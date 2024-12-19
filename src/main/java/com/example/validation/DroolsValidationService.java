@@ -1,58 +1,39 @@
 package com.example.validation;
 
-import com.example.entity.ProductFeature;
+import com.example.entity.CategoryFeatureTemplate;
 import com.example.entity.ProductFeatureValue;
-import com.example.enums.FeatureValueType;
 import com.example.validation.fact.ValidationFact;
 import lombok.RequiredArgsConstructor;
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DroolsValidationService {
-    
-    private final KieSession kieSession;
+    private final KieContainer kieContainer;
 
-    public List<String> validateFeature(ProductFeature feature) {
-        List<String> validationErrors = new ArrayList<>();
+    public boolean validate(ProductFeatureValue value, CategoryFeatureTemplate template) {
+        KieSession kieSession = kieContainer.newKieSession();
+        try {
+            ValidationFact fact = ValidationFact.builder()
+                .featureCode(template.getCode())
+                .value(value.getValue())
+                .attributeType(template.getAttributeType())
+                .validationPattern(template.getValidationPattern())
+                .minValue(template.getMinValue())
+                .maxValue(template.getMaxValue())
+                .allowedValues(template.getAllowedValues())
+                .unit(template.getUnit())
+                .isValid(true)
+                .build();
 
-        // Insert feature into session
-        kieSession.insert(feature);
-        
-        // Add validation facts
-        ValidationFact fact = ValidationFact.builder()
-            .featureCode(feature.getTemplate().getCode())
-            .valueType(feature.getTemplate().getAttributeType())
-            .values(feature.getValues().stream()
-                .map(ProductFeatureValue::getValue)
-                .toList())
-            .multiValued(feature.getTemplate().isMultiValued())
-            .errors(validationErrors)
-            .build();
-        
-        kieSession.insert(fact);
-        
-        // Fire rules
-        kieSession.fireAllRules();
-        
-        return validationErrors;
-    }
+            kieSession.insert(fact);
+            kieSession.fireAllRules();
 
-    public List<String> validateValues(ProductFeature feature, List<String> values) {
-        return values.stream()
-            .flatMap(value -> validateValue(feature, value).stream())
-            .distinct()
-            .collect(Collectors.toList());
-    }
-
-    public boolean isValid(ProductFeature feature, List<String> values) {
-        if (!feature.isListType() && values.size() > 1) {
-            return false;
+            return fact.isValid();
+        } finally {
+            kieSession.dispose();
         }
-        return validateValues(feature, values).isEmpty();
     }
 }

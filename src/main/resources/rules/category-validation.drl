@@ -1,0 +1,139 @@
+package rules;
+
+import com.example.validation.fact.CategoryValidationFact;
+import com.example.entity.Category;
+import com.example.entity.ClassificationClass;
+import java.util.regex.Pattern;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+dialect "mvel"
+
+// Helper functions
+function boolean isValidMedicineComposition(String value) {
+    try {
+        ObjectMapper mapper = new ObjectMapper();
+        Map composition = mapper.readValue(value, Map.class);
+        return composition != null && !composition.isEmpty() && 
+               composition.values().stream().allMatch(v -> v.toString().matches("^\\d+(\\.\\d+)?\\s*(mg|ml|g)$"));
+    } catch (Exception e) {
+        return false;
+    }
+}
+
+function boolean isValidStorageTemp(String value) {
+    try {
+        if (value == null) return false;
+        String[] parts = value.split("-");
+        if (parts.length != 2) return false;
+        
+        double min = Double.parseDouble(parts[0].replaceAll("[^\\d.-]", ""));
+        double max = Double.parseDouble(parts[1].replaceAll("[^\\d.-]", ""));
+        
+        return min >= 0 && max <= 30 && min <= max;
+    } catch (Exception e) {
+        return false;
+    }
+}
+
+// BigBasket Rules
+rule "Validate Fresh Product Shelf Life"
+    salience 80
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "BB_.*",
+        featureCode == "shelf_life",
+        value != null && value.matches("^\\d+$")
+    )
+    eval(Integer.parseInt($fact.getValue()) <= 0 || Integer.parseInt($fact.getValue()) > 365)
+then
+    $fact.addError("Shelf life must be between 1 and 365 days");
+end
+
+rule "Validate Organic Certification"
+    salience 80
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "BB_.*",
+        featureCode == "organic_cert",
+        value != null && !value.matches("^(FSSAI-ORG|USDA|EU-Organic|JAS)$")
+    )
+then
+    $fact.addError("Invalid organic certification. Must be one of: FSSAI-ORG, USDA, EU-Organic, JAS");
+end
+
+// 1mg Rules
+rule "Validate Medicine Composition"
+    salience 80
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "1MG_.*",
+        featureCode == "composition"
+    )
+    eval(!isValidMedicineComposition($fact.getValue()))
+then
+    $fact.addError("Invalid medicine composition format. Must include active ingredients with quantities");
+end
+
+rule "Validate Medicine Storage Temperature"
+    salience 80
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "1MG_.*",
+        featureCode == "storage_temp",
+        value != null
+    )
+    eval(!isValidStorageTemp($fact.getValue()))
+then
+    $fact.addError("Invalid storage temperature. Must be between 0°C and 30°C");
+end
+
+// Tanishq Rules
+rule "Validate Gold Purity"
+    salience 80
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "TANQ_.*",
+        featureCode == "purity",
+        value != null && !value.matches("^(18K|22K|24K)$")
+    )
+then
+    $fact.addError("Invalid gold purity. Must be 18K, 22K, or 24K");
+end
+
+rule "Validate Diamond Certification"
+    salience 80
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "TANQ_.*",
+        featureCode == "certification",
+        value != null && !value.matches("^(IGI|GIA|HRD)$")
+    )
+then
+    $fact.addError("Invalid diamond certification. Must be IGI, GIA, or HRD");
+end
+
+// Appliance Rules
+rule "Validate Energy Rating"
+    salience 80
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "MPH_.*",
+        featureCode == "energy_rating",
+        value != null && !value.matches("^[1-5]\\s*Star$")
+    )
+then
+    $fact.addError("Invalid energy rating. Must be between 1 Star and 5 Star");
+end
+
+rule "Validate AC Tonnage"
+    salience 80
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "MPH_.*",
+        featureCode == "tonnage",
+        value != null && !value.matches("^[0-9](\\.5)?$")
+    )
+then
+    $fact.addError("Invalid AC tonnage. Must be a number between 0.5 and 9.5 in increments of 0.5");
+end

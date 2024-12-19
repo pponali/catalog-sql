@@ -2,18 +2,30 @@ spring:
   application:
     name: catalog-sqldb-poc
   datasource:
-    url: jdbc:postgresql://localhost:5432/catalogdb
+    url: jdbc:postgresql://localhost:5432/catalog
     username: myuser
     password: mypassword
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      schema-locations: 
+        classpath:schema.sql
+      data-locations: classpath:data.sql
+      continue-on-error: false
+
+server:
+  port: 8083
 
 # Actuator Configuration
 management:
@@ -39,8 +51,9 @@ logging:
     root: INFO
     com.example: DEBUG
     org.springframework: INFO
-    org.hibernate: INFO
-
-# Server Configuration
-server:
-  port: 8085
+    org.hibernate:
+      SQL: DEBUG
+      type:
+        descriptor:
+          sql:
+            BasicBinder: TRACE

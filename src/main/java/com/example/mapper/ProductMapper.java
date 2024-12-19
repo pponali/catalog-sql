@@ -2,19 +2,47 @@ package com.example.mapper;
 
 import com.example.dto.ProductDTO;
 import com.example.entity.Product;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", uses = {ProductFeatureMapper.class})
-public interface ProductMapper {
-    
-    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
+@Component
+@RequiredArgsConstructor
+public class ProductMapper {
+    private final ProductFeatureMapper featureMapper;
 
-    @Mapping(target = "categoryIds", ignore = true)
-    ProductDTO toDTO(Product product);
+    public ProductDTO toDTO(Product product) {
+        if (product == null) {
+            return null;
+        }
 
-    @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "features", ignore = true)
-    Product toEntity(ProductDTO dto);
+        ProductDTO dto = new ProductDTO();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+        dto.setSku(product.getSku());
+        dto.setFeatures(product.getFeatures().stream()
+            .map(featureMapper::toDTO)
+            .toList());
+        return dto;
+    }
+
+    public void updateEntityFromDTO(ProductDTO dto, Product product) {
+        if (dto == null) {
+            return;
+        }
+
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setSku(dto.getSku());
+    }
+
+    public Product toEntity(ProductDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Product product = new Product();
+        updateEntityFromDTO(dto, product);
+        return product;
+    }
 }

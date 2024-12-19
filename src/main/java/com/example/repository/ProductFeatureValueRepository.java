@@ -14,88 +14,87 @@ import java.util.Optional;
 public interface ProductFeatureValueRepository extends JpaRepository<ProductFeatureValue, Long> {
     
     // Find all values for a specific product feature
-    List<ProductFeatureValue> findByProductFeature(ProductFeature productFeature);
+    List<ProductFeatureValue> findByFeature(ProductFeature feature);
     
     // Find all string values for a specific product feature
-    List<ProductFeatureValue> findByProductFeatureAndStringValueIsNotNull(ProductFeature productFeature);
+    List<ProductFeatureValue> findByFeatureAndStringValueIsNotNull(ProductFeature feature);
     
     // Find all numeric values for a specific product feature
-    List<ProductFeatureValue> findByProductFeatureAndNumericValueIsNotNull(ProductFeature productFeature);
+    List<ProductFeatureValue> findByFeatureAndNumericValueIsNotNull(ProductFeature feature);
     
     // Find all boolean values for a specific product feature
-    List<ProductFeatureValue> findByProductFeatureAndBooleanValueIsNotNull(ProductFeature productFeature);
+    List<ProductFeatureValue> findByFeatureAndBooleanValueIsNotNull(ProductFeature feature);
     
     // Find by specific string value
     List<ProductFeatureValue> findByStringValue(String value);
     
-    // Find by numeric value range
-    List<ProductFeatureValue> findByNumericValueBetween(Double minValue, Double maxValue);
+    // Find by numeric value
+    List<ProductFeatureValue> findByNumericValue(Double value);
     
     // Find by boolean value
     List<ProductFeatureValue> findByBooleanValue(Boolean value);
     
-    // Find by product feature and string value
-    Optional<ProductFeatureValue> findByProductFeatureAndStringValue(ProductFeature productFeature, String value);
+    // Find by feature and string value
+    Optional<ProductFeatureValue> findByFeatureAndStringValue(ProductFeature feature, String value);
     
-    // Find by product feature and numeric value
-    Optional<ProductFeatureValue> findByProductFeatureAndNumericValue(ProductFeature productFeature, Double value);
+    // Find by feature and numeric value
+    Optional<ProductFeatureValue> findByFeatureAndNumericValue(ProductFeature feature, Double value);
     
-    // Find by product feature and boolean value
-    Optional<ProductFeatureValue> findByProductFeatureAndBooleanValue(ProductFeature productFeature, Boolean value);
+    // Find by feature and boolean value
+    Optional<ProductFeatureValue> findByFeatureAndBooleanValue(ProductFeature feature, Boolean value);
     
-    // Custom query to find values by product code and attribute code
+    // Custom query to find values by product SKU and template code
     @Query("SELECT pfv FROM ProductFeatureValue pfv " +
-           "JOIN pfv.productFeature pf " +
+           "JOIN pfv.feature pf " +
            "JOIN pf.product p " +
-           "JOIN pf.classificationAttribute ca " +
-           "WHERE p.code = :productCode " +
-           "AND ca.code = :attributeCode")
-    List<ProductFeatureValue> findByProductCodeAndAttributeCode(
-        @Param("productCode") String productCode,
-        @Param("attributeCode") String attributeCode
+           "JOIN pf.template t " +
+           "WHERE p.sku = :productSku " +
+           "AND t.code = :templateCode")
+    List<ProductFeatureValue> findByProductSkuAndTemplateCode(
+        @Param("productSku") String productSku,
+        @Param("templateCode") String templateCode
     );
     
-    // Count values by product feature
-    long countByProductFeature(ProductFeature productFeature);
+    // Count values by feature
+    long countByFeature(ProductFeature feature);
     
-    // Delete all values for a specific product feature
-    void deleteByProductFeature(ProductFeature productFeature);
+    // Delete all values for a specific feature
+    void deleteByFeature(ProductFeature feature);
     
     // Find all values with pagination support
     @Query("SELECT pfv FROM ProductFeatureValue pfv " +
-           "JOIN pfv.productFeature pf " +
+           "JOIN pfv.feature pf " +
            "JOIN pf.product p " +
-           "JOIN pf.classificationAttribute ca " +
-           "WHERE p.code = :productCode " +
-           "ORDER BY ca.code")
-    List<ProductFeatureValue> findAllByProductCodeOrdered(@Param("productCode") String productCode);
+           "JOIN pf.template t " +
+           "WHERE p.sku = :productSku " +
+           "AND t.code = :templateCode " +
+           "ORDER BY pfv.id")
+    List<ProductFeatureValue> findByProductSkuAndTemplateCodePaged(
+        @Param("productSku") String productSku,
+        @Param("templateCode") String templateCode
+    );
     
-    // Search values by string pattern
-    @Query("SELECT pfv FROM ProductFeatureValue pfv " +
-           "WHERE pfv.stringValue LIKE %:pattern%")
-    List<ProductFeatureValue> searchByStringValuePattern(@Param("pattern") String pattern);
-    
-    // Find distinct string values for a specific attribute across all products
+    // Find distinct string values for a specific template across all products
     @Query("SELECT DISTINCT pfv.stringValue FROM ProductFeatureValue pfv " +
-           "JOIN pfv.productFeature pf " +
-           "JOIN pf.classificationAttribute ca " +
-           "WHERE ca.code = :attributeCode " +
+           "JOIN pfv.feature pf " +
+           "JOIN pf.template t " +
+           "WHERE t.code = :templateCode " +
            "AND pfv.stringValue IS NOT NULL")
-    List<String> findDistinctStringValuesByAttributeCode(@Param("attributeCode") String attributeCode);
+    List<String> findDistinctStringValuesByTemplateCode(@Param("templateCode") String templateCode);
     
-    // Find average numeric value for a specific attribute
+    // Find average numeric value for a specific template
     @Query("SELECT AVG(pfv.numericValue) FROM ProductFeatureValue pfv " +
-           "JOIN pfv.productFeature pf " +
-           "JOIN pf.classificationAttribute ca " +
-           "WHERE ca.code = :attributeCode " +
+           "JOIN pfv.feature pf " +
+           "JOIN pf.template t " +
+           "WHERE t.code = :templateCode " +
            "AND pfv.numericValue IS NOT NULL")
-    Double findAverageNumericValueByAttributeCode(@Param("attributeCode") String attributeCode);
+    Double findAverageNumericValueByTemplateCode(@Param("templateCode") String templateCode);
     
-    // Find min and max numeric values for a specific attribute
+    // Find min and max numeric values for a specific template
     @Query("SELECT MIN(pfv.numericValue), MAX(pfv.numericValue) FROM ProductFeatureValue pfv " +
-           "JOIN pfv.productFeature pf " +
-           "JOIN pf.classificationAttribute ca " +
-           "WHERE ca.code = :attributeCode " +
+           "JOIN pfv.feature pf " +
+           "JOIN pf.template t " +
+           "WHERE t.code = :templateCode " +
            "AND pfv.numericValue IS NOT NULL")
-    Object[] findMinMaxNumericValuesByAttributeCode(@Param("attributeCode") String attributeCode);
+    Object[] findMinMaxNumericValuesByTemplateCode(@Param("templateCode") String templateCode);
 }

@@ -19,8 +19,9 @@ public class DroolsConfig {
         KieServices kieServices = KieServices.Factory.get();
 
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + "feature-validation.drl"));
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + "domain-validation.drl"));
+        // Add category validation rules
+        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + "category-validation.drl"));
+
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
         kieBuilder.buildAll();
         KieModule kieModule = kieBuilder.getKieModule();

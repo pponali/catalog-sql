@@ -33,7 +33,14 @@ public class ValidationRuleService {
         // Pattern validation for strings
         if ("string".equalsIgnoreCase(template.getAttributeType()) &&
             template.getValidationPattern() != null) {
-            rules.add(ValidationRule.createRegexRule(template));
+            ValidationRule rule = ValidationRule.builder()
+                .code("PATTERN")
+                .name("Pattern Validation")
+                .description("Value must match pattern " + template.getValidationPattern())
+                .ruleType(ValidationRule.RuleType.PATTERN)
+                .pattern(template.getValidationPattern())
+                .build();
+            rules.add(rule);
         }
 
         return rules;
@@ -54,7 +61,52 @@ public class ValidationRuleService {
 
         // Validate each value against all rules
         return feature.getValues().stream()
-            .allMatch(value -> rules.stream()
-                .allMatch(rule -> rule.validate(value.getValue())));
+            .allMatch(value -> validateValue(value.getValue(), rules));
+    }
+
+    private boolean validateValue(String value, List<ValidationRule> rules) {
+        return rules.stream().allMatch(rule -> validateRule(rule, value));
+    }
+
+    private boolean validateRule(ValidationRule rule, String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return rule.getRuleType() != ValidationRule.RuleType.REQUIRED;
+        }
+
+        return switch (rule.getRuleType()) {
+            case REQUIRED -> true;
+            case TYPE -> value.matches(rule.getPattern());
+            case RANGE -> validateRange(value, rule);
+            case PATTERN -> value.matches(rule.getPattern());
+            case ENUMERATION -> validateEnum(value, rule);
+            case LENGTH -> validateLength(value, rule);
+        };
+    }
+
+    private boolean validateRange(String value, ValidationRule rule) {
+        try {
+            double numericValue = Double.parseDouble(value);
+            if (rule.getMinValue() != null && numericValue < rule.getMinValue()) {
+                return false;
+            }
+            return rule.getMaxValue() == null || numericValue <= rule.getMaxValue();
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean validateEnum(String value, ValidationRule rule) {
+        List<String> allowedValues = rule.getAllowedValues();
+        return allowedValues.stream()
+            .map(String::trim)
+            .anyMatch(allowed -> allowed.equals(value));
+    }
+
+    private boolean validateLength(String value, ValidationRule rule) {
+        int length = value.length();
+        if (rule.getMinLength() != null && length < rule.getMinLength()) {
+            return false;
+        }
+        return rule.getMaxLength() == null || length <= rule.getMaxLength();
     }
 }

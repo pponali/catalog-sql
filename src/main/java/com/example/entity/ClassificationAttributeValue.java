@@ -15,6 +15,9 @@ public class ClassificationAttributeValue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "code", nullable = false)
+    private String code;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classification_attribute_id")
     private ClassificationAttribute classificationAttribute;

@@ -1,119 +1,112 @@
 package com.example.validation.rule;
 
 import com.example.entity.CategoryFeatureTemplate;
-import lombok.Builder;
-import lombok.Data;
+import com.example.entity.ClassificationAttribute;
+import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.function.Predicate;
+import java.util.Arrays;
+import java.util.List;
 
+@Entity
+@Table(name = "validation_rules")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ValidationRule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String code;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rule_type", nullable = false)
     private RuleType ruleType;
+
     private String pattern;
+    
+    @Column(name = "min_value")
     private Double minValue;
+    
+    @Column(name = "max_value")
     private Double maxValue;
-    private String[] allowedValues;
+
+    @Column(name = "min_length")
+    private Integer minLength;
+
+    @Column(name = "max_length")
+    private Integer maxLength;
+
+    @Column(name = "allowed_values")
+    private String allowedValues;
+
+    @Column(name = "required")
+    private boolean required;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "classification_attribute_id")
+    private ClassificationAttribute classificationAttribute;
+
+    public List<String> getAllowedValues() {
+        if (allowedValues == null || allowedValues.trim().isEmpty()) {
+            return List.of();
+        }
+        return Arrays.asList(allowedValues.split(","));
+    }
 
     public enum RuleType {
         REQUIRED,
         TYPE,
         RANGE,
         PATTERN,
-        ENUM
+        LENGTH,
+        ENUMERATION
     }
 
     public static ValidationRule createRequiredRule(CategoryFeatureTemplate template) {
         return ValidationRule.builder()
-            .code("REQUIRED")
-            .name("Required Field")
-            .description("Field is required")
-            .ruleType(RuleType.REQUIRED)
-            .build();
+                .code("REQUIRED_" + template.getCode())
+                .name("Required Value")
+                .description("Value is required for " + template.getName())
+                .ruleType(RuleType.REQUIRED)
+                .required(true)
+                .build();
     }
 
     public static ValidationRule createTypeRule(CategoryFeatureTemplate template) {
         return ValidationRule.builder()
-            .code("TYPE")
-            .name("Type Validation")
-            .description("Value must match type " + template.getAttributeType())
-            .ruleType(RuleType.TYPE)
-            .pattern(getTypePattern(template.getAttributeType()))
-            .build();
+                .code("TYPE_" + template.getCode())
+                .name("Type Validation")
+                .description("Value must match type " + template.getAttributeType())
+                .ruleType(RuleType.TYPE)
+                .pattern(getTypePattern(template.getAttributeType()))
+                .build();
     }
 
     public static ValidationRule createRangeRule(CategoryFeatureTemplate template) {
         return ValidationRule.builder()
-            .code("RANGE")
-            .name("Range Validation")
-            .description(String.format("Value must be between %s and %s", 
-                template.getMinValue(), template.getMaxValue()))
-            .ruleType(RuleType.RANGE)
-            .minValue(template.getMinValue())
-            .maxValue(template.getMaxValue())
-            .build();
+                .code("RANGE_" + template.getCode())
+                .name("Range Validation")
+                .description("Value must be between " + template.getMinValue() + " and " + template.getMaxValue())
+                .ruleType(RuleType.RANGE)
+                .minValue(template.getMinValue())
+                .maxValue(template.getMaxValue())
+                .build();
     }
 
-    public static ValidationRule createRegexRule(CategoryFeatureTemplate template) {
-        return ValidationRule.builder()
-            .code("PATTERN")
-            .name("Pattern Validation")
-            .description("Value must match pattern " + template.getValidationPattern())
-            .ruleType(RuleType.PATTERN)
-            .pattern(template.getValidationPattern())
-            .build();
-    }
-
-    public boolean validate(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return ruleType != RuleType.REQUIRED;
-        }
-
-        return switch (ruleType) {
-            case REQUIRED -> true;
-            case TYPE -> value.matches(pattern);
-            case RANGE -> validateRange(value);
-            case PATTERN -> value.matches(pattern);
-            case ENUM -> validateEnum(value);
-        };
-    }
-
-    private boolean validateRange(String value) {
-        try {
-            double numericValue = Double.parseDouble(value);
-            if (minValue != null && numericValue < minValue) {
-                return false;
-            }
-            if (maxValue != null && numericValue > maxValue) {
-                return false;
-            }
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private boolean validateEnum(String value) {
-        if (allowedValues == null) {
-            return true;
-        }
-        for (String allowed : allowedValues) {
-            if (allowed.equals(value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static String getTypePattern(String attributeType) {
-        return switch (attributeType.toLowerCase()) {
-            case "string" -> ".*";
+    private static String getTypePattern(String type) {
+        return switch (type.toLowerCase()) {
             case "numeric" -> "^-?\\d*\\.?\\d+$";
             case "boolean" -> "^(true|false)$";
-            case "enum" -> ".*";
             default -> ".*";
         };
     }
