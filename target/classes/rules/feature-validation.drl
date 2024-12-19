@@ -1,0 +1,80 @@
+package rules;
+
+import com.example.validation.fact.FeatureValidationFact;
+import com.example.enums.FeatureValueType;
+import java.util.regex.Pattern;
+
+dialect "mvel"
+
+rule "Initialize Validation"
+    salience 100
+when
+    $fact : FeatureValidationFact()
+then
+    $fact.setValid(true);
+end
+
+rule "Validate String Format"
+    salience 90
+when
+    $fact : FeatureValidationFact(
+        valueType == FeatureValueType.STRING || 
+        valueType == FeatureValueType.STRING_LIST,
+        value != null && value.trim().isEmpty()
+    )
+then
+    $fact.addError("String value cannot be empty");
+end
+
+rule "Validate Numeric Format"
+    salience 90
+when
+    $fact : FeatureValidationFact(
+        valueType == FeatureValueType.NUMERIC || 
+        valueType == FeatureValueType.NUMERIC_LIST,
+        value != null && !value.matches("^-?\\d*\\.?\\d+$")
+    )
+then
+    $fact.addError("Value must be a valid number");
+end
+
+rule "Validate Boolean Format"
+    salience 90
+when
+    $fact : FeatureValidationFact(
+        valueType == FeatureValueType.BOOLEAN || 
+        valueType == FeatureValueType.BOOLEAN_LIST,
+        value != null && !value.matches("^(true|false)$")
+    )
+then
+    $fact.addError("Value must be true or false");
+end
+
+// Custom rule for price range
+rule "Validate Price Range"
+    salience 80
+when
+    $fact : FeatureValidationFact(
+        featureCode == "product_price",
+        valueType == FeatureValueType.NUMERIC || 
+        valueType == FeatureValueType.NUMERIC_LIST,
+        value != null && value.matches("^-?\\d*\\.?\\d+$")
+    )
+    eval(Double.parseDouble($fact.getValue()) < 0 || Double.parseDouble($fact.getValue()) > 1000000)
+then
+    $fact.addError("Price must be between 0 and 1000000");
+end
+
+// Custom rule for SKU format
+rule "Validate SKU Format"
+    salience 80
+when
+    $fact : FeatureValidationFact(
+        featureCode == "product_sku",
+        valueType == FeatureValueType.STRING || 
+        valueType == FeatureValueType.STRING_LIST,
+        value != null && !value.matches("^ABC-\\d{4}$")
+    )
+then
+    $fact.addError("SKU must match pattern ABC-####");
+end

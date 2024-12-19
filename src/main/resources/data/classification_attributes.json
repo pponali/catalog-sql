@@ -1,0 +1,89 @@
+{
+  "attributes": [
+    {
+      "code": "PURITY",
+      "name": "Gold Purity",
+      "description": "Purity level of gold",
+      "attributeType": "string",
+      "classCode": "GOLD_JEWELRY",
+      "validValues": ["18K", "22K", "24K"],
+      "required": true
+    },
+    {
+      "code": "PROCESSOR_TYPE",
+      "name": "Processor Type",
+      "description": "Type of CPU",
+      "attributeType": "string",
+      "classCode": "PREMIUM_SMARTPHONES",
+      "validValues": ["Snapdragon", "MediaTek", "Apple", "Exynos"],
+      "required": true
+    },
+    {
+      "code": "RAM",
+      "name": "RAM Memory",
+      "description": "RAM capacity in GB",
+      "attributeType": "number",
+      "classCode": "GAMING_LAPTOPS",
+      "minValue": 8,
+      "maxValue": 64,
+      "required": true
+    },
+    {
+      "code": "BATTERY_LIFE",
+      "name": "Battery Life",
+      "description": "Battery life in hours",
+      "attributeType": "number",
+      "classCode": "BUSINESS_LAPTOPS",
+      "minValue": 4,
+      "maxValue": 24,
+      "required": true
+    },
+    {
+      "code": "SIZE",
+      "name": "Clothing Size",
+      "description": "Size of the clothing item",
+      "attributeType": "string",
+      "classCode": "CASUAL_WEAR",
+      "validValues": ["XS", "S", "M", "L", "XL", "XXL"],
+      "required": true
+    },
+    {
+      "code": "MATERIAL",
+      "name": "Fabric Material",
+      "description": "Material of the clothing",
+      "attributeType": "string",
+      "classCode": "FORMAL_WEAR",
+      "validValues": ["Cotton", "Wool", "Polyester", "Linen", "Silk"],
+      "required": true
+    },
+    {
+      "code": "SCREEN_SIZE",
+      "name": "Screen Size",
+      "description": "Display size in inches",
+      "attributeType": "number",
+      "classCode": "PREMIUM_SMARTPHONES",
+      "minValue": 5.5,
+      "maxValue": 7.5,
+      "required": true
+    },
+    {
+      "code": "GPU_MODEL",
+      "name": "Graphics Card",
+      "description": "GPU model",
+      "attributeType": "reference",
+      "classCode": "GAMING_LAPTOPS",
+      "referenceType": "GPU_MODELS",
+      "required": true
+    },
+    {
+      "code": "SECURITY_FEATURES",
+      "name": "Security Features",
+      "description": "Security capabilities",
+      "attributeType": "string",
+      "classCode": "BUSINESS_LAPTOPS",
+      "validValues": ["TPM", "Fingerprint", "FaceID", "SmartCard"],
+      "multiValue": true,
+      "required": false
+    }
+  ]
+}

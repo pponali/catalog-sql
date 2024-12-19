@@ -1,0 +1,64 @@
+{
+  "classes": [
+    {
+      "code": "GOLD_JEWELRY",
+      "name": "Gold Jewelry",
+      "description": "Gold jewelry items",
+      "categoryCode": "JEWELRY",
+      "attributes": {
+        "purity": "24K",
+        "certification": "BIS"
+      }
+    },
+    {
+      "code": "PREMIUM_SMARTPHONES",
+      "name": "Premium Smartphones",
+      "description": "High-end mobile devices",
+      "categoryCode": "SMARTPHONES",
+      "attributes": {
+        "price_range": "premium",
+        "processor": "flagship"
+      }
+    },
+    {
+      "code": "GAMING_LAPTOPS",
+      "name": "Gaming Laptops",
+      "description": "High-performance gaming computers",
+      "categoryCode": "LAPTOPS",
+      "attributes": {
+        "gpu": "dedicated",
+        "cooling": "advanced"
+      }
+    },
+    {
+      "code": "BUSINESS_LAPTOPS",
+      "name": "Business Laptops",
+      "description": "Professional work laptops",
+      "categoryCode": "LAPTOPS",
+      "attributes": {
+        "security": "enterprise",
+        "battery": "long-lasting"
+      }
+    },
+    {
+      "code": "CASUAL_WEAR",
+      "name": "Casual Wear",
+      "description": "Casual clothing items",
+      "categoryCode": "MENS_CLOTHING",
+      "attributes": {
+        "style": "casual",
+        "occasion": "everyday"
+      }
+    },
+    {
+      "code": "FORMAL_WEAR",
+      "name": "Formal Wear",
+      "description": "Business and formal clothing",
+      "categoryCode": "MENS_CLOTHING",
+      "attributes": {
+        "style": "formal",
+        "occasion": "business"
+      }
+    }
+  ]
+}
