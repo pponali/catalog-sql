@@ -20,8 +20,10 @@ spring:
     init:
       mode: always
       schema-locations: 
-        classpath:schema.sql
-      data-locations: classpath:data.sql
+        - classpath:schema.sql
+      data-locations: 
+        - classpath:data.sql
+        - classpath:data/unit_of_measure.sql
       continue-on-error: false
 
 server:
@@ -49,7 +51,7 @@ springdoc:
 logging:
   level:
     root: INFO
-    com.example: DEBUG
+    com.scaler: DEBUG
     org.springframework: INFO
     org.hibernate:
       SQL: DEBUG
