@@ -1,7 +1,7 @@
 package rules;
 
-import com.example.validation.fact.FeatureValidationFact;
-import com.example.enums.FeatureValueType;
+import com.scaler.validation.fact.FeatureValidationFact;
+import com.scaler.enums.FeatureValueType;
 import java.util.regex.Pattern;
 
 dialect "mvel"

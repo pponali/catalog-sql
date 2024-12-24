@@ -1,8 +1,8 @@
 package rules;
 
-import com.example.entity.ProductFeatureValue;
-import com.example.validation.rule.ValidationRule;
-import com.example.validation.rule.ValidationRule.RuleType;
+import com.scaler.entity.ProductFeatureValue;
+import com.scaler.validation.rule.ValidationRule;
+import com.scaler.validation.rule.ValidationRule.RuleType;
 import java.util.List;
 import java.util.regex.Pattern;
 

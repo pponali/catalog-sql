@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS classification_attribute;
 DROP TABLE IF EXISTS classification_class_metadata;
 DROP TABLE IF EXISTS classification_class;
 DROP TABLE IF EXISTS category;
+DROP TABLE IF EXISTS unit_of_measure;
 
 -- Category table (base table)
 CREATE TABLE IF NOT EXISTS category (
@@ -136,18 +137,28 @@ CREATE TABLE IF NOT EXISTS product_feature (
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
 
+-- Unit of Measure table
+CREATE TABLE IF NOT EXISTS unit_of_measure (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    base_unit VARCHAR(50),
+    conversion_factor NUMERIC,
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP
+);
+
 -- Product Feature Value table
 CREATE TABLE IF NOT EXISTS product_feature_value (
-    id BIGINT PRIMARY KEY,
-    feature_id BIGINT,
-    string_value TEXT,
-    numeric_value NUMERIC,
-    boolean_value BOOLEAN,
+    id BIGSERIAL PRIMARY KEY,
+    feature_id BIGINT NOT NULL,
     attribute_value JSONB,
-    unit VARCHAR(50),
+    unit_of_measure_id BIGINT,
     created_date TIMESTAMP,
     last_modified_date TIMESTAMP,
-    FOREIGN KEY (feature_id) REFERENCES product_feature(id)
+    FOREIGN KEY (feature_id) REFERENCES product_feature(id),
+    FOREIGN KEY (unit_of_measure_id) REFERENCES unit_of_measure(id)
 );
 
 -- Classification Attribute Value table
