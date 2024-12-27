@@ -196,6 +196,41 @@ VALUES
     true, true, false, '{"validation": {"enum_values": ["tablet", "capsule", "syrup", "injection"]}}',
     3, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+-- Product Features for Apparel
+INSERT INTO product_feature (
+    id, code, name, description, feature_type, attribute_type,
+    validation_pattern, min_value, max_value, allowed_values, default_value,
+    unit_id, metadata, required, visible, editable, searchable, comparable,
+    multi_valued, product_id, template_id, created_date, last_modified_date
+)
+VALUES 
+-- Size feature
+(1, 'SIZE_SHIRT', 'Size', 'Shirt size', 'ENUM', 'STRING',
+ NULL, NULL, NULL, '["S", "M", "L", "XL"]', 'M',
+ NULL, '{"display_order": 1, "group": "basic", "tooltip": "Select your shirt size"}',
+ true, true, true, true, true,
+ false, 1003, 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Style feature
+(2, 'STYLE_SHIRT', 'Style', 'Shirt style', 'ENUM', 'STRING',
+ NULL, NULL, NULL, '["casual", "formal"]', 'casual',
+ NULL, '{"display_order": 2, "group": "basic", "tooltip": "Select shirt style"}',
+ true, true, true, true, true,
+ false, 1003, 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Product Feature Values
+INSERT INTO product_feature_value (
+    id, feature_id, value, created_date, last_modified_date
+)
+VALUES 
+-- Size values
+(1, 1, 'M', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1, 'L', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Style values
+(3, 2, 'casual', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 2, 'formal', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 -- Products
 INSERT INTO product (id, code, name, description, product_type, status, metadata, sku, created_date, last_modified_date)
 VALUES 
