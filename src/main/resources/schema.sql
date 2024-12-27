@@ -7,12 +7,13 @@ DROP TABLE IF EXISTS product_feature CASCADE;
 DROP TABLE IF EXISTS product_categories CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS category_feature_template CASCADE;
-DROP TABLE IF EXISTS class_attribute_assignment CASCADE;
+DROP TABLE IF EXISTS class_attribute_assignments CASCADE;
 DROP TABLE IF EXISTS classification_attribute CASCADE;
 DROP TABLE IF EXISTS classification_class_metadata CASCADE;
 DROP TABLE IF EXISTS classification_class CASCADE;
 DROP TABLE IF EXISTS category CASCADE;
 DROP TABLE IF EXISTS unit_of_measure CASCADE;
+DROP TABLE IF EXISTS feature_value_event CASCADE;
 
 -- Sequences
 CREATE SEQUENCE IF NOT EXISTS category_seq START WITH 1000;
@@ -22,6 +23,20 @@ CREATE SEQUENCE IF NOT EXISTS category_feature_template_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS classification_attribute_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS class_attribute_assignment_seq START WITH 1000;
 
+-- Unit of Measure table (no dependencies)
+CREATE TABLE IF NOT EXISTS unit_of_measure (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    base_unit VARCHAR(50),
+    conversion_factor NUMERIC,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
+    last_modified_date TIMESTAMP
+);
+
 -- Category table (base table)
 CREATE TABLE IF NOT EXISTS category (
     id BIGINT PRIMARY KEY DEFAULT nextval('category_seq'),
@@ -29,7 +44,13 @@ CREATE TABLE IF NOT EXISTS category (
     name VARCHAR(255),
     description TEXT,
     parent_id BIGINT,
+    allow_multiple_categories BOOLEAN DEFAULT false,
+    inherit_features BOOLEAN DEFAULT true,
+    active BOOLEAN DEFAULT true,
+    sequence INTEGER,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP,
     dtype VARCHAR(31) NOT NULL,
     FOREIGN KEY (parent_id) REFERENCES category(id)
@@ -38,10 +59,10 @@ CREATE TABLE IF NOT EXISTS category (
 -- Classification Class table (extends Category)
 CREATE TABLE IF NOT EXISTS classification_class (
     id BIGINT PRIMARY KEY,
-    allow_multiple_categories BOOLEAN DEFAULT false,
-    inherit_features BOOLEAN DEFAULT true,
-    active BOOLEAN DEFAULT true,
-    sequence INTEGER,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
+    last_modified_date TIMESTAMP,
     FOREIGN KEY (id) REFERENCES category(id)
 );
 
@@ -72,21 +93,27 @@ CREATE TABLE IF NOT EXISTS classification_attribute (
     mandatory BOOLEAN,
     multi_valued BOOLEAN,
     metadata JSONB,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP
 );
 
 -- Class Attribute Assignment table
-CREATE TABLE IF NOT EXISTS class_attribute_assignment (
+CREATE TABLE IF NOT EXISTS class_attribute_assignments (
     id BIGINT PRIMARY KEY DEFAULT nextval('class_attribute_assignment_seq'),
     classification_class_id BIGINT,
     classification_attribute_id BIGINT,
+    unit VARCHAR(50),
+    attribute_type VARCHAR(50) NOT NULL,
     mandatory BOOLEAN DEFAULT false,
-    visible BOOLEAN DEFAULT true,
-    searchable BOOLEAN DEFAULT false,
+    multi_valued BOOLEAN DEFAULT false,
+    sequence INTEGER,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP,
-    FOREIGN KEY (classification_class_id) REFERENCES classification_class(id),
+    FOREIGN KEY (classification_class_id) REFERENCES category(id),
     FOREIGN KEY (classification_attribute_id) REFERENCES classification_attribute(id)
 );
 
@@ -113,7 +140,9 @@ CREATE TABLE IF NOT EXISTS category_feature_template (
     metadata JSONB,
     display_order INTEGER,
     is_required BOOLEAN,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES category(id)
 );
@@ -128,7 +157,9 @@ CREATE TABLE IF NOT EXISTS product (
     status VARCHAR(50),
     metadata JSONB,
     sku VARCHAR(255) UNIQUE,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP
 );
 
@@ -150,30 +181,27 @@ CREATE TABLE IF NOT EXISTS product_feature (
     name VARCHAR(255) NOT NULL,
     description TEXT,
     feature_type VARCHAR(50),
+    attribute_type VARCHAR(50),
     validation_pattern VARCHAR(255),
     min_value VARCHAR(255),
     max_value VARCHAR(255),
     allowed_values TEXT,
+    default_value VARCHAR(255),
     unit_id BIGINT,
     metadata JSONB,
     required BOOLEAN NOT NULL DEFAULT false,
+    visible BOOLEAN DEFAULT true,
+    editable BOOLEAN DEFAULT true,
+    searchable BOOLEAN DEFAULT false,
+    comparable BOOLEAN DEFAULT false,
+    multi_valued BOOLEAN DEFAULT false,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP,
     FOREIGN KEY (template_id) REFERENCES category_feature_template(id),
     FOREIGN KEY (product_id) REFERENCES product(id),
     FOREIGN KEY (unit_id) REFERENCES unit_of_measure(id)
-);
-
--- Unit of Measure table
-CREATE TABLE IF NOT EXISTS unit_of_measure (
-    id BIGSERIAL PRIMARY KEY,
-    code VARCHAR(50) NOT NULL UNIQUE,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    base_unit VARCHAR(50),
-    conversion_factor NUMERIC,
-    created_date TIMESTAMP,
-    last_modified_date TIMESTAMP
 );
 
 -- Product Feature Value table
@@ -190,10 +218,10 @@ CREATE TABLE IF NOT EXISTS product_feature_value (
     validation_pattern VARCHAR(255),
     validation_message TEXT,
     attribute_values JSONB,
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP,
     created_by VARCHAR(255),
-    updated_by VARCHAR(255),
+    created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
+    last_modified_date TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES product(id),
     FOREIGN KEY (feature_id) REFERENCES product_feature(id)
 );
@@ -203,9 +231,11 @@ CREATE TABLE IF NOT EXISTS classification_attribute_value (
     id BIGINT PRIMARY KEY,
     assignment_id BIGINT,
     value TEXT,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP,
-    FOREIGN KEY (assignment_id) REFERENCES class_attribute_assignment(id)
+    FOREIGN KEY (assignment_id) REFERENCES class_attribute_assignments(id)
 );
 
 -- Enum Value table
@@ -213,7 +243,9 @@ CREATE TABLE IF NOT EXISTS enum_value (
     id BIGINT PRIMARY KEY,
     code VARCHAR(255),
     sort_order INTEGER,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP
 );
 
@@ -223,7 +255,9 @@ CREATE TABLE IF NOT EXISTS enum_value_translation (
     enum_value_id BIGINT,
     language_code VARCHAR(10),
     value VARCHAR(255),
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP,
     FOREIGN KEY (enum_value_id) REFERENCES enum_value(id)
 );
@@ -237,5 +271,11 @@ CREATE TABLE IF NOT EXISTS feature_value_event (
     new_value TEXT,
     event_type VARCHAR(50),
     metadata TEXT,
-    timestamp TIMESTAMP
+    timestamp TIMESTAMP,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
+    last_modified_date TIMESTAMP,
+    FOREIGN KEY (feature_id) REFERENCES product_feature(id),
+    FOREIGN KEY (product_id) REFERENCES product(id)
 );

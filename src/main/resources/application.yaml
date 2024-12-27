@@ -3,12 +3,12 @@ spring:
     name: catalog-sqldb-poc
   datasource:
     url: jdbc:postgresql://localhost:5432/catalog
-    username: myuser
-    password: mypassword
+    username: pponali
+    password: 
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:

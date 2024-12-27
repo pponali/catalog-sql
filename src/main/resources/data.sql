@@ -2,62 +2,50 @@
 INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
 VALUES 
 -- Root category for appliances
-(1, 'MSH1230', 'Home Appliances', 'Home and Kitchen Appliances', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 'MSH1230', 'Home Appliances', 'Home and Kitchen Appliances', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- Root category for apparel
-(2, 'apparelCCWEE', 'Yeswee Apparel', 'Fashion and Clothing', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'apparelCCWEE', 'Yeswee Apparel', 'Fashion and Clothing', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- Root category for BigBasket
-(3, 'BIGBASKET', 'BigBasket', 'Fresh Groceries and Daily Essentials', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'BIGBASKET', 'BigBasket', 'Fresh Groceries and Daily Essentials', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- Root category for 1mg
-(4, '1MG', '1mg', 'Healthcare and Wellness', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, '1MG', '1mg', 'Healthcare and Wellness', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- Root category for Tanishq
-(5, 'TANISHQ', 'Tanishq', 'Premium Jewelry', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 'TANISHQ', 'Tanishq', 'Premium Jewelry', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- Root category for Electronics
-(6, 'ELECTRONICS', 'Electronics', 'Electronics and Gadgets', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(6, 'ELECTRONICS', 'Electronics', 'Electronics and Gadgets', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Sub Categories
 INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
 VALUES 
 -- Air Conditioner category under Home Appliances
-(10, 'MPH11111L4', 'Split AC NEW', 'Split Air Conditioners', 1, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 'MPH11111L4', 'Split AC NEW', 'Split Air Conditioners', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- More specific categories under Yeswee Apparel
-(11, 'MPWEAR001', 'Western Wear', 'Western Style Clothing', 2, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(12, 'MPWEAR002', 'Ethnic Wear', 'Traditional and Ethnic Clothing', 2, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(11, 'MPWEAR001', 'Western Wear', 'Western Style Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(12, 'MPWEAR002', 'Ethnic Wear', 'Traditional and Ethnic Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- BigBasket subcategories
-(20, 'BB_FRUITS', 'Fresh Fruits', 'Fresh and Seasonal Fruits', 3, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(21, 'BB_VEG', 'Fresh Vegetables', 'Fresh and Organic Vegetables', 3, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(22, 'BB_DAIRY', 'Dairy & Eggs', 'Fresh Dairy Products and Eggs', 3, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(20, 'BB_FRUITS', 'Fresh Fruits', 'Fresh and Seasonal Fruits', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(21, 'BB_VEG', 'Fresh Vegetables', 'Fresh and Organic Vegetables', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(22, 'BB_DAIRY', 'Dairy & Eggs', 'Fresh Dairy Products and Eggs', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- 1mg subcategories
-(30, '1MG_MEDICINES', 'Medicines', 'Prescription and OTC Medicines', 4, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(31, '1MG_WELLNESS', 'Health & Wellness', 'Wellness and Nutrition Products', 4, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(32, '1MG_PERSONAL', 'Personal Care', 'Personal Care Products', 4, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(30, '1MG_MEDICINES', 'Medicines', 'Prescription and OTC Medicines', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(31, '1MG_WELLNESS', 'Health & Wellness', 'Wellness and Nutrition Products', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(32, '1MG_PERSONAL', 'Personal Care', 'Personal Care Products', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- Tanishq subcategories
-(40, 'TANQ_GOLD', 'Gold Jewelry', '22K Gold Jewelry Collection', 5, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(41, 'TANQ_DIAMOND', 'Diamond Jewelry', 'Premium Diamond Collection', 5, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(42, 'TANQ_WEDDING', 'Wedding Collection', 'Bridal Jewelry Collection', 5, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(40, 'TANQ_GOLD', 'Gold Jewelry', '22K Gold Jewelry Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(41, 'TANQ_DIAMOND', 'Diamond Jewelry', 'Premium Diamond Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(42, 'TANQ_WEDDING', 'Wedding Collection', 'Bridal Jewelry Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Classification Classes (extending Category)
-INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
+INSERT INTO category (id, code, name, description, parent_id, dtype, allow_multiple_categories, inherit_features, active, sequence, created_date, last_modified_date)
 VALUES 
-(100, 'apparelCCWEE', 'Yeswee', 'Apparel Classification Class', 2, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(101, 'ACCC001', 'AC Features', 'Air Conditioner Features', 10, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(102, 'BB_ORGANIC', 'Organic Products', 'Organic Certification Class', 3, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(103, 'BB_FRESH', 'Fresh Products', 'Fresh Product Features', 3, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(104, '1MG_PHARMA', 'Pharmaceutical', 'Medicine Classifications', 4, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(105, '1MG_AYUR', 'Ayurvedic', 'Ayurvedic Medicine Class', 4, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(106, 'TANQ_PRECIOUS', 'Precious Metals', 'Precious Metals Class', 5, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(107, 'TANQ_GEMS', 'Gemstones', 'Gemstones Classification', 5, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Classification Classes
-INSERT INTO classification_class (id, allow_multiple_categories, inherit_features, active, sequence)
-VALUES 
-(100, true, true, true, 1),
-(101, true, true, true, 2),
-(102, true, true, true, 3),
-(103, true, true, true, 4),
-(104, true, true, true, 5),
-(105, true, true, true, 6),
-(106, true, true, true, 7),
-(107, true, true, true, 8);
+(100, 'apparelCCWEE', 'Yeswee', 'Apparel Classification Class', 2, 'CLASSIFICATION', true, true, true, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(101, 'ACCC001', 'AC Features', 'Air Conditioner Features', 10, 'CLASSIFICATION', true, true, true, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(102, 'BB_ORGANIC', 'Organic Products', 'Organic Certification Class', 3, 'CLASSIFICATION', true, true, true, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(103, 'BB_FRESH', 'Fresh Products', 'Fresh Product Features', 3, 'CLASSIFICATION', true, true, true, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(104, '1MG_PHARMA', 'Pharmaceutical', 'Medicine Classifications', 4, 'CLASSIFICATION', true, true, true, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(105, '1MG_AYUR', 'Ayurvedic', 'Ayurvedic Medicine Class', 4, 'CLASSIFICATION', true, true, true, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(106, 'TANQ_PRECIOUS', 'Precious Metals', 'Precious Metals Class', 5, 'CLASSIFICATION', true, true, true, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(107, 'TANQ_GEMS', 'Gemstones', 'Gemstones Classification', 5, 'CLASSIFICATION', true, true, true, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Classification Class Metadata
 INSERT INTO classification_class_metadata (class_id, key, value)
@@ -91,21 +79,21 @@ VALUES
 (13, 'certification', 'Certification', 'Jewelry certification', 'STRING', '^[A-Z]{2,4}-[0-9]{6}$', NULL, NULL, NULL, true, true, true, false, true, false, '{"validation": {"pattern": "^[A-Z]{2,4}-[0-9]{6}$"}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Class Attribute Assignments
-INSERT INTO class_attribute_assignment (id, classification_class_id, classification_attribute_id, mandatory, visible, searchable, created_date, last_modified_date)
+INSERT INTO class_attribute_assignments (id, classification_class_id, classification_attribute_id, unit, attribute_type, mandatory, multi_valued, sequence, created_date, last_modified_date)
 VALUES 
-(1, 100, 1, false, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 100, 2, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 101, 3, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 101, 4, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 102, 5, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 102, 6, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(7, 103, 7, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(8, 104, 8, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(9, 104, 9, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(10, 105, 10, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(11, 106, 11, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(12, 106, 12, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(13, 107, 13, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 100, 1, NULL, 'ENUM', false, false, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 100, 2, NULL, 'ENUM', true, false, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 101, 3, 'ton', 'NUMERIC', true, false, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 101, 4, NULL, 'ENUM', true, false, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 102, 5, NULL, 'STRING', true, false, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 102, 6, NULL, 'JSON', true, false, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 103, 7, 'days', 'NUMERIC', true, false, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 104, 8, NULL, 'ENUM', true, false, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 104, 9, NULL, 'JSON', true, false, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 105, 10, NULL, 'ENUM', true, false, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(11, 106, 11, NULL, 'STRING', true, false, 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(12, 106, 12, NULL, 'JSON', true, false, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(13, 107, 13, NULL, 'STRING', true, false, 13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Enum Values
 INSERT INTO enum_value (id, code, sort_order, created_date, last_modified_date)
@@ -241,7 +229,7 @@ VALUES
 (10, 1007, 10, 'FORM', 'Form', 'Medicine form', 'ENUM', NULL, NULL, NULL, '["tablet", "capsule", "syrup", "injection"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Feature Values
-INSERT INTO product_feature_value (id, product_id, feature_id, template_id, type, unit, unit_of_measure, status, validation_status, validation_pattern, validation_message, attribute_values, created_at, updated_at, created_by, updated_by)
+INSERT INTO product_feature_value (id, product_id, feature_id, template_id, type, unit, unit_of_measure, status, validation_status, validation_pattern, validation_message, attribute_values, created_date, last_modified_date, created_by, last_modified_by)
 VALUES 
 (1, 1003, 1, 1, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "formal"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 (2, 1003, 2, 2, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "M"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
