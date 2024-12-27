@@ -19,10 +19,10 @@ public abstract class ProductFeatureValueMapper {
     @Mapping(target = "feature", source = "feature")
     @Mapping(target = "attributeValue", expression = "java(mapAttributeValues(dto))")
     @Mapping(target = "validationPattern", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
     @Mapping(target = "createdBy", constant = "system")
-    @Mapping(target = "updatedBy", constant = "system")
+    @Mapping(target = "lastModifiedBy", constant = "system")
     public abstract ProductFeatureValue toEntity(ProductFeatureValueDTO dto);
 
     @Mapping(target = "product", ignore = true)
@@ -63,7 +63,7 @@ public abstract class ProductFeatureValueMapper {
             entity.setValidationMessage(dto.getValidationMessage());
         }
         entity.setCreatedBy("system");
-        entity.setUpdatedBy("system");
+        entity.setLastModifiedBy("system");
     }
 
     public abstract List<ProductFeatureValueDTO> toDto(List<ProductFeatureValue> entities);

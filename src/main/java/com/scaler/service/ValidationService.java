@@ -3,6 +3,7 @@ package com.scaler.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.entity.Category;
+import com.scaler.entity.ProductFeature;
 import com.scaler.entity.ProductFeatureValue;
 import com.scaler.enums.FeatureValueType;
 import com.scaler.validation.fact.CategoryValidationFact;
@@ -29,6 +30,12 @@ public class ValidationService {
         List<String> validationErrors = new ArrayList<>();
 
         try {
+            String value = getFeatureValue(featureValue);
+            if (value == null) {
+                validationErrors.add("Feature value cannot be null");
+                return validationErrors;
+            }
+
             kieSession.setGlobal("validationErrors", validationErrors);
             kieSession.insert(featureValue);
             rules.forEach(kieSession::insert);
@@ -104,14 +111,20 @@ public class ValidationService {
                 }
 
                 Map<String, Object> metadata = null;
-                if (feature.getAttributeValue() != null) {
-                    metadata = objectMapper.convertValue(feature.getAttributeValue(), Map.class);
+                if (feature.getAttributeValues() != null) {
+                    metadata = objectMapper.convertValue(feature.getAttributeValues(), Map.class);
+                }
+
+                String value = getFeatureValue(feature);
+                if (value == null) {
+                    validationErrors.add("Feature value cannot be null");
+                    continue;
                 }
 
                 CategoryValidationFact fact = CategoryValidationFact.builder()
                     .categoryCode(category.getCode())
                     .featureCode(featureCode)
-                    .value(getFeatureValue(feature))
+                    .value(value)
                     .metadata(metadata)
                     .errors(new ArrayList<>())
                     .build();
@@ -137,11 +150,8 @@ public class ValidationService {
     }
 
     private String getFeatureValue(ProductFeatureValue feature) {
-        if (feature.getValue() != null) {
-            return feature.getValue();
-        }
-        if (feature.getAttributeValue() != null) {
-            return feature.getAttributeValue().toString();
+        if (feature.getAttributeValues() != null) {
+            return feature.getValueAsString();
         }
         return null;
     }

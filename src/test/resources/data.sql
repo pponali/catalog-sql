@@ -62,7 +62,7 @@ VALUES
     ('RING_MATERIAL', 'Ring Material', 'Ring Material Type', 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Feature Values
-INSERT INTO product_feature_value (id, product_id, feature_id, template_id, type, unit, unit_of_measure, status, validation_status, validation_pattern, validation_message, attribute_values, created_at, updated_at, created_by, updated_by)
+INSERT INTO product_feature_value (id, product_id, feature_id, template_id, type, unit, unit_of_measure, status, validation_status, validation_pattern, validation_message, attribute_values, created_date, last_modified_date, created_by, updated_by)
 VALUES 
 (1, 1, 1, 1, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "formal"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 (2, 1, 2, 2, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "M"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),

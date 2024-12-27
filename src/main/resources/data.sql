@@ -159,3 +159,45 @@ VALUES
 (1005, 20), -- Quinoa in Fresh Foods
 (1006, 22), -- Chia Seeds in Fresh Foods
 (1007, 30); -- Paracetamol in Medicines
+
+-- Product Feature Values
+INSERT INTO product_feature_value (
+    id, product_id, feature_id, template_id,
+    type, unit, unit_of_measure, status,
+    validation_status, validation_pattern,
+    validation_message, attribute_values,
+    created_by, created_date,
+    last_modified_by, last_modified_date
+)
+VALUES 
+-- Size values for Formal Shirt (product_id: 1003)
+(1, 1003, 1, 100, 
+ 'ENUM', 'SIZE', NULL, 'ACTIVE',
+ 'VALID', '^(S|M|L|XL)$', NULL,
+ '{"value": "M"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+-- Style values for Formal Shirt (product_id: 1003)
+(2, 1003, 2, 101,
+ 'ENUM', 'STYLE', NULL, 'ACTIVE',
+ 'VALID', '^(casual|formal)$', NULL,
+ '{"value": "formal"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+-- Size values for T-Shirt (product_id: 1004)
+(3, 1004, 3, 100,
+ 'ENUM', 'SIZE', NULL, 'ACTIVE',
+ 'VALID', '^(S|M|L|XL)$', NULL,
+ '{"value": "L"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+-- Style values for T-Shirt (product_id: 1004)
+(4, 1004, 4, 101,
+ 'ENUM', 'STYLE', NULL, 'ACTIVE',
+ 'VALID', '^(sports|casual)$', NULL,
+ '{"value": "casual"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP);

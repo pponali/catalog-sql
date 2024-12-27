@@ -3,6 +3,8 @@ package com.scaler.mapper;
 import com.scaler.dto.ProductFeatureDTO;
 import com.scaler.entity.ProductFeature;
 import com.scaler.entity.UnitOfMeasure;
+import com.scaler.entity.Product;
+import com.scaler.entity.CategoryFeatureTemplate;
 import org.mapstruct.*;
 
 import java.util.*;
@@ -20,7 +22,9 @@ public interface ProductFeatureMapper {
     @Mapping(target = "minValue", source = "minValue")
     @Mapping(target = "maxValue", source = "maxValue")
     @Mapping(target = "allowedValues", source = "allowedValues")
-    @Mapping(target = "values", ignore = true)
+    @Mapping(target = "productId", source = "product.id")
+    @Mapping(target = "templateId", source = "template.id")
+    @Mapping(target = "values", expression = "java(mapValuesToList(entity))")
     ProductFeatureDTO toDTO(ProductFeature entity);
 
     @Mapping(target = "id", source = "id")
@@ -51,9 +55,36 @@ public interface ProductFeatureMapper {
             unit.setId(dto.getUnitId());
             feature.setUnit(unit);
         }
+        
+        if (dto.getProductId() != null) {
+            Product product = new Product();
+            product.setId(dto.getProductId());
+            feature.setProduct(product);
+        }
+        
+        if (dto.getTemplateId() != null) {
+            CategoryFeatureTemplate template = new CategoryFeatureTemplate();
+            template.setId(dto.getTemplateId());
+            feature.setTemplate(template);
+        }
     }
 
     default String generateCode(ProductFeatureDTO dto) {
         return dto.getName().toLowerCase().replaceAll("\\s+", "_");
+    }
+
+    default List<String> mapValuesToList(ProductFeature entity) {
+        if (entity.getValues() == null || entity.getValues().isEmpty()) {
+            return Collections.emptyList();
+        }
+        
+        List<String> values = new ArrayList<>();
+        entity.getValues().forEach(value -> {
+            String valueStr = value.getValueAsString();
+            if (valueStr != null) {
+                values.add(valueStr);
+            }
+        });
+        return values;
     }
 }

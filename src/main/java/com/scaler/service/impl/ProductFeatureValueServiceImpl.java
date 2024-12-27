@@ -290,7 +290,7 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
                     Map<String, Object> result = new HashMap<>();
                     result.put("id", value.getId());
                     result.put("value", value.getValueAsString());
-                    result.put("timestamp", value.getCreatedAt());
+                    result.put("timestamp", value.getCreatedDate());
                     result.put("status", value.getValidationStatus());
                     return result;
                 })
@@ -317,6 +317,7 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
         }
         return List.of();
     }
+
 
     @Override
     public List<ProductFeatureValueDTO> normalizeNumericValues(Long featureId) {

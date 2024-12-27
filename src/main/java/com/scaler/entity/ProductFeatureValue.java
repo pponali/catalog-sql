@@ -20,9 +20,6 @@ public class ProductFeatureValue extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String value;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
@@ -59,27 +56,15 @@ public class ProductFeatureValue extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode attributeValues;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @Column(name = "updated_by")
-    private String updatedBy;
-
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        setCreatedDate(LocalDateTime.now());
+        setLastModifiedDate(LocalDateTime.now());
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        setLastModifiedDate(LocalDateTime.now());
     }
 
     public String getValueAsString() {
