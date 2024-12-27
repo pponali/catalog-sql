@@ -127,6 +127,26 @@ VALUES
 (5, 3, '{"value": "1.5", "unit": "ton"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (6, 4, '{"value": "5 Star", "efficiency": "high"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+-- Products
+INSERT INTO product (
+    id, code, name, description, product_type,
+    status, metadata, sku,
+    created_date, last_modified_date
+)
+VALUES 
+-- Apparel Products
+(1003, 'FORMAL_SHIRT_001', 'Men''s Formal Shirt', 'Classic formal shirt for men',
+ 'APPAREL', 'ACTIVE',
+ '{"brand": "ClassicWear", "department": "mens", "category": "formal_wear"}',
+ 'SHIRT-F-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(1004, 'CASUAL_TSHIRT_001', 'Men''s Casual T-Shirt', 'Comfortable casual t-shirt',
+ 'APPAREL', 'ACTIVE',
+ '{"brand": "ComfortWear", "department": "mens", "category": "casual_wear"}',
+ 'TSHIRT-C-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 -- Category Feature Templates
 INSERT INTO category_feature_template (
     id, category_id, code, name, description, 
