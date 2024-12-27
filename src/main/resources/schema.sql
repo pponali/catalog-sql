@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS classification_class CASCADE;
 DROP TABLE IF EXISTS category CASCADE;
 DROP TABLE IF EXISTS unit_of_measure CASCADE;
 DROP TABLE IF EXISTS feature_value_event CASCADE;
+DROP TABLE IF EXISTS unit CASCADE;
 
 -- Sequences
 CREATE SEQUENCE IF NOT EXISTS category_seq START WITH 1000;
@@ -22,6 +23,17 @@ CREATE SEQUENCE IF NOT EXISTS product_feature_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS category_feature_template_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS classification_attribute_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS class_attribute_assignment_seq START WITH 1000;
+CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1000;
+
+-- Unit table (no dependencies)
+CREATE TABLE IF NOT EXISTS unit (
+    id BIGINT PRIMARY KEY DEFAULT nextval('unit_seq'),
+    code VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP
+);
 
 -- Unit of Measure table (no dependencies)
 CREATE TABLE IF NOT EXISTS unit_of_measure (
@@ -195,13 +207,14 @@ CREATE TABLE IF NOT EXISTS product_feature (
     searchable BOOLEAN DEFAULT false,
     comparable BOOLEAN DEFAULT false,
     multi_valued BOOLEAN DEFAULT false,
+    values TEXT,
     created_by VARCHAR(255),
     created_date TIMESTAMP,
     last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP,
-    FOREIGN KEY (template_id) REFERENCES category_feature_template(id),
     FOREIGN KEY (product_id) REFERENCES product(id),
-    FOREIGN KEY (unit_id) REFERENCES unit_of_measure(id)
+    FOREIGN KEY (template_id) REFERENCES category_feature_template(id),
+    FOREIGN KEY (unit_id) REFERENCES unit(id)
 );
 
 -- Product Feature Value table
