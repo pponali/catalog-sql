@@ -86,6 +86,7 @@ public class ClassAttributeAssignment {
     )
     @MapKeyJoinColumn(name = "dependent_assignment_id")
     @Column(name = "required_value")
+    @Builder.Default
     private Map<ClassAttributeAssignment, String> dependencies = new HashMap<>();
 
     @ElementCollection
@@ -95,6 +96,7 @@ public class ClassAttributeAssignment {
     )
     @MapKeyColumn(name = "key")
     @Column(name = "value")
+    @Builder.Default
     private Map<String, String> metadata = new HashMap<>();
 
     @PrePersist

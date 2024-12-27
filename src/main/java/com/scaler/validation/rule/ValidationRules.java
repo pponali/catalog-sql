@@ -1,13 +1,29 @@
 package com.scaler.validation.rule;
 
 import com.scaler.entity.CategoryFeatureTemplate;
-import lombok.Builder;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+@Entity
+@Table(name = "validation_rules")
 @Data
-@Builder
-public class ValidationRule {
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ValidationRules {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "template_id")
+    private CategoryFeatureTemplate template;
+    @Column(name = "code")
     private String code;
+    @Column(name = "name")
     private String name;
     private String description;
     private String ruleType;
@@ -17,8 +33,8 @@ public class ValidationRule {
     private String allowedValues;
     private String errorMessage;
 
-    public static ValidationRule createRequiredRule(CategoryFeatureTemplate template) {
-        return ValidationRule.builder()
+    public static ValidationRules createRequiredRule(CategoryFeatureTemplate template) {
+        return ValidationRules.builder()
                 .code(template.getCode() + "_REQUIRED")
                 .name(template.getName() + " Required")
                 .description("Validates that " + template.getName() + " is not empty")
@@ -27,8 +43,8 @@ public class ValidationRule {
                 .build();
     }
 
-    public static ValidationRule createTypeRule(CategoryFeatureTemplate template) {
-        return ValidationRule.builder()
+    public static ValidationRules createTypeRule(CategoryFeatureTemplate template) {
+        return ValidationRules.builder()
                 .code(template.getCode() + "_TYPE")
                 .name(template.getName() + " Type")
                 .description("Validates that " + template.getName() + " is of type " + template.getAttributeType())
@@ -38,8 +54,8 @@ public class ValidationRule {
                 .build();
     }
 
-    public static ValidationRule createRangeRule(CategoryFeatureTemplate template) {
-        return ValidationRule.builder()
+    public static ValidationRules createRangeRule(CategoryFeatureTemplate template) {
+        return ValidationRules.builder()
                 .code(template.getCode() + "_RANGE")
                 .name(template.getName() + " Range")
                 .description("Validates that " + template.getName() + " is between " + template.getMinValue() + " and " + template.getMaxValue())
@@ -50,8 +66,8 @@ public class ValidationRule {
                 .build();
     }
 
-    public static ValidationRule createPatternRule(CategoryFeatureTemplate template) {
-        return ValidationRule.builder()
+    public static ValidationRules createPatternRule(CategoryFeatureTemplate template) {
+        return ValidationRules.builder()
                 .code(template.getCode())
                 .name(template.getName())
                 .description("Pattern validation for " + template.getName())
@@ -61,8 +77,8 @@ public class ValidationRule {
                 .build();
     }
 
-    public static ValidationRule createAllowedValuesRule(CategoryFeatureTemplate template) {
-        return ValidationRule.builder()
+    public static ValidationRules createAllowedValuesRule(CategoryFeatureTemplate template) {
+        return ValidationRules.builder()
                 .code(template.getCode())
                 .name(template.getName())
                 .description("Allowed values validation for " + template.getName())
@@ -72,8 +88,8 @@ public class ValidationRule {
                 .build();
     }
 
-    public static ValidationRule createCustomRule(CategoryFeatureTemplate template) {
-        return ValidationRule.builder()
+    public static ValidationRules createCustomRule(CategoryFeatureTemplate template) {
+        return ValidationRules.builder()
                 .code(template.getCode())
                 .name(template.getName())
                 .description("Custom validation for " + template.getName())

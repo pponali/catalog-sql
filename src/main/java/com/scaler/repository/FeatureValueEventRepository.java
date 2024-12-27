@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FeatureValueEventRepository extends JpaRepository<FeatureValueEvent, String> {
-    List<FeatureValueEvent> findByFeatureId(String featureId);
+public interface FeatureValueEventRepository extends JpaRepository<FeatureValueEvent, Long> {
+    List<FeatureValueEvent> findByFeatureId(Long featureId);
     List<FeatureValueEvent> findByEventType(EventType eventType);
-    List<FeatureValueEvent> findByFeatureIdAndEventType(String featureId, EventType eventType);
+    List<FeatureValueEvent> findByFeatureIdAndEventType(Long featureId, EventType eventType);
 }

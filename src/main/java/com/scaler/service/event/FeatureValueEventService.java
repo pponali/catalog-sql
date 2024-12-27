@@ -1,5 +1,7 @@
 package com.scaler.service.event;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.dto.ProductFeatureValueDTO;
 import com.scaler.model.FeatureValueEvent;
 import com.scaler.repository.FeatureValueEventRepository;
@@ -18,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class FeatureValueEventService {
     private final FeatureValueEventRepository repository;
+    private final ObjectMapper objectMapper;
     private final Map<String, List<FeatureValueEvent>> eventHistory = new ConcurrentHashMap<>();
 
     public void publishValueChangeEvent(ProductFeatureValueDTO oldValue, ProductFeatureValueDTO newValue) {
@@ -32,14 +35,19 @@ public class FeatureValueEventService {
     }
 
     public void publishValidationEvent(ProductFeatureValueDTO value, List<String> violations) {
-        FeatureValueEvent event = FeatureValueEvent.builder()
-                .eventType(FeatureValueEvent.EventType.VALIDATION)
-                .featureId(Long.parseLong(value.getFeatureId().toString()))
-                .newValue(value.getValue())
-                .metadata(Map.of("violations", violations))
-                .timestamp(LocalDateTime.now())
-                .build();
-        saveEvent(event);
+        try {
+            String metadataJson = objectMapper.writeValueAsString(Map.of("violations", violations));
+            FeatureValueEvent event = FeatureValueEvent.builder()
+                    .eventType(FeatureValueEvent.EventType.VALIDATION)
+                    .featureId(Long.parseLong(value.getFeatureId().toString()))
+                    .newValue(value.getValue())
+                    .metadata(metadataJson)
+                    .timestamp(LocalDateTime.now())
+                    .build();
+            saveEvent(event);
+        } catch (JsonProcessingException e) {
+            log.error("Error serializing metadata to JSON", e);
+        }
     }
 
     public void publishTransformationEvent(ProductFeatureValueDTO originalValue, ProductFeatureValueDTO transformedValue) {
@@ -55,21 +63,23 @@ public class FeatureValueEventService {
 
     private void saveEvent(FeatureValueEvent event) {
         repository.save(event);
-        String key = event.getFeatureId() + "_" + event.getEventType();
+        String key = event.getFeatureId().toString();
         eventHistory.computeIfAbsent(key, k -> new ArrayList<>()).add(event);
         log.debug("Event saved: {}", event);
     }
 
     public List<FeatureValueEvent> getEventsByFeatureId(Long featureId) {
-        return repository.findByFeatureId(featureId.toString());
+        return repository.findByFeatureId(featureId);
     }
 
     public List<FeatureValueEvent> getEventsByType(com.scaler.model.FeatureValueEvent.EventType eventType) {
         return repository.findByEventType(eventType);
     }
 
-    public List<FeatureValueEvent> getEventHistory(Long featureId, com.scaler.model.FeatureValueEvent.EventType eventType) {
-        String key = featureId.toString() + "_" + eventType;
-        return new ArrayList<>(eventHistory.getOrDefault(key, new ArrayList<>()));
+    public List<FeatureValueEvent> getEventHistory(Long featureId) {
+        if (featureId == null) {
+            return new ArrayList<>();
+        }
+        return eventHistory.getOrDefault(featureId.toString(), new ArrayList<>());
     }
 }

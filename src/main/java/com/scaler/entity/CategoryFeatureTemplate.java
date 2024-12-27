@@ -13,9 +13,9 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"category", "features"})
-@ToString(exclude = {"category", "features"})
-public class CategoryFeatureTemplate {
+@EqualsAndHashCode(callSuper = true, exclude = {"category", "features"})
+@ToString(callSuper = true, exclude = {"category", "features"})
+public class CategoryFeatureTemplate extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,21 +33,27 @@ public class CategoryFeatureTemplate {
     private String attributeType;
 
     @Column(name = "validation_pattern")
+    @lombok.Builder.Default
     private String validationPattern = "";
 
     @Column(name = "min_value")
+    @lombok.Builder.Default
     private String minValue = "";
 
     @Column(name = "max_value")
+    @lombok.Builder.Default
     private String maxValue = "";
 
     @Column(name = "allowed_values")
+    @lombok.Builder.Default
     private String allowedValues = "";
 
     @Column(name = "default_value")
+    @lombok.Builder.Default
     private String defaultValue = "";
 
     @Column(name = "feature_type")
+    @lombok.Builder.Default
     private String featureType = "STRING";
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,31 +61,39 @@ public class CategoryFeatureTemplate {
     private UnitOfMeasure unit;
 
     @Column
+    @lombok.Builder.Default
     private boolean visible = true;
 
     @Column
+    @lombok.Builder.Default
     private boolean editable = true;
 
     @Column
+    @lombok.Builder.Default
     private boolean searchable = true;
 
     @Column
+    @lombok.Builder.Default
     private boolean comparable = true;
 
     @Column
+    @lombok.Builder.Default
     private boolean mandatory = false;
 
     @Column(name = "multi_valued")
+    @lombok.Builder.Default
     private boolean multiValued = false;
 
     @Column(columnDefinition = "jsonb")
-    private String metadata;
+    @lombok.Builder.Default
+    private String metadata = "";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "template", cascade = CascadeType.ALL, orphanRemoval = true)
+    @lombok.Builder.Default
     private Set<ProductFeature> features = new HashSet<>();
 
     public void addFeature(ProductFeature feature) {

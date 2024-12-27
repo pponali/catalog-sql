@@ -7,26 +7,25 @@ import com.scaler.entity.ProductFeatureValue;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {ProductMapper.class, ProductFeatureMapper.class}, imports = {LocalDateTime.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE, unmappedSourcePolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", uses = {ProductFeatureMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE, unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public abstract class ProductFeatureValueMapper {
 
     @Autowired
     protected ObjectMapper objectMapper;
 
-    @Mapping(target = "product", source = "product")
+    @Mapping(target = "product", ignore = true)
     @Mapping(target = "feature", source = "feature")
-    @Mapping(target = "attributeValues", expression = "java(mapAttributeValues(dto))")
+    @Mapping(target = "attributeValue", expression = "java(mapAttributeValues(dto))")
     @Mapping(target = "validationPattern", ignore = true)
-    @Mapping(target = "createdAt", expression = "java(LocalDateTime.now())")
-    @Mapping(target = "updatedAt", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", constant = "system")
     @Mapping(target = "updatedBy", constant = "system")
     public abstract ProductFeatureValue toEntity(ProductFeatureValueDTO dto);
 
-    @Mapping(target = "product", source = "product")
+    @Mapping(target = "product", ignore = true)
     @Mapping(target = "feature", source = "feature")
     @Mapping(target = "value", expression = "java(entity.getValueAsString())")
     public abstract ProductFeatureValueDTO toDTO(ProductFeatureValue entity);
@@ -34,7 +33,10 @@ public abstract class ProductFeatureValueMapper {
     @Named("mapAttributeValues")
     protected JsonNode mapAttributeValues(ProductFeatureValueDTO dto) {
         try {
-            return objectMapper.readTree(dto.getValue());
+            if (dto.getValue() != null) {
+                return objectMapper.readTree(dto.getValue());
+            }
+            return null;
         } catch (Exception e) {
             throw new RuntimeException("Error mapping attribute values", e);
         }
@@ -54,10 +56,14 @@ public abstract class ProductFeatureValueMapper {
         if (dto.getStatus() != null) {
             entity.setStatus(dto.getStatus());
         }
+        if (dto.getValidationStatus() != null) {
+            entity.setValidationStatus(dto.getValidationStatus());
+        }
+        if (dto.getValidationMessage() != null) {
+            entity.setValidationMessage(dto.getValidationMessage());
+        }
         entity.setCreatedBy("system");
         entity.setUpdatedBy("system");
-        entity.setCreatedAt(LocalDateTime.now());
-        entity.setUpdatedAt(LocalDateTime.now());
     }
 
     public abstract List<ProductFeatureValueDTO> toDto(List<ProductFeatureValue> entities);

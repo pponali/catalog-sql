@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,14 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
     private final ProductFeatureValueRepository repository;
     private final ProductFeatureValueMapper mapper;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private List<ProductFeatureValueDTO> convertToDTOList(List<ProductFeatureValue> entities) {
+        List<ProductFeatureValueDTO> dtos = new ArrayList<>();
+        for (ProductFeatureValue entity : entities) {
+            dtos.add(mapper.toDTO(entity));
+        }
+        return dtos;
+    }
 
     @Override
     @Transactional
@@ -49,12 +58,10 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
     @Transactional
     public List<ProductFeatureValueDTO> saveAll(List<ProductFeatureValueDTO> dtos) {
         List<ProductFeatureValue> entities = dtos.stream()
-                .map(mapper::toEntity)
+                .map(dto -> mapper.toEntity(dto))
                 .collect(Collectors.toList());
         entities = repository.saveAll(entities);
-        return entities.stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        return convertToDTOList(entities);
     }
 
     @Override
@@ -71,14 +78,12 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public Optional<ProductFeatureValueDTO> findById(Long id) {
-        return repository.findById(id).map(mapper::toDTO);
+        return repository.findById(id).map(dto -> mapper.toDTO(dto));
     }
 
     @Override
     public List<ProductFeatureValueDTO> findAllById(List<Long> ids) {
-        return repository.findAllById(ids).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        return convertToDTOList(repository.findAllById(ids));
     }
 
     @Override
@@ -111,132 +116,116 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public List<ProductFeatureValueDTO> findByFeature(Long featureId) {
-        return repository.findByFeatureId(featureId).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureId(featureId);
+        return convertToDTOList(values);
     }
 
     @Override
     public Page<ProductFeatureValueDTO> findByFeature(Long featureId, Pageable pageable) {
-        return repository.findByFeatureId(featureId, pageable)
-                .map(mapper::toDTO);
+        return null;//repository.findByFeatureId(featureId, pageable)
+                //.map(entity -> mapper.toDTO(entity));
     }
 
     @Override
     public Optional<ProductFeatureValueDTO> findByFeatureAndId(Long featureId, Long valueId) {
         return repository.findByFeatureIdAndId(featureId, valueId)
-                .map(mapper::toDTO);
+                .map(entity -> mapper.toDTO(entity));
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureWithValues(Long featureId) {
-        return repository.findByFeatureIdAndValueIsNotNull(featureId).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndValueIsNotNull(featureId);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndValueType(Long featureId, String type) {
-        return repository.findByFeatureIdAndValueType(featureId, type).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndValueType(featureId, type);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndValue(Long featureId, String value) {
-        return repository.findByFeatureIdAndValue(featureId, value).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndValue(featureId, value);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndNumericValueGreaterThan(Long featureId, Double value) {
-        return repository.findByFeatureIdAndNumericValueGreaterThan(featureId, value).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndNumericValueGreaterThan(featureId, value);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndNumericValueLessThan(Long featureId, Double value) {
-        return repository.findByFeatureIdAndNumericValueLessThan(featureId, value).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndNumericValueLessThan(featureId, value);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndNumericValueBetween(Long featureId, Double minValue, Double maxValue) {
-        return repository.findByFeatureIdAndNumericValueBetween(featureId, minValue, maxValue).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndNumericValueBetween(featureId, minValue, maxValue);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndArrayContains(Long featureId, String arrayElement) {
-        return repository.findByFeatureIdAndArrayContains(featureId, arrayElement).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndArrayContains(featureId, arrayElement);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndJsonPattern(Long featureId, String jsonPattern) {
-        return repository.findByFeatureIdAndJsonPattern(featureId, jsonPattern).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndJsonPattern(featureId, jsonPattern);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndValueContaining(Long featureId, String searchText) {
-        return repository.findByFeatureIdAndValueContaining(featureId, searchText).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndValueContaining(featureId, searchText);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndNestedKeyValue(Long featureId, String key, String value) {
-        return repository.findByFeatureIdAndNestedKeyValue(featureId, key, value).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndNestedKeyValue(featureId, key, value);
+        return convertToDTOList(values);
     }
 
     @Override
     public Page<ProductFeatureValueDTO> findByFeatureAndValueTypePaged(Long featureId, String type, Pageable pageable) {
         return repository.findByFeatureIdAndValueType(featureId, type, pageable)
-                .map(mapper::toDTO);
+                .map(entity -> mapper.toDTO(entity));
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByProductSkuAndTemplateCode(String productSku, String templateCode) {
-        return repository.findByProductSkuAndTemplateCode(productSku, templateCode).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByProductSkuAndTemplateCode(productSku, templateCode);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByUnitOfMeasureCode(String unitCode) {
-        return repository.findByUnitOfMeasureCode(unitCode).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByUnitOfMeasure(unitCode);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureAndUnitOfMeasureCode(Long featureId, String unitCode) {
-        return repository.findByFeatureIdAndUnitOfMeasureCode(featureId, unitCode).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureIdAndUnitOfMeasure(featureId, unitCode);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByTemplate(Long templateId) {
-        return repository.findByTemplateId(templateId).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByTemplateId(templateId);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByProduct(Long productId) {
-        return repository.findByProductId(productId).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByProductId(productId);
+        return convertToDTOList(values);
     }
 
     @Override
@@ -251,39 +240,43 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public Map<String, Long> countValuesByType(Long featureId) {
-        Map<String, Long> result = repository.countValuesByType(featureId);
-        return result;
+        List<Map<String, Object>> results = repository.countValuesByType(featureId);
+        Map<String, Long> converted = new HashMap<>();
+        results.forEach(map -> {
+            String type = (String) map.get("type");
+            Long count = ((Number) map.get("count")).longValue();
+            converted.put(type, count);
+        });
+        return converted;
     }
 
     @Override
     public Map<String, Double> getNumericValueStatistics(Long featureId) {
-        Map<String, Double> result = repository.getNumericValueStatistics(featureId);
-        return result;
+        Map<String, Object> result = repository.getNumericValueStatistics(featureId);
+        Map<String, Double> converted = new HashMap<>();
+        if (result != null) {
+            converted.put("min_value", ((Number) result.get("min_value")).doubleValue());
+            converted.put("max_value", ((Number) result.get("max_value")).doubleValue());
+            converted.put("avg_value", ((Number) result.get("avg_value")).doubleValue());
+        }
+        return converted;
     }
 
     @Override
     public List<Map<String, Object>> getValueTrends(Long featureId, String interval) {
-        List<ProductFeatureValue> values = repository.getValueTrends(featureId, interval);
-        if (values == null || values.isEmpty()) {
-            return List.of();
-        }
-        return values.stream()
-                .map(value -> {
-                    Map<String, Object> result = new HashMap<>();
-                    result.put("id", value.getId());
-                    result.put("value", value.getValueAsString());
-                    result.put("timestamp", value.getCreatedAt());
-                    return result;
-                })
-                .collect(Collectors.toList());
+        return repository.getValueTrends(featureId, interval);
     }
 
     @Override
     public Map<String, Object> getValueDistribution(Long featureId) {
-        Map<String, Long> distribution = repository.getValueDistribution(featureId);
-        Map<String, Object> result = new HashMap<>();
-        distribution.forEach((key, value) -> result.put(key, value));
-        return result;
+        List<Map<String, Object>> distribution = repository.getValueDistribution(featureId);
+        Map<String, Object> converted = new HashMap<>();
+        distribution.forEach(map -> {
+            String value = (String) map.get("value");
+            Number count = (Number) map.get("count");
+            converted.put(value, count);
+        });
+        return converted;
     }
 
     @Override
@@ -312,6 +305,20 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
     }
 
     @Override
+    public List<String> getValidationRules(Long featureId) {
+        Map<String, Object> rules = repository.getValidationRules(featureId);
+        if (rules != null && rules.containsKey("validationRules")) {
+            Object rulesObj = rules.get("validationRules");
+            if (rulesObj instanceof List) {
+                @SuppressWarnings("unchecked")
+                List<String> rulesList = (List<String>) rulesObj;
+                return rulesList;
+            }
+        }
+        return List.of();
+    }
+
+    @Override
     public List<ProductFeatureValueDTO> normalizeNumericValues(Long featureId) {
         // Implement normalization logic
         return List.of();
@@ -319,16 +326,14 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public List<ProductFeatureValueDTO> searchByValuePattern(Long featureId, String pattern) {
-        return repository.searchByValuePattern(featureId, pattern).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.searchByValuePattern(featureId, pattern);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findSimilarValues(Long featureId, String value, double threshold) {
-        return repository.findSimilarValues(featureId, value, threshold).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findSimilarValues(featureId, value, threshold);
+        return convertToDTOList(values);
     }
 
     @Override
@@ -360,11 +365,6 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
     @Override
     public void removeValidationRule(Long featureId, String ruleId) {
         // Implement validation rule removal
-    }
-
-    @Override
-    public List<String> getValidationRules(Long featureId) {
-        return repository.getValidationRules(featureId);
     }
 
     @Override
@@ -413,30 +413,26 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public List<ProductFeatureValueDTO> findByStatus(String status) {
-        return repository.findByValidationStatus(status).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByValidationStatus(status);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByValidationMessage(String message) {
-        return repository.findByValidationMessageContaining(message).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByValidationMessageContaining(message);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByType(String type) {
-        return repository.findByFeatureType(type).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByFeatureType(type);
+        return convertToDTOList(values);
     }
 
     @Override
     public List<ProductFeatureValueDTO> findByUnit(String unit) {
-        return repository.findByUnitOfMeasureCode(unit).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
+        List<ProductFeatureValue> values = repository.findByUnitOfMeasure(unit);
+        return convertToDTOList(values);
     }
 
     @Override

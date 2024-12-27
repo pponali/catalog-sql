@@ -131,10 +131,9 @@ public class ProductFeatureValueController {
     @Operation(summary = "Get event history")
     @GetMapping("/monitoring/events/{featureId}")
     public ResponseEntity<ApiResponse<List<FeatureValueEvent>>> getEventHistory(
-            @PathVariable @NotNull Long featureId,
-            @RequestParam FeatureValueEvent.EventType eventType) {
-        log.info("Fetching event history for feature id: {} and event type: {}", featureId, eventType);
-        List<FeatureValueEvent> events = eventService.getEventHistory(featureId, eventType);
+            @PathVariable @NotNull Long featureId) {
+        log.info("Fetching event history for feature id: {}", featureId);
+        List<FeatureValueEvent> events = eventService.getEventHistory(featureId);
         return ResponseEntity.ok(ApiResponse.success(events));
     }
 

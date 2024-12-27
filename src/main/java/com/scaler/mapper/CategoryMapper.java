@@ -4,10 +4,7 @@ import com.scaler.dto.CategoryDTO;
 import com.scaler.entity.Category;
 import org.mapstruct.*;
 
-@Mapper(
-    componentModel = "spring",
-    unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
     @Mapping(target = "code", source = "code")
     @Mapping(target = "name", source = "name")

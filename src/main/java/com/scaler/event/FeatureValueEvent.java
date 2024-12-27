@@ -16,6 +16,7 @@ public class FeatureValueEvent {
     private Long featureId;
     private Long productId;
     private com.scaler.model.FeatureValueEvent.EventType eventType;
+    @lombok.Builder.Default
     private LocalDateTime eventTime = LocalDateTime.now();
     private String oldValue;
     private String newValue;

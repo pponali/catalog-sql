@@ -14,6 +14,6 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findBySku(String sku);
     
-    @Query("SELECT p FROM Product p JOIN p.categories c WHERE c = :category")
+    @Query("SELECT p FROM Product p WHERE p.category = :category")
     List<Product> findByCategory(@Param("category") Category category);
 }

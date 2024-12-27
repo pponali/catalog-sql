@@ -3,16 +3,16 @@ package com.scaler.entity;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Entity
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "product_feature_value")
 public class ProductFeatureValue extends BaseEntity {
 
@@ -20,11 +20,14 @@ public class ProductFeatureValue extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @Column(nullable = false)
+    private String value;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feature_id")
     private ProductFeature feature;
 
@@ -53,6 +56,7 @@ public class ProductFeatureValue extends BaseEntity {
     private String validationMessage;
 
     @Column(name = "attribute_values", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode attributeValues;
 
     @Column(name = "created_at")

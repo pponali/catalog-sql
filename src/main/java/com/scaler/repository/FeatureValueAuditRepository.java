@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface FeatureValueAuditRepository extends JpaRepository<FeatureValueAudit, Long> {
     
-    Page<FeatureValueAudit> findByValueId(Long valueId, Pageable pageable);
+    Page<FeatureValueAudit> findByFeatureValueId(Long featureValueId, Pageable pageable);
     
     Page<FeatureValueAudit> findByFeatureId(Long featureId, Pageable pageable);
     

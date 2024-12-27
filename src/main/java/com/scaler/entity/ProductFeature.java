@@ -2,32 +2,20 @@ package com.scaler.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "product_feature")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"product", "values"})
-@ToString(exclude = {"product", "values"})
-public class ProductFeature {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "template_id", nullable = false)
-    private CategoryFeatureTemplate template;
-
+@EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "values"})
+@ToString(callSuper = true, exclude = {"product", "template", "values"})
+public class ProductFeature extends BaseEntity {
     @Column(nullable = false)
     private String code;
 
@@ -37,8 +25,8 @@ public class ProductFeature {
     @Column
     private String description;
 
-    @Column(name = "feature_type")
-    private String featureType;
+    @Column(name = "attribute_type")
+    private String attributeType;
 
     @Column(name = "validation_pattern")
     private String validationPattern;
@@ -52,21 +40,48 @@ public class ProductFeature {
     @Column(name = "allowed_values")
     private String allowedValues;
 
+    @Column(name = "default_value")
+    private String defaultValue;
+
+    @Column(name = "feature_type")
+    private String featureType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_id")
     private UnitOfMeasure unit;
 
+    @Column
+    private boolean visible;
+
+    @Column
+    private boolean editable;
+
+    @Column
+    private boolean searchable;
+
+    @Column
+    private boolean comparable;
+
+    @Column
+    private boolean required;
+
+    @Column(name = "multi_valued")
+    private boolean multiValued;
+
     @Column(columnDefinition = "jsonb")
     private String metadata;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "template_id")
+    private CategoryFeatureTemplate template;
+
     @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
+    @lombok.Builder.Default
     private Set<ProductFeatureValue> values = new HashSet<>();
-
-    private boolean required;
-
-    public boolean isRequired() {
-        return required;
-    }
 
     public void addValue(ProductFeatureValue value) {
         values.add(value);
@@ -76,22 +91,5 @@ public class ProductFeature {
     public void removeValue(ProductFeatureValue value) {
         values.remove(value);
         value.setFeature(null);
-    }
-
-    @PrePersist
-    @PreUpdate
-    private void updateFromTemplate() {
-        if (template != null) {
-            this.code = template.getCode();
-            this.name = template.getName();
-            this.description = template.getDescription();
-            this.featureType = template.getAttributeType();
-            this.validationPattern = template.getValidationPattern();
-            this.minValue = template.getMinValue();
-            this.maxValue = template.getMaxValue();
-            this.allowedValues = template.getAllowedValues();
-            this.unit = template.getUnit();
-            this.metadata = template.getMetadata();
-        }
     }
 }

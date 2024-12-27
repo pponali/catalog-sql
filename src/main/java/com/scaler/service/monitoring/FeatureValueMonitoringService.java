@@ -93,7 +93,7 @@ public class FeatureValueMonitoringService {
                 .operationTimes(avgOperationTimes)
                 .errorCounts(errors)
                 .cacheStats(cacheService.getAllCacheStats())
-                .eventHistory(eventService.getEventHistory(null, com.scaler.model.FeatureValueEvent.EventType.VALUE_CHANGE))
+                .eventHistory(eventService.getEventHistory(null))
                 .lastUpdateTimes(new ConcurrentHashMap<>(lastUpdateTimes))
                 .build();
     }

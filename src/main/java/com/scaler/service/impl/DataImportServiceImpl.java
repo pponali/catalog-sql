@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -43,13 +44,12 @@ public class DataImportServiceImpl implements DataImportService {
                 
                 for (Map<String, Object> unitData : units) {
                     try {
-                        UnitOfMeasure unit = UnitOfMeasure.builder()
-                                .code((String) unitData.get("code"))
-                                .name((String) unitData.get("name"))
-                                .description((String) unitData.get("description"))
-                                .baseUnit((String) unitData.get("baseUnit"))
-                                .conversionFactor(Double.valueOf(unitData.get("conversionFactor").toString()))
-                                .build();
+                        UnitOfMeasure unit = new UnitOfMeasure();
+                        unit.setCode((String) unitData.get("code"));
+                        unit.setName((String) unitData.get("name"));
+                        unit.setDescription((String) unitData.get("description"));
+                        unit.setBaseUnit((String) unitData.get("baseUnit"));
+                        unit.setConversionFactor(Double.valueOf(unitData.get("conversionFactor").toString()));
                         
                         unitRepository.save(unit);
                         successCount++;
@@ -66,13 +66,12 @@ public class DataImportServiceImpl implements DataImportService {
                 
                 for (Map<String, Object> productData : products) {
                     try {
-                        Product product = Product.builder()
-                                .name((String) productData.get("name"))
-                                .description((String) productData.get("description"))
-                                .sku((String) productData.get("sku"))
-                                .status((String) productData.get("status"))
-                                .category(categoryService.findByCode((String) productData.get("categoryCode")))
-                                .build();
+                        Product product = new Product();
+                        product.setName((String) productData.get("name"));
+                        product.setDescription((String) productData.get("description"));
+                        product.setSku((String) productData.get("sku"));
+                        product.setStatus((String) productData.get("status"));
+                        product.setCategories(Collections.singleton(categoryService.findByCode((String) productData.get("categoryCode"))));
                         
                         productRepository.save(product);
                         successCount++;
@@ -82,20 +81,20 @@ public class DataImportServiceImpl implements DataImportService {
                 }
             }
             
-            return ImportResult.builder()
-                    .totalRecords(totalRecords)
-                    .successCount(successCount)
-                    .failureCount(totalRecords - successCount)
-                    .errors(errors)
-                    .build();
+            ImportResult result = new ImportResult();
+            result.setTotalRecords(totalRecords);
+            result.setSuccessCount(successCount);
+            result.setFailureCount(totalRecords - successCount);
+            result.setErrors(errors);
+            return result;
                     
         } catch (IOException e) {
-            return ImportResult.builder()
-                    .totalRecords(0)
-                    .successCount(0)
-                    .failureCount(0)
-                    .errors(List.of("Failed to parse import file: " + e.getMessage()))
-                    .build();
+            ImportResult result = new ImportResult();
+            result.setTotalRecords(0);
+            result.setSuccessCount(0);
+            result.setFailureCount(0);
+            result.setErrors(List.of("Failed to parse import file: " + e.getMessage()));
+            return result;
         }
     }
 }

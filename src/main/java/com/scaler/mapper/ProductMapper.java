@@ -2,13 +2,13 @@ package com.scaler.mapper;
 
 import com.scaler.dto.ProductDTO;
 import com.scaler.entity.Product;
+import com.scaler.entity.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.util.List;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = {ProductFeatureMapper.class}, imports = {UUID.class})
 public interface ProductMapper {
@@ -18,7 +18,7 @@ public interface ProductMapper {
     @Mapping(target = "code", source = "code")
     ProductDTO toDTO(Product product);
 
-    @Mapping(target = "category.id", expression = "java(mapFromCategoryIds(productDTO.getCategoryIds()))")
+    @Mapping(target = "categories", expression = "java(mapFromCategoryIds(productDTO.getCategoryIds()))")
     @Mapping(source = "features", target = "features")
     @Mapping(target = "featureValues", ignore = true)
     @Mapping(target = "metadata", ignore = true)
@@ -32,16 +32,24 @@ public interface ProductMapper {
     List<Product> toEntity(List<ProductDTO> dtos);
 
     default List<Long> mapToCategoryIds(Product product) {
-        if (product == null || product.getCategory() == null) {
+        if (product == null || product.getCategories() == null) {
             return Collections.emptyList();
         }
-        return Collections.singletonList(product.getCategory().getId());
+        return product.getCategories().stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
     }
 
-    default Long mapFromCategoryIds(List<Long> categoryIds) {
+    default Set<Category> mapFromCategoryIds(List<Long> categoryIds) {
         if (categoryIds == null || categoryIds.isEmpty()) {
-            return null;
+            return new HashSet<>();
         }
-        return categoryIds.get(0);
+        return categoryIds.stream()
+                .map(id -> {
+                    Category category = new Category();
+                    category.setId(id);
+                    return category;
+                })
+                .collect(Collectors.toSet());
     }
 }

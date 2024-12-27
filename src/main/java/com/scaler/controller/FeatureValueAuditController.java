@@ -37,7 +37,7 @@ public class FeatureValueAuditController {
             @PathVariable @NotNull Long valueId,
             Pageable pageable) {
         log.info("Fetching audit entries for value id: {}", valueId);
-        Page<FeatureValueAudit> audits = repository.findByValueId(valueId, pageable);
+        Page<FeatureValueAudit> audits = repository.findByFeatureValueId(valueId, pageable);
         return ResponseEntity.ok(ApiResponse.success(audits));
     }
 
@@ -97,54 +97,30 @@ public class FeatureValueAuditController {
 
     @Operation(summary = "Get audit entries by complex criteria")
     @PostMapping("/search")
-    public ResponseEntity<ApiResponse<Page<FeatureValueAudit>>> searchAudits(
+    public ResponseEntity<ApiResponse<List<FeatureValueAudit>>> searchAudits(
             @RequestBody Map<String, Object> criteria,
-            Pageable pageable) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+        
         log.info("Searching audit entries with criteria: {}", criteria);
         
-        // Example implementation - extend based on your needs
-        Long featureId = (Long) criteria.get("featureId");
-        Long valueId = (Long) criteria.get("valueId");
-        String action = (String) criteria.get("action");
-        String startTime = (String) criteria.get("startTime");
-        String endTime = (String) criteria.get("endTime");
+        Long featureId = criteria.get("featureId") != null ? 
+                Long.valueOf(criteria.get("featureId").toString()) : null;
         
-        // Build dynamic query based on criteria
-        Page<FeatureValueAudit> audits;
-        if (featureId != null && action != null) {
-            audits = repository.findByFeatureIdAndAction(
-                featureId, FeatureValueAudit.AuditAction.valueOf(action), pageable);
-        } else if (featureId != null) {
-            audits = repository.findByFeatureId(featureId, pageable);
-        } else if (valueId != null) {
-            audits = repository.findByValueId(valueId, pageable);
-        } else {
-            audits = repository.findAll(pageable);
+        List<FeatureValueAudit.AuditAction> actions = criteria.get("actions") != null ?
+                ((List<String>) criteria.get("actions")).stream()
+                        .map(FeatureValueAudit.AuditAction::valueOf)
+                        .collect(Collectors.toList()) :
+                List.of();
+        
+        if (featureId != null && start != null && end != null && !actions.isEmpty()) {
+            return ResponseEntity.ok(ApiResponse.success(
+                    repository.findByFeatureIdAndTimeRangeAndActions(featureId, start, end, actions)
+            ));
         }
         
-        return ResponseEntity.ok(ApiResponse.success(audits));
-    }
-
-    @Operation(summary = "Get audit statistics")
-    @GetMapping("/stats")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getAuditStats() {
-        log.info("Fetching audit statistics");
-        
-        Map<String, Object> stats = new HashMap<>();
-        
-        // Total number of audit entries
-        long totalEntries = repository.count();
-        stats.put("totalEntries", totalEntries);
-        
-        // Count by action type
-        Map<FeatureValueAudit.AuditAction, Long> actionCounts = repository.findAll().stream()
-                .collect(Collectors.groupingBy(FeatureValueAudit::getAction, Collectors.counting()));
-        stats.put("actionCounts", actionCounts);
-        
-        // Recent activity
-        List<FeatureValueAudit> recentAudits = repository.findTop10ByOrderByTimestampDesc();
-        stats.put("recentActivity", recentAudits);
-        
-        return ResponseEntity.ok(ApiResponse.success(stats));
+        return ResponseEntity.ok(ApiResponse.success(
+                repository.findTop10ByOrderByTimestampDesc()
+        ));
     }
 }

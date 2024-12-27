@@ -1,8 +1,9 @@
 package com.scaler.entity;
 
-import com.scaler.validation.rule.ValidationRule;
+import com.scaler.model.ValidationRule;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -30,29 +31,26 @@ public class ClassificationAttribute {
     @Column(length = 1000)
     private String description;
 
-    @Builder.Default
+    @lombok.Builder.Default
     @Column(nullable = false)
     private boolean active = true;
 
-    @Builder.Default
+    @lombok.Builder.Default
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Builder.Default
+    @lombok.Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classification_class_id")
     private ClassificationClass classificationClass;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "validation_rule_id")
-    private ValidationRule validationRule;
+    @Column(name = "validation_rule", columnDefinition = "jsonb")
+    private String validationRule;
 
     @OneToMany(mappedBy = "classificationAttribute", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ValidationRule> validationRules = new HashSet<>();
-
-    @OneToMany(mappedBy = "classificationAttribute", cascade = CascadeType.ALL, orphanRemoval = true)
+    @lombok.Builder.Default
     private Set<ClassificationAttributeValue> values = new HashSet<>();
 
     @PreUpdate

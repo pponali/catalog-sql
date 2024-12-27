@@ -10,7 +10,9 @@ VALUES
 -- Root category for 1mg
 (4, '1MG', '1mg', 'Healthcare and Wellness', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 -- Root category for Tanishq
-(5, 'TANISHQ', 'Tanishq', 'Premium Jewelry', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(5, 'TANISHQ', 'Tanishq', 'Premium Jewelry', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- Root category for Electronics
+(6, 'ELECTRONICS', 'Electronics', 'Electronics and Gadgets', NULL, 'Category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Sub Categories
 INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
@@ -45,7 +47,7 @@ VALUES
 (106, 'TANQ_PRECIOUS', 'Precious Metals', 'Precious Metals Class', 5, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (107, 'TANQ_GEMS', 'Gemstones', 'Gemstones Classification', 5, 'ClassificationClass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- Classification Class specific attributes
+-- Classification Classes
 INSERT INTO classification_class (id, allow_multiple_categories, inherit_features, active, sequence)
 VALUES 
 (100, true, true, true, 1),
@@ -138,37 +140,86 @@ VALUES
 (6, 4, '{"value": "5 Star", "efficiency": "high"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Category Feature Templates
-INSERT INTO category_feature_template (id, category_id, code, name, description, attribute_type, validation_pattern, min_value, max_value, unit, visible, editable, searchable, comparable, mandatory, multi_valued, metadata, created_date, last_modified_date)
+INSERT INTO category_feature_template (
+    id, category_id, code, name, description, 
+    feature_type, attribute_type, validation_pattern, min_value, max_value,
+    allowed_values, unit, visible, editable, searchable,
+    comparable, mandatory, multi_valued, metadata,
+    display_order, is_required, created_date, last_modified_date
+)
 VALUES 
-(1, 11, 'style', 'Style', 'Apparel style', 'ENUM', NULL, NULL, NULL, NULL, true, true, true, true, false, false, '{"validation": {"enum_values": ["casual", "formal", "sports"]}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 11, 'size', 'Size', 'Apparel size', 'ENUM', NULL, NULL, NULL, NULL, true, true, true, true, true, false, '{"validation": {"enum_values": ["XS", "S", "M", "L", "XL"]}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 10, 'cooling_capacity', 'Cooling Capacity', 'AC cooling capacity', 'NUMERIC', NULL, 0.8, 2.0, 'ton', true, true, true, true, true, false, '{"validation": {"min": 0.8, "max": 2.0}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 10, 'energy_rating', 'Energy Rating', 'Energy efficiency', 'ENUM', NULL, NULL, NULL, NULL, true, true, true, true, true, false, '{"validation": {"enum_values": ["3_star", "4_star", "5_star"]}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 20, 'organic_cert', 'Organic Certification', 'Organic certification', 'STRING', '^[A-Z0-9-]+$', NULL, NULL, NULL, true, true, true, false, true, false, '{"validation": {"pattern": "^[A-Z0-9-]+$"}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 20, 'nutritional_info', 'Nutritional Info', 'Nutrition facts', 'JSON', NULL, NULL, NULL, NULL, true, true, false, false, true, false, '{"validation": {"required_fields": ["calories", "protein", "carbs", "fat"]}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(7, 22, 'shelf_life', 'Shelf Life', 'Product shelf life', 'NUMERIC', NULL, 1, 365, 'days', true, true, true, true, true, false, '{"validation": {"min": 1, "max": 365}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(8, 30, 'medicine_type', 'Medicine Type', 'Type of medicine', 'ENUM', NULL, NULL, NULL, NULL, true, true, true, true, true, false, '{"validation": {"enum_values": ["allopathy", "ayurvedic", "homeopathy"]}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(9, 30, 'composition', 'Composition', 'Medicine composition', 'JSON', NULL, NULL, NULL, NULL, true, true, false, false, true, false, '{"validation": {"required_fields": ["active_ingredients", "strength"]}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(10, 31, 'dosage_form', 'Dosage Form', 'Medicine form', 'ENUM', NULL, NULL, NULL, NULL, true, true, true, true, true, false, '{"validation": {"enum_values": ["tablet", "capsule", "syrup", "injection"]}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(11, 41, 'metal_purity', 'Metal Purity', 'Gold purity', 'STRING', '^[0-9]{2,3}K$', NULL, NULL, NULL, true, true, true, true, true, false, '{"validation": {"pattern": "^[0-9]{2,3}K$"}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(12, 41, 'stone_details', 'Stone Details', 'Diamond details', 'JSON', NULL, NULL, NULL, NULL, true, true, false, false, true, false, '{"validation": {"required_fields": ["stone_type", "carat", "clarity"]}}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 1, 'STYLE', 'Style', 'Clothing style', 
+    'string', 'ENUM', NULL, NULL, NULL,
+    '["casual", "formal", "sports"]', NULL, true, true, true,
+    true, true, false, '{"validation": {"enum_values": ["casual", "formal", "sports"]}}',
+    1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(2, 1, 'SIZE', 'Size', 'Clothing size',
+    'string', 'ENUM', NULL, NULL, NULL,
+    '["XS", "S", "M", "L", "XL"]', NULL, true, true, true,
+    true, true, false, '{"validation": {"enum_values": ["XS", "S", "M", "L", "XL"]}}',
+    2, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(3, 2, 'WEIGHT', 'Weight', 'Product weight',
+    'number', 'NUMERIC', NULL, 0.1, 100.0,
+    NULL, 'ton', true, true, true,
+    true, true, false, '{"validation": {"min": 0.1, "max": 100.0}}',
+    1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(4, 2, 'RATING', 'Rating', 'Product rating',
+    'string', 'ENUM', NULL, NULL, NULL,
+    '["3_star", "4_star", "5_star"]', NULL, true, true, true,
+    true, false, false, '{"validation": {"enum_values": ["3_star", "4_star", "5_star"]}}',
+    2, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(5, 3, 'CERTIFICATION', 'Certification', 'Organic certification',
+    'string', 'STRING', '^[A-Z0-9-]+$', NULL, NULL,
+    NULL, NULL, true, true, true,
+    false, true, false, '{"validation": {"pattern": "^[A-Z0-9-]+$"}}',
+    1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(6, 3, 'NUTRITION', 'Nutrition', 'Nutritional information',
+    'json', 'JSON', NULL, NULL, NULL,
+    NULL, NULL, true, true, false,
+    false, true, false, '{"validation": {"required_fields": ["calories", "protein", "carbs", "fat"]}}',
+    2, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(7, 4, 'SHELF_LIFE', 'Shelf Life', 'Product shelf life',
+    'number', 'NUMERIC', NULL, 1, 365,
+    NULL, 'days', true, true, true,
+    true, true, false, '{"validation": {"min": 1, "max": 365}}',
+    1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(8, 5, 'MEDICINE_TYPE', 'Medicine Type', 'Type of medicine',
+    'string', 'ENUM', NULL, NULL, NULL,
+    '["allopathy", "ayurvedic", "homeopathy"]', NULL, true, true, true,
+    true, true, false, '{"validation": {"enum_values": ["allopathy", "ayurvedic", "homeopathy"]}}',
+    1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(9, 5, 'COMPOSITION', 'Composition', 'Medicine composition',
+    'json', 'JSON', NULL, NULL, NULL,
+    NULL, NULL, true, true, false,
+    false, true, false, '{"validation": {"required_fields": ["active_ingredients", "strength"]}}',
+    2, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    
+(10, 5, 'FORM', 'Form', 'Medicine form',
+    'string', 'ENUM', NULL, NULL, NULL,
+    '["tablet", "capsule", "syrup", "injection"]', NULL, true, true, true,
+    true, true, false, '{"validation": {"enum_values": ["tablet", "capsule", "syrup", "injection"]}}',
+    3, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- Sample Products
-INSERT INTO product (id, sku, name, description, created_date, last_modified_date)
+-- Products
+INSERT INTO product (id, code, name, description, product_type, status, metadata, sku, created_date, last_modified_date)
 VALUES 
-(1001, 'AC15TON001', 'Premium 1.5 Ton Split AC', '5 Star energy efficient split AC', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1002, 'AC2TON002', '2 Ton Window AC', '3 Star energy rated window AC', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1003, 'SHIRT001', 'Cotton Formal Shirt', 'White cotton formal shirt', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1004, 'TSHIRT001', 'Sports T-Shirt', 'Moisture-wicking sports t-shirt', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1005, 'BB_APPLE001', 'Organic Royal Gala Apples', 'Premium imported organic apples', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1006, 'BB_MILK001', 'Organic Fresh Milk', 'Farm fresh organic milk', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(1007, '1MG_MED001', 'Crocin Advance', 'Paracetamol 500mg tablets', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1003, 'SHIRT_001', 'Men''s Formal Shirt', 'Classic formal shirt for men', 'APPAREL', 'ACTIVE', '{"brand": "ABC", "color": "white"}', 'SKU001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1004, 'TSHIRT_001', 'Men''s Sports T-Shirt', 'Comfortable sports t-shirt', 'APPAREL', 'ACTIVE', '{"brand": "XYZ", "color": "blue"}', 'SKU002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1005, 'FOOD_001', 'Organic Quinoa', 'Premium organic quinoa', 'FOOD', 'ACTIVE', '{"origin": "Peru", "packaging": "1kg"}', 'SKU003', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1006, 'FOOD_002', 'Organic Chia Seeds', 'Premium organic chia seeds', 'FOOD', 'ACTIVE', '{"origin": "Mexico", "packaging": "500g"}', 'SKU004', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1007, 'MED_001', 'Paracetamol', 'Pain relief medication', 'MEDICINE', 'ACTIVE', '{"manufacturer": "PharmaX", "dosage": "500mg"}', 'SKU005', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Categories
 INSERT INTO product_categories (product_id, category_id)
 VALUES 
-(1001, 10), -- AC in Electronics
-(1002, 10), -- AC in Electronics
 (1003, 11), -- Shirt in Apparel
 (1004, 11), -- T-Shirt in Apparel
 (1005, 20), -- Apples in Food & Beverages
@@ -176,35 +227,29 @@ VALUES
 (1007, 30); -- Medicine in Healthcare
 
 -- Product Features
-INSERT INTO product_feature (id, product_id, template_id, created_date, last_modified_date)
+INSERT INTO product_feature (id, product_id, template_id, code, name, description, feature_type, validation_pattern, min_value, max_value, allowed_values, metadata, required, created_date, last_modified_date)
 VALUES 
-(1, 1001, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 1001, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 1002, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 1002, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 1003, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 1003, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(7, 1004, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(8, 1004, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(9, 1005, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(10, 1005, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(11, 1006, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(12, 1007, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(13, 1007, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 1003, 1, 'STYLE_SHIRT', 'Style', 'Shirt style', 'ENUM', NULL, NULL, NULL, '["casual", "formal"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1003, 2, 'SIZE_SHIRT', 'Size', 'Shirt size', 'ENUM', NULL, NULL, NULL, '["S", "M", "L", "XL"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 1004, 3, 'STYLE_TSHIRT', 'Style', 'T-Shirt style', 'ENUM', NULL, NULL, NULL, '["sports", "casual"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 1004, 4, 'SIZE_TSHIRT', 'Size', 'T-Shirt size', 'ENUM', NULL, NULL, NULL, '["S", "M", "L", "XL"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 1005, 5, 'ORGANIC_CERT', 'Organic Certification', 'Organic certification details', 'STRING', NULL, NULL, NULL, NULL, NULL, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 1005, 6, 'NUTRITION', 'Nutrition Facts', 'Nutritional information', 'JSON', NULL, NULL, NULL, NULL, NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 1006, 7, 'SHELF_LIFE', 'Shelf Life', 'Product shelf life', 'NUMBER', NULL, '1', '30', NULL, NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 1007, 8, 'MED_TYPE', 'Medicine Type', 'Type of medicine', 'ENUM', NULL, NULL, NULL, '["allopathy", "ayurvedic", "homeopathy"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 1007, 9, 'COMPOSITION', 'Composition', 'Medicine composition', 'JSON', NULL, NULL, NULL, NULL, NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 1007, 10, 'FORM', 'Form', 'Medicine form', 'ENUM', NULL, NULL, NULL, '["tablet", "capsule", "syrup", "injection"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Feature Values
-INSERT INTO product_feature_value (id, feature_id, string_value, numeric_value, boolean_value, attribute_value, unit, created_date, last_modified_date)
+INSERT INTO product_feature_value (id, product_id, feature_id, template_id, type, unit, unit_of_measure, status, validation_status, validation_pattern, validation_message, attribute_values, created_at, updated_at, created_by, updated_by)
 VALUES 
-(1, 1, NULL, 1.5, NULL, NULL, 'ton', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 2, NULL, NULL, NULL, '{"value": "5_star", "efficiency": "high"}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 3, NULL, 2.0, NULL, NULL, 'ton', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 4, NULL, NULL, NULL, '{"value": "3_star", "efficiency": "medium"}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 5, 'USDA-ORG-001', NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 6, NULL, NULL, NULL, '{"calories": 52, "protein": 0.3, "carbs": 14, "fat": 0.2}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(7, 7, NULL, 7, NULL, NULL, 'days', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(8, 8, NULL, NULL, NULL, '{"value": "allopathy"}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(9, 9, NULL, NULL, NULL, '{"active_ingredients": ["paracetamol"], "strength": "500mg"}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(10, 10, NULL, NULL, NULL, '{"value": "tablet"}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(11, 11, '22K', NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(12, 12, NULL, NULL, NULL, '{"stone_type": "diamond", "carat": 1.2, "clarity": "VS1"}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(13, 13, NULL, NULL, NULL, '{"value": "allopathy"}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 1003, 1, 1, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "formal"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(2, 1003, 2, 2, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "M"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(3, 1004, 3, 3, 'number', 'ton', NULL, 'active', 'valid', NULL, NULL, '{"value": 1.5}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(4, 1004, 4, 4, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "5_star"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(5, 1005, 5, 5, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "USDA-ORG-001"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(6, 1005, 6, 6, 'json', NULL, NULL, 'active', 'valid', NULL, NULL, '{"calories": 52, "protein": 0.3, "carbs": 14, "fat": 0.2}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(7, 1006, 7, 7, 'number', 'days', NULL, 'active', 'valid', NULL, NULL, '{"value": 7}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(8, 1007, 8, 8, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "allopathy"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(9, 1007, 9, 9, 'json', NULL, NULL, 'active', 'valid', NULL, NULL, '{"active_ingredients": ["paracetamol"], "strength": "500mg"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(10, 1007, 10, 10, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "tablet"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');

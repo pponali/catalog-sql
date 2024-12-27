@@ -7,33 +7,33 @@ import org.mapstruct.*;
 
 import java.util.*;
 
-@Mapper(componentModel = "spring", uses = {ProductFeatureValueMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProductFeatureMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "description", source = "description")
-    @Mapping(target = "type", source = "featureType")
-    @Mapping(target = "unit", source = "unit", qualifiedByName = "unitToString")
+    @Mapping(target = "featureType", source = "featureType")
+    @Mapping(target = "unitId", source = "unit.id")
     @Mapping(target = "required", source = "required")
     @Mapping(target = "validationPattern", source = "validationPattern")
     @Mapping(target = "minValue", source = "minValue")
     @Mapping(target = "maxValue", source = "maxValue")
-    @Mapping(target = "allowedValues", source = "allowedValues", qualifiedByName = "stringToList")
-    @Mapping(target = "values", source = "values")
+    @Mapping(target = "allowedValues", source = "allowedValues")
+    @Mapping(target = "values", ignore = true)
     ProductFeatureDTO toDTO(ProductFeature entity);
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "description", source = "description")
-    @Mapping(target = "featureType", source = "type")
-    @Mapping(target = "unit", source = "unit", qualifiedByName = "stringToUnit")
+    @Mapping(target = "featureType", source = "featureType")
+    @Mapping(target = "unit", ignore = true)
     @Mapping(target = "required", source = "required")
     @Mapping(target = "validationPattern", source = "validationPattern")
     @Mapping(target = "minValue", source = "minValue")
     @Mapping(target = "maxValue", source = "maxValue")
-    @Mapping(target = "allowedValues", source = "allowedValues", qualifiedByName = "listToString")
-    @Mapping(target = "values", source = "values")
+    @Mapping(target = "allowedValues", source = "allowedValues")
+    @Mapping(target = "values", ignore = true)
     @Mapping(target = "product", ignore = true)
     @Mapping(target = "template", ignore = true)
     @Mapping(target = "metadata", ignore = true)
@@ -44,33 +44,13 @@ public interface ProductFeatureMapper {
 
     List<ProductFeature> toEntity(List<ProductFeatureDTO> dtos);
 
-    @Named("unitToString")
-    default String unitToString(UnitOfMeasure unit) {
-        return unit != null ? unit.getCode() : null;
-    }
-
-    @Named("stringToUnit")
-    default UnitOfMeasure stringToUnit(String unitCode) {
-        if (unitCode == null) {
-            return null;
+    @AfterMapping
+    default void afterToEntity(@MappingTarget ProductFeature feature, ProductFeatureDTO dto) {
+        if (dto.getUnitId() != null) {
+            UnitOfMeasure unit = new UnitOfMeasure();
+            unit.setId(dto.getUnitId());
+            feature.setUnit(unit);
         }
-        return UnitOfMeasure.builder().code(unitCode).build();
-    }
-
-    @Named("stringToList")
-    default List<String> stringToList(String value) {
-        if (value == null || value.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return Arrays.asList(value.split(","));
-    }
-
-    @Named("listToString")
-    default String listToString(List<String> values) {
-        if (values == null || values.isEmpty()) {
-            return null;
-        }
-        return String.join(",", values);
     }
 
     default String generateCode(ProductFeatureDTO dto) {

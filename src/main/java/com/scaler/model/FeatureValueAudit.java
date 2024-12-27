@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -32,9 +34,11 @@ public class FeatureValueAudit {
     private AuditAction action;
     
     @Column(name = "old_value", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode oldValue;
     
     @Column(name = "new_value", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode newValue;
     
     @Column(name = "changed_by")

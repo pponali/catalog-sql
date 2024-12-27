@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Entity
-@Table(name = "classification_classes")
+@DiscriminatorValue("CLASSIFICATION")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +18,7 @@ import java.util.Set;
 public class ClassificationClass extends Category {
 
     @OneToMany(mappedBy = "classificationClass")
+    @Builder.Default
     private Set<ClassAttributeAssignment> attributeAssignments = new HashSet<>();
 
     @Column(name = "allow_multiple_categories")
@@ -27,6 +28,7 @@ public class ClassificationClass extends Category {
     private boolean inheritFeatures;
 
     @Column(name = "active")
+    @Builder.Default
     private boolean active = true;
 
     @Column(name = "sequence")
@@ -39,6 +41,7 @@ public class ClassificationClass extends Category {
     )
     @MapKeyColumn(name = "key")
     @Column(name = "value")
+    @Builder.Default
     private Map<String, String> metadata = new java.util.HashMap<>();
 
     public Set<ClassAttributeAssignment> getAllAttributeAssignments() {

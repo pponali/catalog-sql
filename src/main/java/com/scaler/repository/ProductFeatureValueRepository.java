@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,244 +15,198 @@ import java.util.Optional;
 @Repository
 public interface ProductFeatureValueRepository extends JpaRepository<ProductFeatureValue, Long> {
     
-    // Basic feature queries
-    List<ProductFeatureValue> findByFeature(ProductFeature feature);
-    Optional<ProductFeatureValue> findByFeatureAndId(ProductFeature feature, Long id);
-    
-    // JSON value queries
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature AND pfv.attributeValue IS NOT NULL")
-    List<ProductFeatureValue> findByFeatureWithValues(@Param("feature") ProductFeature feature);
-    
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature AND pfv.attributeValue->>'type' = :type")
-    List<ProductFeatureValue> findByFeatureAndValueType(@Param("feature") ProductFeature feature, @Param("type") String type);
-    
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature AND pfv.attributeValue->>'value' = :value")
-    List<ProductFeatureValue> findByFeatureAndValue(@Param("feature") ProductFeature feature, @Param("value") String value);
-    
-    // Numeric value comparisons
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND (pfv.attributeValue->>'type' = 'number') " +
-           "AND CAST(pfv.attributeValue->>'value' AS DECIMAL) > :value")
-    List<ProductFeatureValue> findByFeatureAndNumericValueGreaterThan(
-            @Param("feature") ProductFeature feature, 
-            @Param("value") Double value);
-    
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND (pfv.attributeValue->>'type' = 'number') " +
-           "AND CAST(pfv.attributeValue->>'value' AS DECIMAL) < :value")
-    List<ProductFeatureValue> findByFeatureAndNumericValueLessThan(
-            @Param("feature") ProductFeature feature, 
-            @Param("value") Double value);
-    
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND (pfv.attributeValue->>'type' = 'number') " +
-           "AND CAST(pfv.attributeValue->>'value' AS DECIMAL) BETWEEN :minValue AND :maxValue")
-    List<ProductFeatureValue> findByFeatureAndNumericValueBetween(
-            @Param("feature") ProductFeature feature, 
-            @Param("minValue") Double minValue,
-            @Param("maxValue") Double maxValue);
-    
-    // Array value queries
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND (pfv.attributeValue->>'type' = 'array') " +
-           "AND pfv.attributeValue->'value' ? :arrayElement")
-    List<ProductFeatureValue> findByFeatureAndArrayContains(
-            @Param("feature") ProductFeature feature,
-            @Param("arrayElement") String arrayElement);
-    
-    // Product and template queries
-    @Query("SELECT pfv FROM ProductFeatureValue pfv " +
-           "JOIN pfv.feature pf " +
-           "JOIN pf.product p " +
-           "JOIN pf.template t " +
-           "WHERE p.sku = :productSku " +
-           "AND t.code = :templateCode")
-    List<ProductFeatureValue> findByProductSkuAndTemplateCode(
-            @Param("productSku") String productSku,
-            @Param("templateCode") String templateCode);
-    
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureId(Long featureId);
 
-    List<ProductFeatureValue> findByFeatureAndUnitOfMeasureCode(ProductFeature feature, String unitCode);
-    
-    // Advanced JSON queries
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND pfv.attributeValue @> :jsonPattern")
-    List<ProductFeatureValue> findByFeatureAndJsonPattern(
-            @Param("feature") ProductFeature feature,
-            @Param("jsonPattern") String jsonPattern);
-    
-    // Text search in JSON values
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND pfv.attributeValue->>'value' ILIKE %:searchText%")
-    List<ProductFeatureValue> findByFeatureAndValueContaining(
-            @Param("feature") ProductFeature feature,
-            @Param("searchText") String searchText);
-    
-    // Aggregation queries
-    @Query(value = "SELECT COUNT(pfv) FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND (pfv.attributeValue->>'type' = :type)")
-    Long countByFeatureAndValueType(
-            @Param("feature") ProductFeature feature,
-            @Param("type") String type);
-    
-    @Query(value = "SELECT AVG(CAST(pfv.attributeValue->>'value' AS DECIMAL)) FROM ProductFeatureValue pfv " +
-           "WHERE pfv.feature = :feature AND (pfv.attributeValue->>'type' = 'number')")
-    Double averageNumericValueByFeature(@Param("feature") ProductFeature feature);
-    
-    // Pagination support
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND pfv.attributeValue->>'type' = :type",
-           countQuery = "SELECT COUNT(pfv) FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND pfv.attributeValue->>'type' = :type")
-    Page<ProductFeatureValue> findByFeatureAndValueTypePaged(
-            @Param("feature") ProductFeature feature,
-            @Param("type") String type,
-            Pageable pageable);
-    
-    // Complex JSON structure queries
-    @Query(value = "SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature = :feature " +
-           "AND pfv.attributeValue->'value'->>'key' = :key " +
-           "AND pfv.attributeValue->'value'->>'value' = :value")
-    List<ProductFeatureValue> findByFeatureAndNestedKeyValue(
-            @Param("feature") ProductFeature feature,
-            @Param("key") String key,
-            @Param("value") String value);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.id = ?2", nativeQuery = true)
+    Optional<ProductFeatureValue> findByFeatureIdAndId(Long featureId, Long id);
 
-    Page<ProductFeatureValue> findByFeatureId(Long featureId, Pageable pageable);
-    void deleteByFeatureId(Long featureId);
-    
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.feature.template.id = :templateId")
-    List<ProductFeatureValue> findByFeatureTemplateId(Long templateId);
-    
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.feature.product.id = :productId")
-    List<ProductFeatureValue> findByProductId(Long productId);
-    
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.attributeValue->>'status' = :status")
-    List<ProductFeatureValue> findByStatus(String status);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.attribute_values IS NOT NULL", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndValueIsNotNull(Long featureId);
 
-    
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.attributeValue->>'type' = :type")
-    List<ProductFeatureValue> findByType(String type);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = ?2", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndValueType(Long featureId, String type);
 
-    // ID-based queries
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId AND pfv.id = :id")
-    Optional<ProductFeatureValue> findByFeatureIdAndId(@Param("featureId") Long featureId, @Param("id") Long id);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.attribute_values->>'value' = ?2", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndValue(Long featureId, String value);
 
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId AND pfv.attributeValue IS NOT NULL")
-    List<ProductFeatureValue> findByFeatureIdAndValueIsNotNull(@Param("featureId") Long featureId);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.product_id = ?1 " +
+           "AND pfv.template_id = ?2", nativeQuery = true)
+    List<ProductFeatureValue> findByProductSkuAndTemplateCode(String productSku, String templateCode);
 
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId AND pfv.attributeValue->>'type' = :type")
-    List<ProductFeatureValue> findByFeatureIdAndValueType(@Param("featureId") Long featureId, @Param("type") String type);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId AND pfv.attributeValue->>'type' = :type")
-    Page<ProductFeatureValue> findByFeatureIdAndValueType(@Param("featureId") Long featureId, @Param("type") String type, Pageable pageable);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId AND pfv.attributeValue->>'value' = :value")
-    List<ProductFeatureValue> findByFeatureIdAndValue(@Param("featureId") Long featureId, @Param("value") String value);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId " +
-           "AND (pfv.attributeValue->>'type' = 'number') " +
-           "AND CAST(pfv.attributeValue->>'value' AS DECIMAL) > :value")
-    List<ProductFeatureValue> findByFeatureIdAndNumericValueGreaterThan(
-            @Param("featureId") Long featureId, 
-            @Param("value") Double value);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId " +
-           "AND (pfv.attributeValue->>'type' = 'number') " +
-           "AND CAST(pfv.attributeValue->>'value' AS DECIMAL) < :value")
-    List<ProductFeatureValue> findByFeatureIdAndNumericValueLessThan(
-            @Param("featureId") Long featureId, 
-            @Param("value") Double value);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId " +
-           "AND (pfv.attributeValue->>'type' = 'number') " +
-           "AND CAST(pfv.attributeValue->>'value' AS DECIMAL) BETWEEN :minValue AND :maxValue")
-    List<ProductFeatureValue> findByFeatureIdAndNumericValueBetween(
-            @Param("featureId") Long featureId, 
-            @Param("minValue") Double minValue,
-            @Param("maxValue") Double maxValue);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId " +
-           "AND (pfv.attributeValue->>'type' = 'array') " +
-           "AND pfv.attributeValue->'value' ? :arrayElement")
-    List<ProductFeatureValue> findByFeatureIdAndArrayContains(
-            @Param("featureId") Long featureId,
-            @Param("arrayElement") String arrayElement);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId " +
-           "AND pfv.attributeValue @> :jsonPattern")
-    List<ProductFeatureValue> findByFeatureIdAndJsonPattern(
-            @Param("featureId") Long featureId,
-            @Param("jsonPattern") String jsonPattern);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId " +
-           "AND pfv.attributeValue->>'value' ILIKE %:searchText%")
-    List<ProductFeatureValue> findByFeatureIdAndValueContaining(
-            @Param("featureId") Long featureId,
-            @Param("searchText") String searchText);
-
-    @Query("SELECT pfv FROM ProductFeatureValue pfv WHERE pfv.feature.id = :featureId " +
-           "AND pfv.attributeValue->>:key = :value")
-    List<ProductFeatureValue> findByFeatureIdAndNestedKeyValue(
-            @Param("featureId") Long featureId,
-            @Param("key") String key,
-            @Param("value") String value);
-
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.feature.featureType = :type")
-    List<ProductFeatureValue> findByFeatureType(@Param("type") String type);
-    
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.validationStatus = :status")
-    List<ProductFeatureValue> findByValidationStatus(@Param("status") String status);
-    
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.validationMessage LIKE %:message%")
-    List<ProductFeatureValue> findByValidationMessageContaining(@Param("message") String message);
-    
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.feature.unit.code = :unitCode")
-    List<ProductFeatureValue> findByUnitOfMeasureCode(@Param("unitCode") String unitCode);
-    
-    @Query("SELECT v FROM ProductFeatureValue v WHERE v.feature.id = :featureId")
-    List<ProductFeatureValue> findByFeatureId(@Param("featureId") Long featureId);
-
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.unit_of_measure = ?2", nativeQuery = true)
     List<ProductFeatureValue> findByFeatureIdAndUnitOfMeasureCode(Long featureId, String unitOfMeasureCode);
 
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = 'number' " +
+           "AND CAST(pfv.attribute_values->>'value' AS DECIMAL) > ?2", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndNumericValueGreaterThan(Long featureId, Double value);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = 'number' " +
+           "AND CAST(pfv.attribute_values->>'value' AS DECIMAL) < ?2", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndNumericValueLessThan(Long featureId, Double value);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = 'number' " +
+           "AND CAST(pfv.attribute_values->>'value' AS DECIMAL) BETWEEN ?2 AND ?3", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndNumericValueBetween(Long featureId, Double minValue, Double maxValue);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = 'array' " +
+           "AND pfv.attribute_values @> CAST(?2 AS jsonb)", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndArrayContains(Long featureId, String arrayElement);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.attribute_values->>'value' LIKE CONCAT('%', ?2, '%')", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndValueContaining(Long featureId, String searchText);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.attribute_values->?2 = ?3::jsonb", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndNestedKeyValue(Long featureId, String key, String value);
+
+    @Query(value = "SELECT COUNT(*) FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = ?2", nativeQuery = true)
+    Long countByFeatureIdAndValueType(Long featureId, String valueType);
+
+    @Query(value = "SELECT AVG(CAST(pfv.attribute_values->>'value' AS DECIMAL)) " +
+           "FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = 'number'", nativeQuery = true)
+    Double averageNumericValueByFeatureId(Long featureId);
+
+    @Query(value = "SELECT pfv.type as value_type, COUNT(*) as count " +
+           "FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "GROUP BY pfv.type", nativeQuery = true)
+    List<Map<String, Object>> countValuesByType(Long featureId);
+
+    @Query(value = "SELECT " +
+           "MIN(CAST(pfv.attribute_values->>'value' AS DECIMAL)) as min_value, " +
+           "MAX(CAST(pfv.attribute_values->>'value' AS DECIMAL)) as max_value, " +
+           "AVG(CAST(pfv.attribute_values->>'value' AS DECIMAL)) as avg_value " +
+           "FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = 'number'", nativeQuery = true)
+    Map<String, Object> getNumericValueStatistics(Long featureId);
+
+    @Query(value = "SELECT " +
+           "DATE_TRUNC('month', pfv.created_at) as month, " +
+           "COUNT(*) as count " +
+           "FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = ?2 " +
+           "GROUP BY DATE_TRUNC('month', pfv.created_at) " +
+           "ORDER BY month", nativeQuery = true)
+    List<Map<String, Object>> getValueTrends(Long featureId, String valueType);
+
+    @Query(value = "SELECT " +
+           "pfv.attribute_values->>'value' as value, " +
+           "COUNT(*) as count " +
+           "FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "GROUP BY pfv.attribute_values->>'value'", nativeQuery = true)
+    List<Map<String, Object>> getValueDistribution(Long featureId);
+
+    @Query(value = "SELECT pfv.created_at, pfv.attribute_values->>'value' as value " +
+           "FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.product_id = ?2 " +
+           "ORDER BY pfv.created_at DESC", nativeQuery = true)
+    List<ProductFeatureValue> getValueHistory(Long featureId, Long productId);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.attribute_values::text SIMILAR TO ?2", nativeQuery = true)
+    List<ProductFeatureValue> searchByValuePattern(Long featureId, String pattern);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.attribute_values->>'value' LIKE CONCAT('%', ?2, '%') " +
+           "AND similarity(pfv.attribute_values->>'value', ?2) > ?3", nativeQuery = true)
+    List<ProductFeatureValue> findSimilarValues(Long featureId, String value, double threshold);
+
+    @Query(value = "SELECT pfv.validation_pattern FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1", nativeQuery = true)
+    Map<String, Object> getValidationRules(Long featureId);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.type = ?2", nativeQuery = true)
+    Page<ProductFeatureValue> findByFeatureIdAndValueType(Long featureId, String type, Pageable pageable);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.unit_of_measure = ?2", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndUnitOfMeasure(Long featureId, String unitOfMeasure);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.template_id = ?1", nativeQuery = true)
     List<ProductFeatureValue> findByTemplateId(Long templateId);
 
-    @Query("SELECT COUNT(pf) FROM ProductFeatureValue pf WHERE pf.feature.id = :featureId AND pf.type = :valueType")
-    Long countByFeatureIdAndValueType(@Param("featureId") Long featureId, @Param("valueType") String valueType);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.type = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureType(String type);
 
-    @Query("SELECT AVG(pf.numericValue) FROM ProductFeatureValue pf WHERE pf.feature.id = :featureId")
-    Double averageNumericValueByFeatureId(@Param("featureId") Long featureId);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.validation_status = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByValidationStatus(String status);
 
-    @Query("SELECT pf.type, COUNT(pf) FROM ProductFeatureValue pf WHERE pf.feature.id = :featureId GROUP BY pf.type")
-    Map<String, Long> countValuesByType(@Param("featureId") Long featureId);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.validation_message LIKE CONCAT('%', ?1, '%')", nativeQuery = true)
+    List<ProductFeatureValue> findByValidationMessageContaining(String message);
 
-    @Query("SELECT MIN(pf.numericValue) as min, MAX(pf.numericValue) as max, AVG(pf.numericValue) as avg, " +
-           "COUNT(pf.numericValue) as count FROM ProductFeatureValue pf WHERE pf.feature.id = :featureId")
-    Map<String, Double> getNumericValueStatistics(@Param("featureId") Long featureId);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.unit_of_measure = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByUnitOfMeasure(String unitOfMeasure);
 
-    @Query("SELECT pf FROM ProductFeatureValue pf WHERE pf.feature.id = :featureId " +
-           "AND pf.type = :valueType ORDER BY pf.createdAt")
-    List<ProductFeatureValue> getValueTrends(@Param("featureId") Long featureId, @Param("valueType") String valueType);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByFeature(ProductFeature feature);
 
-    @Query("SELECT pf.stringValue, COUNT(pf) FROM ProductFeatureValue pf " +
-           "WHERE pf.feature.id = :featureId GROUP BY pf.stringValue")
-    Map<String, Long> getValueDistribution(@Param("featureId") Long featureId);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "AND pfv.attribute_values::text LIKE ?2", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdAndJsonPattern(Long featureId, String jsonPattern);
 
-    @Query("SELECT pf FROM ProductFeatureValue pf WHERE pf.feature.id = :featureId " +
-           "AND pf.product.id = :productId ORDER BY pf.createdAt")
-    List<ProductFeatureValue> getValueHistory(@Param("featureId") Long featureId, @Param("productId") Long productId);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.product_id = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByProductId(Long productId);
 
-    @Query("SELECT pf FROM ProductFeatureValue pf WHERE pf.feature.id = :featureId " +
-           "AND pf.stringValue LIKE %:pattern%")
-    List<ProductFeatureValue> searchByValuePattern(@Param("featureId") Long featureId, @Param("pattern") String pattern);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureId(Long featureId, Pageable pageable);
 
-    @Query(value = "SELECT * FROM product_feature_value pf WHERE pf.feature_id = :featureId " +
-                   "AND similarity(pf.string_value, :value) > :threshold", nativeQuery = true)
-    List<ProductFeatureValue> findSimilarValues(@Param("featureId") Long featureId, 
-                                              @Param("value") String value,
-                                              @Param("threshold") double threshold);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.status = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByStatus(String status);
 
-    @Query("SELECT DISTINCT pf.validationPattern FROM ProductFeatureValue pf " +
-           "WHERE pf.feature.id = :featureId AND pf.validationPattern IS NOT NULL")
-    List<String> getValidationRules(@Param("featureId") Long featureId);
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.type = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByType(String type);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureTemplateId(Long templateId);
+
+    void deleteByFeatureId(Long featureId);
 }

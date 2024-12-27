@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "validation_rules")
+@Table(name = "validation_rule")
 @Data
 @Builder
 @NoArgsConstructor
@@ -44,7 +44,7 @@ public class ValidationRule {
     @Column(name = "max_value")
     private String maxValue;
 
-    @Column(name = "feature_id")
+    @Column(name = "feature_id", insertable = false, updatable = false)
     private Long featureId;
 
     public enum RuleType {

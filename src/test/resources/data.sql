@@ -61,11 +61,10 @@ VALUES
     ('MED_BRAND', 'Medicine Brand', 'Medicine Brand Name', 4, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('RING_MATERIAL', 'Ring Material', 'Ring Material Type', 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- Insert test product feature values
-INSERT INTO product_feature_value (feature_id, string_value, numeric_value, boolean_value, attribute_value, unit, created_date, last_modified_date)
+-- Product Feature Values
+INSERT INTO product_feature_value (id, product_id, feature_id, template_id, type, unit, unit_of_measure, status, validation_status, validation_pattern, validation_message, attribute_values, created_at, updated_at, created_by, updated_by)
 VALUES 
-    (1, NULL, 150, NULL, NULL, 'W', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'Blue', NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (3, '2024-12-31', NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (4, 'Generic', NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (5, 'Gold', NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 1, 1, 1, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "formal"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(2, 1, 2, 2, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "M"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(3, 2, 3, 3, 'number', 'ton', NULL, 'active', 'valid', NULL, NULL, '{"value": 1.5}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(4, 2, 4, 4, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "5_star"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
