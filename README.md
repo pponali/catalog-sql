@@ -74,6 +74,225 @@ A Spring Boot application with PostgreSQL database integration, featuring Spring
 - Flexible attribute types
 - Dynamic feature configuration
 
+## Validation System
+
+The application implements a comprehensive validation system using both database constraints and Drools rules engine.
+
+### 1. Product Feature Validations (Database Level)
+
+These are basic data validations defined in the database schema through the `category_feature_template` table:
+
+```sql
+CREATE TABLE category_feature_template (
+    feature_type VARCHAR(50),
+    validation_pattern VARCHAR(255),
+    min_value VARCHAR(50),
+    max_value VARCHAR(50),
+    allowed_values JSONB
+);
+```
+
+Example template with validation:
+```sql
+INSERT INTO category_feature_template (
+    feature_type, validation_pattern, min_value, max_value, allowed_values
+) VALUES (
+    'ENUM', '^(S|M|L|XL)$', '0', '100', '["S", "M", "L", "XL"]'
+);
+```
+
+### 2. Jakarta Bean Validation
+
+The application uses a custom annotation `@ProductFeatureValueValidator` that implements Jakarta Bean Validation:
+
+```java
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = ProductFeatureValueValidator.Validator.class)
+public @interface ProductFeatureValueValidator {
+    String message() default "Invalid feature value";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+}
+```
+
+### 3. Type-Specific Validations
+
+#### String Validation
+- Pattern matching using regular expressions
+- Length constraints
+- Allowed values validation
+- Custom format validation
+
+#### Numeric Validation
+- Range validation (min/max)
+- Precision validation
+- Unit-specific validation
+- Scale validation
+
+#### JSON Validation
+- Schema validation
+- Required fields validation
+- Enum value validation
+- Nested object validation
+
+### 4. Drools Rules Engine Integration
+
+Complex business validations are handled by Drools rules engine:
+
+#### Category-Specific Rules
+```java
+rule "Validate Fresh Product Shelf Life"
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "BB_.*",
+        featureCode == "shelf_life",
+        value != null && value.matches("^\\d+$")
+    )
+    eval(Integer.parseInt($fact.getValue()) <= 0 || 
+         Integer.parseInt($fact.getValue()) > 365)
+then
+    $fact.addError("Shelf life must be between 1 and 365 days");
+end
+```
+
+#### Feature-Specific Rules
+```java
+rule "Validate Medicine Composition"
+when
+    $fact : CategoryValidationFact(
+        categoryCode matches "1MG_.*",
+        featureCode == "composition"
+    )
+    eval(!isValidMedicineComposition($fact.getValue()))
+then
+    $fact.addError("Invalid medicine composition format");
+end
+```
+
+### 5. Validation Flow
+
+1. **Database Level**
+   - Basic data type validation
+   - Pattern matching
+   - Range checking
+   - Allowed values validation
+
+2. **Service Level**
+   - Complex business rules
+   - Cross-field validation
+   - Category-specific validation
+   - Feature dependency validation
+
+3. **API Level**
+   - Request payload validation
+   - Data format validation
+   - Authorization validation
+   - Input sanitization
+
+### 6. Error Handling
+
+- Detailed error messages
+- Field-level validation errors
+- Business rule violation errors
+- Category-specific error messages
+- Localized error messages
+
+### 7. Validation Extension Points
+
+1. **Custom Validators**
+```java
+public interface CustomValidator {
+    boolean validate(ProductFeatureValue value);
+    String getErrorMessage();
+}
+```
+
+2. **Custom Rules**
+```java
+rule "Custom Category Rule"
+when
+    // Custom conditions
+then
+    // Custom actions
+end
+```
+
+3. **Custom Validation Metadata**
+```json
+{
+    "validation": {
+        "custom_rule": {
+            "type": "regex",
+            "pattern": "^custom_pattern$",
+            "message": "Custom error message"
+        }
+    }
+}
+```
+
+### 8. Validation Examples
+
+1. **Size Validation**
+```sql
+-- Template definition
+INSERT INTO category_feature_template VALUES (
+    'SIZE_TEMPLATE',
+    'ENUM',
+    '^(S|M|L|XL)$',
+    NULL,
+    '["S", "M", "L", "XL"]'
+);
+
+-- Feature value
+{
+    "type": "ENUM",
+    "value": "M",
+    "validation_status": "VALID"
+}
+```
+
+2. **Price Validation**
+```sql
+-- Template definition
+INSERT INTO category_feature_template VALUES (
+    'PRICE_TEMPLATE',
+    'NUMERIC',
+    '^[0-9]+(\.[0-9]{1,2})?$',
+    '0',
+    '1000000'
+);
+
+-- Feature value
+{
+    "type": "NUMERIC",
+    "value": 99.99,
+    "validation_status": "VALID"
+}
+```
+
+3. **Medicine Composition**
+```sql
+-- Template definition
+INSERT INTO category_feature_template VALUES (
+    'COMPOSITION_TEMPLATE',
+    'JSON',
+    NULL,
+    NULL,
+    NULL
+);
+
+-- Feature value
+{
+    "type": "JSON",
+    "value": {
+        "paracetamol": "500mg",
+        "caffeine": "65mg"
+    },
+    "validation_status": "VALID"
+}
+```
+
 ## Adding Complex Features Without Code Changes
 
 ### 1. Adding New Attributes
