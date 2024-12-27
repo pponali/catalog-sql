@@ -23,7 +23,11 @@ VALUES
 (3, 'DAYS', 'Days', 'Time duration in days', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (4, 'CERTIFICATION', 'Certification', 'Certification type', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (5, 'NUTRITION', 'Nutrition', 'Nutritional measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 'MEDICINE', 'Medicine', 'Medicine measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(6, 'MEDICINE', 'Medicine', 'Medicine measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 'WEIGHT', 'Weight', 'Weight measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 'VOLUME', 'Volume', 'Volume measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 'LENGTH', 'Length', 'Length measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 'TEMPERATURE', 'Temperature', 'Temperature measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Root Categories
 INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
@@ -38,55 +42,37 @@ VALUES
 -- Sub Categories
 INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
 VALUES 
-(10, 'MPH11111L4', 'Split AC NEW', 'Split Air Conditioners', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(11, 'MPWEAR001', 'Western Wear', 'Western Style Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(12, 'MPWEAR002', 'Ethnic Wear', 'Traditional and Ethnic Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(20, 'BB_FRUITS', 'Fresh Fruits', 'Fresh and Seasonal Fruits', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(21, 'BB_VEG', 'Fresh Vegetables', 'Fresh and Organic Vegetables', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(22, 'BB_DAIRY', 'Dairy & Eggs', 'Fresh Dairy Products and Eggs', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(30, '1MG_MEDICINES', 'Medicines', 'Prescription and OTC Medicines', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(31, '1MG_WELLNESS', 'Health & Wellness', 'Wellness and Nutrition Products', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(32, '1MG_PERSONAL', 'Personal Care', 'Personal Care Products', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(40, 'TANQ_GOLD', 'Gold Jewelry', '22K Gold Jewelry Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(41, 'TANQ_DIAMOND', 'Diamond Jewelry', 'Premium Diamond Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(42, 'TANQ_WEDDING', 'Wedding Collection', 'Bridal Jewelry Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- Home Appliances Sub-categories
+(10, 'MPH11111L4', 'Split AC', 'Split Air Conditioners', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(11, 'MPH11111L5', 'Refrigerators', 'Home Refrigerators', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(12, 'MPH11111L6', 'Washing Machines', 'Washing Machines', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
--- Products
-INSERT INTO product (
-    id, code, name, description, product_type,
-    status, metadata, sku,
-    created_date, last_modified_date
-)
-VALUES 
-(1003, 'FORMAL_SHIRT_001', 'Men''s Formal Shirt', 'Classic formal shirt for men',
- 'APPAREL', 'ACTIVE',
- '{"brand": "ClassicWear", "department": "mens", "category": "formal_wear"}',
- 'SHIRT-F-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- Apparel Sub-categories
+(20, 'MPWEAR001', 'Western Wear', 'Western Style Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(21, 'MPWEAR002', 'Ethnic Wear', 'Traditional and Ethnic Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(22, 'MPWEAR003', 'Sports Wear', 'Athletic and Sports Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-(1004, 'CASUAL_TSHIRT_001', 'Men''s Casual T-Shirt', 'Comfortable casual t-shirt',
- 'APPAREL', 'ACTIVE',
- '{"brand": "ComfortWear", "department": "mens", "category": "casual_wear"}',
- 'TSHIRT-C-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- Groceries Sub-categories
+(30, 'BB_FRUITS', 'Fresh Fruits', 'Fresh and Seasonal Fruits', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(31, 'BB_VEG', 'Fresh Vegetables', 'Fresh and Organic Vegetables', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(32, 'BB_DAIRY', 'Dairy & Eggs', 'Fresh Dairy Products and Eggs', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(33, 'BB_STAPLES', 'Staples', 'Daily Essential Staples', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-(1005, 'FOOD_001', 'Organic Quinoa', 'Premium organic quinoa', 
- 'FOOD', 'ACTIVE', 
- '{"origin": "Peru", "packaging": "1kg"}', 
- 'SKU003', 
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- Healthcare Sub-categories
+(40, '1MG_MEDICINES', 'Medicines', 'Prescription and OTC Medicines', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(41, '1MG_WELLNESS', 'Health & Wellness', 'Wellness and Nutrition Products', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(42, '1MG_PERSONAL', 'Personal Care', 'Personal Care Products', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(43, '1MG_DEVICES', 'Medical Devices', 'Healthcare Devices', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-(1006, 'FOOD_002', 'Organic Chia Seeds', 'Premium organic chia seeds', 
- 'FOOD', 'ACTIVE', 
- '{"origin": "Mexico", "packaging": "500g"}', 
- 'SKU004', 
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- Jewelry Sub-categories
+(50, 'TANQ_GOLD', 'Gold Jewelry', '22K Gold Jewelry Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(51, 'TANQ_DIAMOND', 'Diamond Jewelry', 'Premium Diamond Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(52, 'TANQ_PLATINUM', 'Platinum Jewelry', 'Premium Platinum Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-(1007, 'MED_001', 'Paracetamol', 'Pain relief medication', 
- 'MEDICINE', 'ACTIVE', 
- '{"manufacturer": "PharmaX", "dosage": "500mg"}', 
- 'SKU005', 
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- Electronics Sub-categories
+(60, 'ELEC_MOBILE', 'Mobile Phones', 'Smartphones and Mobile Phones', 6, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(61, 'ELEC_LAPTOP', 'Laptops', 'Laptops and Notebooks', 6, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(62, 'ELEC_AUDIO', 'Audio Devices', 'Headphones and Speakers', 6, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Category Feature Templates
 INSERT INTO category_feature_template (
@@ -98,15 +84,108 @@ INSERT INTO category_feature_template (
     category_id
 )
 VALUES 
+-- Apparel Templates
 (100, 'SIZE_TEMPLATE', 'Size Template', 'Template for size features',
  'ENUM', '^(S|M|L|XL)$', '0', '100', '["S", "M", "L", "XL"]',
  '{"group": "basic", "tooltip": "Select size"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 11),
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 20),
 
 (101, 'STYLE_TEMPLATE', 'Style Template', 'Template for style features',
  'ENUM', '^(casual|formal|sports)$', '0', '100', '["casual", "formal", "sports"]',
  '{"group": "basic", "tooltip": "Select style"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 11);
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 20),
+
+-- Electronics Templates
+(102, 'STORAGE_TEMPLATE', 'Storage Template', 'Template for storage capacity',
+ 'ENUM', '^(64GB|128GB|256GB|512GB)$', '0', '1000', '["64GB", "128GB", "256GB", "512GB"]',
+ '{"group": "specifications", "tooltip": "Select storage capacity"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 60),
+
+(103, 'COLOR_TEMPLATE', 'Color Template', 'Template for color selection',
+ 'ENUM', '^(Black|White|Gold|Silver)$', '0', '100', '["Black", "White", "Gold", "Silver"]',
+ '{"group": "appearance", "tooltip": "Select color"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 60),
+
+-- Appliance Templates
+(104, 'CAPACITY_TEMPLATE', 'Capacity Template', 'Template for appliance capacity',
+ 'NUMERIC', '^[0-9]+$', '0', '1000', NULL,
+ '{"group": "specifications", "tooltip": "Enter capacity"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 10),
+
+(105, 'ENERGY_RATING_TEMPLATE', 'Energy Rating Template', 'Template for energy efficiency',
+ 'ENUM', '^(1|2|3|4|5)$', '1', '5', '["1", "2", "3", "4", "5"]',
+ '{"group": "efficiency", "tooltip": "Select energy rating"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 10),
+
+-- Grocery Templates
+(106, 'WEIGHT_TEMPLATE', 'Weight Template', 'Template for product weight',
+ 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0', '1000', NULL,
+ '{"group": "measurements", "tooltip": "Enter weight in kg"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 30),
+
+(107, 'EXPIRY_TEMPLATE', 'Expiry Template', 'Template for expiry date',
+ 'DATE', NULL, NULL, NULL, NULL,
+ '{"group": "quality", "tooltip": "Select expiry date"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 30);
+
+-- Products
+INSERT INTO product (
+    id, code, name, description, product_type,
+    status, metadata, sku,
+    created_date, last_modified_date
+)
+VALUES 
+-- Apparel Products
+(1001, 'FORMAL_SHIRT_001', 'Men''s Formal Shirt', 'Classic formal shirt for men',
+ 'APPAREL', 'ACTIVE',
+ '{"brand": "ClassicWear", "department": "mens", "category": "formal_wear"}',
+ 'SHIRT-F-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(1002, 'CASUAL_TSHIRT_001', 'Men''s Casual T-Shirt', 'Comfortable casual t-shirt',
+ 'APPAREL', 'ACTIVE',
+ '{"brand": "ComfortWear", "department": "mens", "category": "casual_wear"}',
+ 'TSHIRT-C-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Electronics Products
+(1003, 'PHONE_001', 'Smartphone X', 'Latest smartphone model',
+ 'ELECTRONICS', 'ACTIVE',
+ '{"brand": "TechPro", "series": "X", "year": "2023"}',
+ 'PHONE-X-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(1004, 'LAPTOP_001', 'Pro Laptop', 'High-performance laptop',
+ 'ELECTRONICS', 'ACTIVE',
+ '{"brand": "TechPro", "series": "Pro", "year": "2023"}',
+ 'LAPTOP-P-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Appliance Products
+(1005, 'AC_001', 'Smart AC', 'Smart split AC with inverter technology',
+ 'APPLIANCE', 'ACTIVE',
+ '{"brand": "CoolTech", "type": "split", "technology": "inverter"}',
+ 'AC-S-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(1006, 'FRIDGE_001', 'Double Door Refrigerator', 'Energy efficient refrigerator',
+ 'APPLIANCE', 'ACTIVE',
+ '{"brand": "CoolTech", "type": "double_door", "frost_free": true}',
+ 'FRIDGE-D-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Grocery Products
+(1007, 'RICE_001', 'Basmati Rice', 'Premium basmati rice',
+ 'GROCERY', 'ACTIVE',
+ '{"brand": "FreshField", "type": "basmati", "origin": "India"}',
+ 'RICE-B-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(1008, 'MILK_001', 'Full Cream Milk', 'Fresh full cream milk',
+ 'GROCERY', 'ACTIVE',
+ '{"brand": "FreshDaily", "type": "full_cream", "pasteurized": true}',
+ 'MILK-F-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Features
 INSERT INTO product_feature (
@@ -116,49 +195,68 @@ INSERT INTO product_feature (
     created_date, last_modified_date,
     attribute_type, visible, editable, searchable,
     comparable, multi_valued, default_value,
-    unit_id, values
+    unit_id
 )
 VALUES 
-(1, 1003, 100, 'SIZE_SHIRT', 'Size', 'Shirt size',
+-- Features for Formal Shirt (product_id: 1001)
+(1, 1001, 100, 'SIZE_SHIRT', 'Size', 'Shirt size',
  'ENUM', '^(S|M|L|XL)$', '0', '100',
  '["S", "M", "L", "XL"]',
  '{"group": "basic", "tooltip": "Select your size", "display_order": 1}',
  true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
  'STRING', true, true, true, true, false, 'M',
- 1, '["S", "M", "L", "XL"]'),
+ 1),
 
-(2, 1003, 101, 'STYLE_SHIRT', 'Style', 'Shirt style',
+(2, 1001, 101, 'STYLE_SHIRT', 'Style', 'Shirt style',
  'ENUM', '^(casual|formal)$', '0', '100',
  '["casual", "formal"]',
  '{"group": "basic", "tooltip": "Select style", "display_order": 2}',
  true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, 'casual',
- 2, '["casual", "formal"]'),
+ 'STRING', true, true, true, true, false, 'formal',
+ 2),
 
-(3, 1004, 100, 'SIZE_TSHIRT', 'Size', 'T-Shirt size',
- 'ENUM', '^(S|M|L|XL)$', '0', '100',
- '["S", "M", "L", "XL"]',
- '{"group": "basic", "tooltip": "Select your size", "display_order": 1}',
+-- Features for Smartphone (product_id: 1003)
+(3, 1003, 102, 'STORAGE_PHONE', 'Storage', 'Phone storage capacity',
+ 'ENUM', '^(64GB|128GB|256GB)$', '0', '1000',
+ '["64GB", "128GB", "256GB"]',
+ '{"group": "specifications", "tooltip": "Select storage capacity", "display_order": 1}',
  true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, 'L',
- 1, '["S", "M", "L", "XL"]'),
+ 'STRING', true, true, true, true, false, '128GB',
+ 7),
 
-(4, 1004, 101, 'STYLE_TSHIRT', 'Style', 'T-Shirt style',
- 'ENUM', '^(sports|casual)$', '0', '100',
- '["sports", "casual"]',
- '{"group": "basic", "tooltip": "Select style", "display_order": 2}',
+(4, 1003, 103, 'COLOR_PHONE', 'Color', 'Phone color',
+ 'ENUM', '^(Black|White|Gold)$', '0', '100',
+ '["Black", "White", "Gold"]',
+ '{"group": "appearance", "tooltip": "Select color", "display_order": 2}',
  true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, 'sports',
- 2, '["sports", "casual"]');
+ 'STRING', true, true, true, true, false, 'Black',
+ 2),
 
--- Product Categories
-INSERT INTO product_categories (product_id, category_id)
-VALUES 
-(1003, 11), -- Shirt in Western Wear
-(1004, 11), -- T-Shirt in Western Wear
-(1005, 20), -- Quinoa in Fresh Foods
-(1006, 22), -- Chia Seeds in Fresh Foods
-(1007, 30); -- Paracetamol in Medicines
+-- Features for AC (product_id: 1005)
+(5, 1005, 104, 'CAPACITY_AC', 'Capacity', 'AC cooling capacity',
+ 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0.5', '2.0',
+ NULL,
+ '{"group": "specifications", "tooltip": "Enter capacity in tons", "display_order": 1}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'DECIMAL', true, true, true, true, false, '1.5',
+ 8),
+
+(6, 1005, 105, 'ENERGY_RATING_AC', 'Energy Rating', 'AC energy efficiency rating',
+ 'ENUM', '^(3|4|5)$', '1', '5',
+ '["3", "4", "5"]',
+ '{"group": "efficiency", "tooltip": "Select energy rating", "display_order": 2}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'STRING', true, true, true, true, false, '5',
+ 2),
+
+-- Features for Rice (product_id: 1007)
+(7, 1007, 106, 'WEIGHT_RICE', 'Weight', 'Package weight',
+ 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0.1', '25.0',
+ NULL,
+ '{"group": "measurements", "tooltip": "Enter weight in kg", "display_order": 1}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'DECIMAL', true, true, true, true, false, '5.0',
+ 7);
 
 -- Product Feature Values
 INSERT INTO product_feature_value (
@@ -170,34 +268,67 @@ INSERT INTO product_feature_value (
     last_modified_by, last_modified_date
 )
 VALUES 
--- Size values for Formal Shirt (product_id: 1003)
-(1, 1003, 1, 100, 
+-- Values for Formal Shirt (product_id: 1001)
+(1, 1001, 1, 100, 
  'ENUM', 'SIZE', NULL, 'ACTIVE',
  'VALID', '^(S|M|L|XL)$', NULL,
  '{"value": "M"}',
  'system', CURRENT_TIMESTAMP,
  'system', CURRENT_TIMESTAMP),
 
--- Style values for Formal Shirt (product_id: 1003)
-(2, 1003, 2, 101,
+(2, 1001, 2, 101,
  'ENUM', 'STYLE', NULL, 'ACTIVE',
  'VALID', '^(casual|formal)$', NULL,
  '{"value": "formal"}',
  'system', CURRENT_TIMESTAMP,
  'system', CURRENT_TIMESTAMP),
 
--- Size values for T-Shirt (product_id: 1004)
-(3, 1004, 3, 100,
- 'ENUM', 'SIZE', NULL, 'ACTIVE',
- 'VALID', '^(S|M|L|XL)$', NULL,
- '{"value": "L"}',
+-- Values for Smartphone (product_id: 1003)
+(3, 1003, 3, 102,
+ 'ENUM', 'STORAGE', 'GB', 'ACTIVE',
+ 'VALID', '^(64GB|128GB|256GB)$', NULL,
+ '{"value": "128GB"}',
  'system', CURRENT_TIMESTAMP,
  'system', CURRENT_TIMESTAMP),
 
--- Style values for T-Shirt (product_id: 1004)
-(4, 1004, 4, 101,
- 'ENUM', 'STYLE', NULL, 'ACTIVE',
- 'VALID', '^(sports|casual)$', NULL,
- '{"value": "casual"}',
+(4, 1003, 4, 103,
+ 'ENUM', 'COLOR', NULL, 'ACTIVE',
+ 'VALID', '^(Black|White|Gold)$', NULL,
+ '{"value": "Black"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+-- Values for AC (product_id: 1005)
+(5, 1005, 5, 104,
+ 'NUMERIC', 'CAPACITY', 'tons', 'ACTIVE',
+ 'VALID', '^[0-9]+(\.[0-9]{1,2})?$', NULL,
+ '{"value": 1.5}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+(6, 1005, 6, 105,
+ 'ENUM', 'ENERGY_RATING', 'stars', 'ACTIVE',
+ 'VALID', '^(3|4|5)$', NULL,
+ '{"value": "5"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+-- Values for Rice (product_id: 1007)
+(7, 1007, 7, 106,
+ 'NUMERIC', 'WEIGHT', 'kg', 'ACTIVE',
+ 'VALID', '^[0-9]+(\.[0-9]{1,2})?$', NULL,
+ '{"value": 5.0}',
  'system', CURRENT_TIMESTAMP,
  'system', CURRENT_TIMESTAMP);
+
+-- Product Categories
+INSERT INTO product_categories (product_id, category_id)
+VALUES 
+(1001, 20), -- Formal Shirt in Western Wear
+(1002, 20), -- T-Shirt in Western Wear
+(1003, 60), -- Smartphone in Mobile Phones
+(1004, 61), -- Laptop in Laptops
+(1005, 10), -- AC in Split AC
+(1006, 11), -- Fridge in Refrigerators
+(1007, 33), -- Rice in Staples
+(1008, 32); -- Milk in Dairy & Eggs

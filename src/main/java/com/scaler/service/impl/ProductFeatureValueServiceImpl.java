@@ -10,6 +10,7 @@ import com.scaler.repository.ProductFeatureValueRepository;
 import com.scaler.service.ProductFeatureValueService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductFeatureValueServiceImpl implements ProductFeatureValueService {
 
     private final ProductFeatureValueRepository repository;
@@ -321,7 +323,8 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public List<ProductFeatureValueDTO> normalizeNumericValues(Long featureId) {
-        // Implement normalization logic
+        //Implement normalization logic
+        log.debug("Normalizing numeric values for featureId: {}", featureId);
         return List.of();
     }
 

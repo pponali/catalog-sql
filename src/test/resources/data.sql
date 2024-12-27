@@ -68,3 +68,117 @@ VALUES
 (2, 1, 2, 2, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "M"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 (3, 2, 3, 3, 'number', 'ton', NULL, 'active', 'valid', NULL, NULL, '{"value": 1.5}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 (4, 2, 4, 4, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "5_star"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Test Data
+-- Units
+INSERT INTO unit (id, code, name, description, created_date, last_modified_date)
+VALUES 
+(1, 'TEST_SIZE', 'Test Size', 'Test size measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'TEST_STYLE', 'Test Style', 'Test style type', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'TEST_WEIGHT', 'Test Weight', 'Test weight measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Test Categories
+INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
+VALUES 
+-- Root category
+(1, 'TEST_ROOT', 'Test Category', 'Test Root Category', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Sub categories
+(2, 'TEST_SUB_1', 'Test Sub Category 1', 'Test Sub Category 1', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'TEST_SUB_2', 'Test Sub Category 2', 'Test Sub Category 2', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Test Category Feature Templates
+INSERT INTO category_feature_template (
+    id, code, name, description,
+    feature_type, validation_pattern,
+    min_value, max_value, allowed_values,
+    metadata, is_required,
+    created_date, last_modified_date,
+    category_id
+)
+VALUES 
+(1, 'TEST_TEMPLATE_1', 'Test Template 1', 'Test feature template 1',
+ 'ENUM', '^(A|B|C)$', '0', '100', '["A", "B", "C"]',
+ '{"group": "test", "tooltip": "Test tooltip"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2),
+
+(2, 'TEST_TEMPLATE_2', 'Test Template 2', 'Test feature template 2',
+ 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0', '1000', NULL,
+ '{"group": "test", "tooltip": "Test numeric tooltip"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2);
+
+-- Test Products
+INSERT INTO product (
+    id, code, name, description, product_type,
+    status, metadata, sku,
+    created_date, last_modified_date
+)
+VALUES 
+(1, 'TEST_PROD_1', 'Test Product 1', 'Test product description 1',
+ 'TEST_TYPE', 'ACTIVE',
+ '{"test_key": "test_value"}',
+ 'TEST-SKU-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(2, 'TEST_PROD_2', 'Test Product 2', 'Test product description 2',
+ 'TEST_TYPE', 'ACTIVE',
+ '{"test_key": "test_value_2"}',
+ 'TEST-SKU-002',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Test Product Features
+INSERT INTO product_feature (
+    id, product_id, template_id, code, name, description,
+    feature_type, validation_pattern, min_value, max_value,
+    allowed_values, metadata, required,
+    created_date, last_modified_date,
+    attribute_type, visible, editable, searchable,
+    comparable, multi_valued, default_value,
+    unit_id
+)
+VALUES 
+(1, 1, 1, 'TEST_FEATURE_1', 'Test Feature 1', 'Test feature description 1',
+ 'ENUM', '^(A|B|C)$', '0', '100',
+ '["A", "B", "C"]',
+ '{"group": "test", "tooltip": "Test tooltip", "display_order": 1}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'STRING', true, true, true, true, false, 'A',
+ 1),
+
+(2, 1, 2, 'TEST_FEATURE_2', 'Test Feature 2', 'Test feature description 2',
+ 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0', '1000',
+ NULL,
+ '{"group": "test", "tooltip": "Test numeric tooltip", "display_order": 2}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'DECIMAL', true, true, true, true, false, '10.5',
+ 3);
+
+-- Test Product Feature Values
+INSERT INTO product_feature_value (
+    id, product_id, feature_id, template_id,
+    type, unit, unit_of_measure, status,
+    validation_status, validation_pattern,
+    validation_message, attribute_values,
+    created_by, created_date,
+    last_modified_by, last_modified_date
+)
+VALUES 
+(1, 1, 1, 1, 
+ 'ENUM', 'TEST_UNIT', NULL, 'ACTIVE',
+ 'VALID', '^(A|B|C)$', NULL,
+ '{"value": "A"}',
+ 'test_system', CURRENT_TIMESTAMP,
+ 'test_system', CURRENT_TIMESTAMP),
+
+(2, 1, 2, 2,
+ 'NUMERIC', 'TEST_UNIT', 'test', 'ACTIVE',
+ 'VALID', '^[0-9]+(\.[0-9]{1,2})?$', NULL,
+ '{"value": 10.5}',
+ 'test_system', CURRENT_TIMESTAMP,
+ 'test_system', CURRENT_TIMESTAMP);
+
+-- Test Product Categories
+INSERT INTO product_categories (product_id, category_id)
+VALUES 
+(1, 2), -- Test Product 1 in Test Sub Category 1
+(2, 3); -- Test Product 2 in Test Sub Category 2
