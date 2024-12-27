@@ -194,7 +194,23 @@ VALUES
     'string', 'ENUM', NULL, NULL, NULL,
     '["tablet", "capsule", "syrup", "injection"]', NULL, true, true, true,
     true, true, false, '{"validation": {"enum_values": ["tablet", "capsule", "syrup", "injection"]}}',
-    3, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    3, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Category Feature Templates for Apparel
+(100, 2, 'SIZE_TEMPLATE', 'Size', 'Size specification for apparel',
+ 'ENUM', 'STRING', NULL,
+ NULL, NULL, '["S", "M", "L", "XL"]', NULL,
+ true, true, true, true, true,
+ false, '{"group": "basic", "tooltip": "Select size"}', 1, true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Style template
+(101, 2, 'STYLE_TEMPLATE', 'Style', 'Style specification for apparel',
+ 'ENUM', 'STRING', NULL,
+ NULL, NULL, '["casual", "formal"]', NULL,
+ true, true, true, true, true,
+ false, '{"group": "basic", "tooltip": "Select style"}', 2, true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Features for Apparel
 INSERT INTO product_feature (
@@ -216,7 +232,7 @@ VALUES
  NULL, NULL, NULL, '["casual", "formal"]', 'casual',
  NULL, '{"display_order": 2, "group": "basic", "tooltip": "Select shirt style"}',
  true, true, true, true, true,
- false, 1003, 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+ false, 1003, 101, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Feature Values
 INSERT INTO product_feature_value (
@@ -252,10 +268,10 @@ VALUES
 -- Product Features
 INSERT INTO product_feature (id, product_id, template_id, code, name, description, feature_type, validation_pattern, min_value, max_value, allowed_values, metadata, required, created_date, last_modified_date)
 VALUES 
-(1, 1003, 1, 'STYLE_SHIRT', 'Style', 'Shirt style', 'ENUM', NULL, NULL, NULL, '["casual", "formal"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 1003, 2, 'SIZE_SHIRT', 'Size', 'Shirt size', 'ENUM', NULL, NULL, NULL, '["S", "M", "L", "XL"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 1004, 3, 'STYLE_TSHIRT', 'Style', 'T-Shirt style', 'ENUM', NULL, NULL, NULL, '["sports", "casual"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 1004, 4, 'SIZE_TSHIRT', 'Size', 'T-Shirt size', 'ENUM', NULL, NULL, NULL, '["S", "M", "L", "XL"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 1003, 100, 'SIZE_SHIRT', 'Size', 'Shirt size', 'ENUM', NULL, NULL, NULL, '["S", "M", "L", "XL"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1003, 101, 'STYLE_SHIRT', 'Style', 'Shirt style', 'ENUM', NULL, NULL, NULL, '["casual", "formal"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 1004, 100, 'SIZE_TSHIRT', 'Size', 'T-Shirt size', 'ENUM', NULL, NULL, NULL, '["S", "M", "L", "XL"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 1004, 101, 'STYLE_TSHIRT', 'Style', 'T-Shirt style', 'ENUM', NULL, NULL, NULL, '["sports", "casual"]', NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (5, 1005, 5, 'ORGANIC_CERT', 'Organic Certification', 'Organic certification details', 'STRING', NULL, NULL, NULL, NULL, NULL, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (6, 1005, 6, 'NUTRITION', 'Nutrition Facts', 'Nutritional information', 'JSON', NULL, NULL, NULL, NULL, NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (7, 1006, 7, 'SHELF_LIFE', 'Shelf Life', 'Product shelf life', 'NUMBER', NULL, '1', '30', NULL, NULL, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -266,10 +282,10 @@ VALUES
 -- Product Feature Values
 INSERT INTO product_feature_value (id, product_id, feature_id, template_id, type, unit, unit_of_measure, status, validation_status, validation_pattern, validation_message, attribute_values, created_date, last_modified_date, created_by, last_modified_by)
 VALUES 
-(1, 1003, 1, 1, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "formal"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-(2, 1003, 2, 2, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "M"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-(3, 1004, 3, 3, 'number', 'ton', NULL, 'active', 'valid', NULL, NULL, '{"value": 1.5}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-(4, 1004, 4, 4, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "5_star"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(1, 1003, 1, 100, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "M"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(2, 1003, 2, 101, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "formal"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(3, 1004, 3, 100, 'number', 'ton', NULL, 'active', 'valid', NULL, NULL, '{"value": 1.5}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+(4, 1004, 4, 101, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "5_star"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 (5, 1005, 5, 5, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "USDA-ORG-001"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 (6, 1005, 6, 6, 'json', NULL, NULL, 'active', 'valid', NULL, NULL, '{"calories": 52, "protein": 0.3, "carbs": 14, "fat": 0.2}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 (7, 1006, 7, 7, 'number', 'days', NULL, 'active', 'valid', NULL, NULL, '{"value": 7}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
