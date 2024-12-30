@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>cfcab406-1921-4174-b4fc-cc5f1b965bd0.DATABASE:catalog</OriginalElement>
+  <nodes>
+    <node x="525.0" y="1464.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature</node>
+    <node x="1028.5" y="2720.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.enum_value_translation</node>
+    <node x="106.0" y="1752.5">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_categories</node>
+    <node x="268.5" y="2672.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.feature_value_event</node>
+    <node x="708.5" y="2696.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.unit_of_measure</node>
+    <node x="188.5" y="532.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product</node>
+    <node x="851.0" y="1112.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.class_attribute_assignments</node>
+    <node x="748.5" y="176.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_class</node>
+    <node x="1025.0" y="436.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_attribute</node>
+    <node x="848.5" y="2332.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_attribute_value</node>
+    <node x="1028.5" y="1692.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.enum_value</node>
+    <node x="525.0" y="2224.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature_value</node>
+    <node x="330.0" y="164.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.unit</node>
+    <node x="597.0" y="376.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category_feature_template</node>
+    <node x="595.5" y="-332.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category</node>
+    <node x="-134.0" y="640.0">cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_class_metadata</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category_feature_template" relationship="REFERENCES">
+      <point x="76.66666666666666" y="-332.0" />
+      <point x="716.6666666666666" y="1436.0" />
+      <point x="720.0" y="1436.0" />
+      <point x="0.0" y="320.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category_feature_template" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category" relationship="REFERENCES">
+      <point x="0.0" y="-320.0" />
+      <point x="-1.4210854715202004E-14" y="188.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.class_attribute_assignments" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category" relationship="REFERENCES">
+      <point x="-64.5" y="-164.0" />
+      <point x="915.5" y="1076.0" />
+      <point x="920.0" y="1076.0" />
+      <point x="920.0" y="716.0" />
+      <point x="1000.0" y="716.0" />
+      <point x="1000.0" y="136.0" />
+      <point x="819.5999999999999" y="136.0" />
+      <point x="99.59999999999997" y="188.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product" relationship="REFERENCES">
+      <point x="-76.66666666666666" y="-332.0" />
+      <point x="563.3333333333334" y="1436.0" />
+      <point x="300.0" y="1436.0" />
+      <point x="0.0" y="164.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.feature_value_event" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature" relationship="REFERENCES">
+      <point x="55.75" y="-164.0" />
+      <point x="435.75" y="2196.0" />
+      <point x="640.0" y="2196.0" />
+      <point x="0.0" y="332.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_class_metadata" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category" relationship="REFERENCES">
+      <point x="0.0" y="-56.0" />
+      <point x="0.0" y="116.0" />
+      <point x="670.2" y="116.0" />
+      <point x="-49.80000000000001" y="188.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.unit" relationship="REFERENCES">
+      <point x="0.0" y="-332.0" />
+      <point x="640.0" y="1416.0" />
+      <point x="440.0" y="1416.0" />
+      <point x="0.0" y="92.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.feature_value_event" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product" relationship="REFERENCES">
+      <point x="-55.75" y="-164.0" />
+      <point x="324.25" y="2636.0" />
+      <point x="320.0" y="2636.0" />
+      <point x="320.0" y="1436.0" />
+      <point x="300.0" y="1436.0" />
+      <point x="0.0" y="164.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature_value" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product" relationship="REFERENCES">
+      <point x="-57.5" y="-212.0" />
+      <point x="582.5" y="2176.0" />
+      <point x="360.0" y="2176.0" />
+      <point x="360.0" y="1436.0" />
+      <point x="300.0" y="1436.0" />
+      <point x="0.0" y="164.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category" relationship="REFERENCES">
+      <point x="-124.5" y="-0.0" />
+      <point x="560.0" y="-144.0" />
+      <point x="560.0" y="76.0" />
+      <point x="620.4" y="76.0" />
+      <point x="-99.6" y="188.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature_value" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature" relationship="REFERENCES">
+      <point x="57.5" y="-212.0" />
+      <point x="697.5" y="2196.0" />
+      <point x="640.0" y="2196.0" />
+      <point x="0.0" y="332.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.class_attribute_assignments" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_attribute" relationship="REFERENCES">
+      <point x="64.5" y="-164.0" />
+      <point x="1044.5" y="1076.0" />
+      <point x="1140.0" y="1076.0" />
+      <point x="0.0" y="260.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_attribute_value" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.class_attribute_assignments" relationship="REFERENCES">
+      <point x="0.0" y="-104.0" />
+      <point x="0.0" y="164.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_class" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category" relationship="REFERENCES">
+      <point x="0.0" y="-80.0" />
+      <point x="860.0" y="156.0" />
+      <point x="769.8" y="156.0" />
+      <point x="49.79999999999998" y="188.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.class_attribute_assignments" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_class" relationship="REFERENCES">
+      <point x="-64.5" y="-164.0" />
+      <point x="915.5" y="1076.0" />
+      <point x="920.0" y="1076.0" />
+      <point x="920.0" y="716.0" />
+      <point x="860.0" y="716.0" />
+      <point x="0.0" y="80.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.enum_value_translation" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.enum_value" relationship="REFERENCES">
+      <point x="0.0" y="-116.0" />
+      <point x="0.0" y="104.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_categories" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product" relationship="REFERENCES">
+      <point x="47.0" y="-43.5" />
+      <point x="247.0" y="1436.0" />
+      <point x="300.0" y="1436.0" />
+      <point x="0.0" y="164.0" />
+    </edge>
+    <edge source="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_categories" target="cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category" relationship="REFERENCES">
+      <point x="-47.0" y="-43.5" />
+      <point x="153.0" y="1716.0" />
+      <point x="160.0" y="1716.0" />
+      <point x="160.0" y="136.0" />
+      <point x="720.0" y="136.0" />
+      <point x="-1.4210854715202004E-14" y="188.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.41602960918854415" showDependencies="false" x="823.4019607843138" y="626.6810532212885" />
+  <SelectedNodes>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_categories</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.unit_of_measure</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_class</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.unit</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.enum_value</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.category_feature_template</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.feature_value_event</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.enum_value_translation</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.class_attribute_assignments</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_attribute_value</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_class_metadata</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.classification_attribute</node>
+    <node>cfcab406-1921-4174-b4fc-cc5f1b965bd0.TABLE:catalog.public.product_feature_value</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
