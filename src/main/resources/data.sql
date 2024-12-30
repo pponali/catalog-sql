@@ -126,7 +126,29 @@ VALUES
 (107, 'EXPIRY_TEMPLATE', 'Expiry Template', 'Template for expiry date',
  'DATE', NULL, NULL, NULL, NULL,
  '{"group": "quality", "tooltip": "Select expiry date"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 30);
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 30),
+
+-- Jewelry Templates
+(201, 'GOLD_PURITY', 'Gold Purity', 'Gold purity in Karats',
+ 'NUMERIC', '^(18|22|24)$', '18', '24', NULL,
+ '{"group": "specifications", "tooltip": "Select gold purity in Karats"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5),
+
+(202, 'DIAMOND_CERT', 'Diamond Certification', 'Diamond certification type',
+ 'ENUM', '^(IGI|GIA|HRD)$', NULL, NULL, '["IGI", "GIA", "HRD"]',
+ '{"group": "certification", "tooltip": "Select certification type"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5),
+
+-- Medicine Templates
+(301, 'PRESCRIPTION_REQ', 'Prescription Required', 'Whether prescription is required',
+ 'BOOLEAN', NULL, NULL, NULL, NULL,
+ '{"group": "regulations", "tooltip": "Is prescription required?"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4),
+
+(302, 'SHELF_LIFE', 'Shelf Life', 'Product shelf life in months',
+ 'NUMERIC', '^[0-9]+$', '12', '36', NULL,
+ '{"group": "storage", "tooltip": "Enter shelf life in months"}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4);
 
 -- Products
 INSERT INTO product (
@@ -185,6 +207,44 @@ VALUES
  'GROCERY', 'ACTIVE',
  '{"brand": "FreshDaily", "type": "full_cream", "pasteurized": true}',
  'MILK-F-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Jewelry Products
+(2001, 'TANQ_RING_001', 'Diamond Solitaire Ring', '18K Gold Ring with VS1 Diamond',
+ 'JEWELRY', 'ACTIVE',
+ '{"brand": "Tanishq", "collection": "Solitaire", "occasion": "Engagement"}',
+ 'RING-D-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(2002, 'TANQ_NECKLACE_001', 'Pearl String Necklace', 'South Sea Pearls with Gold Clasp',
+ 'JEWELRY', 'ACTIVE',
+ '{"brand": "Tanishq", "collection": "Pearl", "occasion": "Wedding"}',
+ 'NECK-P-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(2003, 'TANQ_BANGLE_001', 'Gold Kada', '22K Gold Traditional Bangle',
+ 'JEWELRY', 'ACTIVE',
+ '{"brand": "Tanishq", "collection": "Traditional", "occasion": "Festival"}',
+ 'BANG-G-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Medicine Products
+(3001, '1MG_PARA_001', 'Paracetamol 500mg', 'Fever and Pain Relief Tablet',
+ 'MEDICINE', 'ACTIVE',
+ '{"brand": "Generic", "category": "Pain Relief", "prescription_required": true}',
+ 'MED-P-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(3002, '1MG_AMOX_001', 'Amoxicillin 250mg', 'Antibiotic Capsule',
+ 'MEDICINE', 'ACTIVE',
+ '{"brand": "Generic", "category": "Antibiotics", "prescription_required": true}',
+ 'MED-A-001',
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+(3003, '1MG_VIT_001', 'Multivitamin Complex', 'Daily Vitamin Supplement',
+ 'MEDICINE', 'ACTIVE',
+ '{"brand": "HealthVit", "category": "Supplements", "prescription_required": false}',
+ 'MED-V-001',
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Features
@@ -256,7 +316,37 @@ VALUES
  '{"group": "measurements", "tooltip": "Enter weight in kg", "display_order": 1}',
  true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
  'DECIMAL', true, true, true, true, false, '5.0',
- 7);
+ 7),
+
+-- Features for Diamond Ring (product_id: 2001)
+(8, 2001, 201, 'GOLD_PURITY_RING', 'Gold Purity', 'Gold purity in Karats',
+ 'NUMERIC', '^(18|22|24)$', '18', '24', NULL,
+ '{"group": "specifications", "tooltip": "Select gold purity in Karats", "display_order": 1}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'DECIMAL', true, true, true, true, false, '18',
+ 1),
+
+(9, 2001, 202, 'DIAMOND_CERT_RING', 'Diamond Certification', 'Diamond certification type',
+ 'ENUM', '^(IGI|GIA|HRD)$', NULL, NULL, '["IGI", "GIA", "HRD"]',
+ '{"group": "certification", "tooltip": "Select certification type", "display_order": 2}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'STRING', true, true, true, true, false, 'IGI',
+ 2),
+
+-- Features for Paracetamol (product_id: 3001)
+(10, 3001, 301, 'PRESCRIPTION_REQ_PARA', 'Prescription Required', 'Whether prescription is required',
+ 'BOOLEAN', NULL, NULL, NULL, NULL,
+ '{"group": "regulations", "tooltip": "Is prescription required?", "display_order": 1}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'BOOLEAN', true, true, true, true, false, true,
+ NULL),
+
+(11, 3001, 302, 'SHELF_LIFE_PARA', 'Shelf Life', 'Product shelf life in months',
+ 'NUMERIC', '^[0-9]+$', '12', '36', NULL,
+ '{"group": "storage", "tooltip": "Enter shelf life in months", "display_order": 2}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'INTEGER', true, true, true, true, false, '24',
+ NULL);
 
 -- Product Feature Values
 INSERT INTO product_feature_value (
@@ -319,6 +409,36 @@ VALUES
  'VALID', '^[0-9]+(\.[0-9]{1,2})?$', NULL,
  '{"value": 5.0}',
  'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+-- Values for Diamond Ring (product_id: 2001)
+(8, 2001, 8, 201,
+ 'NUMERIC', 'GOLD_PURITY', NULL, 'ACTIVE',
+ 'VALID', '^(18|22|24)$', NULL,
+ '{"value": 18.0}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+(9, 2001, 9, 202,
+ 'ENUM', 'DIAMOND_CERT', NULL, 'ACTIVE',
+ 'VALID', '^(IGI|GIA|HRD)$', NULL,
+ '{"value": "IGI"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+-- Values for Paracetamol (product_id: 3001)
+(10, 3001, 10, 301,
+ 'BOOLEAN', NULL, NULL, 'ACTIVE',
+ 'VALID', NULL, NULL,
+ '{"value": true}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+(11, 3001, 11, 302,
+ 'NUMERIC', 'SHELF_LIFE', 'months', 'ACTIVE',
+ 'VALID', '^[0-9]+$', NULL,
+ '{"value": 24}',
+ 'system', CURRENT_TIMESTAMP,
  'system', CURRENT_TIMESTAMP);
 
 -- Product Categories
@@ -331,4 +451,10 @@ VALUES
 (1005, 10), -- AC in Split AC
 (1006, 11), -- Fridge in Refrigerators
 (1007, 33), -- Rice in Staples
-(1008, 32); -- Milk in Dairy & Eggs
+(1008, 32), -- Milk in Dairy & Eggs
+(2001, 51), -- Diamond Ring in Diamond Jewelry
+(2002, 50), -- Pearl Necklace in Gold Jewelry
+(2003, 50), -- Gold Kada in Gold Jewelry
+(3001, 40), -- Paracetamol in Medicines
+(3002, 40), -- Amoxicillin in Medicines
+(3003, 41); -- Multivitamin in Health & Wellness
