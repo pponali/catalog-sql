@@ -1,8 +1,8 @@
 package rules;
 
-import com.example.validation.fact.CategoryValidationFact;
-import com.example.entity.Category;
-import com.example.entity.ClassificationClass;
+import com.scaler.validation.fact.CategoryValidationFact;
+import com.scaler.entity.Category;
+import com.scaler.entity.ClassificationClass;
 import java.util.regex.Pattern;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
