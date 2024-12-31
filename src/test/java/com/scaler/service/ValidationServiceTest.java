@@ -6,6 +6,7 @@ import com.scaler.entity.ProductFeature;
 import com.scaler.entity.ProductFeatureValue;
 import com.scaler.enums.FeatureValueType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -122,11 +123,15 @@ class ValidationServiceTest {
         // Set up feature values
         ProductFeatureValue organicValue = new ProductFeatureValue();
         organicValue.setFeature(organicFeature);
-        organicValue.setAttributeValue(objectMapper.valueToTree("FSSAI-ORG"));
+        ObjectNode organicNode = objectMapper.createObjectNode();
+        organicNode.put("value", "FSSAI-ORG");
+        organicValue.setAttributeValues(organicNode);
 
         ProductFeatureValue shelfLifeValue = new ProductFeatureValue();
         shelfLifeValue.setFeature(shelfLifeFeature);
-        shelfLifeValue.setAttributeValue(objectMapper.valueToTree("30"));
+        ObjectNode shelfLifeNode = objectMapper.createObjectNode();
+        shelfLifeNode.put("value", "30");
+        shelfLifeValue.setAttributeValues(shelfLifeNode);
 
         List<ProductFeatureValue> features = Arrays.asList(organicValue, shelfLifeValue);
 

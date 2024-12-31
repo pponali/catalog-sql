@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS category CASCADE;
 DROP TABLE IF EXISTS unit_of_measure CASCADE;
 DROP TABLE IF EXISTS feature_value_event CASCADE;
 DROP TABLE IF EXISTS unit CASCADE;
+DROP TABLE IF EXISTS validation_rule CASCADE;
 
 -- Sequences
 CREATE SEQUENCE IF NOT EXISTS category_seq START WITH 1000;
@@ -24,6 +25,29 @@ CREATE SEQUENCE IF NOT EXISTS category_feature_template_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS classification_attribute_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS class_attribute_assignment_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1000;
+CREATE SEQUENCE IF NOT EXISTS unit_of_measure_seq START WITH 1000;
+CREATE SEQUENCE IF NOT EXISTS validation_rule_seq START WITH 1000;
+
+-- Validation Rule table
+CREATE TABLE IF NOT EXISTS validation_rule (
+    id BIGINT PRIMARY KEY DEFAULT nextval('validation_rule_seq'),
+    code VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    feature_id BIGINT,
+    rule_type VARCHAR(50) NOT NULL,
+    rule_expression TEXT NOT NULL,
+    validation_pattern VARCHAR(255),
+    min_value VARCHAR(255),
+    max_value VARCHAR(255),
+    allowed_values TEXT,
+    priority INTEGER,
+    active BOOLEAN DEFAULT true,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
+    last_modified_date TIMESTAMP
+);
 
 -- Unit table (no dependencies)
 CREATE TABLE IF NOT EXISTS unit (
@@ -31,7 +55,9 @@ CREATE TABLE IF NOT EXISTS unit (
     code VARCHAR(50) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     description TEXT,
+    created_by VARCHAR(255),
     created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
     last_modified_date TIMESTAMP
 );
 
