@@ -134,9 +134,25 @@ VALUES
  '{"group": "appearance", "tooltip": "Select color"}', true,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 60),
 
+-- New JSON Feature Templates
+(110, 'LAPTOP_SPECS_TEMPLATE', 'Laptop Specifications', 'Template for laptop technical specifications',
+ 'JSON', NULL, NULL, NULL, NULL,
+ '{"group": "specifications", "tooltip": "Enter laptop specifications", "schema": {"type": "object", "properties": {"processor": {"type": "string"}, "ram": {"type": "string"}, "gpu": {"type": "string"}, "screen": {"type": "string"}}}}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 61),
+
+(111, 'MOBILE_SPECS_TEMPLATE', 'Mobile Specifications', 'Template for mobile technical specifications',
+ 'JSON', NULL, NULL, NULL, NULL,
+ '{"group": "specifications", "tooltip": "Enter mobile specifications", "schema": {"type": "object", "properties": {"processor": {"type": "string"}, "camera": {"type": "object"}, "battery": {"type": "string"}, "display": {"type": "string"}}}}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 60),
+
+(112, 'CONNECTIVITY_TEMPLATE', 'Connectivity Features', 'Template for device connectivity features',
+ 'JSON', NULL, NULL, NULL, NULL,
+ '{"group": "connectivity", "tooltip": "Enter connectivity features", "schema": {"type": "object", "properties": {"wifi": {"type": "string"}, "bluetooth": {"type": "string"}, "ports": {"type": "array"}}}}', true,
+ CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 61),
+
 -- Appliance Templates
 (104, 'CAPACITY_TEMPLATE', 'Capacity Template', 'Template for appliance capacity',
- 'NUMERIC', '^[0-9]+$', '0', '1000', NULL,
+ 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0', '1000', NULL,
  '{"group": "specifications", "tooltip": "Enter capacity"}', true,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 10),
 
@@ -305,16 +321,16 @@ VALUES
 
 -- Features for Smartphone (product_id: 1003)
 (3, 1003, 102, 'STORAGE_PHONE', 'Storage', 'Phone storage capacity',
- 'ENUM', '^(64GB|128GB|256GB)$', '0', '1000',
- '["64GB", "128GB", "256GB"]',
+ 'ENUM', '^(64GB|128GB|256GB|512GB)$', '0', '1000',
+ '["64GB", "128GB", "256GB", "512GB"]',
  '{"group": "specifications", "tooltip": "Select storage capacity", "display_order": 1}',
  true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
  'STRING', true, true, true, true, false, '128GB',
  7),
 
 (4, 1003, 103, 'COLOR_PHONE', 'Color', 'Phone color',
- 'ENUM', '^(Black|White|Gold)$', '0', '100',
- '["Black", "White", "Gold"]',
+ 'ENUM', '^(Black|White|Gold|Silver)$', '0', '100',
+ '["Black", "White", "Gold", "Silver"]',
  '{"group": "appearance", "tooltip": "Select color", "display_order": 2}',
  true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
  'STRING', true, true, true, true, false, 'Black',
@@ -374,6 +390,29 @@ VALUES
  '{"group": "storage", "tooltip": "Enter shelf life in months", "display_order": 2}',
  true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
  'INTEGER', true, true, true, true, false, '24',
+ NULL),
+
+-- New JSON feature for Smartphone (product_id: 1003)
+(20, 1003, 111, 'MOBILE_SPECS', 'Mobile Specifications', 'Mobile technical specifications',
+ 'JSON', NULL, NULL, NULL, NULL,
+ '{"group": "specifications", "tooltip": "Enter mobile specifications", "display_order": 3}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'JSON', true, true, true, true, false, '{"processor": "Snapdragon 8 Gen 2", "camera": {"main": "50MP", "ultra": "12MP", "tele": "10MP"}, "battery": "5000mAh", "display": "6.8-inch AMOLED"}',
+ NULL),
+
+-- New JSON feature for Laptop (product_id: 1004)
+(21, 1004, 110, 'LAPTOP_SPECS', 'Laptop Specifications', 'Laptop technical specifications',
+ 'JSON', NULL, NULL, NULL, NULL,
+ '{"group": "specifications", "tooltip": "Enter laptop specifications", "display_order": 1}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'JSON', true, true, true, true, false, '{"processor": "Intel Core i7-12700H", "ram": "16GB DDR5", "gpu": "NVIDIA RTX 3060", "screen": "15.6-inch 165Hz"}',
+ NULL),
+
+(22, 1004, 112, 'CONNECTIVITY', 'Connectivity Features', 'Device connectivity features',
+ 'JSON', NULL, NULL, NULL, NULL,
+ '{"group": "connectivity", "tooltip": "Enter connectivity features", "display_order": 2}',
+ true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+ 'JSON', true, true, true, true, false, '{"wifi": "WiFi 6E", "bluetooth": "5.2", "ports": ["USB-C", "HDMI", "USB-A", "3.5mm Audio"]}',
  NULL);
 
 -- Product Feature Values
@@ -404,15 +443,37 @@ VALUES
 -- Values for Smartphone (product_id: 1003)
 (3, 1003, 3, 102,
  'ENUM', 'STORAGE', 'GB', 'ACTIVE',
- 'VALID', '^(64GB|128GB|256GB)$', NULL,
+ 'VALID', '^(64GB|128GB|256GB|512GB)$', NULL,
  '{"value": "128GB"}',
  'system', CURRENT_TIMESTAMP,
  'system', CURRENT_TIMESTAMP),
 
 (4, 1003, 4, 103,
  'ENUM', 'COLOR', NULL, 'ACTIVE',
- 'VALID', '^(Black|White|Gold)$', NULL,
+ 'VALID', '^(Black|White|Gold|Silver)$', NULL,
  '{"value": "Black"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+(20, 1003, 20, 111,
+ 'JSON', 'SPECIFICATIONS', NULL, 'ACTIVE',
+ 'VALID', NULL, NULL,
+ '{"value": {"processor": "Snapdragon 8 Gen 2", "camera": {"main": "50MP", "ultra": "12MP", "tele": "10MP"}, "battery": "5000mAh", "display": "6.8-inch AMOLED"}}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+-- Values for Laptop (product_id: 1004)
+(21, 1004, 21, 110,
+ 'JSON', 'SPECIFICATIONS', NULL, 'ACTIVE',
+ 'VALID', NULL, NULL,
+ '{"value": {"processor": "Intel Core i7-12700H", "ram": "16GB DDR5", "gpu": "NVIDIA RTX 3060", "screen": "15.6-inch 165Hz"}}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+(22, 1004, 22, 112,
+ 'JSON', 'CONNECTIVITY', NULL, 'ACTIVE',
+ 'VALID', NULL, NULL,
+ '{"value": {"wifi": "WiFi 6E", "bluetooth": "5.2", "ports": ["USB-C", "HDMI", "USB-A", "3.5mm Audio"]}}',
  'system', CURRENT_TIMESTAMP,
  'system', CURRENT_TIMESTAMP),
 
