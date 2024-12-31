@@ -27,6 +27,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/feature-values")
@@ -64,7 +65,7 @@ public class ProductFeatureValueController {
 
     @Operation(summary = "Get feature value by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ProductFeatureValueDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<ProductFeatureValueDTO> getById(@PathVariable UUID id) {
         return service.findById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
@@ -73,7 +74,7 @@ public class ProductFeatureValueController {
     @Operation(summary = "Update feature value")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductFeatureValueDTO>> updateFeatureValue(
-            @PathVariable @NotNull Long id,
+            @PathVariable @NotNull UUID id,
             @Valid @RequestBody ProductFeatureValueDTO dto) {
         log.info("Updating feature value with id: {}", id);
         dto.setId(id);
@@ -84,7 +85,7 @@ public class ProductFeatureValueController {
     @Operation(summary = "Delete feature value")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteFeatureValue(
-            @PathVariable @NotNull Long id) {
+            @PathVariable @NotNull UUID id) {
         log.info("Deleting feature value with id: {}", id);
         service.delete(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Feature value deleted successfully"));
@@ -92,18 +93,16 @@ public class ProductFeatureValueController {
 
     @Operation(summary = "Get feature values by feature ID")
     @GetMapping("/feature/{featureId}")
-    public ResponseEntity<ApiResponse<Page<ProductFeatureValueDTO>>> getFeatureValuesByFeature(
-            @PathVariable @NotNull Long featureId,
+    public ResponseEntity<Page<ProductFeatureValueDTO>> findByFeature(
+            @PathVariable UUID featureId,
             Pageable pageable) {
-        log.info("Fetching feature values for feature id: {}", featureId);
-        Page<ProductFeatureValueDTO> values = service.findByFeature(featureId, pageable);
-        return ResponseEntity.ok(ApiResponse.success(values));
+        return ResponseEntity.ok(service.findByFeature(featureId, pageable));
     }
 
     @Operation(summary = "Get value trends")
     @GetMapping("/trends/{featureId}")
     public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getValueTrends(
-            @PathVariable @NotNull Long featureId,
+            @PathVariable @NotNull UUID featureId,
             @RequestParam(defaultValue = "daily") String interval) {
         log.info("Fetching value trends for feature id: {} with interval: {}", featureId, interval);
         List<Map<String, Object>> trends = service.getValueTrends(featureId, interval);
@@ -113,7 +112,7 @@ public class ProductFeatureValueController {
     @Operation(summary = "Bulk update feature values")
     @PutMapping("/bulk/{featureId}")
     public ResponseEntity<ApiResponse<Map<String, Object>>> bulkUpdateValues(
-            @PathVariable @NotNull Long featureId,
+            @PathVariable @NotNull UUID featureId,
             @RequestBody Map<String, Object> updates) {
         log.info("Performing bulk update for feature id: {}", featureId);
         Map<String, Object> results = service.bulkUpdateValues(featureId, updates);
@@ -131,7 +130,7 @@ public class ProductFeatureValueController {
     @Operation(summary = "Get event history")
     @GetMapping("/monitoring/events/{featureId}")
     public ResponseEntity<ApiResponse<List<FeatureValueEvent>>> getEventHistory(
-            @PathVariable @NotNull Long featureId) {
+            @PathVariable @NotNull UUID featureId) {
         log.info("Fetching event history for feature id: {}", featureId);
         List<FeatureValueEvent> events = eventService.getEventHistory(featureId);
         return ResponseEntity.ok(ApiResponse.success(events));
@@ -153,10 +152,10 @@ public class ProductFeatureValueController {
         return ResponseEntity.ok(ApiResponse.success(null, "Cache cleared successfully"));
     }
 
-    @Operation(summary = "Reset monitoring metrics")
+    @Operation(summary = "Reset metrics")
     @PostMapping("/monitoring/metrics/reset")
     public ResponseEntity<ApiResponse<Void>> resetMetrics() {
-        log.info("Resetting monitoring metrics");
+        log.info("Resetting metrics");
         monitoringService.resetMetrics();
         return ResponseEntity.ok(ApiResponse.success(null, "Metrics reset successfully"));
     }

@@ -4,26 +4,23 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "enum_value")
-@Getter
-@Setter
+@Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-@EqualsAndHashCode(exclude = {"translations"})
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class EnumValue extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "enum_type", nullable = false)
@@ -38,18 +35,6 @@ public class EnumValue extends BaseEntity {
     @Column(length = 1000)
     private String description;
 
-    @OneToMany(mappedBy = "enumValue", cascade = CascadeType.ALL)
-    private Set<EnumValueTranslation> translations = new HashSet<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EnumValue that)) return false;
-        return code != null && code.equals(that.getCode());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    @OneToMany(mappedBy = "enumValue", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EnumValueTranslation> translations = new ArrayList<>();
 }

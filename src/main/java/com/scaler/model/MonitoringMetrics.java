@@ -8,12 +8,17 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MonitoringMetrics {
+    private UUID featureId;
+    private long totalValues;
+    private long validValues;
+    
     @Builder.Default
     private Map<String, Double> operationTimes = Map.of();
     @Builder.Default
@@ -25,6 +30,7 @@ public class MonitoringMetrics {
     @Builder.Default
     private List<FeatureValueEvent> eventHistory = List.of();
     @Builder.Default
-    private Map<Long, LocalDateTime> lastUpdateTimes = Map.of();
+    private Map<UUID, LocalDateTime> lastUpdateTimes = Map.of();
     private LocalDateTime lastUpdated;
+    private LocalDateTime lastUpdateTime;
 }

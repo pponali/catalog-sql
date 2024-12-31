@@ -2,54 +2,48 @@ package com.scaler.mapper;
 
 import com.scaler.dto.ProductDTO;
 import com.scaler.entity.Product;
-import com.scaler.entity.Category;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {ProductFeatureMapper.class}, imports = {UUID.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, 
+        uses = {ProductFeatureMapper.class, ProductFeatureValueMapper.class},
+        imports = {Collectors.class, List.class})
 public interface ProductMapper {
 
-    @Mapping(target = "categoryIds", expression = "java(mapToCategoryIds(product))")
-    @Mapping(source = "features", target = "features")
-    @Mapping(target = "code", source = "code")
-    ProductDTO toDTO(Product product);
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "businessId", source = "business.id"),
+        @Mapping(target = "catalogId", source = "catalog.id"),
+        @Mapping(target = "unitOfMeasureId", source = "unitOfMeasure.id"),
+        @Mapping(target = "createdAt", source = "createdDate"),
+        @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
+        @Mapping(target = "createdBy", source = "createdBy"),
+        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
+        @Mapping(target = "categoryIds", expression = "java(entity.getCategories().stream().map(category -> category.getId()).collect(Collectors.toSet()))")
+    })
+    ProductDTO toDTO(Product entity);
 
-    @Mapping(target = "categories", expression = "java(mapFromCategoryIds(productDTO.getCategoryIds()))")
-    @Mapping(source = "features", target = "features")
-    @Mapping(target = "featureValues", ignore = true)
-    @Mapping(target = "metadata", ignore = true)
-    @Mapping(target = "status", constant = "ACTIVE")
-    @Mapping(target = "productType", constant = "DEFAULT")
-    @Mapping(target = "sku", expression = "java(UUID.randomUUID().toString())")
-    Product toEntity(ProductDTO productDTO);
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "business", ignore = true),
+        @Mapping(target = "catalog", ignore = true),
+        @Mapping(target = "unitOfMeasure", ignore = true),
+        @Mapping(target = "categories", ignore = true),
+        @Mapping(target = "features", ignore = true),
+        @Mapping(target = "featureValues", ignore = true),
+        @Mapping(target = "createdDate", source = "createdAt"),
+        @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
+        @Mapping(target = "createdBy", source = "createdBy"),
+        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
+    })
+    Product toEntity(ProductDTO dto);
 
-    List<ProductDTO> toDTO(List<Product> products);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntity(@MappingTarget Product entity, ProductDTO dto);
 
-    List<Product> toEntity(List<ProductDTO> dtos);
-
-    default List<Long> mapToCategoryIds(Product product) {
-        if (product == null || product.getCategories() == null) {
-            return Collections.emptyList();
-        }
-        return product.getCategories().stream()
-                .map(Category::getId)
-                .collect(Collectors.toList());
-    }
-
-    default Set<Category> mapFromCategoryIds(List<Long> categoryIds) {
-        if (categoryIds == null || categoryIds.isEmpty()) {
-            return new HashSet<>();
-        }
-        return categoryIds.stream()
-                .map(id -> {
-                    Category category = new Category();
-                    category.setId(id);
-                    return category;
-                })
-                .collect(Collectors.toSet());
-    }
+    List<ProductDTO> toDTOList(List<Product> entities);
+    Set<ProductDTO> toDTOSet(Set<Product> entities);
 }

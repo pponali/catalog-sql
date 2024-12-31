@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ProductFeatureRepository extends JpaRepository<ProductFeature, Long> {
+public interface ProductFeatureRepository extends JpaRepository<ProductFeature, UUID> {
     
     Optional<ProductFeature> findByProductAndTemplate(Product product, CategoryFeatureTemplate template);
     

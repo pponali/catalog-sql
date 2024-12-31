@@ -15,7 +15,7 @@
     <artifactId>catalog-sqldb-poc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>catalog-sqldb-poc</name>
-    <description>Spring Boot PostgreSQL Demo Project</description>
+    <description>Catalog Management Project</description>
     
     <properties>
         <java.version>17</java.version>
@@ -170,7 +170,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -188,7 +187,7 @@
                     </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-Amapstruct.defaultComponentModel=spring</arg>
-                        <arg>-parameters</arg>
+                        <arg>-Amapstruct.unmappedTargetPolicy=IGNORE</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

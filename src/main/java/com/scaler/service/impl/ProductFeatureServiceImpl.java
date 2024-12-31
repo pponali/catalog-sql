@@ -35,7 +35,7 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
     private final ValidationService validationService;
 
     @Override
-    public ProductFeature findById(Long id) {
+    public ProductFeature findById(UUID id) {
         String operationId = UUID.randomUUID().toString();
         log.debug("Operation ID: {} - Finding ProductFeature by ID: {}", operationId, id);
         

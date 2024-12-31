@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "classification_attributes")
@@ -19,8 +20,7 @@ import java.util.Set;
 public class ClassificationAttribute {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(unique = true, nullable = false)
     private String code;
@@ -30,6 +30,10 @@ public class ClassificationAttribute {
 
     @Column(length = 1000)
     private String description;
+
+    private String type;
+
+    private String status;
 
     @lombok.Builder.Default
     @Column(nullable = false)
@@ -52,6 +56,13 @@ public class ClassificationAttribute {
     @OneToMany(mappedBy = "classificationAttribute", cascade = CascadeType.ALL, orphanRemoval = true)
     @lombok.Builder.Default
     private Set<ClassificationAttributeValue> values = new HashSet<>();
+
+    @PrePersist
+    protected void onCreate() {
+        id = UUID.randomUUID();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
 
     @PreUpdate
     protected void onUpdate() {

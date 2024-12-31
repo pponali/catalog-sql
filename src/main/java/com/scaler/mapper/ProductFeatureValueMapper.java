@@ -1,72 +1,87 @@
 package com.scaler.mapper;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.dto.ProductFeatureValueDTO;
 import com.scaler.entity.ProductFeatureValue;
 import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
-@Mapper(componentModel = "spring", uses = {ProductFeatureMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE, unmappedSourcePolicy = ReportingPolicy.IGNORE)
-public abstract class ProductFeatureValueMapper {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface ProductFeatureValueMapper {
 
-    @Autowired
-    protected ObjectMapper objectMapper;
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "productId", expression = "java(entityProductId(entity))"),
+        @Mapping(target = "featureId", expression = "java(entityFeatureId(entity))"),
+        @Mapping(target = "templateId", source = "templateId"),
+        @Mapping(target = "type", source = "type"),
+        @Mapping(target = "unit", source = "unit"),
+        @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
+        @Mapping(target = "status", source = "status"),
+        @Mapping(target = "validationStatus", source = "validationStatus"),
+        @Mapping(target = "validationPattern", source = "validationPattern"),
+        @Mapping(target = "validationMessage", source = "validationMessage"),
+        @Mapping(target = "attributeValue", source = "attributeValues"),
+        @Mapping(target = "createdAt", source = "createdDate"),
+        @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
+        @Mapping(target = "createdBy", source = "createdBy"),
+        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
+    })
+    ProductFeatureValueDTO toDTO(ProductFeatureValue entity);
 
-    @Mapping(target = "product", ignore = true)
-    @Mapping(target = "feature", source = "feature")
-    @Mapping(target = "attributeValue", expression = "java(mapAttributeValues(dto))")
-    @Mapping(target = "validationPattern", ignore = true)
-    @Mapping(target = "createdDate", ignore = true)
-    @Mapping(target = "lastModifiedDate", ignore = true)
-    @Mapping(target = "createdBy", constant = "system")
-    @Mapping(target = "lastModifiedBy", constant = "system")
-    public abstract ProductFeatureValue toEntity(ProductFeatureValueDTO dto);
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "product", ignore = true),
+        @Mapping(target = "feature", ignore = true),
+        @Mapping(target = "templateId", source = "templateId"),
+        @Mapping(target = "type", source = "type"),
+        @Mapping(target = "unit", source = "unit"),
+        @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
+        @Mapping(target = "status", source = "status"),
+        @Mapping(target = "validationStatus", source = "validationStatus"),
+        @Mapping(target = "validationPattern", source = "validationPattern"),
+        @Mapping(target = "validationMessage", source = "validationMessage"),
+        @Mapping(target = "attributeValues", source = "attributeValue"),
+        @Mapping(target = "createdDate", source = "createdAt"),
+        @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
+        @Mapping(target = "createdBy", source = "createdBy"),
+        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
+    })
+    ProductFeatureValue toEntity(ProductFeatureValueDTO dto);
 
-    @Mapping(target = "product", ignore = true)
-    @Mapping(target = "feature", source = "feature")
-    @Mapping(target = "value", expression = "java(entity.getValueAsString())")
-    public abstract ProductFeatureValueDTO toDTO(ProductFeatureValue entity);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "product", ignore = true),
+        @Mapping(target = "feature", ignore = true),
+        @Mapping(target = "templateId", source = "templateId"),
+        @Mapping(target = "type", source = "type"),
+        @Mapping(target = "unit", source = "unit"),
+        @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
+        @Mapping(target = "status", source = "status"),
+        @Mapping(target = "validationStatus", source = "validationStatus"),
+        @Mapping(target = "validationPattern", source = "validationPattern"),
+        @Mapping(target = "validationMessage", source = "validationMessage"),
+        @Mapping(target = "attributeValues", source = "attributeValue"),
+        @Mapping(target = "createdDate", source = "createdAt"),
+        @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
+        @Mapping(target = "createdBy", source = "createdBy"),
+        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
+    })
+    void updateEntity(@MappingTarget ProductFeatureValue entity, ProductFeatureValueDTO dto);
 
-    @Named("mapAttributeValues")
-    protected JsonNode mapAttributeValues(ProductFeatureValueDTO dto) {
-        try {
-            if (dto.getValue() != null) {
-                return objectMapper.readTree(dto.getValue());
-            }
-            return null;
-        } catch (Exception e) {
-            throw new RuntimeException("Error mapping attribute values", e);
-        }
+    List<ProductFeatureValueDTO> toDTOList(List<ProductFeatureValue> entities);
+    Set<ProductFeatureValueDTO> toDTOSet(Set<ProductFeatureValue> entities);
+    List<ProductFeatureValue> toEntityList(List<ProductFeatureValueDTO> dtos);
+    Set<ProductFeatureValue> toEntitySet(Set<ProductFeatureValueDTO> dtos);
+
+    default UUID entityProductId(ProductFeatureValue entity) {
+        return entity.getProduct() != null ? entity.getProduct().getId() : null;
     }
 
-    @AfterMapping
-    protected void afterToEntity(@MappingTarget ProductFeatureValue entity, ProductFeatureValueDTO dto) {
-        if (dto.getType() != null) {
-            entity.setType(dto.getType());
-        }
-        if (dto.getUnit() != null) {
-            entity.setUnit(dto.getUnit());
-        }
-        if (dto.getUnitOfMeasure() != null) {
-            entity.setUnitOfMeasure(dto.getUnitOfMeasure());
-        }
-        if (dto.getStatus() != null) {
-            entity.setStatus(dto.getStatus());
-        }
-        if (dto.getValidationStatus() != null) {
-            entity.setValidationStatus(dto.getValidationStatus());
-        }
-        if (dto.getValidationMessage() != null) {
-            entity.setValidationMessage(dto.getValidationMessage());
-        }
-        entity.setCreatedBy("system");
-        entity.setLastModifiedBy("system");
+    default UUID entityFeatureId(ProductFeatureValue entity) {
+        return entity.getFeature() != null ? entity.getFeature().getId() : null;
     }
-
-    public abstract List<ProductFeatureValueDTO> toDto(List<ProductFeatureValue> entities);
-
-    public abstract List<ProductFeatureValue> toEntity(List<ProductFeatureValueDTO> dtos);
 }

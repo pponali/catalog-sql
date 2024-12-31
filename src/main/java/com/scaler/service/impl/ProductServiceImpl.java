@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,25 +25,26 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductDTO create(ProductDTO dto) {
         Product entity = mapper.toEntity(dto);
+        entity.setId(UUID.randomUUID());
         entity = repository.save(entity);
         return mapper.toDTO(entity);
     }
 
     @Override
     @Transactional
-    public ProductDTO update(Long id, ProductDTO dto) {
+    public ProductDTO update(UUID id, ProductDTO dto) {
         if (!repository.existsById(id)) {
             throw new RuntimeException("Product not found with id: " + id);
         }
-        Product entity = mapper.toEntity(dto);
-        entity.setId(id);
+        Product entity = repository.findById(id).orElseThrow();
+        mapper.updateEntity(entity, dto);
         entity = repository.save(entity);
         return mapper.toDTO(entity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ProductDTO> findById(Long id) {
+    public Optional<ProductDTO> findById(UUID id) {
         return repository.findById(id)
                 .map(mapper::toDTO);
     }
@@ -57,19 +59,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(UUID id) {
         repository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         repository.deleteById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existsById(Long id) {
+    public boolean existsById(UUID id) {
         return repository.existsById(id);
     }
 }

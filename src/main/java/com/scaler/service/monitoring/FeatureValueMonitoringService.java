@@ -2,11 +2,12 @@ package com.scaler.service.monitoring;
 
 import com.scaler.dto.ProductFeatureValueDTO;
 import com.scaler.entity.ProductFeatureValue;
-import com.scaler.event.FeatureValueEvent;
+import com.scaler.model.FeatureValueEvent;
 import com.scaler.model.MonitoringMetrics;
 import com.scaler.repository.ProductFeatureValueRepository;
 import com.scaler.service.cache.FeatureValueCacheService;
 import com.scaler.service.event.FeatureValueEventService;
+import com.scaler.service.ProductFeatureValueService;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,12 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -32,11 +35,12 @@ public class FeatureValueMonitoringService {
     private final FeatureValueCacheService cacheService;
     private final FeatureValueEventService eventService;
     private final ProductFeatureValueRepository repository;
+    private final ProductFeatureValueService featureValueService;
     private final ApplicationEventPublisher eventPublisher;
 
     private final Map<String, Timer> operationTimers = new ConcurrentHashMap<>();
     private final Map<String, AtomicLong> errorCounters = new ConcurrentHashMap<>();
-    private final Map<Long, LocalDateTime> lastUpdateTimes = new ConcurrentHashMap<>();
+    private final Map<UUID, LocalDateTime> lastUpdateTimes = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
@@ -60,7 +64,7 @@ public class FeatureValueMonitoringService {
                 .increment();
     }
 
-    public void recordUpdate(Long featureId, ProductFeatureValueDTO value) {
+    public void recordUpdate(UUID featureId, ProductFeatureValueDTO value) {
         lastUpdateTimes.put(featureId, LocalDateTime.now());
         meterRegistry.counter("feature.value.updates", "featureId", featureId.toString())
                 .increment();
@@ -79,22 +83,41 @@ public class FeatureValueMonitoringService {
     }
 
     public MonitoringMetrics getMetrics() {
-        Map<String, Double> avgOperationTimes = new ConcurrentHashMap<>();
-        operationTimers.forEach((operation, timer) -> 
-            avgOperationTimes.put(operation, timer.mean(java.util.concurrent.TimeUnit.MILLISECONDS))
-        );
+        Map<String, Double> avgOperationTimes = operationTimers.entrySet().stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> e.getValue().mean(java.util.concurrent.TimeUnit.MILLISECONDS)
+            ));
 
-        Map<String, Long> errors = new ConcurrentHashMap<>();
-        errorCounters.forEach((operation, counter) -> 
-            errors.put(operation, counter.get())
-        );
+        Map<String, Long> errors = errorCounters.entrySet().stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> e.getValue().get()
+            ));
 
         return MonitoringMetrics.builder()
                 .operationTimes(avgOperationTimes)
                 .errorCounts(errors)
                 .cacheStats(cacheService.getAllCacheStats())
                 .eventHistory(eventService.getEventHistory(null))
-                .lastUpdateTimes(new ConcurrentHashMap<>(lastUpdateTimes))
+                .lastUpdateTimes(lastUpdateTimes)
+                .build();
+    }
+
+    public MonitoringMetrics getMetricsForFeature(UUID featureId) {
+        List<ProductFeatureValue> values = repository.findByFeatureId(featureId);
+        
+        // Calculate metrics
+        long totalValues = values.size();
+        long validValues = values.stream()
+                .filter(v -> "VALID".equals(v.getValidationStatus()))
+                .count();
+        
+        return MonitoringMetrics.builder()
+                .featureId(featureId)
+                .totalValues(totalValues)
+                .validValues(validValues)
+                .lastUpdateTime(lastUpdateTimes.get(featureId))
                 .build();
     }
 
@@ -106,19 +129,19 @@ public class FeatureValueMonitoringService {
     }
 
     public Map<String, Double> getOperationTimings() {
-        Map<String, Double> timings = new ConcurrentHashMap<>();
-        operationTimers.forEach((operation, timer) -> 
-            timings.put(operation, timer.mean(java.util.concurrent.TimeUnit.MILLISECONDS))
-        );
-        return timings;
+        return operationTimers.entrySet().stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> e.getValue().mean(java.util.concurrent.TimeUnit.MILLISECONDS)
+            ));
     }
 
     public Map<String, Long> getErrorCounts() {
-        Map<String, Long> counts = new ConcurrentHashMap<>();
-        errorCounters.forEach((operation, counter) -> 
-            counts.put(operation, counter.get())
-        );
-        return counts;
+        return errorCounters.entrySet().stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> e.getValue().get()
+            ));
     }
 
     public double getAverageOperationTime(String operationName) {
@@ -144,7 +167,7 @@ public class FeatureValueMonitoringService {
                 .productId(featureValue.getProduct().getId())
                 .oldValue(featureValue.getStringValue())
                 .newValue(featureValue.getStringValue())
-                .eventType(com.scaler.model.FeatureValueEvent.EventType.VALUE_CHANGE)
+                .eventType(FeatureValueEvent.EventType.VALIDATION)
                 .build();
         eventPublisher.publishEvent(event);
     }
@@ -155,7 +178,7 @@ public class FeatureValueMonitoringService {
                 .productId(featureValue.getProduct().getId())
                 .oldValue(featureValue.getStringValue())
                 .newValue(featureValue.getStringValue())
-                .eventType(com.scaler.model.FeatureValueEvent.EventType.VALUE_CHANGE)
+                .eventType(FeatureValueEvent.EventType.VALUE_CHANGE)
                 .build();
         eventPublisher.publishEvent(event);
     }
@@ -163,25 +186,72 @@ public class FeatureValueMonitoringService {
     public void monitorFeatureValueChange(ProductFeatureValue oldValue, ProductFeatureValue newValue) {
         if (oldValue == null && newValue != null) {
             // Feature value created
-            createEvent(newValue, com.scaler.model.FeatureValueEvent.EventType.CREATED);
+            createEvent(newValue, FeatureValueEvent.EventType.CREATED);
         } else if (oldValue != null && newValue == null) {
             // Feature value deleted
-            createEvent(oldValue, com.scaler.model.FeatureValueEvent.EventType.DELETED);
+            createEvent(oldValue, FeatureValueEvent.EventType.DELETED);
         } else if (!oldValue.equals(newValue)) {
             // Feature value updated
-            createEvent(newValue, com.scaler.model.FeatureValueEvent.EventType.UPDATED);
+            createEvent(newValue, FeatureValueEvent.EventType.UPDATED);
         }
     }
 
-    private void createEvent(ProductFeatureValue value, com.scaler.model.FeatureValueEvent.EventType eventType) {
+    private void createEvent(ProductFeatureValue value, FeatureValueEvent.EventType eventType) {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .featureId(value.getFeature().getId())
                 .productId(value.getProduct().getId())
-                .oldValue(eventType == com.scaler.model.FeatureValueEvent.EventType.UPDATED ? value.getStringValue() : null)
+                .oldValue(eventType == FeatureValueEvent.EventType.UPDATED ? value.getStringValue() : null)
                 .newValue(value.getStringValue())
                 .eventType(eventType)
                 .build();
         
         eventPublisher.publishEvent(event);
+    }
+
+    private void publishValidationEvent(ProductFeatureValue featureValue) {
+        FeatureValueEvent event = FeatureValueEvent.builder()
+                .id(UUID.randomUUID())
+                .timestamp(LocalDateTime.now())
+                .featureId(featureValue.getFeature().getId())
+                .productId(featureValue.getProduct().getId())
+                .oldValue(featureValue.getStringValue())
+                .newValue(featureValue.getStringValue())
+                .eventType(FeatureValueEvent.EventType.VALIDATION)
+                .build();
+        eventPublisher.publishEvent(event);
+    }
+
+    public void monitorFeatureValue(UUID featureId) {
+        log.info("Starting monitoring for feature ID: {}", featureId);
+        ProductFeatureValueDTO featureValue = featureValueService.findById(featureId)
+            .orElseThrow(() -> new IllegalArgumentException("Feature value not found: " + featureId));
+        
+        // Add monitoring logic here
+        // Monitor value changes
+        monitorValueChanges(featureId);
+        
+        // Monitor validation status
+        monitorValidationStatus(featureId);
+        
+        // Monitor performance metrics
+        monitorPerformanceMetrics(featureId);
+        
+        log.info("Monitoring completed for feature ID: {}", featureId);
+    }
+
+    public List<FeatureValueEvent> getEventHistory(UUID featureId) {
+        return eventService.getEventHistory(featureId);
+    }
+
+    private void monitorValueChanges(UUID featureId) {
+        // TO DO: implement value change monitoring logic
+    }
+
+    private void monitorValidationStatus(UUID featureId) {
+        // TO DO: implement validation status monitoring logic
+    }
+
+    private void monitorPerformanceMetrics(UUID featureId) {
+        // TO DO: implement performance metrics monitoring logic
     }
 }

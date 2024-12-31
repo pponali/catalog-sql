@@ -5,12 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "feature_value_event")
@@ -25,15 +27,16 @@ public class FeatureValueEvent {
         VALUE_CHANGE,
         STATUS_CHANGE,
         VALIDATION,
-        TRANSFORMATION
+        TRANSFORMATION,
+        ACCESS
     }
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     
-    private Long featureId;
-    private Long productId;
+    private UUID featureId;
+    private UUID productId;
     private String oldValue;
     private String newValue;
     
@@ -44,4 +47,38 @@ public class FeatureValueEvent {
     private String metadata;
     
     private LocalDateTime timestamp;
+
+
+    private String details;
+
+    public static FeatureValueEvent createUpdateEvent(UUID featureId, String oldValue, String newValue) {
+        return FeatureValueEvent.builder()
+                .id(UUID.randomUUID())
+                .featureId(featureId)
+                .eventType(com.scaler.model.FeatureValueEvent.EventType.UPDATED)
+                .oldValue(oldValue)
+                .newValue(newValue)
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    public static FeatureValueEvent createValidationEvent(UUID featureId, String validationMessage) {
+        return FeatureValueEvent.builder()
+                .id(UUID.randomUUID())
+                .featureId(featureId)
+                .eventType(com.scaler.model.FeatureValueEvent.EventType.VALIDATION)
+                .details(validationMessage)
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    public static FeatureValueEvent createAccessEvent(UUID featureId, String accessType) {
+        return FeatureValueEvent.builder()
+                .id(UUID.randomUUID())
+                .featureId(featureId)
+                .eventType(com.scaler.model.FeatureValueEvent.EventType.ACCESS)
+                .details(accessType)
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
 }

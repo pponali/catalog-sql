@@ -6,39 +6,24 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "enum_value_translations")
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class EnumValueTranslation extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String languageCode;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(length = 1000)
-    private String description;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "enum_value_id")
+    @JoinColumn(name = "enum_value_id", nullable = false)
     private EnumValue enumValue;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EnumValueTranslation that)) return false;
-        return id != null && id.equals(that.getId());
-    }
+    @Column(name = "languageCode", nullable = false)
+    private String languageCode;
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "description")
+    private String description;
 }

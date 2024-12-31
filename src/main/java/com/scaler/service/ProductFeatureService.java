@@ -5,6 +5,7 @@ import com.scaler.entity.Product;
 import com.scaler.entity.ProductFeature;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Service interface for managing product features
@@ -16,7 +17,7 @@ public interface ProductFeatureService {
      * @param id The id to find feature for
      * @return The product feature
      */
-    ProductFeature findById(Long id);
+    ProductFeature findById(UUID id);
     
     /**
      * Find a product feature by product and category feature template

@@ -4,25 +4,25 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "category")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 @DiscriminatorValue("STANDARD")
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"parent", "children", "templates", "products"})
-@ToString(callSuper = true, exclude = {"parent", "children", "templates", "products"})
+@EqualsAndHashCode(callSuper = true, exclude = {"parent", "children", "templates", "products", "business", "catalog"})
+@ToString(callSuper = true, exclude = {"parent", "children", "templates", "products", "business", "catalog"})
 public class Category extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = false, nullable = false)
     private String code;
 
@@ -32,19 +32,27 @@ public class Category extends BaseEntity {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "business_id", nullable = false)
+    private Business business;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "catalog_id", nullable = false)
+    private Catalog catalog;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    @lombok.Builder.Default
-    private Set<Category> children = new HashSet<>();
+    @Builder.Default
+    private List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @lombok.Builder.Default
+    @Builder.Default
     private Set<CategoryFeatureTemplate> templates = new HashSet<>();
 
     @ManyToMany(mappedBy = "categories")
-    @lombok.Builder.Default
+    @Builder.Default
     private Set<Product> products = new HashSet<>();
 
     public void addTemplate(CategoryFeatureTemplate template) {

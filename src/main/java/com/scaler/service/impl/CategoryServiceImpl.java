@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findById(Long id) {
+    public Category findById(UUID id) {
         return categoryRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
     }
@@ -39,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category update(Long id, Category category) {
+    public Category update(UUID id, Category category) {
         Category existingCategory = findById(id);
         existingCategory.setCode(category.getCode());
         existingCategory.setName(category.getName());
@@ -52,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         Category category = findById(id);
         if (!category.getChildren().isEmpty()) {
             throw new IllegalStateException("Cannot delete category with children");

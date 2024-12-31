@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "category_feature_template")
@@ -13,23 +14,19 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"category", "features"})
-@ToString(callSuper = true, exclude = {"category", "features"})
+@ToString(callSuper = true, exclude = "category")
+@EqualsAndHashCode(callSuper = true, exclude = "category")
 public class CategoryFeatureTemplate extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column
     private String description;
 
-    @Column(name = "attribute_type")
+    @Column
     private String attributeType;
 
     @Column(name = "validation_pattern")
@@ -89,7 +86,7 @@ public class CategoryFeatureTemplate extends BaseEntity {
     private String metadata = "";
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "template", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -104,141 +101,5 @@ public class CategoryFeatureTemplate extends BaseEntity {
     public void removeFeature(ProductFeature feature) {
         features.remove(feature);
         feature.setTemplate(null);
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAttributeType() {
-        return attributeType;
-    }
-
-    public void setAttributeType(String attributeType) {
-        this.attributeType = attributeType;
-    }
-
-    public String getValidationPattern() {
-        return validationPattern;
-    }
-
-    public void setValidationPattern(String validationPattern) {
-        this.validationPattern = validationPattern;
-    }
-
-    public String getMinValue() {
-        return minValue;
-    }
-
-    public void setMinValue(String minValue) {
-        this.minValue = minValue;
-    }
-
-    public String getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(String maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public String getAllowedValues() {
-        return allowedValues;
-    }
-
-    public void setAllowedValues(String allowedValues) {
-        this.allowedValues = allowedValues;
-    }
-
-    public UnitOfMeasure getUnit() {
-        return unit;
-    }
-
-    public void setUnit(UnitOfMeasure unit) {
-        this.unit = unit;
-    }
-
-    public String getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(String metadata) {
-        this.metadata = metadata;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public boolean isEditable() {
-        return editable;
-    }
-
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-    }
-
-    public boolean isSearchable() {
-        return searchable;
-    }
-
-    public void setSearchable(boolean searchable) {
-        this.searchable = searchable;
-    }
-
-    public boolean isComparable() {
-        return comparable;
-    }
-
-    public void setComparable(boolean comparable) {
-        this.comparable = comparable;
-    }
-
-    public boolean isMandatory() {
-        return mandatory;
-    }
-
-    public void setMandatory(boolean mandatory) {
-        this.mandatory = mandatory;
-    }
-
-    public boolean isMultiValued() {
-        return multiValued;
-    }
-
-    public void setMultiValued(boolean multiValued) {
-        this.multiValued = multiValued;
     }
 }

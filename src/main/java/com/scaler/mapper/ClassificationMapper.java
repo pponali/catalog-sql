@@ -4,56 +4,47 @@ import com.scaler.dto.ClassificationAttributeDTO;
 import com.scaler.dto.ClassificationClassDTO;
 import com.scaler.entity.ClassificationAttribute;
 import com.scaler.entity.ClassificationClass;
-import org.springframework.stereotype.Component;
+import org.mapstruct.*;
 
-@Component
-public class ClassificationMapper {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface ClassificationMapper {
 
-    public ClassificationAttributeDTO toDTO(ClassificationAttribute entity) {
-        if (entity == null) {
-            return null;
-        }
-        
-        ClassificationAttributeDTO dto = new ClassificationAttributeDTO();
-        dto.setId(entity.getId());
-        dto.setCode(entity.getCode());
-        dto.setName(entity.getName());
-        return dto;
-    }
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "code", source = "code")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "description", source = "description")
+    ClassificationAttributeDTO toDTO(ClassificationAttribute entity);
 
-    public ClassificationAttribute toEntity(ClassificationAttributeDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-        
-        ClassificationAttribute entity = new ClassificationAttribute();
-        entity.setId(dto.getId());
-        entity.setCode(dto.getCode());
-        entity.setName(dto.getName());
-        return entity;
-    }
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "code", source = "code")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "description", source = "description")
+    ClassificationAttribute toEntity(ClassificationAttributeDTO dto);
 
-    public ClassificationClassDTO toDTO(ClassificationClass entity) {
-        if (entity == null) {
-            return null;
-        }
-        
-        ClassificationClassDTO dto = new ClassificationClassDTO();
-        dto.setId(entity.getId());
-        dto.setCode(entity.getCode());
-        dto.setName(entity.getName());
-        return dto;
-    }
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "parentId", source = "parent.id"),
+        @Mapping(target = "inheritFeatures", source = "inheritFeatures"),
+        @Mapping(target = "metadata", source = "metadata"),
+        @Mapping(target = "businessId", source = "business.id"),
+        @Mapping(target = "catalogId", source = "catalog.id")
+    })
+    ClassificationClassDTO toDTO(ClassificationClass entity);
 
-    public ClassificationClass toEntity(ClassificationClassDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-        
-        ClassificationClass entity = new ClassificationClass();
-        entity.setId(dto.getId());
-        entity.setCode(dto.getCode());
-        entity.setName(dto.getName());
-        return entity;
-    }
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "parent", ignore = true),
+        @Mapping(target = "inheritFeatures", source = "inheritFeatures"),
+        @Mapping(target = "metadata", source = "metadata"),
+        @Mapping(target = "business", ignore = true),
+        @Mapping(target = "catalog", ignore = true),
+        @Mapping(target = "attributeAssignments", ignore = true)
+    })
+    ClassificationClass toEntity(ClassificationClassDTO dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntity(@MappingTarget ClassificationClass entity, ClassificationClassDTO dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntity(@MappingTarget ClassificationAttribute entity, ClassificationAttributeDTO dto);
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -26,7 +27,7 @@ public class FeatureValueEventService {
     public void publishValueChangeEvent(ProductFeatureValueDTO oldValue, ProductFeatureValueDTO newValue) {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .eventType(FeatureValueEvent.EventType.VALUE_CHANGE)
-                .featureId(Long.parseLong(newValue.getFeatureId().toString()))
+                .featureId(newValue.getFeatureId())
                 .oldValue(oldValue != null ? oldValue.getValue() : null)
                 .newValue(newValue.getValue())
                 .timestamp(LocalDateTime.now())
@@ -39,7 +40,7 @@ public class FeatureValueEventService {
             String metadataJson = objectMapper.writeValueAsString(Map.of("violations", violations));
             FeatureValueEvent event = FeatureValueEvent.builder()
                     .eventType(FeatureValueEvent.EventType.VALIDATION)
-                    .featureId(Long.parseLong(value.getFeatureId().toString()))
+                    .featureId(value.getFeatureId())
                     .newValue(value.getValue())
                     .metadata(metadataJson)
                     .timestamp(LocalDateTime.now())
@@ -53,7 +54,7 @@ public class FeatureValueEventService {
     public void publishTransformationEvent(ProductFeatureValueDTO originalValue, ProductFeatureValueDTO transformedValue) {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .eventType(FeatureValueEvent.EventType.TRANSFORMATION)
-                .featureId(Long.parseLong(originalValue.getFeatureId().toString()))
+                .featureId(originalValue.getFeatureId())
                 .oldValue(originalValue.getValue())
                 .newValue(transformedValue.getValue())
                 .timestamp(LocalDateTime.now())
@@ -76,7 +77,7 @@ public class FeatureValueEventService {
         return repository.findByEventType(eventType);
     }
 
-    public List<FeatureValueEvent> getEventHistory(Long featureId) {
+    public List<FeatureValueEvent> getEventHistory(UUID featureId) {
         if (featureId == null) {
             return new ArrayList<>();
         }

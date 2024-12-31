@@ -2,89 +2,79 @@ package com.scaler.mapper;
 
 import com.scaler.dto.ProductFeatureDTO;
 import com.scaler.entity.ProductFeature;
-import com.scaler.entity.UnitOfMeasure;
-import com.scaler.entity.Product;
-import com.scaler.entity.CategoryFeatureTemplate;
 import org.mapstruct.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {ProductFeatureValueMapper.class})
 public interface ProductFeatureMapper {
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "featureType", source = "featureType")
-    @Mapping(target = "unitId", source = "unit.id")
-    @Mapping(target = "required", source = "required")
-    @Mapping(target = "validationPattern", source = "validationPattern")
-    @Mapping(target = "minValue", source = "minValue")
-    @Mapping(target = "maxValue", source = "maxValue")
-    @Mapping(target = "allowedValues", source = "allowedValues")
-    @Mapping(target = "productId", source = "product.id")
-    @Mapping(target = "templateId", source = "template.id")
-    @Mapping(target = "values", expression = "java(mapValuesToList(entity))")
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "productId", source = "product.id"),
+        @Mapping(target = "templateId", source = "template.id"),
+        @Mapping(target = "code", source = "code"),
+        @Mapping(target = "name", source = "name"),
+        @Mapping(target = "description", source = "description"),
+        @Mapping(target = "attributeType", source = "attributeType"),
+        @Mapping(target = "validationPattern", source = "validationPattern"),
+        @Mapping(target = "minValue", source = "minValue"),
+        @Mapping(target = "maxValue", source = "maxValue"),
+        @Mapping(target = "allowedValues", source = "allowedValues"),
+        @Mapping(target = "defaultValue", source = "defaultValue"),
+        @Mapping(target = "featureType", source = "featureType"),
+        @Mapping(target = "unitId", source = "unit.id"),
+        @Mapping(target = "visible", source = "visible"),
+        @Mapping(target = "editable", source = "editable"),
+        @Mapping(target = "searchable", source = "searchable"),
+        @Mapping(target = "comparable", source = "comparable"),
+        @Mapping(target = "required", source = "required"),
+        @Mapping(target = "multiValued", source = "multiValued"),
+        @Mapping(target = "metadata", source = "metadata"),
+        @Mapping(target = "createdAt", source = "createdDate"),
+        @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
+        @Mapping(target = "createdBy", source = "createdBy"),
+        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
+        @Mapping(target = "values", source = "values")
+    })
     ProductFeatureDTO toDTO(ProductFeature entity);
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "featureType", source = "featureType")
-    @Mapping(target = "unit", ignore = true)
-    @Mapping(target = "required", source = "required")
-    @Mapping(target = "validationPattern", source = "validationPattern")
-    @Mapping(target = "minValue", source = "minValue")
-    @Mapping(target = "maxValue", source = "maxValue")
-    @Mapping(target = "allowedValues", source = "allowedValues")
-    @Mapping(target = "values", ignore = true)
-    @Mapping(target = "product", ignore = true)
-    @Mapping(target = "template", ignore = true)
-    @Mapping(target = "metadata", ignore = true)
-    @Mapping(target = "code", expression = "java(generateCode(dto))")
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "product", ignore = true),
+        @Mapping(target = "template", ignore = true),
+        @Mapping(target = "code", source = "code"),
+        @Mapping(target = "name", source = "name"),
+        @Mapping(target = "description", source = "description"),
+        @Mapping(target = "attributeType", source = "attributeType"),
+        @Mapping(target = "validationPattern", source = "validationPattern"),
+        @Mapping(target = "minValue", source = "minValue"),
+        @Mapping(target = "maxValue", source = "maxValue"),
+        @Mapping(target = "allowedValues", source = "allowedValues"),
+        @Mapping(target = "defaultValue", source = "defaultValue"),
+        @Mapping(target = "featureType", source = "featureType"),
+        @Mapping(target = "unit", ignore = true),
+        @Mapping(target = "visible", source = "visible"),
+        @Mapping(target = "editable", source = "editable"),
+        @Mapping(target = "searchable", source = "searchable"),
+        @Mapping(target = "comparable", source = "comparable"),
+        @Mapping(target = "required", source = "required"),
+        @Mapping(target = "multiValued", source = "multiValued"),
+        @Mapping(target = "metadata", source = "metadata"),
+        @Mapping(target = "values", ignore = true),
+        @Mapping(target = "createdDate", source = "createdAt"),
+        @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
+        @Mapping(target = "createdBy", source = "createdBy"),
+        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
+    })
     ProductFeature toEntity(ProductFeatureDTO dto);
 
-    List<ProductFeatureDTO> toDto(List<ProductFeature> entities);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntity(@MappingTarget ProductFeature entity, ProductFeatureDTO dto);
 
-    List<ProductFeature> toEntity(List<ProductFeatureDTO> dtos);
+    List<ProductFeatureDTO> toDTOList(List<ProductFeature> entities);
 
-    @AfterMapping
-    default void afterToEntity(@MappingTarget ProductFeature feature, ProductFeatureDTO dto) {
-        if (dto.getUnitId() != null) {
-            UnitOfMeasure unit = new UnitOfMeasure();
-            unit.setId(dto.getUnitId());
-            feature.setUnit(unit);
-        }
-        
-        if (dto.getProductId() != null) {
-            Product product = new Product();
-            product.setId(dto.getProductId());
-            feature.setProduct(product);
-        }
-        
-        if (dto.getTemplateId() != null) {
-            CategoryFeatureTemplate template = new CategoryFeatureTemplate();
-            template.setId(dto.getTemplateId());
-            feature.setTemplate(template);
-        }
-    }
-
-    default String generateCode(ProductFeatureDTO dto) {
-        return dto.getName().toLowerCase().replaceAll("\\s+", "_");
-    }
-
-    default List<String> mapValuesToList(ProductFeature entity) {
-        if (entity.getValues() == null || entity.getValues().isEmpty()) {
-            return Collections.emptyList();
-        }
-        
-        List<String> values = new ArrayList<>();
-        entity.getValues().forEach(value -> {
-            String valueStr = value.getValueAsString();
-            if (valueStr != null) {
-                values.add(valueStr);
-            }
-        });
-        return values;
-    }
+    Set<ProductFeatureDTO> toDTOSet(Set<ProductFeature> entities);
 }

@@ -2,40 +2,45 @@ package com.scaler.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "product")
-@Getter
-@Setter
+@Table(name = "products")
+@Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true, exclude = {"catalog", "categories", "features", "featureValues", "business", "unitOfMeasure"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "categories", "features", "featureValues", "business", "unitOfMeasure"})
 public class Product extends BaseEntity {
-    @Column(nullable = false)
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "product_type")
+    @Column(name = "product_type", nullable = false)
     private String productType;
 
-    @Column
+    @Column(name = "status")
     private String status;
 
-    @Column(columnDefinition = "jsonb")
-    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "metadata", columnDefinition = "jsonb")
     private String metadata;
 
-    @Column
+    @Column(name = "sku")
     private String sku;
+
+    @Column(name = "price")
+    private Double price;
 
     @ManyToMany
     @JoinTable(
@@ -43,13 +48,32 @@ public class Product extends BaseEntity {
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "category_id")
     )
+    @Builder.Default
     private Set<Category> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<ProductAttribute> attributes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<ProductFeature> features = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<ProductFeatureValue> featureValues = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "business_id", nullable = false)
+    private Business business;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "catalog_id")
+    private Catalog catalog;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unit_of_measure_id")
+    private UnitOfMeasure unitOfMeasure;
 
     public void addCategory(Category category) {
         categories.add(category);

@@ -3,22 +3,22 @@ package com.scaler.entity;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "product_feature_value")
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true, exclude = {"product", "feature"})
+@EqualsAndHashCode(callSuper = true, exclude = {"product", "feature"})
 public class ProductFeatureValue extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -29,7 +29,7 @@ public class ProductFeatureValue extends BaseEntity {
     private ProductFeature feature;
 
     @Column(name = "template_id")
-    private Long templateId;
+    private UUID templateId;
 
     @Column(name = "type")
     private String type;
@@ -55,6 +55,10 @@ public class ProductFeatureValue extends BaseEntity {
     @Column(name = "attribute_values", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode attributeValues;
+
+    @Column(name = "metadata", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private JsonNode metadata;
 
     @PrePersist
     protected void onCreate() {
@@ -101,6 +105,14 @@ public class ProductFeatureValue extends BaseEntity {
 
     public void setAttributeValue(JsonNode value) {
         this.attributeValues = value;
+    }
+
+    public JsonNode getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(JsonNode metadata) {
+        this.metadata = metadata;
     }
 
     public void setValidationStatus(String status) {

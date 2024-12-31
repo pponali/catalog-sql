@@ -11,33 +11,34 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ProductFeatureValueRepository extends JpaRepository<ProductFeatureValue, Long> {
+public interface ProductFeatureValueRepository extends JpaRepository<ProductFeatureValue, UUID> {
     
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureId(Long featureId);
+    List<ProductFeatureValue> findByFeatureId(UUID featureId);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.id = ?2", nativeQuery = true)
-    Optional<ProductFeatureValue> findByFeatureIdAndId(Long featureId, Long id);
+    Optional<ProductFeatureValue> findByFeatureIdAndId(UUID featureId, UUID id);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.attribute_values IS NOT NULL", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndValueIsNotNull(Long featureId);
+    List<ProductFeatureValue> findByFeatureIdAndValueIsNotNull(UUID featureId);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = ?2", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndValueType(Long featureId, String type);
+    List<ProductFeatureValue> findByFeatureIdAndValueType(UUID featureId, String type);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.attribute_values->>'value' = ?2", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndValue(Long featureId, String value);
+    List<ProductFeatureValue> findByFeatureIdAndValue(UUID featureId, String value);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.product_id = ?1 " +
@@ -47,58 +48,58 @@ public interface ProductFeatureValueRepository extends JpaRepository<ProductFeat
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.unit_of_measure = ?2", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndUnitOfMeasureCode(Long featureId, String unitOfMeasureCode);
+    List<ProductFeatureValue> findByFeatureIdAndUnitOfMeasureCode(UUID featureId, String unitOfMeasureCode);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = 'number' " +
            "AND CAST(pfv.attribute_values->>'value' AS DECIMAL) > ?2", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndNumericValueGreaterThan(Long featureId, Double value);
+    List<ProductFeatureValue> findByFeatureIdAndNumericValueGreaterThan(UUID featureId, Double value);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = 'number' " +
            "AND CAST(pfv.attribute_values->>'value' AS DECIMAL) < ?2", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndNumericValueLessThan(Long featureId, Double value);
+    List<ProductFeatureValue> findByFeatureIdAndNumericValueLessThan(UUID featureId, Double value);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = 'number' " +
            "AND CAST(pfv.attribute_values->>'value' AS DECIMAL) BETWEEN ?2 AND ?3", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndNumericValueBetween(Long featureId, Double minValue, Double maxValue);
+    List<ProductFeatureValue> findByFeatureIdAndNumericValueBetween(UUID featureId, Double minValue, Double maxValue);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = 'array' " +
            "AND pfv.attribute_values @> CAST(?2 AS jsonb)", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndArrayContains(Long featureId, String arrayElement);
+    List<ProductFeatureValue> findByFeatureIdAndArrayContains(UUID featureId, String arrayElement);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.attribute_values->>'value' LIKE CONCAT('%', ?2, '%')", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndValueContaining(Long featureId, String searchText);
+    List<ProductFeatureValue> findByFeatureIdAndValueContaining(UUID featureId, String searchText);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.attribute_values->?2 = ?3::jsonb", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndNestedKeyValue(Long featureId, String key, String value);
+    List<ProductFeatureValue> findByFeatureIdAndNestedKeyValue(UUID featureId, String key, String value);
 
     @Query(value = "SELECT COUNT(*) FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = ?2", nativeQuery = true)
-    Long countByFeatureIdAndValueType(Long featureId, String valueType);
+    Long countByFeatureIdAndValueType(UUID featureId, String valueType);
 
     @Query(value = "SELECT AVG(CAST(pfv.attribute_values->>'value' AS DECIMAL)) " +
            "FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = 'number'", nativeQuery = true)
-    Double averageNumericValueByFeatureId(Long featureId);
+    Double averageNumericValueByFeatureId(UUID featureId);
 
     @Query(value = "SELECT pfv.type as value_type, COUNT(*) as count " +
            "FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "GROUP BY pfv.type", nativeQuery = true)
-    List<Map<String, Object>> countValuesByType(Long featureId);
+    List<Map<String, Object>> countValuesByType(UUID featureId);
 
     @Query(value = "SELECT " +
            "MIN(CAST(pfv.attribute_values->>'value' AS DECIMAL)) as min_value, " +
@@ -107,7 +108,7 @@ public interface ProductFeatureValueRepository extends JpaRepository<ProductFeat
            "FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = 'number'", nativeQuery = true)
-    Map<String, Object> getNumericValueStatistics(Long featureId);
+    Map<String, Object> getNumericValueStatistics(UUID featureId);
 
     @Query(value = "SELECT " +
            "DATE_TRUNC('month', pfv.created_at) as month, " +
@@ -117,7 +118,7 @@ public interface ProductFeatureValueRepository extends JpaRepository<ProductFeat
            "AND pfv.type = ?2 " +
            "GROUP BY DATE_TRUNC('month', pfv.created_at) " +
            "ORDER BY month", nativeQuery = true)
-    List<Map<String, Object>> getValueTrends(Long featureId, String valueType);
+    List<Map<String, Object>> getValueTrends(UUID featureId, String valueType);
 
     @Query(value = "SELECT " +
            "pfv.attribute_values->>'value' as value, " +
@@ -125,43 +126,43 @@ public interface ProductFeatureValueRepository extends JpaRepository<ProductFeat
            "FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "GROUP BY pfv.attribute_values->>'value'", nativeQuery = true)
-    List<Map<String, Object>> getValueDistribution(Long featureId);
+    List<Map<String, Object>> getValueDistribution(UUID featureId);
 
     @Query(value = "SELECT pfv.created_at, pfv.attribute_values->>'value' as value " +
            "FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.product_id = ?2 " +
            "ORDER BY pfv.created_at DESC", nativeQuery = true)
-    List<ProductFeatureValue> getValueHistory(Long featureId, Long productId);
+    List<ProductFeatureValue> getValueHistory(UUID featureId, UUID productId);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.attribute_values::text SIMILAR TO ?2", nativeQuery = true)
-    List<ProductFeatureValue> searchByValuePattern(Long featureId, String pattern);
+    List<ProductFeatureValue> searchByValuePattern(UUID featureId, String pattern);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.attribute_values->>'value' LIKE CONCAT('%', ?2, '%') " +
            "AND similarity(pfv.attribute_values->>'value', ?2) > ?3", nativeQuery = true)
-    List<ProductFeatureValue> findSimilarValues(Long featureId, String value, double threshold);
+    List<ProductFeatureValue> findSimilarValues(UUID featureId, String value, double threshold);
 
     @Query(value = "SELECT pfv.validation_pattern FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1", nativeQuery = true)
-    Map<String, Object> getValidationRules(Long featureId);
+    Map<String, Object> getValidationRules(UUID featureId);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.type = ?2", nativeQuery = true)
-    Page<ProductFeatureValue> findByFeatureIdAndValueType(Long featureId, String type, Pageable pageable);
+    Page<ProductFeatureValue> findByFeatureIdAndValueType(UUID featureId, String type, Pageable pageable);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.unit_of_measure = ?2", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndUnitOfMeasure(Long featureId, String unitOfMeasure);
+    List<ProductFeatureValue> findByFeatureIdAndUnitOfMeasure(UUID featureId, String unitOfMeasure);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.template_id = ?1", nativeQuery = true)
-    List<ProductFeatureValue> findByTemplateId(Long templateId);
+    List<ProductFeatureValue> findByTemplateId(UUID templateId);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.type = ?1", nativeQuery = true)
@@ -186,15 +187,15 @@ public interface ProductFeatureValueRepository extends JpaRepository<ProductFeat
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1 " +
            "AND pfv.attribute_values::text LIKE ?2", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureIdAndJsonPattern(Long featureId, String jsonPattern);
+    List<ProductFeatureValue> findByFeatureIdAndJsonPattern(UUID featureId, String jsonPattern);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.product_id = ?1", nativeQuery = true)
-    List<ProductFeatureValue> findByProductId(Long productId);
+    List<ProductFeatureValue> findByProductId(UUID productId);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureId(Long featureId, Pageable pageable);
+    Page<ProductFeatureValue> findByFeatureId(UUID featureId, Pageable pageable);
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.status = ?1", nativeQuery = true)
@@ -206,7 +207,14 @@ public interface ProductFeatureValueRepository extends JpaRepository<ProductFeat
 
     @Query(value = "SELECT * FROM product_feature_value pfv " +
            "WHERE pfv.feature_id = ?1", nativeQuery = true)
-    List<ProductFeatureValue> findByFeatureTemplateId(Long templateId);
+    List<ProductFeatureValue> findByFeatureTemplateId(UUID templateId);
 
-    void deleteByFeatureId(Long featureId);
+    void deleteByFeatureId(UUID featureId);
+
+    List<ProductFeatureValue> findByFeatureIdAndAttributeValuesIsNotNull(UUID featureId);
+
+    @Query(value = "SELECT * FROM product_feature_value pfv " +
+           "WHERE pfv.feature_id = ?1 " +
+           "ORDER BY pfv.created_date DESC", nativeQuery = true)
+    List<ProductFeatureValue> findByFeatureIdOrderByCreatedDateDesc(UUID featureId);
 }

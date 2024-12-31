@@ -2,28 +2,57 @@ package com.scaler.mapper;
 
 import com.scaler.dto.CategoryDTO;
 import com.scaler.entity.Category;
+import com.scaler.entity.Product;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
-public interface CategoryMapper {
-    @Mapping(target = "code", source = "code")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "parentId", expression = "java(category.getParent() != null ? category.getParent().getId() : null)")
-    CategoryDTO toDTO(Category category);
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.UUID;
 
-    @Mapping(target = "code", source = "code")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "parent", ignore = true)
-    @Mapping(target = "children", ignore = true)
-    @Mapping(target = "templates", ignore = true)
-    @Mapping(target = "products", ignore = true)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, 
+        uses = {CategoryFeatureTemplateMapper.class})
+public interface CategoryMapper {
+
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "businessId", source = "business.id"),
+        @Mapping(target = "catalogId", source = "catalog.id"),
+        @Mapping(target = "parentId", source = "parent.id"),
+        @Mapping(target = "code", source = "code"),
+        @Mapping(target = "name", source = "name"),
+        @Mapping(target = "description", source = "description"),
+        @Mapping(target = "children", source = "children"),
+        @Mapping(target = "templates", source = "templates"),
+        @Mapping(target = "productIds", expression = "java(getProductIds(entity.getProducts()))")
+    })
+    CategoryDTO toDTO(Category entity);
+
+    @Mappings({
+        @Mapping(target = "id", source = "id"),
+        @Mapping(target = "business", ignore = true),
+        @Mapping(target = "catalog", ignore = true),
+        @Mapping(target = "parent", ignore = true),
+        @Mapping(target = "code", source = "code"),
+        @Mapping(target = "name", source = "name"),
+        @Mapping(target = "description", source = "description"),
+        @Mapping(target = "children", ignore = true),
+        @Mapping(target = "templates", ignore = true),
+        @Mapping(target = "products", ignore = true)
+    })
     Category toEntity(CategoryDTO dto);
 
-    @Mapping(target = "parent", ignore = true)
-    @Mapping(target = "children", ignore = true)
-    @Mapping(target = "templates", ignore = true)
-    @Mapping(target = "products", ignore = true)
-    void updateEntityFromDTO(CategoryDTO dto, @MappingTarget Category category);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntity(@MappingTarget Category entity, CategoryDTO dto);
+
+    List<CategoryDTO> toDTOList(List<Category> entities);
+
+    default Set<UUID> getProductIds(Set<Product> products) {
+        if (products == null) {
+            return null;
+        }
+        return products.stream()
+                .map(Product::getId)
+                .collect(Collectors.toSet());
+    }
 }

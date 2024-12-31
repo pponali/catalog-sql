@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -11,9 +12,9 @@ import java.util.Set;
 @Entity
 @DiscriminatorValue("CLASSIFICATION")
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class ClassificationClass extends Category {
 
@@ -21,26 +22,15 @@ public class ClassificationClass extends Category {
     @Builder.Default
     private Set<ClassAttributeAssignment> attributeAssignments = new HashSet<>();
 
-    @Column(name = "allow_multiple_categories")
-    private boolean allowMultipleCategories;
-
     @Column(name = "inherit_features")
-    private boolean inheritFeatures;
-
-    @Column(name = "active")
     @Builder.Default
-    private boolean active = true;
-
-    @Column(name = "sequence")
-    private Integer sequence;
+    private boolean inheritFeatures = true;
 
     @ElementCollection
-    @CollectionTable(
-        name = "classification_class_metadata",
-        joinColumns = @JoinColumn(name = "class_id")
-    )
-    @MapKeyColumn(name = "key")
-    @Column(name = "value")
+    @CollectionTable(name = "classification_class_metadata",
+            joinColumns = @JoinColumn(name = "classification_class_id"))
+    @MapKeyColumn(name = "metadata_key")
+    @Column(name = "metadata_value")
     @Builder.Default
     private Map<String, String> metadata = new java.util.HashMap<>();
 
@@ -52,29 +42,14 @@ public class ClassificationClass extends Category {
         return allAssignments;
     }
 
-    public boolean isRoot() {
-        return getParent() == null;
+    @PrePersist
+    protected void onCreate() {
+        setCreatedDate(LocalDateTime.now());
+        setLastModifiedDate(LocalDateTime.now());
     }
 
-    public boolean isLeaf() {
-        return getChildren().isEmpty();
-    }
-
-    public int getLevel() {
-        int level = 0;
-        Category current = this;
-        while (current.getParent() != null) {
-            level++;
-            current = current.getParent();
-        }
-        return level;
-    }
-
-    @Override
-    public void addChild(Category child) {
-        if (!(child instanceof ClassificationClass)) {
-            throw new IllegalArgumentException("Can only add ClassificationClass as children");
-        }
-        super.addChild(child);
+    @PreUpdate
+    protected void onUpdate() {
+        setLastModifiedDate(LocalDateTime.now());
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -32,7 +33,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get category by ID")
-    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable UUID id) {
         Category category = categoryService.findById(id);
         return ResponseEntity.ok(categoryMapper.toDTO(category));
     }
@@ -48,7 +49,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     @Operation(summary = "Update a category")
     public ResponseEntity<CategoryDTO> updateCategory(
-        @PathVariable Long id,
+        @PathVariable UUID id,
         @RequestBody CategoryDTO categoryDTO
     ) {
         Category category = categoryMapper.toEntity(categoryDTO);
@@ -58,7 +59,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a category")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCategory(@PathVariable UUID id) {
         categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }
