@@ -29,6 +29,34 @@ VALUES
 (9, 'LENGTH', 'Length', 'Length measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (10, 'TEMPERATURE', 'Temperature', 'Temperature measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+-- Unit of Measures
+INSERT INTO unit_of_measure (code, name, description, base_unit, conversion_factor, created_date, last_modified_date)
+VALUES
+-- Size measures
+('XS', 'Extra Small', 'Extra Small size', 'SIZE', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('S', 'Small', 'Small size', 'SIZE', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('MD', 'Medium', 'Medium size', 'SIZE', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('LG', 'Large', 'Large size', 'SIZE', 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('XL', 'Extra Large', 'Extra Large size', 'SIZE', 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Weight measures
+('G', 'Gram', 'Weight in grams', 'WEIGHT', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('KG', 'Kilogram', 'Weight in kilograms', 'WEIGHT', 1000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('MG', 'Milligram', 'Weight in milligrams', 'WEIGHT', 0.001, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Volume measures
+('ML', 'Milliliter', 'Volume in milliliters', 'VOLUME', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('LTR', 'Liter', 'Volume in liters', 'VOLUME', 1000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Length measures
+('CM', 'Centimeter', 'Length in centimeters', 'LENGTH', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('MTR', 'Meter', 'Length in meters', 'LENGTH', 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('MM', 'Millimeter', 'Length in millimeters', 'LENGTH', 0.1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Temperature measures
+('CELSIUS', 'Celsius', 'Temperature in Celsius', 'TEMPERATURE', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('FAHR', 'Fahrenheit', 'Temperature in Fahrenheit', 'TEMPERATURE', 1.8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 -- Root Categories
 INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
 VALUES 

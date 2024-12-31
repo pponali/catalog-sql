@@ -62,22 +62,51 @@ VALUES
     ('RING_MATERIAL', 'Ring Material', 'Ring Material Type', 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Product Feature Values
-INSERT INTO product_feature_value (id, product_id, feature_id, template_id, type, unit, unit_of_measure, status, validation_status, validation_pattern, validation_message, attribute_values, created_date, last_modified_date, created_by, updated_by)
+INSERT INTO product_feature_value (
+    id, product_id, feature_id, template_id,
+    type, unit_id, unit_of_measure, status,
+    validation_status, validation_pattern,
+    validation_message, attribute_values,
+    created_by, created_date,
+    last_modified_by, last_modified_date
+)
 VALUES 
-(1, 1, 1, 1, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "formal"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-(2, 1, 2, 2, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "M"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-(3, 2, 3, 3, 'number', 'ton', NULL, 'active', 'valid', NULL, NULL, '{"value": 1.5}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-(4, 2, 4, 4, 'string', NULL, NULL, 'active', 'valid', NULL, NULL, '{"value": "5_star"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+(101, 1, 1, 1, 
+ 'ENUM', 1, 'SIZE', 'ACTIVE',
+ 'VALID', '^(S|M|L|XL)$', NULL,
+ '{"value": "M"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
 
--- Test Data
+(102, 1, 2, 2,
+ 'ENUM', 2, 'STYLE', 'ACTIVE',
+ 'VALID', '^(casual|formal)$', NULL,
+ '{"value": "formal"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+(103, 2, 3, 3,
+ 'NUMERIC', 8, 'CAPACITY', 'ACTIVE',
+ 'VALID', '^[0-9]+(\.[0-9]{1,2})?$', NULL,
+ '{"value": 1.5}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP),
+
+(104, 2, 4, 4,
+ 'ENUM', 2, 'ENERGY_RATING', 'ACTIVE',
+ 'VALID', '^(3|4|5)$', NULL,
+ '{"value": "5"}',
+ 'system', CURRENT_TIMESTAMP,
+ 'system', CURRENT_TIMESTAMP);
+
 -- Units
-INSERT INTO unit (id, code, name, description, created_date, last_modified_date)
+INSERT INTO unit_of_measure (id, code, name, description, base_unit, conversion_factor, created_date, last_modified_date)
 VALUES 
-(1, 'TEST_SIZE', 'Test Size', 'Test size measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'TEST_STYLE', 'Test Style', 'Test style type', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'TEST_WEIGHT', 'Test Weight', 'Test weight measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(1, 'TEST_SIZE', 'Test Size', 'Test size measurements', NULL, 1.0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'TEST_STYLE', 'Test Style', 'Test style type', NULL, 1.0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'TEST_WEIGHT', 'Test Weight', 'Test weight measurements', 'kg', 1000.0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- Test Categories
+-- Insert test categories
 INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
 VALUES 
 -- Root category
@@ -163,17 +192,17 @@ INSERT INTO product_feature_value (
     last_modified_by, last_modified_date
 )
 VALUES 
-(1, 1, 1, 1, 
- 'ENUM', 'TEST_UNIT', NULL, 'ACTIVE',
+(201, 1, 1, 1, 
+ 'ENUM', NULL, NULL, 'ACTIVE',
  'VALID', '^(A|B|C)$', NULL,
  '{"value": "A"}',
  'test_system', CURRENT_TIMESTAMP,
  'test_system', CURRENT_TIMESTAMP),
 
-(2, 1, 2, 2,
- 'NUMERIC', 'TEST_UNIT', 'test', 'ACTIVE',
+(202, 1, 2, 2, 
+ 'NUMERIC', NULL, NULL, 'ACTIVE',
  'VALID', '^[0-9]+(\.[0-9]{1,2})?$', NULL,
- '{"value": 10.5}',
+ '{"value": 42.5}',
  'test_system', CURRENT_TIMESTAMP,
  'test_system', CURRENT_TIMESTAMP);
 

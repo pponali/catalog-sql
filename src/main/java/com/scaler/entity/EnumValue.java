@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.*;
 
 @Entity
-@Table(name = "enum_values")
+@Table(name = "enum_value")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,14 +33,12 @@ public class EnumValue extends BaseEntity {
     private Integer sortOrder;
 
     @Column(name = "is_active", nullable = false)
-    @Builder.Default
     private boolean active = true;
 
     @Column(length = 1000)
     private String description;
 
     @OneToMany(mappedBy = "enumValue", cascade = CascadeType.ALL)
-    @Builder.Default
     private Set<EnumValueTranslation> translations = new HashSet<>();
 
     @Override
