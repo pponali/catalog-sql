@@ -25,7 +25,7 @@ public class ProductFeatureValue extends BaseEntity {
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feature_id")
+    @JoinColumn(name = "feature_id", referencedColumnName = "id")
     private ProductFeature feature;
 
     @Column(name = "template_id")

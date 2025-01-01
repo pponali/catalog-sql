@@ -45,7 +45,6 @@ public class Site extends BaseEntity {
     private Business business;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
-    @Builder.Default
     private Set<SiteCatalog> siteCatalogs = new HashSet<>();
 
     public void addSiteCatalog(SiteCatalog siteCatalog) {

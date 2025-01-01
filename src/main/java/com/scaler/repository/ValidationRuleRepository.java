@@ -6,17 +6,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ValidationRuleRepository extends JpaRepository<ValidationRule, Long> {
+public interface ValidationRuleRepository extends JpaRepository<ValidationRule, UUID> {
     
-    List<ValidationRule> findByFeatureIdAndActiveTrue(Long featureId);
+    List<ValidationRule> findByFeatureIdAndActiveTrue(UUID featureId);
     
-    List<ValidationRule> findByFeatureIdAndRuleTypeAndActiveTrue(Long featureId, ValidationRule.RuleType ruleType);
+    List<ValidationRule> findByFeatureIdAndRuleTypeAndActiveTrue(UUID featureId, ValidationRule.RuleType ruleType);
     
-    List<ValidationRule> findByFeatureIdOrderByPriorityAsc(Long featureId);
+    List<ValidationRule> findByFeatureIdOrderByPriorityAsc(UUID featureId);
     
-    boolean existsByFeatureIdAndRuleExpressionAndActiveTrue(Long featureId, String ruleExpression);
+    boolean existsByFeatureIdAndRuleExpressionAndActiveTrue(UUID featureId, String ruleExpression);
     
     Optional<ValidationRule> findByCode(String code);
     boolean existsByCode(String code);

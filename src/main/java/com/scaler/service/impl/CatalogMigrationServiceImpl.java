@@ -233,8 +233,8 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         Catalog targetCatalog = catalogRepository.findById(targetCatalogId)
             .orElseThrow(() -> new ResourceNotFoundException("Target catalog not found: " + targetCatalogId));
             
-        if (!sourceCatalog.getBusiness().equals(targetCatalog.getBusiness())) {
-            throw new BusinessException("Cannot migrate between catalogs of different businesses");
+        if (sourceCatalog.equals(targetCatalog)) {
+            throw new BusinessException("Cannot migrate to the same catalog");
         }
     }
 
@@ -249,40 +249,31 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         Business targetBusiness = businessRepository.findById(targetCatalog.getBusiness().getId())
             .orElseThrow(() -> new ResourceNotFoundException("Target business not found"));
 
-        // Enhanced business rules for migration
-        if (sourceBusiness.equals(targetBusiness)) {
-            throw new BusinessException("Cannot migrate within the same business unit");
+        // Rule 1: Tata CLiQ Fashion can only migrate to Tata Digital
+        if (isBusinessUnit(sourceBusiness, BusinessUnit.TATA_CLIQ_FASHION) &&
+            !isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
+            throw new BusinessException("Tata CLiQ Fashion can only migrate to Tata Digital");
         }
 
-        // Rule 1: Tata CLiQ Fashion can only migrate to/from Tata Digital
-        if (isBusinessUnit(sourceBusiness, BusinessUnit.TATA_CLIQ_FASHION)) {
-            if (!isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
-                throw new BusinessException("Tata CLiQ Fashion can only migrate to Tata Digital");
-            }
+        // Rule 2: BigBasket can only migrate to Tata Digital
+        if (isBusinessUnit(sourceBusiness, BusinessUnit.BIGBASKET) &&
+            !isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
+            throw new BusinessException("BigBasket can only migrate to Tata Digital");
         }
 
-        // Rule 2: BigBasket can only migrate to/from Tata Digital
-        if (isBusinessUnit(sourceBusiness, BusinessUnit.BIGBASKET)) {
-            if (!isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
-                throw new BusinessException("BigBasket can only migrate to Tata Digital");
-            }
+        // Rule 3: Tata 1mg can only migrate to Tata Digital
+        if (isBusinessUnit(sourceBusiness, BusinessUnit.TATA_1MG) &&
+            !isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
+            throw new BusinessException("Tata 1mg can only migrate to Tata Digital");
         }
 
-        // Rule 3: Tata 1mg can only migrate to/from Tata Digital
-        if (isBusinessUnit(sourceBusiness, BusinessUnit.TATA_1MG)) {
-            if (!isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
-                throw new BusinessException("Tata 1mg can only migrate to Tata Digital");
-            }
+        // Rule 4: Tanishq can only migrate to Tata Digital
+        if (isBusinessUnit(sourceBusiness, BusinessUnit.TANISHQ) &&
+            !isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
+            throw new BusinessException("Tanishq can only migrate to Tata Digital");
         }
 
-        // Rule 4: Tanishq can only migrate to/from Tata Digital
-        if (isBusinessUnit(sourceBusiness, BusinessUnit.TANISHQ)) {
-            if (!isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
-                throw new BusinessException("Tanishq can only migrate to Tata Digital");
-            }
-        }
-
-        // Rule 5: Tata Digital can migrate to/from any business
+        // Rule 5: Tata Digital can migrate to any business
         if (isBusinessUnit(sourceBusiness, BusinessUnit.TATA_DIGITAL)) {
             // No restrictions needed as Tata Digital can migrate to any business
             return;
@@ -335,7 +326,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
     }
 
     private void validateSizeChartMapping(Catalog sourceCatalog, Catalog targetCatalog) {
-        List<Product> products = productRepository.findByCatalog(sourceCatalog.getId());
+        List<Product> products = productRepository.findByCatalogId(sourceCatalog.getId());
         
         for (Product product : products) {
             List<ProductAttribute> attributes = product.getAttributes();
@@ -360,7 +351,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
     }
 
     private void validateNutritionalInfo(Catalog sourceCatalog, Catalog targetCatalog) {
-        List<Product> products = productRepository.findByCatalog(sourceCatalog.getId());
+        List<Product> products = productRepository.findByCatalogId(sourceCatalog.getId());
         
         for (Product product : products) {
             List<ProductAttribute> attributes = product.getAttributes();
@@ -379,7 +370,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
     }
 
     private void validateMedicalInfo(Catalog sourceCatalog, Catalog targetCatalog) {
-        List<Product> products = productRepository.findByCatalog(sourceCatalog.getId());
+        List<Product> products = productRepository.findByCatalogId(sourceCatalog.getId());
         
         for (Product product : products) {
             List<ProductAttribute> attributes = product.getAttributes();
@@ -405,7 +396,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
     }
 
     private void validateJewelryCertification(Catalog sourceCatalog, Catalog targetCatalog) {
-        List<Product> products = productRepository.findByCatalog(sourceCatalog.getId());
+        List<Product> products = productRepository.findByCatalogId(sourceCatalog.getId());
         
         for (Product product : products) {
             List<ProductAttribute> attributes = product.getAttributes();
@@ -506,12 +497,12 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
     }
 
     public boolean migrateCatalog(CatalogMigrationDTO request) {
-        Catalog sourceCatalog = catalogRepository.findById(request.getSourceCatalogId()).orElse(null);
-        Catalog targetCatalog = catalogRepository.findById(request.getTargetCatalogId()).orElse(null);
+        Catalog sourceCatalog = catalogRepository.findById(request.getSourceCatalogId())
+            .orElseThrow(() -> new ResourceNotFoundException("Source catalog not found"));
+        Catalog targetCatalog = catalogRepository.findById(request.getTargetCatalogId())
+            .orElseThrow(() -> new ResourceNotFoundException("Target catalog not found"));
 
-        if (sourceCatalog == null || targetCatalog == null) {
-            throw new BusinessException("Source or target catalog not found");
-        }
+        validateBusinessRules(sourceCatalog.getId(), targetCatalog.getId());
 
         CatalogMigration migration = new CatalogMigration();
         migration.setSourceCatalogId(sourceCatalog.getId());
@@ -527,18 +518,22 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         migration.setFailedCategoryIds(new ArrayList<>());
         migration.setFailedProductIds(new ArrayList<>());
         migration.setMigrationNotes(request.getMigrationNotes());
-        //migration.setPerformedBy(request.getPerformedBy());
 
         migration = migrationRepository.save(migration);
 
-        //migrateCategories(sourceCatalog.getId(), targetCatalog.getId(), migration);
-        //migrateProducts(sourceCatalog, targetCatalog, migration);
+        try {
+            migrateCategories(sourceCatalog.getId(), targetCatalog.getId(), Collections.emptyList());
+            migrateProducts(sourceCatalog.getId(), targetCatalog.getId(), Collections.emptyList());
+            migration.setStatus(MigrationStatus.COMPLETED);
+        } catch (Exception e) {
+            migration.setStatus(MigrationStatus.FAILED);
+            migration.getErrors().add(e.getMessage());
+        }
 
-        migration.setStatus(MigrationStatus.COMPLETED);
         migration.setCompletedAt(LocalDateTime.now());
-        //migration = catalogMigrationRepository.save(migration);
+        migrationRepository.save(migration);
 
-        return true;
+        return migration.getStatus() == MigrationStatus.COMPLETED;
     }
 
 }

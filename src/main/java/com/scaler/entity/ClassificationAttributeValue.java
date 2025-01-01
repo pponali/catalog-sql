@@ -2,18 +2,17 @@ package com.scaler.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "classification_attribute_values")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassificationAttributeValue {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class ClassificationAttributeValue extends BaseEntity {
 
     @Column(name = "code", nullable = false)
     private String code;

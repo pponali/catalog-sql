@@ -1,24 +1,22 @@
 package com.scaler.model;
 
+import com.scaler.entity.BaseEntity;
 import com.scaler.entity.ProductFeature;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import java.util.List;
 
 @Entity
 @Table(name = "validation_rule")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ValidationRule {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class ValidationRule extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String code;
 
@@ -29,6 +27,7 @@ public class ValidationRule {
     private int priority;
 
     @ManyToOne
+    @JoinColumn(name = "feature_id")
     private ProductFeature feature;
     private boolean active;
 
@@ -44,16 +43,14 @@ public class ValidationRule {
     @Column(name = "max_value")
     private String maxValue;
 
-    @Column(name = "feature_id", insertable = false, updatable = false)
-    private Long featureId;
-
     public enum RuleType {
         REQUIRED,
         PATTERN,
         LENGTH,
         RANGE,
         DEPENDENCY,
-        CUSTOM
+        CUSTOM,
+        ALLOWED_VALUES
     }
 
     public String getRuleType() {
@@ -92,7 +89,7 @@ public class ValidationRule {
 
     public static ValidationRule createRequiredRule(String code, String name) {
         return ValidationRule.builder()
-                .code("REQUIRED_" + code)
+                .code(code)
                 .name(name)
                 .description("Field is required")
                 .ruleType(RuleType.REQUIRED.toString())
@@ -104,7 +101,7 @@ public class ValidationRule {
 
     public static ValidationRule createPatternRule(String code, String name, String pattern) {
         return ValidationRule.builder()
-                .code("PATTERN_" + code)
+                .code(code)
                 .name(name)
                 .description("Value must match pattern")
                 .ruleType(RuleType.PATTERN.toString())
@@ -116,7 +113,7 @@ public class ValidationRule {
 
     public static ValidationRule createRangeRule(String code, String name, String min, String max) {
         return ValidationRule.builder()
-                .code("RANGE_" + code)
+                .code(code)
                 .name(name)
                 .description("Value must be within range")
                 .ruleType(RuleType.RANGE.toString())
@@ -128,10 +125,10 @@ public class ValidationRule {
 
     public static ValidationRule createAllowedValuesRule(String code, String name, String allowedValues) {
         return ValidationRule.builder()
-                .code("ALLOWED_VALUES_" + code)
+                .code(code)
                 .name(name)
                 .description("Value must be one of allowed values")
-                .ruleType(RuleType.DEPENDENCY.toString())
+                .ruleType(RuleType.ALLOWED_VALUES.toString())
                 .ruleExpression(allowedValues)
                 .priority(0)
                 .active(true)

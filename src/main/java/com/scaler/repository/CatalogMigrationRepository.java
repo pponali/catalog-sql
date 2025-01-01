@@ -1,6 +1,7 @@
 package com.scaler.repository;
 
 import com.scaler.entity.CatalogMigration;
+import com.scaler.enums.MigrationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +13,5 @@ public interface CatalogMigrationRepository extends JpaRepository<CatalogMigrati
     List<CatalogMigration> findBySourceCatalogIdOrTargetCatalogId(UUID sourceCatalogId, UUID targetCatalogId);
     List<CatalogMigration> findBySourceCatalogId(UUID sourceCatalogId);
     List<CatalogMigration> findByTargetCatalogId(UUID targetCatalogId);
-    List<CatalogMigration> findByStatus(String status);
+    List<CatalogMigration> findByStatus(MigrationStatus status);
 }

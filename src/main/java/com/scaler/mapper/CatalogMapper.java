@@ -7,7 +7,9 @@ import org.mapstruct.*;
 import java.util.List;
 import java.util.Set;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+@Mapper(componentModel = "spring", 
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        builder = @Builder(disableBuilder = true),
         uses = {ProductMapper.class, CategoryMapper.class, SiteCatalogMapper.class})
 public interface CatalogMapper {
 

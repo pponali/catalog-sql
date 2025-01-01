@@ -2,7 +2,12 @@ package com.scaler.entity;
 
 import com.scaler.enums.MigrationStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
@@ -12,9 +17,11 @@ import java.util.UUID;
 @Entity
 @Table(name = "catalog_migration")
 @Data
-public class CatalogMigration {
-    @Id
-    private UUID id;
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class CatalogMigration extends BaseEntity {
 
     @Column(name = "source_catalog_id", nullable = false)
     private UUID sourceCatalogId;
@@ -72,8 +79,8 @@ public class CatalogMigration {
 
     @PrePersist
     protected void onCreate() {
-        if (id == null) {
-            id = UUID.randomUUID();
+        if (super.getId() == null) {
+            super.setId(UUID.randomUUID()); // Generate a new UUID = UUID.randomUUID();
         }
         if (migrationTime == null) {
             migrationTime = LocalDateTime.now();

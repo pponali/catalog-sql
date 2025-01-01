@@ -3,6 +3,7 @@ package com.scaler.entity;
 import com.scaler.model.ValidationRule;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
@@ -13,14 +14,13 @@ import java.util.UUID;
 @Entity
 @Table(name = "classification_attributes")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class ClassificationAttribute {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class ClassificationAttribute extends BaseEntity {
 
-    @Id
-    private UUID id;
 
     @Column(unique = true, nullable = false)
     private String code;
@@ -59,7 +59,9 @@ public class ClassificationAttribute {
 
     @PrePersist
     protected void onCreate() {
-        id = UUID.randomUUID();
+        if(super.getId() == null) {
+            super.setId(UUID.randomUUID());
+        }
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }

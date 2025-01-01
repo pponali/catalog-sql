@@ -32,15 +32,12 @@ public class Catalog extends BaseEntity {
     private Business business;
 
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-    @Builder.Default
     private List<Product> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-    @Builder.Default
     private List<Category> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-    @Builder.Default
     private Set<SiteCatalog> siteCatalogs = new HashSet<>();
 
     public void addProduct(Product product) {

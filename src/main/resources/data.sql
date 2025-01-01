@@ -1,761 +1,260 @@
--- Drop and recreate sequences
+-- Drop all tables in the correct order
+DROP TABLE IF EXISTS product_feature_value CASCADE;
+DROP TABLE IF EXISTS product_feature CASCADE;
+DROP TABLE IF EXISTS category_feature_template CASCADE;
+DROP TABLE IF EXISTS site_catalog_assignment CASCADE;
+DROP TABLE IF EXISTS product_catalog_assignment CASCADE;
+DROP TABLE IF EXISTS product_category_assignment CASCADE;
+DROP TABLE IF EXISTS product CASCADE;
+DROP TABLE IF EXISTS category CASCADE;
+DROP TABLE IF EXISTS catalog CASCADE;
+DROP TABLE IF EXISTS site CASCADE;
+DROP TABLE IF EXISTS business CASCADE;
+DROP TABLE IF EXISTS unit_of_measure CASCADE;
+DROP TABLE IF EXISTS unit CASCADE;
+
+-- Drop all sequences
 DROP SEQUENCE IF EXISTS category_seq CASCADE;
 DROP SEQUENCE IF EXISTS product_seq CASCADE;
-DROP SEQUENCE IF EXISTS product_feature_seq CASCADE;
-DROP SEQUENCE IF EXISTS category_feature_template_seq CASCADE;
-DROP SEQUENCE IF EXISTS classification_attribute_seq CASCADE;
-DROP SEQUENCE IF EXISTS class_attribute_assignment_seq CASCADE;
+DROP SEQUENCE IF EXISTS business_seq CASCADE;
+DROP SEQUENCE IF EXISTS catalog_seq CASCADE;
+DROP SEQUENCE IF EXISTS site_seq CASCADE;
 DROP SEQUENCE IF EXISTS unit_seq CASCADE;
+DROP SEQUENCE IF EXISTS unit_of_measure_seq CASCADE;
 
+-- Create sequences
 CREATE SEQUENCE IF NOT EXISTS category_seq START WITH 1000;
 CREATE SEQUENCE IF NOT EXISTS product_seq START WITH 1000;
-CREATE SEQUENCE IF NOT EXISTS product_feature_seq START WITH 1000;
-CREATE SEQUENCE IF NOT EXISTS category_feature_template_seq START WITH 1000;
-CREATE SEQUENCE IF NOT EXISTS classification_attribute_seq START WITH 1000;
-CREATE SEQUENCE IF NOT EXISTS class_attribute_assignment_seq START WITH 1000;
-CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1000;
+CREATE SEQUENCE IF NOT EXISTS business_seq START WITH 1000;
+CREATE SEQUENCE IF NOT EXISTS catalog_seq START WITH 1000;
+CREATE SEQUENCE IF NOT EXISTS site_seq START WITH 1000;
+CREATE SEQUENCE IF NOT EXISTS unit_seq START WITH 1;
+CREATE SEQUENCE IF NOT EXISTS unit_of_measure_seq START WITH 1000;
 
--- Units (no dependencies)
-INSERT INTO unit (id, code, name, description, created_date, last_modified_date)
+-- Create base tables
+CREATE TABLE IF NOT EXISTS unit (
+    id UUID PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS unit_of_measure (
+    id UUID PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    base_unit_id UUID REFERENCES unit(id),
+    conversion_factor DECIMAL(10,3),
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS business (
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS site (
+    id UUID PRIMARY KEY,
+    business_id UUID REFERENCES business(id),
+    name VARCHAR(100) NOT NULL,
+    domain VARCHAR(100),
+    locale VARCHAR(10),
+    currency VARCHAR(3),
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS catalog (
+    id UUID PRIMARY KEY,
+    business_id UUID REFERENCES business(id),
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS category (
+    id UUID PRIMARY KEY,
+    parent_id UUID REFERENCES category(id),
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS product (
+    id UUID PRIMARY KEY,
+    business_id UUID REFERENCES business(id),
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    sku VARCHAR(50),
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS product_category_assignment (
+    product_id UUID REFERENCES product(id),
+    category_id UUID REFERENCES category(id),
+    created_date TIMESTAMP,
+    PRIMARY KEY (product_id, category_id)
+);
+
+CREATE TABLE IF NOT EXISTS product_catalog_assignment (
+    product_id UUID REFERENCES product(id),
+    catalog_id UUID REFERENCES catalog(id),
+    created_date TIMESTAMP,
+    PRIMARY KEY (product_id, catalog_id)
+);
+
+CREATE TABLE IF NOT EXISTS site_catalog_assignment (
+    site_id UUID REFERENCES site(id),
+    catalog_id UUID REFERENCES catalog(id),
+    is_default BOOLEAN,
+    created_date TIMESTAMP,
+    PRIMARY KEY (site_id, catalog_id)
+);
+
+CREATE TABLE IF NOT EXISTS category_feature_template (
+    id UUID PRIMARY KEY,
+    category_id UUID REFERENCES category(id),
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    unit_id UUID REFERENCES unit_of_measure(id),
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS product_feature (
+    id UUID PRIMARY KEY,
+    product_id UUID REFERENCES product(id),
+    name VARCHAR(100) NOT NULL,
+    value TEXT,
+    unit_id UUID REFERENCES unit_of_measure(id),
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS product_feature_value (
+    id UUID PRIMARY KEY,
+    feature_id UUID REFERENCES product_feature(id),
+    value TEXT NOT NULL,
+    created_date TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    created_by VARCHAR(50),
+    last_modified_by VARCHAR(50)
+);
+
+-- Insert base units
+INSERT INTO unit (id, code, name, description, created_date, last_modified_date, created_by, last_modified_by)
 VALUES 
-(1, 'SIZE', 'Size', 'Size measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'STYLE', 'Style', 'Style type', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'DAYS', 'Days', 'Time duration in days', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 'CERTIFICATION', 'Certification', 'Certification type', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 'NUTRITION', 'Nutrition', 'Nutritional measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 'MEDICINE', 'Medicine', 'Medicine measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(7, 'WEIGHT', 'Weight', 'Weight measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(8, 'VOLUME', 'Volume', 'Volume measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(9, 'LENGTH', 'Length', 'Length measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(10, 'TEMPERATURE', 'Temperature', 'Temperature measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('550e8400-e29b-41d4-a716-446655440000', 'KG', 'Kilogram', 'Base unit for mass', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('550e8400-e29b-41d4-a716-446655440001', 'M', 'Meter', 'Base unit for length', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('550e8400-e29b-41d4-a716-446655440002', 'L', 'Liter', 'Base unit for volume', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('550e8400-e29b-41d4-a716-446655440003', 'PC', 'Piece', 'Base unit for count', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('550e8400-e29b-41d4-a716-446655440004', 'LENGTH', 'Length', 'Length measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('550e8400-e29b-41d4-a716-446655440005', 'TEMP', 'Temperature', 'Temperature measurements', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
--- Unit of Measures
-INSERT INTO unit_of_measure (code, name, description, base_unit, conversion_factor, created_date, last_modified_date)
+-- Insert unit measures
+INSERT INTO unit_of_measure (id, code, name, description, base_unit_id, conversion_factor, created_date, last_modified_date, created_by, last_modified_by)
 VALUES
--- Size measures
-('XS', 'Extra Small', 'Extra Small size', 'SIZE', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('S', 'Small', 'Small size', 'SIZE', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('MD', 'Medium', 'Medium size', 'SIZE', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('LG', 'Large', 'Large size', 'SIZE', 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('XL', 'Extra Large', 'Extra Large size', 'SIZE', 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Weight measures
-('G', 'Gram', 'Weight in grams', 'WEIGHT', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('KG', 'Kilogram', 'Weight in kilograms', 'WEIGHT', 1000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('MG', 'Milligram', 'Weight in milligrams', 'WEIGHT', 0.001, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Volume measures
-('ML', 'Milliliter', 'Volume in milliliters', 'VOLUME', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('LTR', 'Liter', 'Volume in liters', 'VOLUME', 1000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Length measures
-('CM', 'Centimeter', 'Length in centimeters', 'LENGTH', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('MTR', 'Meter', 'Length in meters', 'LENGTH', 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('MM', 'Millimeter', 'Length in millimeters', 'LENGTH', 0.1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Temperature measures
-('CELSIUS', 'Celsius', 'Temperature in Celsius', 'TEMPERATURE', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('FAHR', 'Fahrenheit', 'Temperature in Fahrenheit', 'TEMPERATURE', 1.8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Categories for Tata CLiQ Fashion
-INSERT INTO category (id, catalog_id, business_id, name, description, parent_id) VALUES
--- Men's Fashion
-('c1000000-0000-0000-0000-000000000001', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Men''s Fashion', 'Complete men''s fashion collection', NULL),
-('c1000000-0000-0000-0000-000000000002', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Men''s Shirts', 'Formal and casual shirts', 'c1000000-0000-0000-0000-000000000001'),
-('c1000000-0000-0000-0000-000000000003', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Men''s Trousers', 'Formal and casual trousers', 'c1000000-0000-0000-0000-000000000001'),
-('c1000000-0000-0000-0000-000000000007', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Men''s Accessories', 'Belts, wallets, and accessories', 'c1000000-0000-0000-0000-000000000001'),
-('c1000000-0000-0000-0000-000000000008', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Men''s Footwear', 'Formal and casual footwear', 'c1000000-0000-0000-0000-000000000001'),
-('c1000000-0000-0000-0000-000000000009', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Men''s Suits', 'Premium suits and blazers', 'c1000000-0000-0000-0000-000000000001'),
-
--- Women's Fashion
-('c1000000-0000-0000-0000-000000000004', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Women''s Fashion', 'Complete women''s fashion collection', NULL),
-('c1000000-0000-0000-0000-000000000005', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Women''s Dresses', 'Party and casual dresses', 'c1000000-0000-0000-0000-000000000004'),
-('c1000000-0000-0000-0000-000000000006', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Women''s Ethnic Wear', 'Traditional Indian wear', 'c1000000-0000-0000-0000-000000000004'),
-('c1000000-0000-0000-0000-000000000010', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Women''s Accessories', 'Bags, scarves, and accessories', 'c1000000-0000-0000-0000-000000000004'),
-('c1000000-0000-0000-0000-000000000011', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Women''s Footwear', 'Heels, flats, and sandals', 'c1000000-0000-0000-0000-000000000004'),
-('c1000000-0000-0000-0000-000000000012', '770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Women''s Western Wear', 'Modern western outfits', 'c1000000-0000-0000-0000-000000000004'),
-
--- Categories for BigBasket
--- Fresh Produce
-('c2000000-0000-0000-0000-000000000001', '770e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440002', 'Fruits & Vegetables', 'Fresh fruits and vegetables', NULL),
-('c2000000-0000-0000-0000-000000000002', '770e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440002', 'Fresh Fruits', 'Seasonal and exotic fruits', 'c2000000-0000-0000-0000-000000000001'),
-('c2000000-0000-0000-0000-000000000003', '770e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440002', 'Fresh Vegetables', 'Local and exotic vegetables', 'c2000000-0000-0000-0000-000000000001'),
-
--- Grocery Essentials
-('c2000000-0000-0000-0000-000000000004', '770e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440002', 'Staples', 'Daily essential staples', NULL),
-('c2000000-0000-0000-0000-000000000005', '770e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440002', 'Rice & Grains', 'Premium rice and grains', 'c2000000-0000-0000-0000-000000000004'),
-('c2000000-0000-0000-0000-000000000006', '770e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440002', 'Pulses & Lentils', 'Various types of dals', 'c2000000-0000-0000-0000-000000000004'),
-
--- Categories for Tata 1mg
--- Medicines
-('c3000000-0000-0000-0000-000000000001', '770e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440003', 'Prescription Medicines', 'Prescription medications', NULL),
-('c3000000-0000-0000-0000-000000000002', '770e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440003', 'Diabetes Care', 'Diabetes medications and care', 'c3000000-0000-0000-0000-000000000001'),
-('c3000000-0000-0000-0000-000000000003', '770e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440003', 'Cardiac Care', 'Heart medications', 'c3000000-0000-0000-0000-000000000001'),
-
--- Healthcare
-('c3000000-0000-0000-0000-000000000004', '770e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440003', 'Healthcare Devices', 'Medical devices and equipment', NULL),
-('c3000000-0000-0000-0000-000000000005', '770e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440003', 'BP Monitors', 'Blood pressure monitoring devices', 'c3000000-0000-0000-0000-000000000004'),
-('c3000000-0000-0000-0000-000000000006', '770e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440003', 'Glucometers', 'Blood sugar monitoring devices', 'c3000000-0000-0000-0000-000000000004'),
-
--- Categories for Tanishq
--- Gold Jewelry
-('c4000000-0000-0000-0000-000000000001', '770e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440004', 'Gold Jewelry', 'Pure gold jewelry collection', NULL),
-('c4000000-0000-0000-0000-000000000002', '770e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440004', 'Gold Necklaces', 'Traditional and modern necklaces', 'c4000000-0000-0000-0000-000000000001'),
-('c4000000-0000-0000-0000-000000000003', '770e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440004', 'Gold Bangles', 'Designer gold bangles', 'c4000000-0000-0000-0000-000000000001'),
-
--- Diamond Jewelry
-('c4000000-0000-0000-0000-000000000004', '770e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440004', 'Diamond Jewelry', 'Premium diamond collection', NULL),
-('c4000000-0000-0000-0000-000000000005', '770e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440004', 'Diamond Rings', 'Engagement and fashion rings', 'c4000000-0000-0000-0000-000000000004'),
-('c4000000-0000-0000-0000-000000000006', '770e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440004', 'Diamond Earrings', 'Statement diamond earrings', 'c4000000-0000-0000-0000-000000000004');
-
--- Sample Products for each business unit
--- Tata CLiQ Fashion Products
-INSERT INTO product (id, catalog_id, category_id, business_id, name, description, sku, price) VALUES
--- Men's Fashion Products
-('p1000000-0000-0000-0000-000000000001', '770e8400-e29b-41d4-a716-446655440000', 'c1000000-0000-0000-0000-000000000002', '550e8400-e29b-41d4-a716-446655440000', 'Classic White Shirt', 'Pure cotton formal shirt', 'CLQ-SHT-001', 1999.00),
-('p1000000-0000-0000-0000-000000000002', '770e8400-e29b-41d4-a716-446655440000', 'c1000000-0000-0000-0000-000000000003', '550e8400-e29b-41d4-a716-446655440000', 'Black Formal Trousers', 'Slim fit formal trousers', 'CLQ-TRS-001', 2499.00),
-('p1000000-0000-0000-0000-000000000010', '770e8400-e29b-41d4-a716-446655440000', 'c1000000-0000-0000-0000-000000000009', '550e8400-e29b-41d4-a716-446655440000', 'Premium Wool Suit', 'Italian wool blend suit', 'CLQ-SUT-001', 24999.00),
-('p1000000-0000-0000-0000-000000000011', '770e8400-e29b-41d4-a716-446655440000', 'c1000000-0000-0000-0000-000000000007', '550e8400-e29b-41d4-a716-446655440000', 'Leather Wallet', 'Genuine leather bifold wallet', 'CLQ-WAL-001', 1999.00),
-('p1000000-0000-0000-0000-000000000012', '770e8400-e29b-41d4-a716-446655440000', 'c1000000-0000-0000-0000-000000000008', '550e8400-e29b-41d4-a716-446655440000', 'Oxford Leather Shoes', 'Classic brown oxford shoes', 'CLQ-SHO-001', 4999.00),
-
--- Women's Fashion Products
-('p1000000-0000-0000-0000-000000000003', '770e8400-e29b-41d4-a716-446655440000', 'c1000000-0000-0000-0000-000000000005', '550e8400-e29b-41d4-a716-446655440000', 'Floral Summer Dress', 'Cotton summer dress', 'CLQ-DRS-001', 2999.00),
-('p1000000-0000-0000-0000-000000000004', '770e8400-e29b-41d4-a716-446655440000', 'c1000000-0000-0000-0000-000000000006', '550e8400-e29b-41d4-a716-446655440000', 'Designer Saree', 'Silk designer saree', 'CLQ-SAR-001', 5999.00),
-
--- BigBasket Products
--- Fresh Produce
-('p2000000-0000-0000-0000-000000000001', '770e8400-e29b-41d4-a716-446655440004', 'c2000000-0000-0000-0000-000000000002', '550e8400-e29b-41d4-a716-446655440002', 'Fresh Apples', 'Himalayan apples - 1kg', 'BB-FRT-001', 199.00),
-('p2000000-0000-0000-0000-000000000002', '770e8400-e29b-41d4-a716-446655440004', 'c2000000-0000-0000-0000-000000000003', '550e8400-e29b-41d4-a716-446655440002', 'Organic Tomatoes', 'Organic tomatoes - 1kg', 'BB-VEG-001', 49.00),
-
--- Grocery Products
-('p2000000-0000-0000-0000-000000000003', '770e8400-e29b-41d4-a716-446655440005', 'c2000000-0000-0000-0000-000000000005', '550e8400-e29b-41d4-a716-446655440002', 'Basmati Rice', 'Premium basmati rice - 5kg', 'BB-RIC-001', 499.00),
-('p2000000-0000-0000-0000-000000000004', '770e8400-e29b-41d4-a716-446655440005', 'c2000000-0000-0000-0000-000000000006', '550e8400-e29b-41d4-a716-446655440002', 'Toor Dal', 'Premium toor dal - 2kg', 'BB-DAL-001', 299.00),
-
--- Tata 1mg Products
--- Medicines
-('p3000000-0000-0000-0000-000000000001', '770e8400-e29b-41d4-a716-446655440007', 'c3000000-0000-0000-0000-000000000002', '550e8400-e29b-41d4-a716-446655440003', 'Metformin 500mg', 'Diabetes medication - 60 tablets', '1MG-MED-001', 199.00),
-('p3000000-0000-0000-0000-000000000002', '770e8400-e29b-41d4-a716-446655440007', 'c3000000-0000-0000-0000-000000000003', '550e8400-e29b-41d4-a716-446655440003', 'Aspirin 75mg', 'Cardiac care - 30 tablets', '1MG-MED-002', 49.00),
-
--- Healthcare Devices
-('p3000000-0000-0000-0000-000000000003', '770e8400-e29b-41d4-a716-446655440008', 'c3000000-0000-0000-0000-000000000005', '550e8400-e29b-41d4-a716-446655440003', 'Digital BP Monitor', 'Automatic blood pressure monitor', '1MG-DEV-001', 1999.00),
-('p3000000-0000-0000-0000-000000000004', '770e8400-e29b-41d4-a716-446655440008', 'c3000000-0000-0000-0000-000000000006', '550e8400-e29b-41d4-a716-446655440003', 'Glucometer Kit', 'Blood sugar monitoring kit', '1MG-DEV-002', 999.00),
-
--- Tanishq Products
--- Gold Jewelry
-('p4000000-0000-0000-0000-000000000001', '770e8400-e29b-41d4-a716-446655440010', 'c4000000-0000-0000-0000-000000000002', '550e8400-e29b-41d4-a716-446655440004', 'Traditional Gold Necklace', '22K gold necklace - 50g', 'TNQ-GLD-001', 299999.00),
-('p4000000-0000-0000-0000-000000000002', '770e8400-e29b-41d4-a716-446655440010', 'c4000000-0000-0000-0000-000000000003', '550e8400-e29b-41d4-a716-446655440004', 'Gold Bangles Set', '22K gold bangles - 30g', 'TNQ-GLD-002', 179999.00),
-
--- Diamond Jewelry
-('p4000000-0000-0000-0000-000000000003', '770e8400-e29b-41d4-a716-446655440011', 'c4000000-0000-0000-0000-000000000005', '550e8400-e29b-41d4-a716-446655440004', 'Solitaire Diamond Ring', '1ct diamond ring', 'TNQ-DMD-001', 199999.00),
-('p4000000-0000-0000-0000-000000000004', '770e8400-e29b-41d4-a716-446655440011', 'c4000000-0000-0000-0000-000000000006', '550e8400-e29b-41d4-a716-446655440004', 'Diamond Studs', '0.5ct diamond earrings', 'TNQ-DMD-002', 99999.00);
-
--- Product Attributes
-INSERT INTO product_attribute (id, product_id, name, value) VALUES
--- Tata CLiQ Fashion Product Attributes
-('pa1001', 'p1000000-0000-0000-0000-000000000001', 'Size', 'M,L,XL'),
-('pa1002', 'p1000000-0000-0000-0000-000000000001', 'Color', 'White'),
-('pa1003', 'p1000000-0000-0000-0000-000000000001', 'Material', 'Cotton'),
-('pa1004', 'p1000000-0000-0000-0000-000000000002', 'Size', '32,34,36'),
-('pa1005', 'p1000000-0000-0000-0000-000000000002', 'Color', 'Black'),
-('pa3001', 'p1000000-0000-0000-0000-000000000010', 'MATERIAL_COMPOSITION', 'Wool 80%, Polyester 20%'),
-('pa3002', 'p1000000-0000-0000-0000-000000000010', 'CARE_INSTRUCTIONS', 'Dry clean only'),
-('pa3003', 'p1000000-0000-0000-0000-000000000010', 'COUNTRY_OF_ORIGIN', 'Italy'),
-('pa3004', 'p1000000-0000-0000-0000-000000000010', 'FIT_TYPE', 'Slim Fit'),
-('pa3005', 'p1000000-0000-0000-0000-000000000011', 'LEATHER_TYPE', 'Full Grain Leather'),
-('pa3006', 'p1000000-0000-0000-0000-000000000011', 'WARRANTY_PERIOD', '1 Year'),
-('pa3007', 'p1000000-0000-0000-0000-000000000011', 'CARD_SLOTS', '6'),
-('pa3008', 'p1000000-0000-0000-0000-000000000011', 'DIMENSIONS', '11cm x 9cm'),
-('pa3009', 'p1000000-0000-0000-0000-000000000012', 'SOLE_MATERIAL', 'Leather with rubber grip'),
-('pa3010', 'p1000000-0000-0000-0000-000000000012', 'CLOSURE_TYPE', 'Lace-up'),
-('pa3011', 'p1000000-0000-0000-0000-000000000012', 'COLOR', 'Burnished Brown'),
-('pa3012', 'p1000000-0000-0000-0000-000000000012', 'HEEL_HEIGHT', '1 inch'),
-
--- BigBasket Product Attributes
-('pa2001', 'p2000000-0000-0000-0000-000000000001', 'Origin', 'Himachal Pradesh'),
-('pa2002', 'p2000000-0000-0000-0000-000000000001', 'Packaging', '1kg pack'),
-('pa2003', 'p2000000-0000-0000-0000-000000000003', 'Brand', 'India Gate'),
-('pa2004', 'p2000000-0000-0000-0000-000000000003', 'Type', 'Aged Basmati'),
-
--- Tata 1mg Product Attributes
-('pa3001', 'p3000000-0000-0000-0000-000000000001', 'Manufacturer', 'Sun Pharma'),
-('pa3002', 'p3000000-0000-0000-0000-000000000001', 'Prescription', 'Required'),
-('pa3003', 'p3000000-0000-0000-0000-000000000003', 'Brand', 'Omron'),
-('pa3004', 'p3000000-0000-0000-0000-000000000003', 'Warranty', '1 year'),
-
--- Tanishq Product Attributes
-('pa4001', 'p4000000-0000-0000-0000-000000000001', 'Purity', '22K'),
-('pa4002', 'p4000000-0000-0000-0000-000000000001', 'Weight', '50g'),
-('pa4003', 'p4000000-0000-0000-0000-000000000003', 'Diamond Quality', 'VS1'),
-('pa4004', 'p4000000-0000-0000-0000-000000000003', 'Diamond Weight', '1ct');
-
--- Root Categories
-INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
-VALUES 
-(1, 'MSH1230', 'Home Appliances', 'Home and Kitchen Appliances', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'apparelCCWEE', 'Yeswee Apparel', 'Fashion and Clothing', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'BIGBASKET', 'BigBasket', 'Fresh Groceries and Daily Essentials', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, '1MG', '1mg', 'Healthcare and Wellness', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 'TANISHQ', 'Tanishq', 'Premium Jewelry', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 'ELECTRONICS', 'Electronics', 'Electronics and Gadgets', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Sub Categories
-INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
-VALUES 
--- Home Appliances Sub-categories
-(10, 'MPH11111L4', 'Split AC', 'Split Air Conditioners', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(11, 'MPH11111L5', 'Refrigerators', 'Home Refrigerators', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(12, 'MPH11111L6', 'Washing Machines', 'Washing Machines', 1, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Apparel Sub-categories
-(20, 'MPWEAR001', 'Western Wear', 'Western Style Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(21, 'MPWEAR002', 'Ethnic Wear', 'Traditional and Ethnic Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(22, 'MPWEAR003', 'Sports Wear', 'Athletic and Sports Clothing', 2, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Groceries Sub-categories
-(30, 'BB_FRUITS', 'Fresh Fruits', 'Fresh and Seasonal Fruits', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(31, 'BB_VEG', 'Fresh Vegetables', 'Fresh and Organic Vegetables', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(32, 'BB_DAIRY', 'Dairy & Eggs', 'Fresh Dairy Products and Eggs', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(33, 'BB_STAPLES', 'Staples', 'Daily Essential Staples', 3, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Healthcare Sub-categories
-(40, '1MG_MEDICINES', 'Medicines', 'Prescription and OTC Medicines', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(41, '1MG_WELLNESS', 'Health & Wellness', 'Wellness and Nutrition Products', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(42, '1MG_PERSONAL', 'Personal Care', 'Personal Care Products', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(43, '1MG_DEVICES', 'Medical Devices', 'Healthcare Devices', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Jewelry Sub-categories
-(50, 'TANQ_GOLD', 'Gold Jewelry', '22K Gold Jewelry Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(51, 'TANQ_DIAMOND', 'Diamond Jewelry', 'Premium Diamond Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(52, 'TANQ_PLATINUM', 'Platinum Jewelry', 'Premium Platinum Collection', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Electronics Sub-categories
-(60, 'ELEC_MOBILE', 'Mobile Phones', 'Smartphones and Mobile Phones', 6, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(61, 'ELEC_LAPTOP', 'Laptops', 'Laptops and Notebooks', 6, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(62, 'ELEC_AUDIO', 'Audio Devices', 'Headphones and Speakers', 6, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Category Feature Templates
-INSERT INTO category_feature_template (
-    id, code, name, description,
-    feature_type, validation_pattern,
-    min_value, max_value, allowed_values,
-    metadata, is_required,
-    created_date, last_modified_date,
-    category_id
-)
-VALUES 
--- Apparel Templates
-(100, 'SIZE_TEMPLATE', 'Size Template', 'Template for size features',
- 'ENUM', '^(S|M|L|XL)$', '0', '100', '["S", "M", "L", "XL"]',
- '{"group": "basic", "tooltip": "Select size"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 20),
-
-(101, 'STYLE_TEMPLATE', 'Style Template', 'Template for style features',
- 'ENUM', '^(casual|formal|sports)$', '0', '100', '["casual", "formal", "sports"]',
- '{"group": "basic", "tooltip": "Select style"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 20),
-
--- Electronics Templates
-(102, 'STORAGE_TEMPLATE', 'Storage Template', 'Template for storage capacity',
- 'ENUM', '^(64GB|128GB|256GB|512GB)$', '0', '1000', '["64GB", "128GB", "256GB", "512GB"]',
- '{"group": "specifications", "tooltip": "Select storage capacity"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 60),
-
-(103, 'COLOR_TEMPLATE', 'Color Template', 'Template for color selection',
- 'ENUM', '^(Black|White|Gold|Silver)$', '0', '100', '["Black", "White", "Gold", "Silver"]',
- '{"group": "appearance", "tooltip": "Select color"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 60),
-
--- New JSON Feature Templates
-(110, 'LAPTOP_SPECS_TEMPLATE', 'Laptop Specifications', 'Template for laptop technical specifications',
- 'JSON', NULL, NULL, NULL, NULL,
- '{"group": "specifications", "tooltip": "Enter laptop specifications", "schema": {"type": "object", "properties": {"processor": {"type": "string"}, "ram": {"type": "string"}, "gpu": {"type": "string"}, "screen": {"type": "string"}}}}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 61),
-
-(111, 'MOBILE_SPECS_TEMPLATE', 'Mobile Specifications', 'Template for mobile technical specifications',
- 'JSON', NULL, NULL, NULL, NULL,
- '{"group": "specifications", "tooltip": "Enter mobile specifications", "schema": {"type": "object", "properties": {"processor": {"type": "string"}, "camera": {"type": "object"}, "battery": {"type": "string"}, "display": {"type": "string"}}}}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 60),
-
-(112, 'CONNECTIVITY_TEMPLATE', 'Connectivity Features', 'Template for device connectivity features',
- 'JSON', NULL, NULL, NULL, NULL,
- '{"group": "connectivity", "tooltip": "Enter connectivity features", "schema": {"type": "object", "properties": {"wifi": {"type": "string"}, "bluetooth": {"type": "string"}, "ports": {"type": "array"}}}}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 61),
-
--- Appliance Templates
-(104, 'CAPACITY_TEMPLATE', 'Capacity Template', 'Template for appliance capacity',
- 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0', '1000', NULL,
- '{"group": "specifications", "tooltip": "Enter capacity"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 10),
-
-(105, 'ENERGY_RATING_TEMPLATE', 'Energy Rating Template', 'Template for energy efficiency',
- 'ENUM', '^(1|2|3|4|5)$', '1', '5', '["1", "2", "3", "4", "5"]',
- '{"group": "efficiency", "tooltip": "Select energy rating"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 10),
-
--- Grocery Templates
-(106, 'WEIGHT_TEMPLATE', 'Weight Template', 'Template for product weight',
- 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0', '1000', NULL,
- '{"group": "measurements", "tooltip": "Enter weight in kg"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 30),
-
-(107, 'EXPIRY_TEMPLATE', 'Expiry Template', 'Template for expiry date',
- 'DATE', NULL, NULL, NULL, NULL,
- '{"group": "quality", "tooltip": "Select expiry date"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 30),
-
--- Jewelry Templates
-(201, 'GOLD_PURITY', 'Gold Purity', 'Gold purity in Karats',
- 'NUMERIC', '^(18|22|24)$', '18', '24', NULL,
- '{"group": "specifications", "tooltip": "Select gold purity in Karats"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5),
-
-(202, 'DIAMOND_CERT', 'Diamond Certification', 'Diamond certification type',
- 'ENUM', '^(IGI|GIA|HRD)$', NULL, NULL, '["IGI", "GIA", "HRD"]',
- '{"group": "certification", "tooltip": "Select certification type"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5),
-
--- Medicine Templates
-(301, 'PRESCRIPTION_REQ', 'Prescription Required', 'Whether prescription is required',
- 'BOOLEAN', NULL, NULL, NULL, NULL,
- '{"group": "regulations", "tooltip": "Is prescription required?"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4),
-
-(302, 'SHELF_LIFE', 'Shelf Life', 'Product shelf life in months',
- 'NUMERIC', '^[0-9]+$', '12', '36', NULL,
- '{"group": "storage", "tooltip": "Enter shelf life in months"}', true,
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4);
-
--- Products
-INSERT INTO product (
-    id, code, name, description, product_type,
-    status, metadata, sku,
-    created_date, last_modified_date
-)
-VALUES 
--- Apparel Products
-(1001, 'FORMAL_SHIRT_001', 'Men''s Formal Shirt', 'Classic formal shirt for men',
- 'APPAREL', 'ACTIVE',
- '{"brand": "ClassicWear", "department": "mens", "category": "formal_wear"}',
- 'SHIRT-F-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(1002, 'CASUAL_TSHIRT_001', 'Men''s Casual T-Shirt', 'Comfortable casual t-shirt',
- 'APPAREL', 'ACTIVE',
- '{"brand": "ComfortWear", "department": "mens", "category": "casual_wear"}',
- 'TSHIRT-C-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Electronics Products
-(1003, 'PHONE_001', 'Smartphone X', 'Latest smartphone model',
- 'ELECTRONICS', 'ACTIVE',
- '{"brand": "TechPro", "series": "X", "year": "2023"}',
- 'PHONE-X-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(1004, 'LAPTOP_001', 'Pro Laptop', 'High-performance laptop',
- 'ELECTRONICS', 'ACTIVE',
- '{"brand": "TechPro", "series": "Pro", "year": "2023"}',
- 'LAPTOP-P-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Appliance Products
-(1005, 'AC_001', 'Smart AC', 'Smart split AC with inverter technology',
- 'APPLIANCE', 'ACTIVE',
- '{"brand": "CoolTech", "type": "split", "technology": "inverter"}',
- 'AC-S-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(1006, 'FRIDGE_001', 'Double Door Refrigerator', 'Energy efficient refrigerator',
- 'APPLIANCE', 'ACTIVE',
- '{"brand": "CoolTech", "type": "double_door", "frost_free": true}',
- 'FRIDGE-D-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Grocery Products
-(1007, 'RICE_001', 'Basmati Rice', 'Premium basmati rice',
- 'GROCERY', 'ACTIVE',
- '{"brand": "FreshField", "type": "basmati", "origin": "India"}',
- 'RICE-B-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(1008, 'MILK_001', 'Full Cream Milk', 'Fresh full cream milk',
- 'GROCERY', 'ACTIVE',
- '{"brand": "FreshDaily", "type": "full_cream", "pasteurized": true}',
- 'MILK-F-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Jewelry Products
-(2001, 'TANQ_RING_001', 'Diamond Solitaire Ring', '18K Gold Ring with VS1 Diamond',
- 'JEWELRY', 'ACTIVE',
- '{"brand": "Tanishq", "collection": "Solitaire", "occasion": "Engagement"}',
- 'RING-D-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(2002, 'TANQ_NECKLACE_001', 'Pearl String Necklace', 'South Sea Pearls with Gold Clasp',
- 'JEWELRY', 'ACTIVE',
- '{"brand": "Tanishq", "collection": "Pearl", "occasion": "Wedding"}',
- 'NECK-P-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(2003, 'TANQ_BANGLE_001', 'Gold Kada', '22K Gold Traditional Bangle',
- 'JEWELRY', 'ACTIVE',
- '{"brand": "Tanishq", "collection": "Traditional", "occasion": "Festival"}',
- 'BANG-G-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
--- Medicine Products
-(3001, '1MG_PARA_001', 'Paracetamol 500mg', 'Fever and Pain Relief Tablet',
- 'MEDICINE', 'ACTIVE',
- '{"brand": "Generic", "category": "Pain Relief", "prescription_required": true}',
- 'MED-P-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(3002, '1MG_AMOX_001', 'Amoxicillin 250mg', 'Antibiotic Capsule',
- 'MEDICINE', 'ACTIVE',
- '{"brand": "Generic", "category": "Antibiotics", "prescription_required": true}',
- 'MED-A-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-(3003, '1MG_VIT_001', 'Multivitamin Complex', 'Daily Vitamin Supplement',
- 'MEDICINE', 'ACTIVE',
- '{"brand": "HealthVit", "category": "Supplements", "prescription_required": false}',
- 'MED-V-001',
- CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Product Features
-INSERT INTO product_feature (
-    id, product_id, template_id, code, name, description,
-    feature_type, validation_pattern, min_value, max_value,
-    allowed_values, metadata, required,
-    created_date, last_modified_date,
-    attribute_type, visible, editable, searchable,
-    comparable, multi_valued, default_value,
-    unit_id
-)
-VALUES 
--- Features for Formal Shirt (product_id: 1001)
-(1, 1001, 100, 'SIZE_SHIRT', 'Size', 'Shirt size',
- 'ENUM', '^(S|M|L|XL)$', '0', '100',
- '["S", "M", "L", "XL"]',
- '{"group": "basic", "tooltip": "Select your size", "display_order": 1}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, 'M',
- 1),
-
-(2, 1001, 101, 'STYLE_SHIRT', 'Style', 'Shirt style',
- 'ENUM', '^(casual|formal)$', '0', '100',
- '["casual", "formal"]',
- '{"group": "basic", "tooltip": "Select style", "display_order": 2}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, 'formal',
- 2),
-
--- Features for Smartphone (product_id: 1003)
-(3, 1003, 102, 'STORAGE_PHONE', 'Storage', 'Phone storage capacity',
- 'ENUM', '^(64GB|128GB|256GB|512GB)$', '0', '1000',
- '["64GB", "128GB", "256GB", "512GB"]',
- '{"group": "specifications", "tooltip": "Select storage capacity", "display_order": 1}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, '128GB',
- 7),
-
-(4, 1003, 103, 'COLOR_PHONE', 'Color', 'Phone color',
- 'ENUM', '^(Black|White|Gold|Silver)$', '0', '100',
- '["Black", "White", "Gold", "Silver"]',
- '{"group": "appearance", "tooltip": "Select color", "display_order": 2}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, 'Black',
- 2),
-
--- Features for AC (product_id: 1005)
-(5, 1005, 104, 'CAPACITY_AC', 'Capacity', 'AC cooling capacity',
- 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0.5', '2.0',
- NULL,
- '{"group": "specifications", "tooltip": "Enter capacity in tons", "display_order": 1}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'DECIMAL', true, true, true, true, false, '1.5',
- 8),
-
-(6, 1005, 105, 'ENERGY_RATING_AC', 'Energy Rating', 'AC energy efficiency rating',
- 'ENUM', '^(3|4|5)$', '1', '5',
- '["3", "4", "5"]',
- '{"group": "efficiency", "tooltip": "Select energy rating", "display_order": 2}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, '5',
- 2),
-
--- Features for Rice (product_id: 1007)
-(7, 1007, 106, 'WEIGHT_RICE', 'Weight', 'Package weight',
- 'NUMERIC', '^[0-9]+(\.[0-9]{1,2})?$', '0.1', '25.0',
- NULL,
- '{"group": "measurements", "tooltip": "Enter weight in kg", "display_order": 1}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'DECIMAL', true, true, true, true, false, '5.0',
- 7),
-
--- Features for Diamond Ring (product_id: 2001)
-(8, 2001, 201, 'GOLD_PURITY_RING', 'Gold Purity', 'Gold purity in Karats',
- 'NUMERIC', '^(18|22|24)$', '18', '24', NULL,
- '{"group": "specifications", "tooltip": "Select gold purity in Karats", "display_order": 1}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'DECIMAL', true, true, true, true, false, '18',
- 1),
-
-(9, 2001, 202, 'DIAMOND_CERT_RING', 'Diamond Certification', 'Diamond certification type',
- 'ENUM', '^(IGI|GIA|HRD)$', NULL, NULL, '["IGI", "GIA", "HRD"]',
- '{"group": "certification", "tooltip": "Select certification type", "display_order": 2}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'STRING', true, true, true, true, false, 'IGI',
- 2),
-
--- Features for Paracetamol (product_id: 3001)
-(10, 3001, 301, 'PRESCRIPTION_REQ_PARA', 'Prescription Required', 'Whether prescription is required',
- 'BOOLEAN', NULL, NULL, NULL, NULL,
- '{"group": "regulations", "tooltip": "Is prescription required?", "display_order": 1}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'BOOLEAN', true, true, true, true, false, true,
- NULL),
-
-(11, 3001, 302, 'SHELF_LIFE_PARA', 'Shelf Life', 'Product shelf life in months',
- 'NUMERIC', '^[0-9]+$', '12', '36', NULL,
- '{"group": "storage", "tooltip": "Enter shelf life in months", "display_order": 2}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'INTEGER', true, true, true, true, false, '24',
- NULL),
-
--- New JSON feature for Smartphone (product_id: 1003)
-(20, 1003, 111, 'MOBILE_SPECS', 'Mobile Specifications', 'Mobile technical specifications',
- 'JSON', NULL, NULL, NULL, NULL,
- '{"group": "specifications", "tooltip": "Enter mobile specifications", "display_order": 3}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'JSON', true, true, true, true, false, '{"processor": "Snapdragon 8 Gen 2", "camera": {"main": "50MP", "ultra": "12MP", "tele": "10MP"}, "battery": "5000mAh", "display": "6.8-inch AMOLED"}',
- NULL),
-
--- New JSON feature for Laptop (product_id: 1004)
-(21, 1004, 110, 'LAPTOP_SPECS', 'Laptop Specifications', 'Laptop technical specifications',
- 'JSON', NULL, NULL, NULL, NULL,
- '{"group": "specifications", "tooltip": "Enter laptop specifications", "display_order": 1}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'JSON', true, true, true, true, false, '{"processor": "Intel Core i7-12700H", "ram": "16GB DDR5", "gpu": "NVIDIA RTX 3060", "screen": "15.6-inch 165Hz"}',
- NULL),
-
-(22, 1004, 112, 'CONNECTIVITY', 'Connectivity Features', 'Device connectivity features',
- 'JSON', NULL, NULL, NULL, NULL,
- '{"group": "connectivity", "tooltip": "Enter connectivity features", "display_order": 2}',
- true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
- 'JSON', true, true, true, true, false, '{"wifi": "WiFi 6E", "bluetooth": "5.2", "ports": ["USB-C", "HDMI", "USB-A", "3.5mm Audio"]}',
- NULL);
-
--- Product Feature Values
-INSERT INTO product_feature_value (
-    id, product_id, feature_id, template_id,
-    type, unit, unit_of_measure, status,
-    validation_status, validation_pattern,
-    validation_message, attribute_values,
-    created_by, created_date,
-    last_modified_by, last_modified_date
-)
-VALUES 
--- Values for Formal Shirt (product_id: 1001)
-(1, 1001, 1, 100, 
- 'ENUM', 'SIZE', NULL, 'ACTIVE',
- 'VALID', '^(S|M|L|XL)$', NULL,
- '{"value": "M"}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
-(2, 1001, 2, 101,
- 'ENUM', 'STYLE', NULL, 'ACTIVE',
- 'VALID', '^(casual|formal)$', NULL,
- '{"value": "formal"}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
--- Values for Smartphone (product_id: 1003)
-(3, 1003, 3, 102,
- 'ENUM', 'STORAGE', 'GB', 'ACTIVE',
- 'VALID', '^(64GB|128GB|256GB|512GB)$', NULL,
- '{"value": "128GB"}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
-(4, 1003, 4, 103,
- 'ENUM', 'COLOR', NULL, 'ACTIVE',
- 'VALID', '^(Black|White|Gold|Silver)$', NULL,
- '{"value": "Black"}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
-(20, 1003, 20, 111,
- 'JSON', 'SPECIFICATIONS', NULL, 'ACTIVE',
- 'VALID', NULL, NULL,
- '{"value": {"processor": "Snapdragon 8 Gen 2", "camera": {"main": "50MP", "ultra": "12MP", "tele": "10MP"}, "battery": "5000mAh", "display": "6.8-inch AMOLED"}}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
--- Values for Laptop (product_id: 1004)
-(21, 1004, 21, 110,
- 'JSON', 'SPECIFICATIONS', NULL, 'ACTIVE',
- 'VALID', NULL, NULL,
- '{"value": {"processor": "Intel Core i7-12700H", "ram": "16GB DDR5", "gpu": "NVIDIA RTX 3060", "screen": "15.6-inch 165Hz"}}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
-(22, 1004, 22, 112,
- 'JSON', 'CONNECTIVITY', NULL, 'ACTIVE',
- 'VALID', NULL, NULL,
- '{"value": {"wifi": "WiFi 6E", "bluetooth": "5.2", "ports": ["USB-C", "HDMI", "USB-A", "3.5mm Audio"]}}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
--- Values for AC (product_id: 1005)
-(5, 1005, 5, 104,
- 'NUMERIC', 'CAPACITY', 'tons', 'ACTIVE',
- 'VALID', '^[0-9]+(\.[0-9]{1,2})?$', NULL,
- '{"value": 1.5}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
-(6, 1005, 6, 105,
- 'ENUM', 'ENERGY_RATING', 'stars', 'ACTIVE',
- 'VALID', '^(3|4|5)$', NULL,
- '{"value": "5"}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
--- Values for Rice (product_id: 1007)
-(7, 1007, 7, 106,
- 'NUMERIC', 'WEIGHT', 'kg', 'ACTIVE',
- 'VALID', '^[0-9]+(\.[0-9]{1,2})?$', NULL,
- '{"value": 5.0}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
--- Values for Diamond Ring (product_id: 2001)
-(8, 2001, 8, 201,
- 'NUMERIC', 'GOLD_PURITY', NULL, 'ACTIVE',
- 'VALID', '^(18|22|24)$', NULL,
- '{"value": 18.0}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
-(9, 2001, 9, 202,
- 'ENUM', 'DIAMOND_CERT', NULL, 'ACTIVE',
- 'VALID', '^(IGI|GIA|HRD)$', NULL,
- '{"value": "IGI"}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
--- Values for Paracetamol (product_id: 3001)
-(10, 3001, 10, 301,
- 'BOOLEAN', NULL, NULL, 'ACTIVE',
- 'VALID', NULL, NULL,
- '{"value": true}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP),
-
-(11, 3001, 11, 302,
- 'NUMERIC', 'SHELF_LIFE', 'months', 'ACTIVE',
- 'VALID', '^[0-9]+$', NULL,
- '{"value": 24}',
- 'system', CURRENT_TIMESTAMP,
- 'system', CURRENT_TIMESTAMP);
-
--- Product Categories
-INSERT INTO product_categories (product_id, category_id)
-VALUES 
-(1001, 20), -- Formal Shirt in Western Wear
-(1002, 20), -- T-Shirt in Western Wear
-(1003, 60), -- Smartphone in Mobile Phones
-(1004, 61), -- Laptop in Laptops
-(1005, 10), -- AC in Split AC
-(1006, 11), -- Fridge in Refrigerators
-(1007, 33), -- Rice in Staples
-(1008, 32), -- Milk in Dairy & Eggs
-(2001, 51), -- Diamond Ring in Diamond Jewelry
-(2002, 50), -- Pearl Necklace in Gold Jewelry
-(2003, 50), -- Gold Kada in Gold Jewelry
-(3001, 40), -- Paracetamol in Medicines
-(3002, 40), -- Amoxicillin in Medicines
-(3003, 41); -- Multivitamin in Health & Wellness
-
--- Tata Group Businesses
-INSERT INTO business (id, name, description, created_at) VALUES
-('550e8400-e29b-41d4-a716-446655440000', 'Tata CLiQ Fashion', 'Tata Group''s fashion e-commerce platform', CURRENT_TIMESTAMP),
-('550e8400-e29b-41d4-a716-446655440001', 'Tata Digital', 'Tata Group''s digital business unit', CURRENT_TIMESTAMP),
-('550e8400-e29b-41d4-a716-446655440002', 'BigBasket', 'India''s largest online food and grocery store', CURRENT_TIMESTAMP),
-('550e8400-e29b-41d4-a716-446655440003', 'Tata 1mg', 'Leading online pharmacy and healthcare platform', CURRENT_TIMESTAMP),
-('550e8400-e29b-41d4-a716-446655440004', 'Tanishq', 'Premium jewelry retail chain', CURRENT_TIMESTAMP);
-
--- Tata Group Sites
-INSERT INTO site (id, business_id, name, domain, locale, currency, created_at) VALUES
--- Tata CLiQ Fashion Sites
-('660e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'CLiQ Fashion India', 'fashion.tatacliq.com', 'en-IN', 'INR', CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440000', 'CLiQ Fashion UAE', 'fashion.tatacliq.ae', 'en-AE', 'AED', CURRENT_TIMESTAMP),
-
--- Tata Digital Sites
-('660e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440001', 'Tata Neu', 'tata.neu', 'en-IN', 'INR', CURRENT_TIMESTAMP),
-
--- BigBasket Sites
-('660e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440002', 'BigBasket India', 'bigbasket.com', 'en-IN', 'INR', CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440002', 'BigBasket UAE', 'bigbasket.ae', 'en-AE', 'AED', CURRENT_TIMESTAMP),
-
--- Tata 1mg Sites
-('660e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440003', '1mg India', '1mg.com', 'en-IN', 'INR', CURRENT_TIMESTAMP),
-
--- Tanishq Sites
-('660e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440004', 'Tanishq India', 'tanishq.co.in', 'en-IN', 'INR', CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440004', 'Tanishq UAE', 'tanishq.ae', 'en-AE', 'AED', CURRENT_TIMESTAMP);
-
--- Tata Group Catalogs
-INSERT INTO catalog (id, business_id, name, description, created_at) VALUES
--- Tata CLiQ Fashion Catalogs
-('770e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', 'Fashion Summer 2024', 'Summer collection for 2024', CURRENT_TIMESTAMP),
-('770e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440000', 'Fashion Winter 2024', 'Winter collection for 2024', CURRENT_TIMESTAMP),
-('770e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440000', 'Designer Wear', 'Premium designer collection', CURRENT_TIMESTAMP),
-
--- Tata Digital Catalogs
-('770e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', 'Neu Pass Catalog', 'Neu Pass membership benefits', CURRENT_TIMESTAMP),
-
--- BigBasket Catalogs
-('770e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440002', 'Fresh Produce', 'Fresh fruits and vegetables', CURRENT_TIMESTAMP),
-('770e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440002', 'Grocery Essentials', 'Daily grocery items', CURRENT_TIMESTAMP),
-('770e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440002', 'Gourmet Products', 'Premium food products', CURRENT_TIMESTAMP),
-
--- Tata 1mg Catalogs
-('770e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440003', 'Prescription Medicines', 'Prescription drug catalog', CURRENT_TIMESTAMP),
-('770e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440003', 'OTC Products', 'Over-the-counter products', CURRENT_TIMESTAMP),
-('770e8400-e29b-41d4-a716-446655440009', '550e8400-e29b-41d4-a716-446655440003', 'Healthcare Devices', 'Medical devices and equipment', CURRENT_TIMESTAMP),
-
--- Tanishq Catalogs
-('770e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440004', 'Gold Jewelry', 'Gold jewelry collection', CURRENT_TIMESTAMP),
-('770e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440004', 'Diamond Jewelry', 'Diamond jewelry collection', CURRENT_TIMESTAMP),
-('770e8400-e29b-41d4-a716-446655440012', '550e8400-e29b-41d4-a716-446655440004', 'Wedding Collection', 'Wedding jewelry collection', CURRENT_TIMESTAMP);
-
--- Site-Catalog Mappings
-INSERT INTO site_catalog (site_id, catalog_id, is_default, created_at) VALUES
--- Tata CLiQ Fashion Mappings
-('660e8400-e29b-41d4-a716-446655440000', '770e8400-e29b-41d4-a716-446655440000', true, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440000', '770e8400-e29b-41d4-a716-446655440001', false, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440000', '770e8400-e29b-41d4-a716-446655440002', false, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440001', '770e8400-e29b-41d4-a716-446655440000', true, CURRENT_TIMESTAMP),
-
--- Tata Digital Mappings
-('660e8400-e29b-41d4-a716-446655440002', '770e8400-e29b-41d4-a716-446655440003', true, CURRENT_TIMESTAMP),
-
--- BigBasket Mappings
-('660e8400-e29b-41d4-a716-446655440003', '770e8400-e29b-41d4-a716-446655440004', true, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440003', '770e8400-e29b-41d4-a716-446655440005', false, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440003', '770e8400-e29b-41d4-a716-446655440006', false, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440004', '770e8400-e29b-41d4-a716-446655440004', true, CURRENT_TIMESTAMP),
-
--- Tata 1mg Mappings
-('660e8400-e29b-41d4-a716-446655440005', '770e8400-e29b-41d4-a716-446655440007', true, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440005', '770e8400-e29b-41d4-a716-446655440008', false, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440005', '770e8400-e29b-41d4-a716-446655440009', false, CURRENT_TIMESTAMP),
-
--- Tanishq Mappings
-('660e8400-e29b-41d4-a716-446655440006', '770e8400-e29b-41d4-a716-446655440010', true, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440006', '770e8400-e29b-41d4-a716-446655440011', false, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440006', '770e8400-e29b-41d4-a716-446655440012', false, CURRENT_TIMESTAMP),
-('660e8400-e29b-41d4-a716-446655440007', '770e8400-e29b-41d4-a716-446655440010', true, CURRENT_TIMESTAMP);
+('660e8400-e29b-41d4-a716-446655440000', 'G', 'Gram', 'Gram measurement', '550e8400-e29b-41d4-a716-446655440000', 0.001, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('660e8400-e29b-41d4-a716-446655440001', 'MG', 'Milligram', 'Milligram measurement', '550e8400-e29b-41d4-a716-446655440000', 0.000001, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('660e8400-e29b-41d4-a716-446655440002', 'CM', 'Centimeter', 'Centimeter measurement', '550e8400-e29b-41d4-a716-446655440001', 0.01, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('660e8400-e29b-41d4-a716-446655440003', 'MM', 'Millimeter', 'Millimeter measurement', '550e8400-e29b-41d4-a716-446655440001', 0.001, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('660e8400-e29b-41d4-a716-446655440004', 'ML', 'Milliliter', 'Milliliter measurement', '550e8400-e29b-41d4-a716-446655440002', 0.001, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert businesses
+INSERT INTO business (id, name, description, created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+('770e8400-e29b-41d4-a716-446655440000', 'Fashion Retail', 'Fashion retail business', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440001', 'Grocery Store', 'Grocery retail business', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440002', 'Electronics Store', 'Electronics retail business', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440003', 'Jewelry Store', 'Jewelry retail business', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert sites
+INSERT INTO site (id, business_id, name, domain, locale, currency, created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+('880e8400-e29b-41d4-a716-446655440000', '770e8400-e29b-41d4-a716-446655440000', 'Fashion US', 'fashion.us', 'en-US', 'USD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('880e8400-e29b-41d4-a716-446655440001', '770e8400-e29b-41d4-a716-446655440001', 'Grocery US', 'grocery.us', 'en-US', 'USD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('880e8400-e29b-41d4-a716-446655440002', '770e8400-e29b-41d4-a716-446655440002', 'Electronics US', 'electronics.us', 'en-US', 'USD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('880e8400-e29b-41d4-a716-446655440003', '770e8400-e29b-41d4-a716-446655440003', 'Jewelry US', 'jewelry.us', 'en-US', 'USD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert catalogs
+INSERT INTO catalog (id, business_id, name, description, created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+('990e8400-e29b-41d4-a716-446655440000', '770e8400-e29b-41d4-a716-446655440000', 'Fashion Catalog', 'Fashion catalog', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('990e8400-e29b-41d4-a716-446655440001', '770e8400-e29b-41d4-a716-446655440001', 'Grocery Catalog', 'Grocery catalog', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('990e8400-e29b-41d4-a716-446655440002', '770e8400-e29b-41d4-a716-446655440002', 'Electronics Catalog', 'Electronics catalog', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('990e8400-e29b-41d4-a716-446655440003', '770e8400-e29b-41d4-a716-446655440003', 'Jewelry Catalog', 'Jewelry catalog', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert categories
+INSERT INTO category (id, parent_id, name, description, created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+('aa0e8400-e29b-41d4-a716-446655440000', NULL, 'Fashion', 'Fashion category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('aa0e8400-e29b-41d4-a716-446655440001', NULL, 'Grocery', 'Grocery category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('aa0e8400-e29b-41d4-a716-446655440002', NULL, 'Electronics', 'Electronics category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('aa0e8400-e29b-41d4-a716-446655440003', NULL, 'Jewelry', 'Jewelry category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert products
+INSERT INTO product (id, business_id, name, description, sku, created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+('bb0e8400-e29b-41d4-a716-446655440000', '770e8400-e29b-41d4-a716-446655440000', 'Fashion Product', 'Fashion product', 'FP001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('bb0e8400-e29b-41d4-a716-446655440001', '770e8400-e29b-41d4-a716-446655440001', 'Grocery Product', 'Grocery product', 'GP001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('bb0e8400-e29b-41d4-a716-446655440002', '770e8400-e29b-41d4-a716-446655440002', 'Electronics Product', 'Electronics product', 'EP001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('bb0e8400-e29b-41d4-a716-446655440003', '770e8400-e29b-41d4-a716-446655440003', 'Jewelry Product', 'Jewelry product', 'JP001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert product features
+INSERT INTO product_feature (id, product_id, name, value, unit_id, created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+('cc0e8400-e29b-41d4-a716-446655440000', 'bb0e8400-e29b-41d4-a716-446655440000', 'Size', 'M', '660e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('cc0e8400-e29b-41d4-a716-446655440001', 'bb0e8400-e29b-41d4-a716-446655440001', 'Weight', '1', '660e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('cc0e8400-e29b-41d4-a716-446655440002', 'bb0e8400-e29b-41d4-a716-446655440002', 'Screen Size', '15', '660e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('cc0e8400-e29b-41d4-a716-446655440003', 'bb0e8400-e29b-41d4-a716-446655440003', 'Weight', '10', '660e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert product feature values
+INSERT INTO product_feature_value (id, feature_id, value, created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+('dd0e8400-e29b-41d4-a716-446655440000', 'cc0e8400-e29b-41d4-a716-446655440000', 'M', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('dd0e8400-e29b-41d4-a716-446655440001', 'cc0e8400-e29b-41d4-a716-446655440001', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('dd0e8400-e29b-41d4-a716-446655440002', 'cc0e8400-e29b-41d4-a716-446655440002', '15', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('dd0e8400-e29b-41d4-a716-446655440003', 'cc0e8400-e29b-41d4-a716-446655440003', '10', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert category feature templates
+INSERT INTO category_feature_template (id, category_id, name, description, unit_id, created_date, last_modified_date, created_by, last_modified_by)
+VALUES
+('ee0e8400-e29b-41d4-a716-446655440000', 'aa0e8400-e29b-41d4-a716-446655440000', 'Size', 'Product size', '660e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('ee0e8400-e29b-41d4-a716-446655440001', 'aa0e8400-e29b-41d4-a716-446655440001', 'Weight', 'Product weight', '660e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('ee0e8400-e29b-41d4-a716-446655440002', 'aa0e8400-e29b-41d4-a716-446655440002', 'Screen Size', 'Screen size', '660e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('ee0e8400-e29b-41d4-a716-446655440003', 'aa0e8400-e29b-41d4-a716-446655440003', 'Weight', 'Product weight', '660e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert site catalog assignments
+INSERT INTO site_catalog_assignment (site_id, catalog_id, is_default) VALUES
+('880e8400-e29b-41d4-a716-446655440000', '990e8400-e29b-41d4-a716-446655440000', true),
+('880e8400-e29b-41d4-a716-446655440001', '990e8400-e29b-41d4-a716-446655440001', true),
+('880e8400-e29b-41d4-a716-446655440002', '990e8400-e29b-41d4-a716-446655440002', true),
+('880e8400-e29b-41d4-a716-446655440003', '990e8400-e29b-41d4-a716-446655440003', true);

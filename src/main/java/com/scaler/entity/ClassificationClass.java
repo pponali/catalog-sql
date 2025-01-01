@@ -19,11 +19,9 @@ import java.util.Set;
 public class ClassificationClass extends Category {
 
     @OneToMany(mappedBy = "classificationClass")
-    @Builder.Default
     private Set<ClassAttributeAssignment> attributeAssignments = new HashSet<>();
 
     @Column(name = "inherit_features")
-    @Builder.Default
     private boolean inheritFeatures = true;
 
     @ElementCollection
@@ -31,7 +29,6 @@ public class ClassificationClass extends Category {
             joinColumns = @JoinColumn(name = "classification_class_id"))
     @MapKeyColumn(name = "metadata_key")
     @Column(name = "metadata_value")
-    @Builder.Default
     private Map<String, String> metadata = new java.util.HashMap<>();
 
     public Set<ClassAttributeAssignment> getAllAttributeAssignments() {

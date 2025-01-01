@@ -28,11 +28,9 @@ public class Business extends BaseEntity {
     private String description;
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
-    @Builder.Default
     private List<Catalog> catalogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
-    @Builder.Default
     private List<Site> sites = new ArrayList<>();
 
     public void addCatalog(Catalog catalog) {

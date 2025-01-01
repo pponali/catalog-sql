@@ -3,7 +3,9 @@ package com.scaler.mapper;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.TargetType;
+import org.springframework.stereotype.Component;
 
+@Component
 public class InheritanceMappingStrategy {
 
     @BeforeMapping

@@ -21,5 +21,5 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> findByBusinessId(UUID businessId);
     List<Product> findByBusinessIdAndCategories(UUID businessId, Category category);
     Optional<Product> findByBusinessIdAndId(UUID businessId, UUID id);
-    List<Product> findByCatalog(UUID catalogId);
+    List<Product> findByCatalogId(UUID catalogId);
 }

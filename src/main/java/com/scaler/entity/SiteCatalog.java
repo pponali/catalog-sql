@@ -24,7 +24,6 @@ public class SiteCatalog extends BaseEntity {
     private Catalog catalog;
 
     @Column(name = "is_default")
-    @Builder.Default
     private Boolean isDefault = false;
 
     @Column(name = "status")

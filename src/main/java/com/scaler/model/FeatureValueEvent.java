@@ -1,5 +1,6 @@
 package com.scaler.model;
 
+import com.scaler.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "feature_value_event")
-public class FeatureValueEvent {
+public class FeatureValueEvent extends BaseEntity {
     
     public enum EventType {
         CREATED,
@@ -30,10 +31,6 @@ public class FeatureValueEvent {
         TRANSFORMATION,
         ACCESS
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
     
     private UUID featureId;
     private UUID productId;

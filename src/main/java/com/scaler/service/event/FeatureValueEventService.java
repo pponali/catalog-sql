@@ -69,7 +69,7 @@ public class FeatureValueEventService {
         log.debug("Event saved: {}", event);
     }
 
-    public List<FeatureValueEvent> getEventsByFeatureId(Long featureId) {
+    public List<FeatureValueEvent> getEventsByFeatureId(UUID featureId) {
         return repository.findByFeatureId(featureId);
     }
 

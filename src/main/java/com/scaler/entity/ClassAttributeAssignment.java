@@ -44,26 +44,21 @@ public class ClassAttributeAssignment {
         joinColumns = @JoinColumn(name = "assignment_id")
     )
     @Column(name = "attribute_value")
-    @Builder.Default
     private Set<String> attributeValues = new HashSet<>();
 
     @Column(name = "sequence")
     private Integer sequence;
 
     @Column(name = "visible")
-    @Builder.Default
     private boolean visible = true;
 
     @Column(name = "editable")
-    @Builder.Default
     private boolean editable = true;
 
     @Column(name = "searchable")
-    @Builder.Default
     private boolean searchable = true;
 
     @Column(name = "comparable")
-    @Builder.Default
     private boolean comparable = true;
 
     @Column(name = "range_min")
@@ -76,7 +71,6 @@ public class ClassAttributeAssignment {
     private String regexValidation;
 
     @Column(name = "default_value")
-    @Builder.Default
     private String defaultValue = "";
 
     @ElementCollection
@@ -86,7 +80,6 @@ public class ClassAttributeAssignment {
     )
     @MapKeyJoinColumn(name = "dependent_assignment_id")
     @Column(name = "required_value")
-    @Builder.Default
     private Map<ClassAttributeAssignment, String> dependencies = new HashMap<>();
 
     @ElementCollection
@@ -96,7 +89,6 @@ public class ClassAttributeAssignment {
     )
     @MapKeyColumn(name = "key")
     @Column(name = "value")
-    @Builder.Default
     private Map<String, String> metadata = new HashMap<>();
 
     @PrePersist

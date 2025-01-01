@@ -44,15 +44,12 @@ public class Category extends BaseEntity {
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    @Builder.Default
     private List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<CategoryFeatureTemplate> templates = new HashSet<>();
 
     @ManyToMany(mappedBy = "categories")
-    @Builder.Default
     private Set<Product> products = new HashSet<>();
 
     public void addTemplate(CategoryFeatureTemplate template) {

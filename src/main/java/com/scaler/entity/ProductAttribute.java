@@ -1,22 +1,19 @@
 package com.scaler.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "product_attribute")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductAttribute {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@ToString(callSuper = true, exclude = "product")
+@EqualsAndHashCode(callSuper = true, exclude = "product")
+public class ProductAttribute extends BaseEntity {
+  
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
