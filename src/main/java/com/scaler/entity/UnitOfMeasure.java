@@ -1,10 +1,7 @@
 package com.scaler.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
@@ -15,24 +12,24 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UnitOfMeasure {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
-    
-    @Column(nullable = false, unique = true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class UnitOfMeasure extends BaseEntity {
+
+    @Column(name = "code", unique = true, nullable = false)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "base_unit")
-    private String baseUnit;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "base_unit_id")
+    private Unit baseUnit;
 
-    @Column(name = "conversion_factor", nullable = false)
+    @Column(name = "conversion_factor")
     private Double conversionFactor;
 
     @Column(nullable = false)

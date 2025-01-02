@@ -17,13 +17,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class DataImportServiceImpl implements DataImportService {
 
     private final ProductRepository productRepository;
-    private final UnitOfMeasureRepository unitRepository;
+    private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final CategoryService categoryService;
     private final ObjectMapper objectMapper;
 
@@ -44,14 +45,8 @@ public class DataImportServiceImpl implements DataImportService {
                 
                 for (Map<String, Object> unitData : units) {
                     try {
-                        UnitOfMeasure unit = new UnitOfMeasure();
-                        unit.setCode((String) unitData.get("code"));
-                        unit.setName((String) unitData.get("name"));
-                        unit.setDescription((String) unitData.get("description"));
-                        unit.setBaseUnit((String) unitData.get("baseUnit"));
-                        unit.setConversionFactor(Double.valueOf(unitData.get("conversionFactor").toString()));
-                        
-                        unitRepository.save(unit);
+                        UnitOfMeasure unit = buildUnit(unitData);
+                        unitOfMeasureRepository.save(unit);
                         successCount++;
                     } catch (Exception e) {
                         errors.add("Failed to import unit: " + unitData.get("code") + " - " + e.getMessage());
@@ -72,6 +67,11 @@ public class DataImportServiceImpl implements DataImportService {
                         product.setSku((String) productData.get("sku"));
                         product.setStatus((String) productData.get("status"));
                         product.setCategories(Collections.singleton(categoryService.findByCode((String) productData.get("categoryCode"))));
+                        
+                        if (productData.get("unitOfMeasure") != null) {
+                            UnitOfMeasure unitOfMeasure = unitOfMeasureRepository.findById(UUID.fromString((String) productData.get("unitOfMeasure"))).orElse(null);
+                            product.setUnitOfMeasure(unitOfMeasure);
+                        }
                         
                         productRepository.save(product);
                         successCount++;
@@ -96,5 +96,19 @@ public class DataImportServiceImpl implements DataImportService {
             result.setErrors(List.of("Failed to parse import file: " + e.getMessage()));
             return result;
         }
+    }
+    
+    private UnitOfMeasure buildUnit(Map<String, Object> unitData) {
+        return UnitOfMeasure.builder()
+                .id(UUID.fromString((String) unitData.get("id")))
+                .code((String) unitData.get("code"))
+                .name((String) unitData.get("name"))
+                .description((String) unitData.get("description"))
+                .type((String) unitData.get("type"))
+                .displaySymbol((String) unitData.get("displaySymbol"))
+                .active(Boolean.TRUE.equals(unitData.get("active")))
+                .metadata((String) unitData.get("metadata"))
+                .conversionFactor(Double.valueOf(unitData.get("conversionFactor").toString()))
+                .build();
     }
 }

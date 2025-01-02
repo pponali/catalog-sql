@@ -2,28 +2,21 @@ package com.scaler.mapper;
 
 import com.scaler.dto.ProductFeatureValueDTO;
 import com.scaler.entity.ProductFeatureValue;
+import com.scaler.mapper.util.MapperUtils;
 import org.mapstruct.*;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        imports = {MapperUtils.class})
 public interface ProductFeatureValueMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "productId", expression = "java(entityProductId(entity))"),
-        @Mapping(target = "featureId", expression = "java(entityFeatureId(entity))"),
-        @Mapping(target = "templateId", source = "templateId"),
-        @Mapping(target = "type", source = "type"),
-        @Mapping(target = "unit", source = "unit"),
-        @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
-        @Mapping(target = "status", source = "status"),
-        @Mapping(target = "validationStatus", source = "validationStatus"),
-        @Mapping(target = "validationPattern", source = "validationPattern"),
-        @Mapping(target = "validationMessage", source = "validationMessage"),
-        @Mapping(target = "attributeValue", source = "attributeValues"),
+        @Mapping(target = "productId", source = "product.id"),
+        @Mapping(target = "featureTemplateId", source = "templateId"),
+        @Mapping(target = "value", expression = "java(MapperUtils.mapJsonNodeToString(entity.getAttributeValues()))"),
         @Mapping(target = "createdAt", source = "createdDate"),
         @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
@@ -35,15 +28,8 @@ public interface ProductFeatureValueMapper {
         @Mapping(target = "id", source = "id"),
         @Mapping(target = "product", ignore = true),
         @Mapping(target = "feature", ignore = true),
-        @Mapping(target = "templateId", source = "templateId"),
-        @Mapping(target = "type", source = "type"),
-        @Mapping(target = "unit", source = "unit"),
-        @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
-        @Mapping(target = "status", source = "status"),
-        @Mapping(target = "validationStatus", source = "validationStatus"),
-        @Mapping(target = "validationPattern", source = "validationPattern"),
-        @Mapping(target = "validationMessage", source = "validationMessage"),
-        @Mapping(target = "attributeValues", source = "attributeValue"),
+        @Mapping(target = "templateId", source = "featureTemplateId"),
+        @Mapping(target = "attributeValues", expression = "java(MapperUtils.mapStringToJsonNode(dto.getValue()))"),
         @Mapping(target = "createdDate", source = "createdAt"),
         @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
         @Mapping(target = "createdBy", source = "createdBy"),
@@ -53,35 +39,13 @@ public interface ProductFeatureValueMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({
-        @Mapping(target = "id", ignore = true),
         @Mapping(target = "product", ignore = true),
         @Mapping(target = "feature", ignore = true),
-        @Mapping(target = "templateId", source = "templateId"),
-        @Mapping(target = "type", source = "type"),
-        @Mapping(target = "unit", source = "unit"),
-        @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
-        @Mapping(target = "status", source = "status"),
-        @Mapping(target = "validationStatus", source = "validationStatus"),
-        @Mapping(target = "validationPattern", source = "validationPattern"),
-        @Mapping(target = "validationMessage", source = "validationMessage"),
-        @Mapping(target = "attributeValues", source = "attributeValue"),
-        @Mapping(target = "createdDate", source = "createdAt"),
-        @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
-        @Mapping(target = "createdBy", source = "createdBy"),
-        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
+        @Mapping(target = "templateId", source = "featureTemplateId"),
+        @Mapping(target = "attributeValues", expression = "java(MapperUtils.mapStringToJsonNode(dto.getValue()))")
     })
-    void updateEntity(@MappingTarget ProductFeatureValue entity, ProductFeatureValueDTO dto);
+    void updateEntityFromDTO(ProductFeatureValueDTO dto, @MappingTarget ProductFeatureValue entity);
 
     List<ProductFeatureValueDTO> toDTOList(List<ProductFeatureValue> entities);
     Set<ProductFeatureValueDTO> toDTOSet(Set<ProductFeatureValue> entities);
-    List<ProductFeatureValue> toEntityList(List<ProductFeatureValueDTO> dtos);
-    Set<ProductFeatureValue> toEntitySet(Set<ProductFeatureValueDTO> dtos);
-
-    default UUID entityProductId(ProductFeatureValue entity) {
-        return entity.getProduct() != null ? entity.getProduct().getId() : null;
-    }
-
-    default UUID entityFeatureId(ProductFeatureValue entity) {
-        return entity.getFeature() != null ? entity.getFeature().getId() : null;
-    }
 }

@@ -26,7 +26,7 @@ VALUES
     ('PURITY', 'Purity', 'Gold Purity', 'NUMERIC', NULL, 14, 24, 'K', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert test class attribute assignments
-INSERT INTO class_attribute_assignment (classification_class_id, classification_attribute_id, created_date, last_modified_date)
+INSERT INTO class_attribute (classification_class_id, classification_attribute_id, created_date, last_modified_date)
 VALUES 
     (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

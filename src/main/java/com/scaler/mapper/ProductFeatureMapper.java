@@ -7,8 +7,7 @@ import org.mapstruct.*;
 import java.util.List;
 import java.util.Set;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {ProductFeatureValueMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProductFeatureMapper {
 
     @Mappings({
@@ -37,7 +36,7 @@ public interface ProductFeatureMapper {
         @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
-        @Mapping(target = "values", source = "values")
+        @Mapping(target = "values", ignore = true)
     })
     ProductFeatureDTO toDTO(ProductFeature entity);
 
@@ -63,7 +62,7 @@ public interface ProductFeatureMapper {
         @Mapping(target = "required", source = "required"),
         @Mapping(target = "multiValued", source = "multiValued"),
         @Mapping(target = "metadata", source = "metadata"),
-        @Mapping(target = "values", ignore = true),
+        @Mapping(target = "featureValues", ignore = true),
         @Mapping(target = "createdDate", source = "createdAt"),
         @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
         @Mapping(target = "createdBy", source = "createdBy"),
@@ -75,6 +74,5 @@ public interface ProductFeatureMapper {
     void updateEntity(@MappingTarget ProductFeature entity, ProductFeatureDTO dto);
 
     List<ProductFeatureDTO> toDTOList(List<ProductFeature> entities);
-
     Set<ProductFeatureDTO> toDTOSet(Set<ProductFeature> entities);
 }

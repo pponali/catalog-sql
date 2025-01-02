@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"catalog", "categories", "features", "featureValues", "business", "unitOfMeasure"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "categories", "features", "featureValues", "business", "unitOfMeasure"})
+@ToString(callSuper = true, exclude = {"catalog", "categories", "features", "business", "unitOfMeasure"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "categories", "features", "business", "unitOfMeasure"})
 public class Product extends BaseEntity {
     @Column(name = "code", nullable = false)
     private String code;
@@ -56,9 +56,6 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductFeature> features = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductFeatureValue> featureValues = new HashSet<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id", nullable = false)
     private Business business;
@@ -89,15 +86,5 @@ public class Product extends BaseEntity {
     public void removeFeature(ProductFeature feature) {
         features.remove(feature);
         feature.setProduct(null);
-    }
-
-    public void addFeatureValue(ProductFeatureValue featureValue) {
-        featureValues.add(featureValue);
-        featureValue.setProduct(this);
-    }
-
-    public void removeFeatureValue(ProductFeatureValue featureValue) {
-        featureValues.remove(featureValue);
-        featureValue.setProduct(null);
     }
 }

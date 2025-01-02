@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, 
-        uses = {ProductFeatureMapper.class, ProductFeatureValueMapper.class},
         imports = {Collectors.class, List.class})
 public interface ProductMapper {
 
@@ -33,7 +32,6 @@ public interface ProductMapper {
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "categories", ignore = true),
         @Mapping(target = "features", ignore = true),
-        @Mapping(target = "featureValues", ignore = true),
         @Mapping(target = "createdDate", source = "createdAt"),
         @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
         @Mapping(target = "createdBy", source = "createdBy"),

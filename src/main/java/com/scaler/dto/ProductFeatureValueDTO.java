@@ -17,24 +17,20 @@ public class ProductFeatureValueDTO {
     @NotNull(message = "Product ID is required")
     private UUID productId;
 
-    @NotNull(message = "Feature ID is required")
     private UUID featureId;
 
-    private UUID templateId;
+    @NotNull(message = "Feature Template ID is required")
+    private UUID featureTemplateId;
 
-    @NotNull(message = "Value type is required")
     private String type;
-
     private String unit;
     private String unitOfMeasure;
     private String status;
     private String validationStatus;
     private String validationPattern;
     private String validationMessage;
-    private String value;
 
-    @NotNull(message = "Attribute value is required")
-    private JsonNode attributeValue;
+    private String value;
 
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
@@ -48,24 +44,17 @@ public class ProductFeatureValueDTO {
     private ProductFeatureDTO feature;
 
     public JsonNode getAttributeValue() {
-        return attributeValue;
+        return null;
     }
 
     public void setAttributeValue(JsonNode value) {
-        this.attributeValue = value;
     }
 
     public String getStringValue() {
-        if (attributeValue != null && attributeValue.isTextual()) {
-            return attributeValue.asText();
-        }
         return value;
     }
 
     public Double getNumericValue() {
-        if (attributeValue != null && attributeValue.isNumber()) {
-            return attributeValue.asDouble();
-        }
         try {
             return Double.parseDouble(value);
         } catch (NumberFormatException e) {
@@ -74,9 +63,6 @@ public class ProductFeatureValueDTO {
     }
 
     public Boolean getBooleanValue() {
-        if (attributeValue != null && attributeValue.isBoolean()) {
-            return attributeValue.asBoolean();
-        }
         if (value != null) {
             return Boolean.parseBoolean(value);
         }

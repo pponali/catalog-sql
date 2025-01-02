@@ -13,8 +13,8 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "values"})
-@ToString(callSuper = true, exclude = {"product", "template", "values"})
+@EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "featureValues"})
+@ToString(callSuper = true, exclude = {"product", "template", "featureValues"})
 public class ProductFeature extends BaseEntity {
     @Column(nullable = false)
     private String code;
@@ -81,15 +81,15 @@ public class ProductFeature extends BaseEntity {
 
     @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
     @lombok.Builder.Default
-    private Set<ProductFeatureValue> values = new HashSet<>();
+    private Set<ProductFeatureValue> featureValues = new HashSet<>();
 
-    public void addValue(ProductFeatureValue value) {
-        values.add(value);
+    public void addFeatureValue(ProductFeatureValue value) {
+        featureValues.add(value);
         value.setFeature(this);
     }
 
-    public void removeValue(ProductFeatureValue value) {
-        values.remove(value);
+    public void removeFeatureValue(ProductFeatureValue value) {
+        featureValues.remove(value);
         value.setFeature(null);
     }
 }

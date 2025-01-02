@@ -3,16 +3,21 @@ package com.scaler.mapper;
 import com.scaler.dto.CategoryDTO;
 import com.scaler.entity.Category;
 import com.scaler.entity.Product;
+
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, 
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {CategoryFeatureTemplateMapper.class})
 public interface CategoryMapper {
+
+    CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
     @Mappings({
         @Mapping(target = "id", source = "id"),

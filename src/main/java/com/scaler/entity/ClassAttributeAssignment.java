@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.*;
 
 @Entity
-@Table(name = "class_attribute_assignments")
+@Table(name = "class_attribute")
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -40,7 +40,7 @@ public class ClassAttributeAssignment {
 
     @ElementCollection
     @CollectionTable(
-        name = "class_attribute_assignment_values",
+        name = "class_attribute_values",
         joinColumns = @JoinColumn(name = "assignment_id")
     )
     @Column(name = "attribute_value")
@@ -75,16 +75,16 @@ public class ClassAttributeAssignment {
 
     @ElementCollection
     @CollectionTable(
-        name = "class_attribute_assignment_dependencies",
+        name = "class_attribute_dependencies",
         joinColumns = @JoinColumn(name = "assignment_id")
     )
-    @MapKeyJoinColumn(name = "dependent_assignment_id")
+    @MapKeyJoinColumn(name = "dependent_id")
     @Column(name = "required_value")
     private Map<ClassAttributeAssignment, String> dependencies = new HashMap<>();
 
     @ElementCollection
     @CollectionTable(
-        name = "class_attribute_assignment_metadata",
+        name = "class_attribute_metadata",
         joinColumns = @JoinColumn(name = "assignment_id")
     )
     @MapKeyColumn(name = "key")
