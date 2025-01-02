@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS validation_rule (
 -- Unit table
 CREATE TABLE IF NOT EXISTS unit (
     id UUID PRIMARY KEY,
+    symbol VARCHAR(10) NOT NULL UNIQUE,
     code VARCHAR(255) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     type VARCHAR(100) NOT NULL,
@@ -142,6 +143,18 @@ CREATE TABLE IF NOT EXISTS category (
     last_modified_date TIMESTAMP
 );
 
+-- catalog_category table
+CREATE TABLE IF NOT EXISTS catalog_category (
+    catalog_id UUID REFERENCES catalog(id),
+    category_id UUID REFERENCES category(id),
+    primary_category BOOLEAN DEFAULT false,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
+    last_modified_date TIMESTAMP,
+    PRIMARY KEY (catalog_id, category_id)
+);
+
 -- Product table
 CREATE TABLE IF NOT EXISTS product (
     id UUID PRIMARY KEY,
@@ -166,6 +179,11 @@ CREATE TABLE IF NOT EXISTS product (
 CREATE TABLE IF NOT EXISTS product_categories (
     product_id UUID REFERENCES product(id),
     category_id UUID REFERENCES category(id),
+    primary_category BOOLEAN DEFAULT false,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
+    last_modified_date TIMESTAMP,
     PRIMARY KEY (product_id, category_id)
 );
 
@@ -180,6 +198,13 @@ CREATE TABLE IF NOT EXISTS category_feature_template (
     min_value VARCHAR(255),
     max_value VARCHAR(255),
     allowed_values TEXT,
+    attribute_type VARCHAR(50),
+    comparable BOOLEAN DEFAULT false,
+    visible BOOLEAN DEFAULT true,
+    searchable BOOLEAN DEFAULT false,
+    editable BOOLEAN DEFAULT true,
+    multi_valued BOOLEAN DEFAULT false,
+    default_value VARCHAR(255),
     unit_id UUID REFERENCES unit(id),
     metadata JSONB,
     required BOOLEAN DEFAULT false,
@@ -224,6 +249,11 @@ CREATE TABLE IF NOT EXISTS product_feature (
 -- Product Feature Value table
 CREATE TABLE IF NOT EXISTS product_feature_value (
     id UUID PRIMARY KEY,
+    type VARCHAR(50),
+    product_id UUID REFERENCES product(id),
+    string_value VARCHAR(255),
+    numeric_value DECIMAL(19, 4),
+    boolean_value BOOLEAN,
     feature_id UUID REFERENCES product_feature(id),
     value TEXT,
     created_by VARCHAR(255),

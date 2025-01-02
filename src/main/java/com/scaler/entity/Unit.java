@@ -24,4 +24,7 @@ public class Unit extends BaseEntity {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "symbol", nullable = false)
+    private String symbol;
 }
