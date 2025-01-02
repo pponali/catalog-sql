@@ -383,11 +383,11 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
         // Set audit fields
         LocalDateTime now = LocalDateTime.now();
-        if (dto.getCreatedAt() == null) {
-            dto.setCreatedAt(now);
+        if (dto.getCreatedDate() == null) {
+            dto.setCreatedDate(now);
             dto.setCreatedBy("system");
         }
-        dto.setLastModifiedAt(now);
+        dto.setLastModifiedDate(now);
         dto.setLastModifiedBy("system");
     }
 

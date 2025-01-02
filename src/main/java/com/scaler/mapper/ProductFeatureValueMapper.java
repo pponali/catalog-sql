@@ -16,9 +16,12 @@ public interface ProductFeatureValueMapper {
         @Mapping(target = "id", source = "id"),
         @Mapping(target = "productId", source = "product.id"),
         @Mapping(target = "featureTemplateId", source = "templateId"),
-        @Mapping(target = "value", expression = "java(MapperUtils.mapJsonNodeToString(entity.getAttributeValues()))"),
-        @Mapping(target = "createdAt", source = "createdDate"),
-        @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
+        @Mapping(target = "attributeValues", expression = "java(MapperUtils.mapJsonNodeToString(entity.getAttributeValues()))"),
+        @Mapping(target = "stringValue", source = "stringValue"),
+        @Mapping(target = "numericValue", source = "numericValue"),
+        @Mapping(target = "booleanValue", source = "booleanValue"),
+        @Mapping(target = "createdDate", source = "createdDate"),
+        @Mapping(target = "lastModifiedDate", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })
@@ -29,9 +32,12 @@ public interface ProductFeatureValueMapper {
         @Mapping(target = "product", ignore = true),
         @Mapping(target = "feature", ignore = true),
         @Mapping(target = "templateId", source = "featureTemplateId"),
-        @Mapping(target = "attributeValues", expression = "java(MapperUtils.mapStringToJsonNode(dto.getValue()))"),
-        @Mapping(target = "createdDate", source = "createdAt"),
-        @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
+        @Mapping(target = "attributeValues", expression = "java(MapperUtils.mapStringToJsonNode(dto.getAttributeValues()))"),
+        @Mapping(target = "stringValue", source = "stringValue"),
+        @Mapping(target = "numericValue", source = "numericValue"),
+        @Mapping(target = "booleanValue", source = "booleanValue"),
+        @Mapping(target = "createdDate", source = "createdDate"),
+        @Mapping(target = "lastModifiedDate", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })
@@ -42,7 +48,10 @@ public interface ProductFeatureValueMapper {
         @Mapping(target = "product", ignore = true),
         @Mapping(target = "feature", ignore = true),
         @Mapping(target = "templateId", source = "featureTemplateId"),
-        @Mapping(target = "attributeValues", expression = "java(MapperUtils.mapStringToJsonNode(dto.getValue()))")
+        @Mapping(target = "attributeValues", expression = "java(MapperUtils.mapStringToJsonNode(dto.getAttributeValues()))"),
+        @Mapping(target = "stringValue", source = "stringValue"),
+        @Mapping(target = "numericValue", source = "numericValue"),
+        @Mapping(target = "booleanValue", source = "booleanValue")
     })
     void updateEntityFromDTO(ProductFeatureValueDTO dto, @MappingTarget ProductFeatureValue entity);
 

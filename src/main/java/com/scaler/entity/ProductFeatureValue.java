@@ -52,6 +52,15 @@ public class ProductFeatureValue extends BaseEntity {
     @Column(name = "validation_message")
     private String validationMessage;
 
+    @Column(name = "string_value")
+    private String stringValue;
+
+    @Column(name = "numeric_value")
+    private Double numericValue;
+
+    @Column(name = "boolean_value")
+    private Boolean booleanValue;
+
     @Column(name = "attribute_values", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode attributeValues;
@@ -78,41 +87,17 @@ public class ProductFeatureValue extends BaseEntity {
         return null;
     }
 
-    public String getStringValue() {
-        if (attributeValues != null && attributeValues.isTextual()) {
-            return attributeValues.asText();
-        }
-        return null;
-    }
-
-    public Double getNumericValue() {
-        if (attributeValues != null && attributeValues.isNumber()) {
-            return attributeValues.asDouble();
-        }
-        return null;
-    }
-
-    public Boolean getBooleanValue() {
-        if (attributeValues != null && attributeValues.isBoolean()) {
-            return attributeValues.asBoolean();
-        }
-        return null;
-    }
-
-    public JsonNode getAttributeValue() {
-        return attributeValues;
-    }
-
     public void setAttributeValue(JsonNode value) {
         this.attributeValues = value;
-    }
-
-    public JsonNode getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(JsonNode metadata) {
-        this.metadata = metadata;
+        if (value != null) {
+            if (value.isTextual()) {
+                this.stringValue = value.asText();
+            } else if (value.isNumber()) {
+                this.numericValue = value.asDouble();
+            } else if (value.isBoolean()) {
+                this.booleanValue = value.asBoolean();
+            }
+        }
     }
 
     public void setValidationStatus(String status) {

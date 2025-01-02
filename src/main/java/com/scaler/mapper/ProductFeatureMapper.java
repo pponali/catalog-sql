@@ -7,9 +7,8 @@ import org.mapstruct.*;
 import java.util.List;
 import java.util.Set;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {ProductFeatureValueMapper.class})
-public interface ProductFeatureMapper {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface ProductFeatureMapper extends JsonNodeMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
@@ -20,7 +19,7 @@ public interface ProductFeatureMapper {
         @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
-        @Mapping(target = "featureValues", source = "featureValues")
+        @Mapping(target = "featureValues", ignore = true)
     })
     ProductFeatureDTO toDTO(ProductFeature entity);
 
@@ -29,7 +28,7 @@ public interface ProductFeatureMapper {
         @Mapping(target = "product", ignore = true),
         @Mapping(target = "template", ignore = true),
         @Mapping(target = "unit", ignore = true),
-        @Mapping(target = "featureValues", source = "featureValues"),
+        @Mapping(target = "featureValues", ignore = true),
         @Mapping(target = "createdDate", source = "createdAt"),
         @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
         @Mapping(target = "createdBy", source = "createdBy"),

@@ -30,10 +30,13 @@ public class ProductFeatureValueDTO {
     private String validationPattern;
     private String validationMessage;
 
-    private String value;
+    private String stringValue;
+    private Double numericValue;
+    private Boolean booleanValue;
+    private String attributeValues; // JSON string
 
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
     private String createdBy;
     private String lastModifiedBy;
 
@@ -51,20 +54,20 @@ public class ProductFeatureValueDTO {
     }
 
     public String getStringValue() {
-        return value;
+        return stringValue;
     }
 
     public Double getNumericValue() {
         try {
-            return Double.parseDouble(value);
+            return numericValue;
         } catch (NumberFormatException e) {
             return null;
         }
     }
 
     public Boolean getBooleanValue() {
-        if (value != null) {
-            return Boolean.parseBoolean(value);
+        if (booleanValue != null) {
+            return booleanValue;
         }
         return null;
     }

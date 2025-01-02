@@ -11,7 +11,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring", 
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {CategoryMapper.class, FeatureTemplateMapper.class})
-public interface CategoryFeatureTemplateMapper {
+public interface CategoryFeatureTemplateMapper extends JsonNodeMapper {
     
     CategoryFeatureTemplateMapper INSTANCE = Mappers.getMapper(CategoryFeatureTemplateMapper.class);
 
@@ -21,8 +21,8 @@ public interface CategoryFeatureTemplateMapper {
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
         @Mapping(target = "type", source = "featureType"),
-        @Mapping(target = "createdAt", source = "createdDate"),
-        @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
+        @Mapping(target = "createdDate", source = "createdDate"),
+        @Mapping(target = "lastModifiedDate", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })
@@ -34,8 +34,8 @@ public interface CategoryFeatureTemplateMapper {
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
         @Mapping(target = "featureType", source = "type"),
-        @Mapping(target = "createdDate", source = "createdAt"),
-        @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
+        @Mapping(target = "createdDate", source = "createdDate"),
+        @Mapping(target = "lastModifiedDate", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })

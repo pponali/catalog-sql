@@ -28,8 +28,8 @@ public class FeatureValueEventService {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .eventType(FeatureValueEvent.EventType.VALUE_CHANGE)
                 .featureId(newValue.getFeatureId())
-                .oldValue(oldValue != null ? oldValue.getValue() : null)
-                .newValue(newValue.getValue())
+                .oldValue(oldValue != null ? oldValue.getAttributeValues() : null)
+                .newValue(newValue.getAttributeValues())
                 .timestamp(LocalDateTime.now())
                 .build();
         saveEvent(event);
@@ -41,7 +41,7 @@ public class FeatureValueEventService {
             FeatureValueEvent event = FeatureValueEvent.builder()
                     .eventType(FeatureValueEvent.EventType.VALIDATION)
                     .featureId(value.getFeatureId())
-                    .newValue(value.getValue())
+                    .newValue(value.getAttributeValues())
                     .metadata(metadataJson)
                     .timestamp(LocalDateTime.now())
                     .build();
@@ -55,8 +55,8 @@ public class FeatureValueEventService {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .eventType(FeatureValueEvent.EventType.TRANSFORMATION)
                 .featureId(originalValue.getFeatureId())
-                .oldValue(originalValue.getValue())
-                .newValue(transformedValue.getValue())
+                .oldValue(originalValue.getAttributeValues())
+                .newValue(transformedValue.getAttributeValues())
                 .timestamp(LocalDateTime.now())
                 .build();
         saveEvent(event);

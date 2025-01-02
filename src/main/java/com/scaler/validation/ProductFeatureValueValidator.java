@@ -114,12 +114,12 @@ public @interface ProductFeatureValueValidator {
 
         private boolean validateJson(ProductFeatureValue value, JsonNode validationMetadata,
                                   ConstraintValidatorContext context) {
-            if (value.getAttributeValue() == null) {
+            if (value.getAttributeValues() == null) {
                 return true;
             }
 
             try {
-                JsonNode attributeValue = objectMapper.readTree(value.getAttributeValue().toString());
+                JsonNode attributeValue = objectMapper.readTree(value.getAttributeValues().toString());
 
                 // Validate required fields
                 if (validationMetadata.has("required_fields")) {

@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface SiteCatalogMapper {
+public interface SiteCatalogMapper extends JsonNodeMapper {
     
     SiteCatalogMapper INSTANCE = Mappers.getMapper(SiteCatalogMapper.class);
 
@@ -52,19 +52,11 @@ public interface SiteCatalogMapper {
 
     Set<SiteCatalogDTO> toDTOSet(Set<SiteCatalog> entities);
 
-    @Named("entitySiteId")
     default UUID entitySiteId(SiteCatalog entity) {
-        if (entity == null || entity.getSite() == null) {
-            return null;
-        }
-        return entity.getSite().getId();
+        return entity != null && entity.getSite() != null ? entity.getSite().getId() : null;
     }
 
-    @Named("entityCatalogId")
     default UUID entityCatalogId(SiteCatalog entity) {
-        if (entity == null || entity.getCatalog() == null) {
-            return null;
-        }
-        return entity.getCatalog().getId();
+        return entity != null && entity.getCatalog() != null ? entity.getCatalog().getId() : null;
     }
 }

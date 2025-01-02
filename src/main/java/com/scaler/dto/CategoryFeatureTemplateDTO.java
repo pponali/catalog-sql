@@ -42,52 +42,29 @@ public class CategoryFeatureTemplateDTO {
     @NotBlank(message = "Attribute type is required")
     private String attributeType;
 
-    
     private String validationPattern = "";
-
-   
     private String minValue = "";
-
-  
     private String maxValue = "";
-
-    
     private String allowedValues = "";
-
-    
     private String defaultValue = "";
 
     @NotBlank(message = "Feature type is required")
-    
     private String featureType = "STRING";
 
-    
     private boolean visible = true;
-
-    
     private boolean editable = true;
-
-    
     private boolean searchable = true;
-
-    
     private boolean comparable = true;
-
-    
     private boolean mandatory = false;
-
-    
     private boolean multiValued = false;
 
-    
     private String metadata = "";
 
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
     private String createdBy;
     private String lastModifiedBy;
 
     @JsonIgnore
-    
     private Set<ProductFeatureDTO> features = new HashSet<>();
 }
