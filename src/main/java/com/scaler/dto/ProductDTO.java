@@ -54,7 +54,4 @@ public class ProductDTO {
 
     @Builder.Default
     private List<ProductFeatureDTO> features = new ArrayList<>();
-
-    @Builder.Default
-    private List<ProductFeatureValueDTO> featureValues = new ArrayList<>();
 }

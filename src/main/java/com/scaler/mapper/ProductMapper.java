@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, 
+        uses = {ProductFeatureMapper.class},
         imports = {Collectors.class, List.class})
 public interface ProductMapper {
 
@@ -21,7 +22,8 @@ public interface ProductMapper {
         @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
-        @Mapping(target = "categoryIds", expression = "java(entity.getCategories().stream().map(category -> category.getId()).collect(Collectors.toSet()))")
+        @Mapping(target = "categoryIds", expression = "java(entity.getCategories().stream().map(category -> category.getId()).collect(Collectors.toSet()))"),
+        @Mapping(target = "features", source = "features")
     })
     ProductDTO toDTO(Product entity);
 
@@ -31,7 +33,7 @@ public interface ProductMapper {
         @Mapping(target = "catalog", ignore = true),
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "categories", ignore = true),
-        @Mapping(target = "features", ignore = true),
+        @Mapping(target = "features", source = "features"),
         @Mapping(target = "createdDate", source = "createdAt"),
         @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
         @Mapping(target = "createdBy", source = "createdBy"),

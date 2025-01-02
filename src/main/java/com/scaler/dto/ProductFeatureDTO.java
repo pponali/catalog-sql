@@ -76,5 +76,5 @@ public class ProductFeatureDTO {
     private String lastModifiedBy;
 
     @Builder.Default
-    private Set<ProductFeatureValueDTO> values = new HashSet<>();
+    private Set<ProductFeatureValueDTO> featureValues = new HashSet<>();
 }
