@@ -118,43 +118,22 @@ CROSS JOIN category_feature_template t
 WHERE p.id IN ('ee0e8400-e29b-41d4-a716-446655440000', 'ee0e8400-e29b-41d4-a716-446655440001', 'ee0e8400-e29b-41d4-a716-446655440002');
 
 -- Insert feature values for iPhone 12
-INSERT INTO product_feature_value (id, product_id, feature_id, type, value, string_value, numeric_value, boolean_value, created_date, last_modified_date, created_by, last_modified_by)
+INSERT INTO product_feature_value (id, product_id, feature_id, type, value, created_date, last_modified_date, created_by, last_modified_by)
 SELECT 
     md5(random()::text || clock_timestamp()::text)::uuid,
     p.id,
     f.id,
     f.feature_type,
     CASE 
-        WHEN f.code = 'SCREEN_SIZE' THEN '6.1'
-        WHEN f.code = 'BATTERY_CAPACITY' THEN '2815'
-        WHEN f.code = 'MODEL_NUMBER' THEN 'A2172'
-        WHEN f.code = 'COLOR' THEN 'Blue'
-        WHEN f.code = '5G_CAPABLE' THEN 'true'
-        WHEN f.code = 'WIRELESS_CHARGING' THEN 'true'
+        WHEN f.code = 'SCREEN_SIZE' THEN '{"value": 6.1}'
+        WHEN f.code = 'BATTERY_CAPACITY' THEN '{"value": 2815}'
+        WHEN f.code = 'MODEL_NUMBER' THEN '{"value": "A2172"}'
+        WHEN f.code = 'COLOR' THEN '{"value": "Blue"}'
+        WHEN f.code = '5G_CAPABLE' THEN '{"value": true}'
+        WHEN f.code = 'WIRELESS_CHARGING' THEN '{"value": true}'
         WHEN f.code = 'CAMERA_SPECS' THEN '{"main": "12MP", "ultra": "12MP", "front": "12MP"}'
         WHEN f.code = 'CONNECTIVITY' THEN '{"wifi": "Wi-Fi 6", "bluetooth": "5.0", "nfc": true}'
     END,
-    CASE WHEN f.feature_type = 'STRING' OR f.feature_type = 'ENUM' THEN 
-        CASE 
-            WHEN f.code = 'MODEL_NUMBER' THEN 'A2172'
-            WHEN f.code = 'COLOR' THEN 'Blue'
-            ELSE NULL
-        END
-    ELSE NULL END,
-    CASE WHEN f.feature_type = 'NUMERIC' THEN 
-        CASE 
-            WHEN f.code = 'SCREEN_SIZE' THEN 6.1
-            WHEN f.code = 'BATTERY_CAPACITY' THEN 2815
-            ELSE NULL
-        END
-    ELSE NULL END,
-    CASE WHEN f.feature_type = 'BOOLEAN' THEN 
-        CASE 
-            WHEN f.code = '5G_CAPABLE' THEN true
-            WHEN f.code = 'WIRELESS_CHARGING' THEN true
-            ELSE NULL
-        END
-    ELSE NULL END,
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
     'system',
@@ -164,43 +143,22 @@ JOIN product_feature f ON p.id = f.product_id
 WHERE p.id = 'ee0e8400-e29b-41d4-a716-446655440000';
 
 -- Insert feature values for MacBook Pro
-INSERT INTO product_feature_value (id, product_id, feature_id, type, value, string_value, numeric_value, boolean_value, created_date, last_modified_date, created_by, last_modified_by)
+INSERT INTO product_feature_value (id, product_id, feature_id, type, value, created_date, last_modified_date, created_by, last_modified_by)
 SELECT 
     md5(random()::text || clock_timestamp()::text)::uuid,
     p.id,
     f.id,
     f.feature_type,
     CASE 
-        WHEN f.code = 'SCREEN_SIZE' THEN '13.3'
-        WHEN f.code = 'BATTERY_CAPACITY' THEN '5000'
-        WHEN f.code = 'MODEL_NUMBER' THEN 'A2338'
-        WHEN f.code = 'COLOR' THEN 'Silver'
-        WHEN f.code = '5G_CAPABLE' THEN 'false'
-        WHEN f.code = 'WIRELESS_CHARGING' THEN 'false'
+        WHEN f.code = 'SCREEN_SIZE' THEN '{"value": 13.3}'
+        WHEN f.code = 'BATTERY_CAPACITY' THEN '{"value": 5000}'
+        WHEN f.code = 'MODEL_NUMBER' THEN '{"value": "A2338"}'
+        WHEN f.code = 'COLOR' THEN '{"value": "Silver"}'
+        WHEN f.code = '5G_CAPABLE' THEN '{"value": false}'
+        WHEN f.code = 'WIRELESS_CHARGING' THEN '{"value": false}'
         WHEN f.code = 'CAMERA_SPECS' THEN '{"front": "720p HD"}'
         WHEN f.code = 'CONNECTIVITY' THEN '{"wifi": "Wi-Fi 6", "bluetooth": "5.0", "thunderbolt": 4}'
     END,
-    CASE WHEN f.feature_type = 'STRING' OR f.feature_type = 'ENUM' THEN 
-        CASE 
-            WHEN f.code = 'MODEL_NUMBER' THEN 'A2338'
-            WHEN f.code = 'COLOR' THEN 'Silver'
-            ELSE NULL
-        END
-    ELSE NULL END,
-    CASE WHEN f.feature_type = 'NUMERIC' THEN 
-        CASE 
-            WHEN f.code = 'SCREEN_SIZE' THEN 13.3
-            WHEN f.code = 'BATTERY_CAPACITY' THEN 5000
-            ELSE NULL
-        END
-    ELSE NULL END,
-    CASE WHEN f.feature_type = 'BOOLEAN' THEN 
-        CASE 
-            WHEN f.code = '5G_CAPABLE' THEN false
-            WHEN f.code = 'WIRELESS_CHARGING' THEN false
-            ELSE NULL
-        END
-    ELSE NULL END,
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
     'system',
@@ -210,43 +168,22 @@ JOIN product_feature f ON p.id = f.product_id
 WHERE p.id = 'ee0e8400-e29b-41d4-a716-446655440001';
 
 -- Insert feature values for Samsung S21
-INSERT INTO product_feature_value (id, product_id, feature_id, type, value, string_value, numeric_value, boolean_value, created_date, last_modified_date, created_by, last_modified_by)
+INSERT INTO product_feature_value (id, product_id, feature_id, type, value, created_date, last_modified_date, created_by, last_modified_by)
 SELECT 
     md5(random()::text || clock_timestamp()::text)::uuid,
     p.id,
     f.id,
     f.feature_type,
     CASE 
-        WHEN f.code = 'SCREEN_SIZE' THEN '6.2'
-        WHEN f.code = 'BATTERY_CAPACITY' THEN '4000'
-        WHEN f.code = 'MODEL_NUMBER' THEN 'SM-G991'
-        WHEN f.code = 'COLOR' THEN 'Phantom Gray'
-        WHEN f.code = '5G_CAPABLE' THEN 'true'
-        WHEN f.code = 'WIRELESS_CHARGING' THEN 'true'
+        WHEN f.code = 'SCREEN_SIZE' THEN '{"value": 6.2}'
+        WHEN f.code = 'BATTERY_CAPACITY' THEN '{"value": 4000}'
+        WHEN f.code = 'MODEL_NUMBER' THEN '{"value": "SM-G991"}'
+        WHEN f.code = 'COLOR' THEN '{"value": "Phantom Gray"}'
+        WHEN f.code = '5G_CAPABLE' THEN '{"value": true}'
+        WHEN f.code = 'WIRELESS_CHARGING' THEN '{"value": true}'
         WHEN f.code = 'CAMERA_SPECS' THEN '{"main": "12MP", "ultra": "12MP", "telephoto": "64MP", "front": "10MP"}'
         WHEN f.code = 'CONNECTIVITY' THEN '{"wifi": "Wi-Fi 6E", "bluetooth": "5.0", "nfc": true}'
     END,
-    CASE WHEN f.feature_type = 'STRING' OR f.feature_type = 'ENUM' THEN 
-        CASE 
-            WHEN f.code = 'MODEL_NUMBER' THEN 'SM-G991'
-            WHEN f.code = 'COLOR' THEN 'Phantom Gray'
-            ELSE NULL
-        END
-    ELSE NULL END,
-    CASE WHEN f.feature_type = 'NUMERIC' THEN 
-        CASE 
-            WHEN f.code = 'SCREEN_SIZE' THEN 6.2
-            WHEN f.code = 'BATTERY_CAPACITY' THEN 4000
-            ELSE NULL
-        END
-    ELSE NULL END,
-    CASE WHEN f.feature_type = 'BOOLEAN' THEN 
-        CASE 
-            WHEN f.code = '5G_CAPABLE' THEN true
-            WHEN f.code = 'WIRELESS_CHARGING' THEN true
-            ELSE NULL
-        END
-    ELSE NULL END,
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
     'system',

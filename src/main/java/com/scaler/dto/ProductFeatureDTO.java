@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductFeatureDTO {
@@ -50,31 +50,45 @@ public class ProductFeatureDTO {
 
     private UUID unitId;
 
-    @Builder.Default
+    /**
+     * Whether the feature is visible or not
+     */
     private boolean visible = true;
 
-    @Builder.Default
+    /**
+     * Whether the feature is editable or not
+     */
     private boolean editable = true;
 
-    @Builder.Default
+    /**
+     * Whether the feature is searchable or not
+     */
     private boolean searchable = false;
 
-    @Builder.Default
+    /**
+     * Whether the feature is comparable or not
+     */
     private boolean comparable = false;
 
-    @Builder.Default
+    /**
+     * Whether the feature is required or not
+     */
     private boolean required = false;
 
-    @Builder.Default
+    /**
+     * Whether the feature is multi-valued or not
+     */
     private boolean multiValued = false;
 
     private String metadata;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
+    private String createdDate;
+    private String lastModifiedDate;
     private String createdBy;
     private String lastModifiedBy;
 
-    @Builder.Default
+    /**
+     * Set of feature values
+     */
     private Set<ProductFeatureValueDTO> featureValues = new HashSet<>();
 }

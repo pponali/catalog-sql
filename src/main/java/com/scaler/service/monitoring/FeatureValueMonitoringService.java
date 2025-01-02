@@ -165,8 +165,8 @@ public class FeatureValueMonitoringService {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .featureId(featureValue.getFeature().getId())
                 .productId(featureValue.getProduct().getId())
-                .oldValue(featureValue.getStringValue())
-                .newValue(featureValue.getStringValue())
+                .oldValue(featureValue.getAttributeValues().asText())
+                .newValue(featureValue.getAttributeValues().asText())
                 .eventType(FeatureValueEvent.EventType.VALIDATION)
                 .build();
         eventPublisher.publishEvent(event);
@@ -176,8 +176,8 @@ public class FeatureValueMonitoringService {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .featureId(featureValue.getFeature().getId())
                 .productId(featureValue.getProduct().getId())
-                .oldValue(featureValue.getStringValue())
-                .newValue(featureValue.getStringValue())
+                .oldValue(featureValue.getAttributeValues().asText())
+                .newValue(featureValue.getAttributeValues().asText())
                 .eventType(FeatureValueEvent.EventType.VALUE_CHANGE)
                 .build();
         eventPublisher.publishEvent(event);
@@ -200,8 +200,8 @@ public class FeatureValueMonitoringService {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .featureId(value.getFeature().getId())
                 .productId(value.getProduct().getId())
-                .oldValue(eventType == FeatureValueEvent.EventType.UPDATED ? value.getStringValue() : null)
-                .newValue(value.getStringValue())
+                .oldValue(eventType == FeatureValueEvent.EventType.UPDATED ? value.getAttributeValues().asText() : null)
+                .newValue(value.getAttributeValues().asText())
                 .eventType(eventType)
                 .build();
         
@@ -214,8 +214,8 @@ public class FeatureValueMonitoringService {
                 .timestamp(LocalDateTime.now())
                 .featureId(featureValue.getFeature().getId())
                 .productId(featureValue.getProduct().getId())
-                .oldValue(featureValue.getStringValue())
-                .newValue(featureValue.getStringValue())
+                .oldValue(featureValue.getAttributeValues().asText())
+                .newValue(featureValue.getAttributeValues().asText())
                 .eventType(FeatureValueEvent.EventType.VALIDATION)
                 .build();
         eventPublisher.publishEvent(event);

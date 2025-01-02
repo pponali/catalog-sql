@@ -22,13 +22,13 @@ public class ValidationServiceImpl implements ValidationService {
             return false;
         }
 
-        String stringValue = value.getStringValue();
-        String validationPattern = template.getValidationPattern();
-
-        if (stringValue == null) {
+        if (value.getAttributeValues() == null) {
             log.debug("Value is null for template: {}", template.getCode());
             return false;
         }
+
+        String stringValue = value.getAttributeValues().asText();
+        String validationPattern = template.getValidationPattern();
 
         try {
             return evaluatePattern(stringValue, validationPattern);
@@ -50,7 +50,7 @@ public class ValidationServiceImpl implements ValidationService {
             log.debug("Value: {} {} match pattern: {}", value, matches ? "does" : "does not", pattern);
             return matches;
         } catch (Exception e) {
-            log.error("Error evaluating pattern: {} for value: {}", pattern, value, e);
+            log.error("Error compiling or matching pattern: {}", pattern, e);
             return false;
         }
     }

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDTO {
@@ -44,14 +45,13 @@ public class ProductDTO {
     private UUID catalogId;
     private UUID unitOfMeasureId;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
+    private String createdDate;
+    private String lastModifiedDate;
     private String createdBy;
     private String lastModifiedBy;
 
-    @Builder.Default
     private Set<UUID> categoryIds = new HashSet<>();
 
-    @Builder.Default
     private List<ProductFeatureDTO> features = new ArrayList<>();
+    private List<ProductAttributeDTO> attributes = new ArrayList<>();
 }

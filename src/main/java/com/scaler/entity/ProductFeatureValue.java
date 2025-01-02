@@ -52,15 +52,6 @@ public class ProductFeatureValue extends BaseEntity {
     @Column(name = "validation_message")
     private String validationMessage;
 
-    @Column(name = "string_value")
-    private String stringValue;
-
-    @Column(name = "numeric_value")
-    private Double numericValue;
-
-    @Column(name = "boolean_value")
-    private Boolean booleanValue;
-
     @Column(name = "attribute_values", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode attributeValues;
@@ -89,15 +80,6 @@ public class ProductFeatureValue extends BaseEntity {
 
     public void setAttributeValue(JsonNode value) {
         this.attributeValues = value;
-        if (value != null) {
-            if (value.isTextual()) {
-                this.stringValue = value.asText();
-            } else if (value.isNumber()) {
-                this.numericValue = value.asDouble();
-            } else if (value.isBoolean()) {
-                this.booleanValue = value.asBoolean();
-            }
-        }
     }
 
     public void setValidationStatus(String status) {

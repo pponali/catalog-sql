@@ -1,5 +1,7 @@
 package com.scaler.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.scaler.config.CustomDateSerializer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,10 +32,12 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @Column(name = "created_date", nullable = false, updatable = false)
+    @JsonSerialize(using = CustomDateSerializer.class)
     private LocalDateTime createdDate;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private LocalDateTime lastModifiedDate;
 
     @CreatedBy

@@ -19,21 +19,30 @@ public class ValidationEngine {
     public List<String> validate(ProductFeatureValue value, ProductFeature feature) {
         List<String> violations = new ArrayList<>();
         
+        if (value.getAttributeValues() == null) {
+            if (feature.isRequired()) {
+                violations.add("Value is required");
+            }
+            return violations;
+        }
+
+        String stringValue = value.getAttributeValues().asText();
+        
         // Required validation
-        if (feature.isRequired() && (value.getStringValue() == null || value.getStringValue().isEmpty())) {
+        if (feature.isRequired() && stringValue.isEmpty()) {
             violations.add("Value is required");
         }
         
         // Pattern validation
-        if (feature.getValidationPattern() != null && value.getStringValue() != null) {
-            if (!Pattern.matches(feature.getValidationPattern(), value.getStringValue())) {
+        if (feature.getValidationPattern() != null) {
+            if (!Pattern.matches(feature.getValidationPattern(), stringValue)) {
                 violations.add("Value does not match the required pattern: " + feature.getValidationPattern());
             }
         }
         
         // Range validation
-        if (value.getNumericValue() != null && (feature.getMinValue() != null || feature.getMaxValue() != null)) {
-            Double numericValue = value.getNumericValue();
+        if (value.getAttributeValues().isNumber() && (feature.getMinValue() != null || feature.getMaxValue() != null)) {
+            double numericValue = value.getAttributeValues().asDouble();
             Double minValue = feature.getMinValue() != null ? Double.parseDouble(feature.getMinValue()) : null;
             Double maxValue = feature.getMaxValue() != null ? Double.parseDouble(feature.getMaxValue()) : null;
             
@@ -46,8 +55,8 @@ public class ValidationEngine {
         }
         
         // Allowed values validation
-        if (feature.getAllowedValues() != null && !feature.getAllowedValues().isEmpty() && value.getStringValue() != null) {
-            if (!feature.getAllowedValues().contains(value.getStringValue())) {
+        if (feature.getAllowedValues() != null && !feature.getAllowedValues().isEmpty()) {
+            if (!feature.getAllowedValues().contains(stringValue)) {
                 violations.add("Value is not in the list of allowed values: " + String.join(", ", feature.getAllowedValues()));
             }
         }

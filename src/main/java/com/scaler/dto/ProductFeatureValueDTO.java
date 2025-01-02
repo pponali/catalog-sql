@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -22,6 +21,7 @@ public class ProductFeatureValueDTO {
     @NotNull(message = "Feature Template ID is required")
     private UUID featureTemplateId;
 
+    @NotNull(message = "Type is required")
     private String type;
     private String unit;
     private String unitOfMeasure;
@@ -29,14 +29,11 @@ public class ProductFeatureValueDTO {
     private String validationStatus;
     private String validationPattern;
     private String validationMessage;
+    private String metadata;
+    private String attributeValues;
 
-    private String stringValue;
-    private Double numericValue;
-    private Boolean booleanValue;
-    private String attributeValues; // JSON string
-
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
+    private String createdDate;
+    private String lastModifiedDate;
     private String createdBy;
     private String lastModifiedBy;
 
@@ -51,24 +48,14 @@ public class ProductFeatureValueDTO {
     }
 
     public void setAttributeValue(JsonNode value) {
+        this.attributeValues = value != null ? value.toString() : null;
     }
 
-    public String getStringValue() {
-        return stringValue;
+    public void setValidationStatus(String status) {
+        this.validationStatus = status;
     }
 
-    public Double getNumericValue() {
-        try {
-            return numericValue;
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    public Boolean getBooleanValue() {
-        if (booleanValue != null) {
-            return booleanValue;
-        }
-        return null;
+    public void setValidationMessage(String message) {
+        this.validationMessage = message;
     }
 }

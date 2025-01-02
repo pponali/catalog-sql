@@ -45,7 +45,15 @@ public class ValidationRuleService {
     }
 
     public void validate(ProductFeatureValue value, ValidationRule rule) {
-        if (!validateRule(rule, value.getStringValue())) {
+        if (value.getAttributeValues() == null) {
+            if (rule.getRuleType().equals(ValidationEngine.REQUIRED)) {
+                throw new IllegalArgumentException("Value is required");
+            }
+            return;
+        }
+
+        String stringValue = value.getAttributeValues().asText();
+        if (!validateRule(rule, stringValue)) {
             throw new IllegalArgumentException("Validation failed for rule: " + rule.getRuleType());
         }
     }
@@ -96,10 +104,23 @@ public class ValidationRuleService {
         } else if (rule.getRuleType().equals(ValidationEngine.PATTERN)) {
             return value != null && value.matches(rule.getPattern());
         } else if (rule.getRuleType().equals(ValidationEngine.RANGE)) {
-            double val = Double.parseDouble(value);
-            return val >= rule.getMinValue() && val <= rule.getMaxValue();
+            try {
+                double val = Double.parseDouble(value);
+                String minValueStr = rule.getMinValue().toString();
+                String maxValueStr = rule.getMaxValue().toString();
+                
+                if (minValueStr != null && val < Double.parseDouble(minValueStr)) {
+                    return false;
+                }
+                if (maxValueStr != null && val > Double.parseDouble(maxValueStr)) {
+                    return false;
+                }
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
         } else if (rule.getRuleType().equals(ValidationEngine.ALLOWED_VALUES)) {
-            return value != null && rule.getAllowedValues().contains(value);
+            return rule.getAllowedValues().contains(value);
         }
         return true;
     }

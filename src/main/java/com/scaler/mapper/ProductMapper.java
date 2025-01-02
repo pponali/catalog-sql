@@ -8,21 +8,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, 
-        imports = {Collectors.class, List.class})
-public interface ProductMapper extends JsonNodeMapper {
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {CommonMapper.class, ProductFeatureMapper.class, ProductAttributeMapper.class},
+        imports = {Collectors.class})
+public interface ProductMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
         @Mapping(target = "businessId", source = "business.id"),
         @Mapping(target = "catalogId", source = "catalog.id"),
         @Mapping(target = "unitOfMeasureId", source = "unitOfMeasure.id"),
-        @Mapping(target = "createdAt", source = "createdDate"),
-        @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
-        @Mapping(target = "createdBy", source = "createdBy"),
-        @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
+        @Mapping(target = "metadata", ignore = true),
+        @Mapping(target = "features", ignore = true),
+        @Mapping(target = "features", ignore = true),
         @Mapping(target = "categoryIds", expression = "java(entity.getCategories().stream().map(category -> category.getId()).collect(Collectors.toSet()))"),
-        @Mapping(target = "features", ignore = true)
+        @Mapping(target = "createdDate", qualifiedByName = "formatDateTime"),
+        @Mapping(target = "lastModifiedDate", qualifiedByName = "formatDateTime")
     })
     ProductDTO toDTO(Product entity);
 
@@ -33,8 +34,8 @@ public interface ProductMapper extends JsonNodeMapper {
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "categories", ignore = true),
         @Mapping(target = "features", ignore = true),
-        @Mapping(target = "createdDate", source = "createdAt"),
-        @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
+        @Mapping(target = "createdDate", qualifiedByName = "parseDateTime"),
+        @Mapping(target = "lastModifiedDate", qualifiedByName = "parseDateTime"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })

@@ -69,12 +69,13 @@ public @interface ProductFeatureValueValidator {
 
         private boolean validateString(ProductFeatureValue value, JsonNode validationMetadata, 
                                     ConstraintValidatorContext context) {
-            if (!validationMetadata.has("pattern") || value.getStringValue() == null) {
+            if (!validationMetadata.has("pattern") || value.getAttributeValues() == null) {
                 return true;
             }
 
+            String stringValue = value.getAttributeValues().asText();
             String pattern = validationMetadata.get("pattern").asText();
-            if (!Pattern.matches(pattern, value.getStringValue())) {
+            if (!Pattern.matches(pattern, stringValue)) {
                 context.buildConstraintViolationWithTemplate(
                     "String value does not match required pattern: " + pattern)
                     .addConstraintViolation();
@@ -85,13 +86,15 @@ public @interface ProductFeatureValueValidator {
 
         private boolean validateNumeric(ProductFeatureValue value, JsonNode validationMetadata,
                                      ConstraintValidatorContext context) {
-            if (value.getNumericValue() == null) {
+            if (value.getAttributeValues() == null || !value.getAttributeValues().isNumber()) {
                 return true;
             }
 
+            double numericValue = value.getAttributeValues().asDouble();
+
             if (validationMetadata.has("min")) {
                 double min = validationMetadata.get("min").asDouble();
-                if (value.getNumericValue().doubleValue() < min) {
+                if (numericValue < min) {
                     context.buildConstraintViolationWithTemplate(
                         "Value below minimum: " + min)
                         .addConstraintViolation();
@@ -101,7 +104,7 @@ public @interface ProductFeatureValueValidator {
 
             if (validationMetadata.has("max")) {
                 double max = validationMetadata.get("max").asDouble();
-                if (value.getNumericValue().doubleValue() > max) {
+                if (numericValue > max) {
                     context.buildConstraintViolationWithTemplate(
                         "Value above maximum: " + max)
                         .addConstraintViolation();
@@ -119,7 +122,7 @@ public @interface ProductFeatureValueValidator {
             }
 
             try {
-                JsonNode attributeValue = objectMapper.readTree(value.getAttributeValues().toString());
+                JsonNode attributeValue = value.getAttributeValues();
 
                 // Validate required fields
                 if (validationMetadata.has("required_fields")) {
@@ -150,7 +153,7 @@ public @interface ProductFeatureValueValidator {
                             }
                             if (!validEnum) {
                                 context.buildConstraintViolationWithTemplate(
-                                    "Invalid enum value for field " + fieldName + ": " + fieldValue)
+                                    "Invalid enum value for field: " + fieldName)
                                     .addConstraintViolation();
                                 return false;
                             }
