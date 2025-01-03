@@ -48,12 +48,26 @@ public class CategoryFeatureTemplate extends BaseEntity {
     @Column(name = "feature_type")
     private String featureType = "STRING";
 
+    @Column(name = "data_type")
+    private String dataType = "STRING";
+
+    @Column(name = "input_type")
+    private String inputType = "STRING";
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_id")
     private UnitOfMeasure unit;
 
     @Column
     private boolean visible = true;
+
+    @Column
+    private boolean filterable = true;
+    @Column
+    private boolean inherited = false;
+
+    @Column
+    private boolean hidden = false;
 
     @Column
     private boolean editable = true;

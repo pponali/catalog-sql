@@ -1,6 +1,7 @@
 package com.scaler.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CategoryFeatureTemplateDTO {
     private UUID id;
+    private String version;
 
     @NotNull(message = "Category ID is required")
     private UUID categoryId;
@@ -32,7 +34,7 @@ public class CategoryFeatureTemplateDTO {
     private String description;
 
     @NotBlank(message = "Type is required")
-    private String type;
+    private String featureType;
 
     private UUID unitId;
 
@@ -47,9 +49,8 @@ public class CategoryFeatureTemplateDTO {
     private String maxValue = "";
     private String allowedValues = "";
     private String defaultValue = "";
-
-    @NotBlank(message = "Feature type is required")
-    private String featureType = "STRING";
+    private String dataType = "STRING";
+    private String inputType = "STRING";
 
     private boolean visible = true;
     private boolean editable = true;
@@ -57,6 +58,9 @@ public class CategoryFeatureTemplateDTO {
     private boolean comparable = true;
     private boolean mandatory = false;
     private boolean multiValued = false;
+    private boolean filterable = true;
+    private boolean hidden = false;
+    private boolean inherited = false;
 
     private String metadata = "";
 
