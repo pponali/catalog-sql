@@ -107,7 +107,7 @@ VALUES
 (3, 'TEST_WEIGHT', 'Test Weight', 'Test weight measurements', 'kg', 1000.0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert test categories
-INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
+INSERT INTO category (id, code, name, description, parent_id, type, created_date, last_modified_date)
 VALUES 
 -- Root category
 (1, 'TEST_ROOT', 'Test Category', 'Test Root Category', NULL, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),

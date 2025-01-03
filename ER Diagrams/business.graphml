@@ -223,7 +223,7 @@
               </uml:UMLClassModel.attributes>
               <uml:UMLClassModel.operations>
                 <x:Array Type="sys:Object">
-                  <sys:String>dtype: varchar(50)</sys:String>
+                  <sys:String>type: varchar(50)</sys:String>
                   <sys:String>name: varchar(255)</sys:String>
                   <sys:String>code: varchar(255)</sys:String>
                   <sys:String>status: varchar(50)</sys:String>

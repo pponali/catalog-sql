@@ -13,7 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "category")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype")
+@DiscriminatorColumn(name = "type")
 @DiscriminatorValue("STANDARD")
 @Getter
 @Setter
@@ -30,8 +30,6 @@ public class Category extends BaseEntity {
     private String name;
 
     private String description;
-
-    private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id", nullable = false)

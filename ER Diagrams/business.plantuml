@@ -35,7 +35,7 @@ class catalog_category {
    category_id: uuid
 }
 class category {
-   dtype: varchar(50)
+   type: varchar(50)
    business_id: uuid
    catalog_id: uuid
    parent_id: uuid

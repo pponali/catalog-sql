@@ -13,7 +13,7 @@ class category {
    timestamp created_date
    varchar(255) last_modified_by
    timestamp last_modified_date
-   varchar(31) dtype
+   varchar(31) type
    bigint id
 }
 class category_feature_template {

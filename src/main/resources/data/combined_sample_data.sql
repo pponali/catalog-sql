@@ -1,7 +1,7 @@
 -- Combined sample data from all JSON files
 
 -- Categories from categories.json
-INSERT INTO category (id, code, name, description, parent_id, dtype, metadata, created_date, last_modified_date)
+INSERT INTO category (id, code, name, description, parent_id, type, metadata, created_date, last_modified_date)
 VALUES 
 -- Root Categories
 (1000, 'JEWELRY', 'Jewelry', 'Fine jewelry and accessories', NULL, 'STANDARD', 
@@ -79,7 +79,7 @@ VALUES
  '{"categoryCode": "MENS_CLOTHING", "classificationCode": "FORMAL_WEAR"}', 'SUIT-F-001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Medicine data from medicine_data.json
-INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
+INSERT INTO category (id, code, name, description, parent_id, type, created_date, last_modified_date)
 VALUES 
 (5000, 'PRESCRIPTION_MEDS', 'Prescription Medicines', 'Medicines requiring prescription', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (5001, 'OTC_MEDS', 'Over The Counter Medicines', 'Medicines available without prescription', 4, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
@@ -97,7 +97,7 @@ VALUES
  '{"composition": "Paracetamol", "dosage": "Tablet", "strength": "650mg"}', 'MED-P-001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Jewelry data from jewelry_data.json
-INSERT INTO category (id, code, name, description, parent_id, dtype, created_date, last_modified_date)
+INSERT INTO category (id, code, name, description, parent_id, type, created_date, last_modified_date)
 VALUES 
 (8000, 'JEWELRY_RINGS', 'Rings', 'Fine jewelry rings', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (8001, 'JEWELRY_NECKLACES', 'Necklaces', 'Fine jewelry necklaces', 5, 'STANDARD', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

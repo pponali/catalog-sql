@@ -81,7 +81,7 @@
                   <sys:String>name: varchar(255)</sys:String>
                   <sys:String>created_by: varchar(255)</sys:String>
                   <sys:String>last_modified_by: varchar(255)</sys:String>
-                  <sys:String>dtype: varchar(31)</sys:String>
+                  <sys:String>type: varchar(31)</sys:String>
                 </x:Array>
               </uml:UMLClassModel.operations>
             </uml:UMLClassModel>
