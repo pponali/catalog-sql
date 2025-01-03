@@ -1,32 +1,49 @@
 package com.scaler.dto;
 
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class FeatureTemplateDTO {
     private UUID id;
+
+    @NotBlank(message = "Name is required")
     private String name;
+
     private String description;
-    private String type;
+
+    @NotBlank(message = "Feature type is required")
+    private String featureType;
+
+    @NotBlank(message = "Data type is required")
+    private String dataType;
+
     private String validationPattern;
     private String minValue;
     private String maxValue;
+    private String step;
     private String allowedValues;
+    private String inputType;
+    private Boolean required = false;
+    private Boolean searchable = false;
+    private Boolean filterable = false;
+    private Boolean comparable = false;
+    private Boolean hidden = false;
     private String defaultValue;
-    private Boolean mandatory;
-    private Boolean multiValued;
-    private Boolean searchable;
-    private Boolean comparable;
-    private Boolean visible;
-    private Boolean editable;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
+    private UUID unitId;
+    private String metadata;
+
+    private String createdDate;
+    private String lastModifiedDate;
     private String createdBy;
     private String lastModifiedBy;
 }

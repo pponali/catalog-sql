@@ -14,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,9 +94,9 @@ public class ProductMappingService {
     public Product toEntity(ProductDTO dto) {
         Product product = productMapper.toEntity(dto);
         if (dto.getFeatures() != null) {
-            Set<ProductFeature> features = dto.getFeatures().stream()
+            List<ProductFeature> features = dto.getFeatures().stream()
                 .map(productFeatureMapper::toEntity)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
             product.setFeatures(features);
             features.forEach(feature -> feature.setProduct(product));
         }

@@ -51,12 +51,12 @@ public class CategoryFeatureTemplateServiceImpl implements CategoryFeatureTempla
         existingTemplate.setMaxValue(template.getMaxValue());
         existingTemplate.setAllowedValues(template.getAllowedValues());
         existingTemplate.setUnit(template.getUnit());
-        existingTemplate.setVisible(template.isVisible());
+        existingTemplate.setVisible(template.getVisible());
         existingTemplate.setEditable(template.isEditable());
         existingTemplate.setSearchable(template.isSearchable());
         existingTemplate.setComparable(template.isComparable());
-        existingTemplate.setMandatory(template.isMandatory());
-        existingTemplate.setMultiValued(template.isMultiValued());
+        existingTemplate.setMandatory(template.i());
+        existingTemplate.setRequired(template.getRequired());
         existingTemplate.setMetadata(template.getMetadata());
         
         return templateRepository.save(existingTemplate);

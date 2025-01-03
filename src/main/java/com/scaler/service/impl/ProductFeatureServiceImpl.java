@@ -182,12 +182,12 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
             throw new ValidationException("Feature template cannot be null");
         }
 
-        if (template.isMandatory() && (values == null || values.isEmpty())) {
+        if (template.getRequired() && (values == null || values.isEmpty())) {
             throw new ValidationException(
                 String.format("Feature '%s' is mandatory but no value provided", template.getCode()));
         }
 
-        if (!template.isMultiValued() && values != null && values.size() > 1) {
+        if (!template.getMultiValued() && values != null && values.size() > 1) {
             throw new ValidationException(
                 String.format("Feature '%s' does not support multiple values", template.getCode()));
         }
