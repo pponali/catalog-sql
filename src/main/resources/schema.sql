@@ -26,6 +26,8 @@ CREATE TABLE IF NOT EXISTS business (
     id UUID PRIMARY KEY,
     code VARCHAR(255) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
+    type VARCHAR(100) NOT NULL,
+    status VARCHAR(50) NOT NULL,
     description TEXT,
     created_by VARCHAR(255),
     created_date TIMESTAMP,
@@ -51,6 +53,8 @@ CREATE TABLE IF NOT EXISTS site (
 CREATE TABLE IF NOT EXISTS catalog (
     id UUID PRIMARY KEY,
     code VARCHAR(255) NOT NULL UNIQUE,
+    type VARCHAR(100),
+    status VARCHAR(50),
     business_id UUID NOT NULL REFERENCES business(id),
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -129,7 +133,7 @@ CREATE TABLE IF NOT EXISTS unit_of_measure (
 -- Category table
 CREATE TABLE IF NOT EXISTS category (
     id UUID PRIMARY KEY,
-    dtype VARCHAR(50),
+    type VARCHAR(50),
     business_id UUID NOT NULL REFERENCES business(id),
     catalog_id UUID NOT NULL REFERENCES catalog(id),
     parent_id UUID REFERENCES category(id),
@@ -190,6 +194,33 @@ CREATE TABLE IF NOT EXISTS product_categories (
     PRIMARY KEY (product_id, category_id)
 );
 
+-- Feature Template table
+CREATE TABLE IF NOT EXISTS feature_template (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    feature_type VARCHAR(50) NOT NULL,
+    data_type VARCHAR(50) NOT NULL,
+    validation_pattern VARCHAR(255),
+    min_value VARCHAR(255),
+    max_value VARCHAR(255),
+    step VARCHAR(255),
+    allowed_values TEXT,
+    input_type VARCHAR(50),
+    required BOOLEAN DEFAULT false,
+    searchable BOOLEAN DEFAULT false,
+    filterable BOOLEAN DEFAULT false,
+    comparable BOOLEAN DEFAULT false,
+    hidden BOOLEAN DEFAULT false,
+    default_value VARCHAR(255),
+    unit_id UUID REFERENCES unit(id),
+    metadata JSONB,
+    created_by VARCHAR(255),
+    created_date TIMESTAMP,
+    last_modified_by VARCHAR(255),
+    last_modified_date TIMESTAMP
+);
+
 -- Category Feature Template table
 CREATE TABLE IF NOT EXISTS category_feature_template (
     id UUID PRIMARY KEY,
@@ -197,6 +228,7 @@ CREATE TABLE IF NOT EXISTS category_feature_template (
     description TEXT,
     code VARCHAR(255) NOT NULL,
     feature_type VARCHAR(50) NOT NULL,
+    template_id UUID REFERENCES feature_template(id),
     validation_pattern VARCHAR(255),
     min_value VARCHAR(255),
     max_value VARCHAR(255),

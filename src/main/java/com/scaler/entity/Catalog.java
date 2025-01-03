@@ -24,6 +24,12 @@ public class Catalog extends BaseEntity {
     @Column(name = "code", nullable = false)
     private String code;
 
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "description")
     private String description;
 

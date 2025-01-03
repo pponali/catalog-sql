@@ -27,6 +27,12 @@ public class Business extends BaseEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "status")
+    private String status;
+
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     private List<Catalog> catalogs = new ArrayList<>();
 

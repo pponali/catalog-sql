@@ -20,6 +20,7 @@ public class CategoryDTO {
     private UUID catalogId;
     private UUID parentId;
     private String code;
+    private String type;
     private String name;
     private String description;
     @Builder.Default

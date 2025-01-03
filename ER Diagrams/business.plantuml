@@ -1,0 +1,242 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class business {
+   code: varchar(255)
+   name: varchar(255)
+   description: text
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class catalog {
+   code: varchar(255)
+   business_id: uuid
+   name: varchar(255)
+   description: text
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class catalog_category {
+   primary_category: boolean
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   catalog_id: uuid
+   category_id: uuid
+}
+class category {
+   dtype: varchar(50)
+   business_id: uuid
+   catalog_id: uuid
+   parent_id: uuid
+   name: varchar(255)
+   inherit_features: boolean
+   description: text
+   code: varchar(255)
+   level: integer
+   status: varchar(50)
+   metadata: jsonb
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class category_feature_template {
+   name: varchar(255)
+   description: text
+   code: varchar(255)
+   feature_type: varchar(50)
+   validation_pattern: varchar(255)
+   min_value: varchar(255)
+   max_value: varchar(255)
+   allowed_values: text
+   attribute_type: varchar(50)
+   comparable: boolean
+   visible: boolean
+   searchable: boolean
+   editable: boolean
+   multi_valued: boolean
+   default_value: varchar(255)
+   unit_id: uuid
+   metadata: jsonb
+   required: boolean
+   category_id: uuid
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class product {
+   business_id: uuid
+   catalog_id: uuid
+   name: varchar(255)
+   description: text
+   code: varchar(255)
+   product_type: varchar(50)
+   status: varchar(50)
+   metadata: jsonb
+   sku: varchar(255)
+   price: numeric(19,4)
+   unit_of_measure_id: uuid
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class product_attribute {
+   created_date: timestamp(6)
+   last_modified_date: timestamp(6)
+   product_id: uuid
+   attribute_name: varchar(255)
+   attribute_value: varchar(255)
+   created_by: varchar(255)
+   last_modified_by: varchar(255)
+   unit_of_measure: varchar(255)
+   id: uuid
+}
+class product_categories {
+   primary_category: boolean
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   product_id: uuid
+   category_id: uuid
+}
+class product_feature {
+   name: varchar(255)
+   description: text
+   code: varchar(255)
+   feature_type: varchar(50)
+   validation_pattern: varchar(255)
+   min_value: varchar(255)
+   max_value: varchar(255)
+   allowed_values: text
+   attribute_type: varchar(50)
+   comparable: boolean
+   visible: boolean
+   searchable: boolean
+   editable: boolean
+   multi_valued: boolean
+   default_value: varchar(255)
+   unit_id: uuid
+   metadata: jsonb
+   required: boolean
+   product_id: uuid
+   template_id: uuid
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class product_feature_value {
+   type: varchar(50)
+   product_id: uuid
+   attribute_values: jsonb
+   metadata: jsonb
+   status: varchar(50)
+   template_id: uuid
+   feature_id: uuid
+   unit: varchar(255)
+   unit_of_measure: varchar(255)
+   validation_message: varchar(255)
+   validation_pattern: varchar(255)
+   validation_status: varchar(50)
+   value: text
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class site {
+   business_id: uuid
+   name: varchar(255)
+   domain: varchar(255)
+   locale: varchar(10)
+   currency: varchar(3)
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class site_catalog {
+   is_default: boolean
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   site_id: uuid
+   catalog_id: uuid
+}
+class unit {
+   symbol: varchar(10)
+   code: varchar(255)
+   name: varchar(255)
+   type: varchar(100)
+   description: text
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+class unit_of_measure {
+   code: varchar(255)
+   name: varchar(255)
+   type: varchar(100)
+   active: boolean
+   display_symbol: varchar(10)
+   metadata: varchar(255)
+   description: text
+   unit_id: uuid
+   conversion_factor: numeric(19,4)
+   base_unit_id: uuid
+   created_by: varchar(255)
+   created_date: timestamp
+   last_modified_by: varchar(255)
+   last_modified_date: timestamp
+   id: uuid
+}
+
+catalog                    -[#595959,plain]-^  business                  : "business_id:id"
+catalog_category           -[#595959,plain]-^  catalog                   : "catalog_id:id"
+catalog_category           -[#595959,plain]-^  category                  : "category_id:id"
+category                   -[#595959,plain]-^  business                  : "business_id:id"
+category                   -[#595959,plain]-^  catalog                   : "catalog_id:id"
+category                   -[#595959,plain]-^  category                  : "parent_id:id"
+category_feature_template  -[#595959,plain]-^  category                  : "category_id:id"
+category_feature_template  -[#595959,plain]-^  unit                      : "unit_id:id"
+product                    -[#595959,plain]-^  business                  : "business_id:id"
+product                    -[#595959,plain]-^  catalog                   : "catalog_id:id"
+product                    -[#595959,plain]-^  unit_of_measure           : "unit_of_measure_id:id"
+product_attribute          -[#595959,plain]-^  product                   : "product_id:id"
+product_categories         -[#595959,plain]-^  category                  : "category_id:id"
+product_categories         -[#595959,plain]-^  product                   : "product_id:id"
+product_feature            -[#595959,plain]-^  category_feature_template : "template_id:id"
+product_feature            -[#595959,plain]-^  product                   : "product_id:id"
+product_feature            -[#595959,plain]-^  unit                      : "unit_id:id"
+product_feature_value      -[#595959,plain]-^  category_feature_template : "template_id:id"
+product_feature_value      -[#595959,plain]-^  product                   : "product_id:id"
+product_feature_value      -[#595959,plain]-^  product_feature           : "feature_id:id"
+site                       -[#595959,plain]-^  business                  : "business_id:id"
+site_catalog               -[#595959,plain]-^  catalog                   : "catalog_id:id"
+site_catalog               -[#595959,plain]-^  site                      : "site_id:id"
+unit_of_measure            -[#595959,plain]-^  unit                      : "unit_id:id"
+unit_of_measure            -[#595959,plain]-^  unit_of_measure           : "base_unit_id:id"
+@enduml

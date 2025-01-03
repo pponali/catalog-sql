@@ -30,6 +30,10 @@ public class BusinessDTO {
     @Size(max = 1000, message = "Description cannot exceed 1000 characters")
     private String description;
 
+    private String type;
+
+    private String status;
+
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
     private String createdBy;

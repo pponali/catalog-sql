@@ -26,6 +26,9 @@ public class CatalogDTO {
     @Size(min = 2, max = 50, message = "Catalog code must be between 2 and 50 characters")
     private String code;
 
+    private String type;
+    private String status;
+
     @NotBlank(message = "Catalog name is required")
     @Size(min = 2, max = 255, message = "Catalog name must be between 2 and 255 characters")
     private String name;

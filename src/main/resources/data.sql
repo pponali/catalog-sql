@@ -26,11 +26,11 @@ VALUES
 ('660e8400-e29b-41d4-a716-446655440005', 'ML', 'Milliliter', 'Volume in milliliters', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440007', 0.001, 'VOLUME', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert businesses
-INSERT INTO business (id, name, description, code, created_date, last_modified_date, created_by, last_modified_by)
+INSERT INTO business (id, type, status, name, description, code, created_date, last_modified_date, created_by, last_modified_by)
 VALUES
-('770e8400-e29b-41d4-a716-446655440000', 'Apple Inc.', 'Technology company that designs, manufactures, and markets consumer electronics, computer software, and online services.', 'APPLE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('770e8400-e29b-41d4-a716-446655440001', 'Samsung Electronics', 'Technology company that produces a wide range of consumer and industrial electronics, including smartphones, semiconductors, and home appliances.', 'SAMSUNG', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('770e8400-e29b-41d4-a716-446655440002', 'Sony Corporation', 'Technology company that designs, develops, manufactures, and sells electronic equipment, instruments, and devices for consumer, professional, and industrial markets.', 'SONY', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+('770e8400-e29b-41d4-a716-446655440000','Enterprise', 'ACTIVE','Apple Inc.', 'Technology company that designs, manufactures, and markets consumer electronics, computer software, and online services.', 'APPLE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440001','Enterprise', 'ACTIVE','Samsung Electronics', 'Technology company that produces a wide range of consumer and industrial electronics, including smartphones, semiconductors, and home appliances.', 'SAMSUNG', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440002','Enterprise', 'ACTIVE','Sony Corporation', 'Technology company that designs, develops, manufactures, and sells electronic equipment, instruments, and devices for consumer, professional, and industrial markets.', 'SONY', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert sites
 INSERT INTO site (id, business_id, name, domain, locale, currency, created_date, last_modified_date, created_by, last_modified_by)

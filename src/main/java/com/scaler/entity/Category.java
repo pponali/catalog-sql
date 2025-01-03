@@ -31,6 +31,8 @@ public class Category extends BaseEntity {
 
     private String description;
 
+    private String type;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id", nullable = false)
     private Business business;
