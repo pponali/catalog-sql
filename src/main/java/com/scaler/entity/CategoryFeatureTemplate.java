@@ -14,9 +14,10 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = "category")
-@EqualsAndHashCode(callSuper = true, exclude = "category")
-public class CategoryFeatureTemplate extends BaseEntity {
+@ToString(callSuper = true, exclude = {"category", "features"})
+@EqualsAndHashCode(callSuper = true, exclude = {"category", "features"})
+@DiscriminatorValue("CATEGORY")
+public class CategoryFeatureTemplate extends FeatureTemplate {
     
     @Column(name = "code", nullable = false)
     private String code;
@@ -27,7 +28,7 @@ public class CategoryFeatureTemplate extends BaseEntity {
     @Column
     private String description;
 
-    @Column
+    @Column(name = "attribute_type")
     private String attributeType;
 
     @Column(name = "validation_pattern")
@@ -63,7 +64,8 @@ public class CategoryFeatureTemplate extends BaseEntity {
 
     @Column
     private boolean filterable = true;
-    @Column
+
+    @Column(name = "inherited")
     private boolean inherited = false;
 
     @Column
@@ -78,14 +80,14 @@ public class CategoryFeatureTemplate extends BaseEntity {
     @Column
     private boolean comparable = true;
 
-    @Column
+    @Column(name = "mandatory")
     private boolean mandatory = false;
 
     @Column(name = "multi_valued")
     private boolean multiValued = false;
 
     @Column(columnDefinition = "jsonb")
-    private String metadata = "";
+    private String metadata = "{}";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)

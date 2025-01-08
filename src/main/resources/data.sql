@@ -67,55 +67,144 @@ VALUES
 ('ee0e8400-e29b-41d4-a716-446655440001', 'aa0e8400-e29b-41d4-a716-446655440002'),
 ('ee0e8400-e29b-41d4-a716-446655440002', 'aa0e8400-e29b-41d4-a716-446655440001');
 
--- Insert category feature templates for different types
-INSERT INTO category_feature_template (id, name, description, code, feature_type, validation_pattern, min_value, max_value, allowed_values, attribute_type, comparable, visible, searchable, editable, multi_valued, default_value, unit_id, required, category_id, created_date, last_modified_date, created_by, last_modified_by)
-VALUES
--- Numeric features
-('ff0e8400-e29b-41d4-a716-446655440001', 'Screen Size', 'Display size in inches', 'SCREEN_SIZE', 'NUMERIC', NULL, '4.0', '17.0', NULL, 'NUMERIC', true, true, true, true, false, '6.1', '660e8400-e29b-41d4-a716-446655440000', true, 'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('ff0e8400-e29b-41d4-a716-446655440002', 'Battery Capacity', 'Battery capacity in mAh', 'BATTERY_CAPACITY', 'NUMERIC', NULL, '2000', '10000', NULL, 'NUMERIC', true, true, true, true, false, '3000', '660e8400-e29b-41d4-a716-446655440001', true, 'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+-- First insert into feature_template (parent table)
+INSERT INTO feature_template (
+    id, template_type, name, description, feature_type, data_type, input_type,
+    validation_pattern, min_value, max_value, allowed_values, default_value,
+    unit_id, required, filterable, searchable, comparable, hidden, multi_valued,
+    visible, editable, created_date, last_modified_date, created_by, last_modified_by
+) VALUES
+-- Screen Size template
+('ff0e8400-e29b-41d4-a716-446655440001', 'CATEGORY', 'Screen Size', 'Display size in inches', 
+'NUMERIC', 'NUMBER', 'NUMBER', NULL, '4.0', '17.0', NULL, '6.1',
+'660e8400-e29b-41d4-a716-446655440000', true, true, true, true, false, false,
+true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
--- String features
-('ff0e8400-e29b-41d4-a716-446655440003', 'Model Number', 'Product model number', 'MODEL_NUMBER', 'STRING', '^[A-Z0-9]+$', NULL, NULL, NULL, 'STRING', false, true, true, true, false, NULL, NULL, true, 'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('ff0e8400-e29b-41d4-a716-446655440004', 'Color', 'Product color', 'COLOR', 'STRING', NULL, NULL, NULL, 'Red,Blue,Black,White', 'ENUM', true, true, true, true, false, 'Black', NULL, true, 'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+-- Battery Capacity template
+('ff0e8400-e29b-41d4-a716-446655440002', 'CATEGORY', 'Battery Capacity', 'Battery capacity in mAh',
+'NUMERIC', 'NUMBER', 'NUMBER', NULL, '2000', '10000', NULL, '3000',
+'660e8400-e29b-41d4-a716-446655440001', true, true, true, true, false, false,
+true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
--- Boolean features
-('ff0e8400-e29b-41d4-a716-446655440005', '5G Capable', '5G network support', '5G_CAPABLE', 'BOOLEAN', NULL, NULL, NULL, NULL, 'BOOLEAN', true, true, true, true, false, 'true', NULL, true, 'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('ff0e8400-e29b-41d4-a716-446655440006', 'Wireless Charging', 'Wireless charging support', 'WIRELESS_CHARGING', 'BOOLEAN', NULL, NULL, NULL, NULL, 'BOOLEAN', true, true, true, true, false, 'true', NULL, false, 'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+-- Model Number template
+('ff0e8400-e29b-41d4-a716-446655440003', 'CATEGORY', 'Model Number', 'Product model number',
+'STRING', 'STRING', 'TEXT', '^[A-Z0-9]+$', NULL, NULL, NULL, NULL,
+NULL, true, false, true, false, false, false,
+true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
--- JSON features
-('ff0e8400-e29b-41d4-a716-446655440007', 'Camera Specs', 'Camera specifications', 'CAMERA_SPECS', 'JSON', NULL, NULL, NULL, NULL, 'JSON', false, true, false, true, false, '{"main": "12MP", "ultra": "12MP", "front": "12MP"}', NULL, false, 'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('ff0e8400-e29b-41d4-a716-446655440008', 'Connectivity', 'Connectivity options', 'CONNECTIVITY', 'JSON', NULL, NULL, NULL, NULL, 'JSON', false, true, false, true, false, '{"wifi": "Wi-Fi 6", "bluetooth": "5.0", "nfc": true}', NULL, false, 'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+-- Color template
+('ff0e8400-e29b-41d4-a716-446655440004', 'CATEGORY', 'Color', 'Product color',
+'STRING', 'STRING', 'ENUM', NULL, NULL, NULL, '["Red","Blue","Black","White"]', 'Black',
+NULL, true, true, true, true, false, false,
+true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- 5G Capable template
+('ff0e8400-e29b-41d4-a716-446655440005', 'CATEGORY', '5G Capable', '5G network support',
+'BOOLEAN', 'BOOLEAN', 'BOOLEAN', NULL, NULL, NULL, NULL, 'true',
+NULL, true, true, true, true, false, false,
+true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Wireless Charging template
+('ff0e8400-e29b-41d4-a716-446655440006', 'CATEGORY', 'Wireless Charging', 'Wireless charging support',
+'BOOLEAN', 'BOOLEAN', 'BOOLEAN', NULL, NULL, NULL, NULL, 'true',
+NULL, false, true, true, true, false, false,
+true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Camera Specs template
+('ff0e8400-e29b-41d4-a716-446655440007', 'CATEGORY', 'Camera Specs', 'Camera specifications',
+'JSON', 'JSON', 'JSON', NULL, NULL, NULL, NULL, '{"main": "12MP", "ultra": "12MP", "front": "12MP"}',
+NULL, false, false, false, false, false, false,
+true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Connectivity template
+('ff0e8400-e29b-41d4-a716-446655440008', 'CATEGORY', 'Connectivity', 'Connectivity options',
+'JSON', 'JSON', 'JSON', NULL, NULL, NULL, NULL, '{"wifi": "Wi-Fi 6", "bluetooth": "5.0", "nfc": true}',
+NULL, false, false, false, false, false, false,
+true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Then insert into category_feature_template (child table)
+INSERT INTO category_feature_template (
+    id, code, attribute_type, inherited, mandatory, metadata, category_id,
+    created_date, last_modified_date, created_by, last_modified_by
+) VALUES
+-- Screen Size template category specifics
+('ff0e8400-e29b-41d4-a716-446655440001', 'SCREEN_SIZE', 'MEASUREMENT', false, true, '{}',
+'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Battery Capacity template category specifics
+('ff0e8400-e29b-41d4-a716-446655440002', 'BATTERY_CAPACITY', 'MEASUREMENT', false, true, '{}',
+'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Model Number template category specifics
+('ff0e8400-e29b-41d4-a716-446655440003', 'MODEL_NUMBER', 'STRING', false, true, '{}',
+'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Color template category specifics
+('ff0e8400-e29b-41d4-a716-446655440004', 'COLOR', 'ENUM', false, true, '{}',
+'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- 5G Capable template category specifics
+('ff0e8400-e29b-41d4-a716-446655440005', '5G_CAPABLE', 'BOOLEAN', false, true, '{}',
+'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Wireless Charging template category specifics
+('ff0e8400-e29b-41d4-a716-446655440006', 'WIRELESS_CHARGING', 'BOOLEAN', false, false, '{}',
+'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Camera Specs template category specifics
+('ff0e8400-e29b-41d4-a716-446655440007', 'CAMERA_SPECS', 'JSON', false, false, '{}',
+'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Connectivity template category specifics
+('ff0e8400-e29b-41d4-a716-446655440008', 'CONNECTIVITY', 'JSON', false, false, '{}',
+'aa0e8400-e29b-41d4-a716-446655440001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert product features based on templates
-INSERT INTO product_feature (id, product_id, template_id, name, description, code, feature_type, validation_pattern, min_value, max_value, allowed_values, attribute_type, comparable, visible, searchable, editable, multi_valued, default_value, unit_id, metadata, created_date, last_modified_date, created_by, last_modified_by)
+INSERT INTO product_feature (
+    id, product_id, template_id,
+    name, description,
+    code, feature_type, data_type, input_type,
+    validation_pattern, min_value, max_value, allowed_values,
+    attribute_type, comparable, visible, searchable, editable,
+    multi_valued, default_value, unit_of_measure_id, metadata, required,
+    created_date, last_modified_date, created_by, last_modified_by
+)
 SELECT 
     md5(random()::text || clock_timestamp()::text)::uuid,
     p.id,
-    t.id,
-    t.name,
-    t.description,
-    t.code,
-    t.feature_type,
-    t.validation_pattern,
-    t.min_value,
-    t.max_value,
-    t.allowed_values,
-    t.attribute_type,
-    t.comparable,
-    t.visible,
-    t.searchable,
-    t.editable,
-    t.multi_valued,
-    t.default_value,
-    t.unit_id,
-    '{}',
+    ft.id,
+    ft.name,
+    ft.description,
+    cft.code,
+    ft.feature_type,
+    ft.data_type,
+    ft.input_type,
+    ft.validation_pattern,
+    ft.min_value,
+    ft.max_value,
+    ft.allowed_values,
+    cft.attribute_type,
+    ft.comparable,
+    ft.visible,
+    ft.searchable,
+    ft.editable,
+    ft.multi_valued,
+    ft.default_value,
+    ft.unit_id,
+    cft.metadata,
+    ft.required,
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
     'system',
     'system'
 FROM product p
-CROSS JOIN category_feature_template t
-WHERE p.id IN ('ee0e8400-e29b-41d4-a716-446655440000', 'ee0e8400-e29b-41d4-a716-446655440001', 'ee0e8400-e29b-41d4-a716-446655440002');
+CROSS JOIN feature_template ft
+JOIN category_feature_template cft ON ft.id = cft.id
+WHERE p.id IN (
+    'ee0e8400-e29b-41d4-a716-446655440000',
+    'ee0e8400-e29b-41d4-a716-446655440001',
+    'ee0e8400-e29b-41d4-a716-446655440002'
+);
 
 -- Insert feature values for iPhone 12
 INSERT INTO product_feature_value (id, product_id, feature_id, type, value, created_date, last_modified_date, created_by, last_modified_by)

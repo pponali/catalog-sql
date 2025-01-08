@@ -47,8 +47,8 @@ public class ProductFeature extends BaseEntity {
     private String featureType = "STRING";
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unit_id")
-    private UnitOfMeasure unit;
+    @JoinColumn(name = "unit_of_measure_id")
+    private UnitOfMeasure unitOfMeasure;
 
     @Column
     private boolean visible;

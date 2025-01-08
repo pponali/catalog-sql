@@ -25,33 +25,70 @@ VALUES
 INSERT INTO category (id, business_id, code, name, description, type, status, catalog_id, parent_id, created_date, last_modified_date, created_by, last_modified_by)
 VALUES
 ('770e8400-e29b-41d4-a716-446655440007', '770e8400-e29b-41d4-a716-446655440005','Clothing','Clothing', 'All clothing items', 'MAIN', 'ACTIVE', '770e8400-e29b-41d4-a716-446655440006', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('770e8400-e29b-41d4-a716-446655440008', '770e8400-e29b-41d4-a716-446655440005','Accessories','Accessories', 'Fashion accessories', 'MAIN', 'ACTIVE', '770e8400-e29b-41d4-a716-446655440006', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440008', '770e8400-e29b-41d4-a716-446655440005','Accessories','Accessories', 'All accessories', 'MAIN', 'ACTIVE', '770e8400-e29b-41d4-a716-446655440006', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 ('770e8400-e29b-41d4-a716-446655440009', '770e8400-e29b-41d4-a716-446655440005','Dresses','Dresses', 'Women''s dresses', 'SUB', 'ACTIVE', '770e8400-e29b-41d4-a716-446655440006', '770e8400-e29b-41d4-a716-446655440007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 ('770e8400-e29b-41d4-a716-446655440010', '770e8400-e29b-41d4-a716-446655440005','Bags','Bags', 'Fashion bags', 'SUB', 'ACTIVE', '770e8400-e29b-41d4-a716-446655440006', '770e8400-e29b-41d4-a716-446655440008', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
--- Insert base feature templates
-INSERT INTO feature_template (id, name, description, feature_type, data_type, input_type, required, searchable, filterable, comparable, hidden, default_value, unit_id, created_date, last_modified_date, created_by, last_modified_by)
+-- Insert feature templates
+INSERT INTO feature_template (
+    id, 
+    template_type,
+    name, 
+    description, 
+    feature_type, 
+    data_type, 
+    input_type, 
+    validation_pattern, 
+    min_value, 
+    max_value, 
+    allowed_values, 
+    default_value, 
+    required,
+    filterable,
+    hidden,
+    multi_valued,
+    searchable,
+    comparable,
+    visible,
+    editable,
+    created_date, 
+    last_modified_date, 
+    created_by, 
+    last_modified_by
+)
 VALUES
 -- Size template
-('770e8400-e29b-41d4-a716-446655440011', 'Size', 'Generic size feature', 'SIZE', 'STRING', 'ENUM', true, true, true, true, false, 'M', '770e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440015', 'CATEGORY', 'Size', 'Clothing size template', 'SIZE', 'STRING', 'ENUM', NULL, NULL, NULL, '["XS","S","M","L","XL"]', 'M', false, true, false, false, true, true, true, true,  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 -- Color template
-('770e8400-e29b-41d4-a716-446655440012', 'Color', 'Generic color feature', 'COLOR', 'STRING', 'ENUM', true, true, true, true, false, 'Black', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440016', 'CATEGORY', 'Color', 'Clothing color template', 'COLOR', 'STRING', 'ENUM', NULL, NULL, NULL, '["Black","White","Red","Blue","Green"]', 'Black', false, true, false, false, true, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 -- Material template
-('770e8400-e29b-41d4-a716-446655440013', 'Material', 'Generic material feature', 'MATERIAL', 'STRING', 'ENUM', true, true, true, true, false, 'Cotton', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440017', 'CATEGORY', 'Material', 'Clothing material template', 'MATERIAL', 'STRING', 'ENUM', NULL, NULL, NULL, '["Cotton","Silk","Wool","Polyester"]', 'Cotton', false, true, false, false, true, true, true, true,  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 -- Dimensions template
-('770e8400-e29b-41d4-a716-446655440014', 'Dimensions', 'Generic dimensions feature', 'DIMENSIONS', 'STRING', 'TEXT', true, false, false, false, false, NULL, '770e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+('770e8400-e29b-41d4-a716-446655440018', 'CATEGORY', 'Dimensions', 'Accessory dimensions template', 'DIMENSIONS', 'STRING', 'TEXT', NULL, NULL, NULL, NULL, NULL, false, true, false, false, true, true, true, true,  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert category feature templates
-INSERT INTO category_feature_template (id, name, description, code, feature_type, template_id, validation_pattern, min_value, max_value, allowed_values, attribute_type, comparable, visible, searchable, editable, multi_valued, default_value, unit_id, required, category_id, created_date, last_modified_date, created_by, last_modified_by)
+INSERT INTO category_feature_template (
+    id,
+    code,
+    attribute_type,
+    inherited,
+    mandatory,
+    metadata,
+    category_id,
+    created_date,
+    last_modified_date,
+    created_by,
+    last_modified_by
+)
 VALUES
 -- Size template for clothing
-('770e8400-e29b-41d4-a716-446655440015', 'Clothing Size', 'Clothing size specification', 'SIZE_CLOTHING', 'SIZE', '770e8400-e29b-41d4-a716-446655440011', NULL, NULL, NULL, 'XS,S,M,L,XL', 'ENUM', true, true, true, true, false, 'M', '770e8400-e29b-41d4-a716-446655440000', true, '770e8400-e29b-41d4-a716-446655440007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440015', 'category_feature_template1','ENUM', false, true, '{}', '770e8400-e29b-41d4-a716-446655440007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 -- Color template for clothing
-('770e8400-e29b-41d4-a716-446655440016', 'Clothing Color', 'Product color specification', 'COLOR_CLOTHING', 'COLOR', '770e8400-e29b-41d4-a716-446655440012', NULL, NULL, NULL, 'White,Black,Red,Blue,Green', 'ENUM', true, true, true, true, false, 'Black', NULL, true, '770e8400-e29b-41d4-a716-446655440007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440016','category_feature_template2', 'ENUM', false, true, '{}', '770e8400-e29b-41d4-a716-446655440007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 -- Material template for clothing
-('770e8400-e29b-41d4-a716-446655440017', 'Clothing Material', 'Fabric material specification', 'MATERIAL_CLOTHING', 'MATERIAL', '770e8400-e29b-41d4-a716-446655440013', NULL, NULL, NULL, 'Cotton,Silk,Polyester,Leather', 'ENUM', true, true, true, true, false, 'Cotton', NULL, true, '770e8400-e29b-41d4-a716-446655440007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440017', 'category_feature_template3','ENUM', false, true, '{}', '770e8400-e29b-41d4-a716-446655440007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 -- Dimensions template for accessories
-('770e8400-e29b-41d4-a716-446655440018', 'Accessory Dimensions', 'Product dimensions specification', 'DIMENSIONS_ACCESSORY', 'DIMENSIONS', '770e8400-e29b-41d4-a716-446655440014', NULL, NULL, NULL, NULL, 'TEXT', true, true, false, true, false, NULL, '770e8400-e29b-41d4-a716-446655440002', true, '770e8400-e29b-41d4-a716-446655440008', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+('770e8400-e29b-41d4-a716-446655440018','category_feature_template4', 'TEXT', false, true, '{}', '770e8400-e29b-41d4-a716-446655440008', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert products
 INSERT INTO product (id, name, description, code, product_type, status, business_id, catalog_id, created_date, last_modified_date, created_by, last_modified_by)
@@ -60,16 +97,16 @@ VALUES
 ('770e8400-e29b-41d4-a716-446655440020', 'Leather Tote Bag', 'Elegant leather tote bag', 'BAG001', 'ACCESSORY', 'ACTIVE', '770e8400-e29b-41d4-a716-446655440005', '770e8400-e29b-41d4-a716-446655440006', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert product features
-INSERT INTO product_feature (id, code, name, description, feature_type,  product_id, template_id, unit_id, created_date, last_modified_date, created_by, last_modified_by)
+INSERT INTO product_feature (id,data_type,input_type,code, name, description, feature_type,  product_id, template_id, unit_of_measure_id, created_date, last_modified_date, created_by, last_modified_by)
 VALUES
 -- Features for Summer Floral Dress
-('770e8400-e29b-41d4-a716-446655440021', 'Size','Size', 'Dress size', 'SIZE',  '770e8400-e29b-41d4-a716-446655440019', '770e8400-e29b-41d4-a716-446655440015', '770e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('770e8400-e29b-41d4-a716-446655440022', 'Color','Color', 'Dress color', 'COLOR', '770e8400-e29b-41d4-a716-446655440019', '770e8400-e29b-41d4-a716-446655440016', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('770e8400-e29b-41d4-a716-446655440023', 'Material','Material', 'Dress material', 'MATERIAL', '770e8400-e29b-41d4-a716-446655440019', '770e8400-e29b-41d4-a716-446655440017', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440021', 'STRING','TEXT', 'Size','Size','Size', 'SIZE',  '770e8400-e29b-41d4-a716-446655440019', '770e8400-e29b-41d4-a716-446655440015', '770e8400-e29b-41d4-a716-446655440003', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440022', 'STRING','TEXT','Color','Color','Color', 'COLOR', '770e8400-e29b-41d4-a716-446655440019', '770e8400-e29b-41d4-a716-446655440016', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440023', 'STRING','TEXT','Material','Material','Material', 'MATERIAL', '770e8400-e29b-41d4-a716-446655440019', '770e8400-e29b-41d4-a716-446655440017', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 -- Features for Leather Tote Bag
-('770e8400-e29b-41d4-a716-446655440024', 'Color','Color', 'Bag color', 'COLOR',  '770e8400-e29b-41d4-a716-446655440020', '770e8400-e29b-41d4-a716-446655440016', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('770e8400-e29b-41d4-a716-446655440025', 'Material','Material', 'Bag material', 'MATERIAL', '770e8400-e29b-41d4-a716-446655440020', '770e8400-e29b-41d4-a716-446655440017', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('770e8400-e29b-41d4-a716-446655440026', 'Dimensions','Dimensions', 'Bag dimensions', 'DIMENSIONS', '770e8400-e29b-41d4-a716-446655440020', '770e8400-e29b-41d4-a716-446655440018', '770e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+('770e8400-e29b-41d4-a716-446655440024', 'STRING','TEXT','Color1','Color','Color', 'COLOR',  '770e8400-e29b-41d4-a716-446655440020', '770e8400-e29b-41d4-a716-446655440016', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440025', 'STRING','TEXT','Material1','Material','Material', 'MATERIAL', '770e8400-e29b-41d4-a716-446655440020', '770e8400-e29b-41d4-a716-446655440017', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+('770e8400-e29b-41d4-a716-446655440026', 'STRING','TEXT','Dimensions1','Dimensions','Dimensions', 'DIMENSIONS', '770e8400-e29b-41d4-a716-446655440020', '770e8400-e29b-41d4-a716-446655440018', '770e8400-e29b-41d4-a716-446655440004', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert product feature values
 INSERT INTO product_feature_value (id, feature_id, value, created_date, last_modified_date, created_by, last_modified_by)

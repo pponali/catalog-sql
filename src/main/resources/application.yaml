@@ -29,7 +29,7 @@ spring:
       data-locations: 
         - classpath:data.sql
         - classpath:data-1.sql
-        - classpath:data-2.sql
+#        - classpath:data-2.sql
       schema-locations:
         - classpath:schema.sql
       continue-on-error: false

@@ -4,19 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "feature_template")
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "template_type")
 @EqualsAndHashCode(callSuper = true)
 public class FeatureTemplate extends BaseEntity {
 
-    @Column(name = "unit_id")
-    private UUID unitId;
+    @Column(name = "template_type", insertable = false, updatable = false)
+    private String templateType;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -25,13 +25,13 @@ public class FeatureTemplate extends BaseEntity {
     private String description;
 
     @Column(name = "feature_type", nullable = false)
-    private String featuretype;
+    private String featureType;
 
     @Column(name = "data_type", nullable = false)
-    private String datatype;
+    private String dataType;
 
     @Column(name = "input_type", nullable = false)
-    private String inputtype;
+    private String inputType;
 
     @Column(name = "validation_pattern")
     private String validationPattern;
@@ -48,23 +48,27 @@ public class FeatureTemplate extends BaseEntity {
     @Column(name = "default_value")
     private String defaultValue;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unit_id")
+    private UnitOfMeasure unit;
+
     @Column(name = "required")
     private Boolean required = false;
 
     @Column(name = "filterable")
-    private Boolean filterable;
+    private Boolean filterable = true;
 
     @Column(name = "hidden")
-    private Boolean hidden;
+    private Boolean hidden = false;
 
     @Column(name = "multi_valued")
     private Boolean multiValued = false;
 
     @Column(name = "searchable")
-    private Boolean searchable = false;
+    private Boolean searchable = true;
 
     @Column(name = "comparable")
-    private Boolean comparable = false;
+    private Boolean comparable = true;
 
     @Column(name = "visible")
     private Boolean visible = true;

@@ -49,7 +49,7 @@ public class ProductMappingService {
             .featureTemplateId(feature.getTemplate().getId())
             .featureId(feature.getId())
             .type(feature.getFeatureType())
-            .unit(feature.getUnit() != null ? feature.getUnit().getCode() : null)
+            .unit(feature.getUnitOfMeasure() != null ? feature.getUnitOfMeasure().getCode() : null)
             .status("ACTIVE")
             .createdBy("system")
             .lastModifiedBy("system")

@@ -1,5 +1,6 @@
 package com.scaler.dto;
 
+import com.scaler.entity.UnitOfMeasure;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,24 +12,27 @@ import java.util.UUID;
 @Builder
 public class FeatureTemplateDTO {
     private UUID id;
+    private String templateType;
     private String name;
-    private UUID unitId;
     private String description;
-    private String featuretype;
-    private String datatype;
+    private String featureType;
+    private String dataType;
+    private String inputType;
     private String validationPattern;
     private String minValue;
     private String maxValue;
     private String allowedValues;
     private String defaultValue;
-    private Boolean required;
-    private Boolean multiValued;
-    private Boolean searchable;
-    private Boolean filterable;
-    private Boolean hidden;
-    private Boolean comparable;
-    private Boolean visible;
-    private Boolean editable;
+    private UUID unitId;
+    private UnitOfMeasure unit;
+    private Boolean required = false;
+    private Boolean filterable = true;
+    private Boolean hidden = false;
+    private Boolean multiValued = false;
+    private Boolean searchable = true;
+    private Boolean comparable = true;
+    private Boolean visible = true;
+    private Boolean editable = true;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
     private String createdBy;

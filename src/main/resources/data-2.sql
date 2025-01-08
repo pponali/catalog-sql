@@ -64,28 +64,29 @@ VALUES
 ('990e8400-e29b-41d4-a716-446655440017', '990e8400-e29b-41d4-a716-446655440010', '990e8400-e29b-41d4-a716-446655440013', NULL, 'Premium Equipment', 'PREMIUM_EQUIP', 'MAIN', 'ACTIVE', 'High-end sports equipment', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 ('990e8400-e29b-41d4-a716-446655440018', '990e8400-e29b-41d4-a716-446655440010', '990e8400-e29b-41d4-a716-446655440013', '990e8400-e29b-41d4-a716-446655440017', 'Golf Equipment', 'PREMIUM_GOLF', 'SUB', 'ACTIVE', 'Premium golf equipment', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
--- Insert category feature templates
-INSERT INTO category_feature_template (
+-- Insert feature templates
+INSERT INTO feature_template (
     id,
-    code,
+    template_type,
     name,
     description,
     feature_type,
     data_type,
     input_type,
-    required,
-    searchable,
-    filterable,
-    comparable,
-    hidden,
-    default_value,
-    unit_id,
-    category_id,
-    attribute_type,
     validation_pattern,
     min_value,
     max_value,
     allowed_values,
+    default_value,
+    unit_id,
+    required,
+    filterable,
+    hidden,
+    multi_valued,
+    searchable,
+    comparable,
+    visible,
+    editable,
     created_date,
     last_modified_date,
     created_by,
@@ -93,44 +94,43 @@ INSERT INTO category_feature_template (
 )
 VALUES
 -- Size template
-('770e8400-e29b-41d4-a716-446655440020', 'SIZE_TEMPLATE', 'Size', 'Product size', 'SIZE', 'ENUM', 'SELECT', true, true, true, true, false, NULL, '990e8400-e29b-41d4-a716-446655440001', '880e8400-e29b-41d4-a716-446655440016', 'MEASUREMENT', NULL, '32', '44', '["32","34","36","38","40","42","44"]', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
--- Color template
-('770e8400-e29b-41d4-a716-446655440021', 'COLOR_TEMPLATE', 'Color', 'Product color', 'COLOR', 'ENUM', 'SELECT', true, true, true, true, false, NULL, NULL, '880e8400-e29b-41d4-a716-446655440016', 'ENUM', NULL, NULL, NULL, '["Red","Black","Blue","White"]', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
--- Material template
-('770e8400-e29b-41d4-a716-446655440022', 'MATERIAL_TEMPLATE', 'Material', 'Product material', 'MATERIAL', 'ENUM', 'SELECT', true, true, true, true, false, NULL, NULL, '880e8400-e29b-41d4-a716-446655440016', 'ENUM', NULL, NULL, NULL, '["Cotton","Silk","Wool","Polyester"]', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
--- Weight template
-('770e8400-e29b-41d4-a716-446655440023', 'WEIGHT_TEMPLATE', 'Weight', 'Product weight', 'WEIGHT', 'NUMBER', 'NUMBER', true, true, true, true, false, NULL, '990e8400-e29b-41d4-a716-446655440004', '880e8400-e29b-41d4-a716-446655440016', 'MEASUREMENT', NULL, '0.1', '100.0', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+('770e8400-e29b-41d4-a716-446655440020', 'CATEGORY', 'Size', 'Size specification', 'SIZE', 'STRING', 'ENUM', NULL, NULL, NULL, '["XS","S","M","L","XL"]', 'M', NULL, true, true, false, false, true, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
--- Insert feature templates
-INSERT INTO feature_template (
+-- Color template
+('770e8400-e29b-41d4-a716-446655440021', 'CATEGORY', 'Color', 'Color specification', 'COLOR', 'STRING', 'ENUM', NULL, NULL, NULL, '["Black","White","Red","Blue","Green"]', 'Black', NULL, true, true, false, false, true, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Material template
+('770e8400-e29b-41d4-a716-446655440022', 'CATEGORY', 'Material', 'Material specification', 'MATERIAL', 'STRING', 'ENUM', NULL, NULL, NULL, '["Cotton","Silk","Wool","Polyester"]', 'Cotton', NULL, true, true, false, false, true, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Weight template
+('770e8400-e29b-41d4-a716-446655440023', 'CATEGORY', 'Weight', 'Weight specification', 'WEIGHT', 'NUMBER', 'NUMBER', NULL, '0.1', '100.0', NULL, '0.5', '770e8400-e29b-41d4-a716-446655440002', true, true, false, false, true, true, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+
+-- Insert category feature templates
+INSERT INTO category_feature_template (
     id,
-    name,
-    description,
-    feature_type,
-    data_type,
-    input_type,
-    required,
-    searchable,
-    filterable,
-    comparable,
-    hidden,
-    default_value,
-    unit_id,
+    code,
+    attribute_type,
+    inherited,
+    mandatory,
+    metadata,
+    category_id,
     created_date,
     last_modified_date,
     created_by,
     last_modified_by
 )
 VALUES
--- Common templates
-('880e8400-e29b-41d4-a716-446655440023', 'Size', 'Size specification', 'SIZE', 'STRING', 'ENUM', true, true, true, true, false, 'M', '770e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('880e8400-e29b-41d4-a716-446655440024', 'Color', 'Color specification', 'COLOR', 'STRING', 'ENUM', true, true, true, true, false, 'Black', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('880e8400-e29b-41d4-a716-446655440025', 'Material', 'Material specification', 'MATERIAL', 'STRING', 'ENUM', true, true, true, true, false, 'Cotton', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('880e8400-e29b-41d4-a716-446655440026', 'Dimensions', 'Product dimensions', 'DIMENSIONS', 'STRING', 'TEXT', true, false, false, false, false, NULL, '770e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('880e8400-e29b-41d4-a716-446655440027', 'Weight', 'Product weight', 'WEIGHT', 'DECIMAL', 'NUMBER', false, false, true, true, false, NULL, '770e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('990e8400-e29b-41d4-a716-446655440019', 'Premium Size', 'Premium product sizing', 'SIZE', 'STRING', 'ENUM', true, true, true, true, false, '40', '770e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('990e8400-e29b-41d4-a716-446655440020', 'Premium Material', 'Premium material specification', 'MATERIAL', 'STRING', 'ENUM', true, true, true, true, false, 'Cashmere', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
-('990e8400-e29b-41d4-a716-446655440021', 'Premium Weight', 'Product weight specification', 'WEIGHT', 'DECIMAL', 'NUMBER', true, true, true, true, false, '0.5', '770e8400-e29b-41d4-a716-446655440002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
+-- Size template category specifics
+('770e8400-e29b-41d4-a716-446655440020', 'SIZE_TEMPLATE', 'MEASUREMENT', false, true, '{}', '880e8400-e29b-41d4-a716-446655440016', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Color template category specifics
+('770e8400-e29b-41d4-a716-446655440021', 'COLOR_TEMPLATE', 'ENUM', false, true, '{}', '880e8400-e29b-41d4-a716-446655440016', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Material template category specifics
+('770e8400-e29b-41d4-a716-446655440022', 'MATERIAL_TEMPLATE', 'ENUM', false, true, '{}', '880e8400-e29b-41d4-a716-446655440016', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
+
+-- Weight template category specifics
+('770e8400-e29b-41d4-a716-446655440023', 'WEIGHT_TEMPLATE', 'MEASUREMENT', false, true, '{}', '880e8400-e29b-41d4-a716-446655440016', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert products
 INSERT INTO product (id, name, description, code, product_type, status, business_id, catalog_id, created_date, last_modified_date, created_by, last_modified_by)
@@ -157,6 +157,8 @@ INSERT INTO product_feature (
     product_id,
     template_id,
     feature_type,
+    data_type,
+    input_type,
     attribute_type,
     validation_pattern,
     min_value, 
@@ -179,59 +181,59 @@ INSERT INTO product_feature (
 VALUES
 -- Features for Silk Evening Gown (product_id: 880e8400-e29b-41d4-a716-446655440034)
 ('880e8400-e29b-41d4-a716-446655440038', 'DRESS_SIZE_001', 'Size', 'Dress size', 
- '880e8400-e29b-41d4-a716-446655440034', '770e8400-e29b-41d4-a716-446655440020', 'SIZE',
- 'MEASUREMENT', NULL, '32', '44', '["32","34","36","38","40","42","44"]', '36',
+ '880e8400-e29b-41d4-a716-446655440034', '770e8400-e29b-41d4-a716-446655440015', 'SIZE',
+ 'STRING', 'ENUM', 'MEASUREMENT', NULL, '32', '44', '["32","34","36","38","40","42","44"]', '36',
  true, true, true, true, false, false, '990e8400-e29b-41d4-a716-446655440001', NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
 ('880e8400-e29b-41d4-a716-446655440039', 'DRESS_COLOR_001', 'Color', 'Dress color',
- '880e8400-e29b-41d4-a716-446655440034', '770e8400-e29b-41d4-a716-446655440021', 'COLOR',
- 'ENUM', NULL, NULL, NULL, '["Red","Black","Blue","White"]', 'Black',
+ '880e8400-e29b-41d4-a716-446655440034', '770e8400-e29b-41d4-a716-446655440016', 'COLOR',
+ 'STRING', 'ENUM', 'ENUM', NULL, NULL, NULL, '["Red","Black","Blue","White"]', 'Black',
  true, true, true, true, false, false, NULL, NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
 ('880e8400-e29b-41d4-a716-446655440040', 'DRESS_MATERIAL_001', 'Material', 'Dress material',
- '880e8400-e29b-41d4-a716-446655440034', '770e8400-e29b-41d4-a716-446655440022', 'MATERIAL',
- 'ENUM', NULL, NULL, NULL, '["Cotton","Silk","Wool","Polyester"]', 'Silk',
+ '880e8400-e29b-41d4-a716-446655440034', '770e8400-e29b-41d4-a716-446655440017', 'MATERIAL',
+ 'STRING', 'ENUM', 'ENUM', NULL, NULL, NULL, '["Cotton","Silk","Wool","Polyester"]', 'Silk',
  true, true, true, true, false, false, NULL, NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
 -- Features for Pro Runner Jacket (product_id: 880e8400-e29b-41d4-a716-446655440036)
 ('880e8400-e29b-41d4-a716-446655440041', 'RUN_SIZE_001', 'Size', 'Jacket size',
- '880e8400-e29b-41d4-a716-446655440036', '880e8400-e29b-41d4-a716-446655440023', 'SIZE',
- 'ENUM', NULL, 'XS', 'XXL', '["XS","S","M","L","XL","XXL"]', 'M',
+ '880e8400-e29b-41d4-a716-446655440036', '770e8400-e29b-41d4-a716-446655440015', 'SIZE',
+ 'STRING', 'ENUM', 'ENUM', NULL, 'XS', 'XXL', '["XS","S","M","L","XL","XXL"]', 'M',
  true, true, true, true, false, false, NULL, NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
 ('880e8400-e29b-41d4-a716-446655440042', 'RUN_COLOR_001', 'Color', 'Jacket color',
- '880e8400-e29b-41d4-a716-446655440036', '880e8400-e29b-41d4-a716-446655440024', 'COLOR',
- 'ENUM', NULL, NULL, NULL, '["Black","Blue","Neon Yellow","Grey"]', 'Black',
+ '880e8400-e29b-41d4-a716-446655440036', '770e8400-e29b-41d4-a716-446655440016', 'COLOR',
+ 'STRING', 'ENUM', 'ENUM', NULL, NULL, NULL, '["Black","Blue","Neon Yellow","Grey"]', 'Black',
  true, true, true, true, false, false, NULL, NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
 ('880e8400-e29b-41d4-a716-446655440043', 'RUN_MATERIAL_001', 'Material', 'Jacket material',
- '880e8400-e29b-41d4-a716-446655440036', '880e8400-e29b-41d4-a716-446655440025', 'MATERIAL',
- 'ENUM', NULL, NULL, NULL, '["Polyester","Spandex","Mesh"]', 'Polyester',
+ '880e8400-e29b-41d4-a716-446655440036', '770e8400-e29b-41d4-a716-446655440017', 'MATERIAL',
+ 'STRING', 'ENUM', 'ENUM', NULL, NULL, NULL, '["Polyester","Spandex","Mesh"]', 'Polyester',
  true, true, true, true, false, false, NULL, NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
 -- Features for Cashmere Suit (product_id: 990e8400-e29b-41d4-a716-446655440025)
 ('990e8400-e29b-41d4-a716-446655440028', 'SUIT_SIZE_001', 'Size', 'Suit size',
- '990e8400-e29b-41d4-a716-446655440025', '990e8400-e29b-41d4-a716-446655440019', 'SIZE',
- 'MEASUREMENT', NULL, '36', '48', '["36","38","40","42","44","46","48"]', '40',
+ '990e8400-e29b-41d4-a716-446655440025', '770e8400-e29b-41d4-a716-446655440015', 'SIZE',
+ 'STRING', 'ENUM', 'MEASUREMENT', NULL, '36', '48', '["36","38","40","42","44","46","48"]', '40',
  true, true, true, true, false, false, NULL, NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
 ('990e8400-e29b-41d4-a716-446655440029', 'SUIT_MATERIAL_001', 'Material', 'Suit material',
- '990e8400-e29b-41d4-a716-446655440025', '990e8400-e29b-41d4-a716-446655440020', 'MATERIAL',
- 'ENUM', NULL, NULL, NULL, '["Wool","Cashmere","Silk","Linen"]', 'Cashmere',
+ '990e8400-e29b-41d4-a716-446655440025', '770e8400-e29b-41d4-a716-446655440017', 'MATERIAL',
+ 'STRING', 'ENUM', 'ENUM', NULL, NULL, NULL, '["Wool","Cashmere","Silk","Linen"]', 'Cashmere',
  true, true, true, true, false, false, NULL, NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 
 -- Features for Pro Golf Driver (product_id: 990e8400-e29b-41d4-a716-446655440027)
 ('990e8400-e29b-41d4-a716-446655440030', 'GOLF_WEIGHT_001', 'Weight', 'Club weight',
- '990e8400-e29b-41d4-a716-446655440027', '990e8400-e29b-41d4-a716-446655440021', 'WEIGHT',
- 'MEASUREMENT', NULL, '0.2', '0.5', NULL, '13',
+ '990e8400-e29b-41d4-a716-446655440027', '770e8400-e29b-41d4-a716-446655440018', 'WEIGHT',
+ 'STRING', 'TEXT', 'MEASUREMENT', NULL, '0.2', '0.5', NULL, '13',
  true, true, true, true, false, false, '990e8400-e29b-41d4-a716-446655440004', NULL,
  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 

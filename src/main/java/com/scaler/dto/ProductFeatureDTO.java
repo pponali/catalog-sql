@@ -48,7 +48,7 @@ public class ProductFeatureDTO {
     @NotBlank(message = "Feature type is required")
     private String featureType;
 
-    private UUID unitId;
+    private UUID unitOfMeasureId;
 
     /**
      * Whether the feature is visible or not
