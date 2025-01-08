@@ -44,7 +44,7 @@ public class ProductFeature extends BaseEntity {
     private String defaultValue;
 
     @Column(name = "feature_type")
-    private String featureType;
+    private String featureType = "STRING";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_id")

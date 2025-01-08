@@ -2,7 +2,7 @@ spring:
   application:
     name: catalog-sqldb-poc
   datasource:
-    url: jdbc:postgresql://localhost:5432/catalog_final
+    url: jdbc:postgresql://localhost:5432/catalog_final_database
     username: myuser
     password: mypassword
     driver-class-name: org.postgresql.Driver
@@ -29,6 +29,7 @@ spring:
       data-locations: 
         - classpath:data.sql
         - classpath:data-1.sql
+        - classpath:data-2.sql
       schema-locations:
         - classpath:schema.sql
       continue-on-error: false
