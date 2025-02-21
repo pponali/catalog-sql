@@ -15,8 +15,8 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"catalog", "categories", "features", "business", "unitOfMeasure"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "categories", "features", "business", "unitOfMeasure"})
+@ToString(callSuper = true, exclude = {"catalog", "categories", "features", "merchant", "unitOfMeasure", "channels", "lineOfBusiness"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "categories", "features", "merchant", "unitOfMeasure", "channels", "lineOfBusiness"})
 public class Product extends BaseEntity {
     @Column(name = "code", nullable = false)
     private String code;
@@ -57,8 +57,8 @@ public class Product extends BaseEntity {
     private Set<ProductFeature> features = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "business_id", nullable = false)
-    private Business business;
+    @JoinColumn(name = "merchant_id", nullable = false)
+    private Merchant merchant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "catalog_id")
@@ -67,6 +67,18 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_of_measure_id")
     private UnitOfMeasure unitOfMeasure;
+    
+    @ManyToMany
+    @JoinTable(
+        name = "product_channels",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "channel_id")
+    )
+    private Set<Channel> channels = new HashSet<>();
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "line_of_business_id", nullable = false)
+    private LineOfBusiness lineOfBusiness;
 
     public void addCategory(Category category) {
         categories.add(category);
@@ -86,5 +98,15 @@ public class Product extends BaseEntity {
     public void removeFeature(ProductFeature feature) {
         features.remove(feature);
         feature.setProduct(null);
+    }
+    
+    public void addChannel(Channel channel) {
+        channels.add(channel);
+        channel.getProducts().add(this);
+    }
+
+    public void removeChannel(Channel channel) {
+        channels.remove(channel);
+        channel.getProducts().remove(this);
     }
 }

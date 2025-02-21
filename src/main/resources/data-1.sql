@@ -11,8 +11,8 @@ VALUES
 ('770e8400-e29b-41d4-a716-446655440003', 'SIZE_EU', 'EU Size', 'European size standard', '770e8400-e29b-41d4-a716-446655440000', 'SIZE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 ('770e8400-e29b-41d4-a716-446655440004', 'SIZE_US', 'US Size', 'US size standard', '770e8400-e29b-41d4-a716-446655440001', 'SIZE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
--- Insert business for fashion retail
-INSERT INTO business (id, code, name, description, type, status, created_date, last_modified_date, created_by, last_modified_by)
+-- Insert Merchant for fashion retail
+INSERT INTO Merchant (id, code, name, description, type, status, created_date, last_modified_date, created_by, last_modified_by)
 VALUES
 ('770e8400-e29b-41d4-a716-446655440005', 'FashionNLifeStyle','Fashion Retail Co', 'Fashion and accessories retail business', 'RETAIL', 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 

@@ -36,7 +36,7 @@ public class CatalogDTO {
     @Size(max = 1000, message = "Description cannot exceed 1000 characters")
     private String description;
 
-    @NotNull(message = "Business ID is required")
+    @NotNull(message = "Merchant ID is required")
     private UUID businessId;
 
     private LocalDateTime createdAt;

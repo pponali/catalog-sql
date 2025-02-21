@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: channel-service
+    
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/channeldb
+      auto-index-creation: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: channel-service-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+server:
+  port: 8082
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      catalogService:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 1000
+        slidingWindowSize: 2
+      vendorService:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 1000
+        slidingWindowSize: 2
+  retry:
+    instances:
+      catalogService:
+        maxAttempts: 3
+        waitDuration: 100
+      vendorService:
+        maxAttempts: 3
+        waitDuration: 100
+
+logging:
+  level:
+    com.nosql.poc.channel: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.data.mongodb: INFO

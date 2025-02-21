@@ -32,7 +32,7 @@
     },
     {
       "code": "BUSINESS_LAPTOPS",
-      "name": "Business Laptops",
+      "name": "Merchant Laptops",
       "description": "Professional work laptops",
       "categoryCode": "LAPTOPS",
       "attributes": {
@@ -53,7 +53,7 @@
     {
       "code": "FORMAL_WEAR",
       "name": "Formal Wear",
-      "description": "Business and formal clothing",
+      "description": "Merchant and formal clothing",
       "categoryCode": "MENS_CLOTHING",
       "attributes": {
         "style": "formal",

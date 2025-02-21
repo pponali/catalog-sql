@@ -30,11 +30,11 @@ VALUES
  '{"price_range": "premium", "processor": "flagship"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2002, 'GAMING_LAPTOPS', 'Gaming Laptops', 'High-performance gaming computers', 1006,
  '{"gpu": "dedicated", "cooling": "advanced"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2003, 'BUSINESS_LAPTOPS', 'Business Laptops', 'Professional work laptops', 1006,
+(2003, 'BUSINESS_LAPTOPS', 'Merchant Laptops', 'Professional work laptops', 1006,
  '{"security": "enterprise", "battery": "long-lasting"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2004, 'CASUAL_WEAR', 'Casual Wear', 'Casual clothing items', 1005,
  '{"style": "casual", "occasion": "everyday"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2005, 'FORMAL_WEAR', 'Formal Wear', 'Business and formal clothing', 1005,
+(2005, 'FORMAL_WEAR', 'Formal Wear', 'Merchant and formal clothing', 1005,
  '{"style": "formal", "occasion": "business"}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Classification Attributes from classification_attributes.json
@@ -69,13 +69,13 @@ VALUES
 -- Laptop Products
 (4002, 'GL001', 'ROG Strix Gaming Laptop', 'High-performance gaming laptop with RGB', 'ELECTRONICS', 'ACTIVE',
  '{"categoryCode": "LAPTOPS", "classificationCode": "GAMING_LAPTOPS"}', 'LAP-G-001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4003, 'BL001', 'ThinkPad X1 Carbon', 'Professional business laptop', 'ELECTRONICS', 'ACTIVE',
+(4003, 'BL001', 'ThinkPad X1 Carbon', 'Professional Merchant laptop', 'ELECTRONICS', 'ACTIVE',
  '{"categoryCode": "LAPTOPS", "classificationCode": "BUSINESS_LAPTOPS"}', 'LAP-B-001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
 -- Clothing Products
 (4004, 'CW001', 'Classic Polo Shirt', 'Comfortable cotton polo for casual wear', 'APPAREL', 'ACTIVE',
  '{"categoryCode": "MENS_CLOTHING", "classificationCode": "CASUAL_WEAR"}', 'SHIRT-C-001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4005, 'FW001', 'Executive Suit', 'Premium wool business suit', 'APPAREL', 'ACTIVE',
+(4005, 'FW001', 'Executive Suit', 'Premium wool Merchant suit', 'APPAREL', 'ACTIVE',
  '{"categoryCode": "MENS_CLOTHING", "classificationCode": "FORMAL_WEAR"}', 'SUIT-F-001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Medicine data from medicine_data.json
@@ -137,7 +137,7 @@ VALUES
  '{"ram": "32GB DDR5"}', 'VALID', NULL, NULL, NULL,
  'system', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP),
 
--- Business Laptop Features
+-- Merchant Laptop Features
 (11004, 4003, 3003, NULL, 18, NULL,
  '{"battery": "18 hours"}', 'VALID', NULL, NULL, NULL,
  'system', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP),

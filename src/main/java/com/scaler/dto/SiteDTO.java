@@ -19,8 +19,8 @@ import java.util.UUID;
 public class SiteDTO {
     private UUID id;
 
-    @NotNull(message = "Business ID is required")
-    private UUID businessId;
+    @NotNull(message = "Merchant ID is required")
+    private UUID merchantId;
 
     @NotBlank(message = "Site name is required")
     @Size(min = 2, max = 255, message = "Site name must be between 2 and 255 characters")

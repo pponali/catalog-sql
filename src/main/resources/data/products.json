@@ -53,7 +53,7 @@
     {
       "code": "BL001",
       "name": "ThinkPad X1 Carbon",
-      "description": "Professional business laptop",
+      "description": "Professional Merchant laptop",
       "categoryCode": "LAPTOPS",
       "classificationCode": "BUSINESS_LAPTOPS",
       "status": "ACTIVE",
@@ -85,7 +85,7 @@
     {
       "code": "FW001",
       "name": "Executive Suit",
-      "description": "Premium wool business suit",
+      "description": "Premium wool Merchant suit",
       "categoryCode": "MENS_CLOTHING",
       "classificationCode": "FORMAL_WEAR",
       "status": "ACTIVE",

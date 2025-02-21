@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface StoreCatalogService {
     SiteCatalogDTO assignCatalogToSite(UUID siteId, UUID catalogId, boolean isDefault);
-    void removeCatalogFromSite(UUID siteId, UUID catalogId);
+    void removeCatalogFromStore(UUID siteId, UUID catalogId);
     List<SiteCatalogDTO> getCatalogsBySite(UUID siteId);
     SiteCatalogDTO getDefaultCatalog(UUID siteId);
     void setDefaultCatalog(UUID siteId, UUID catalogId);

@@ -10,7 +10,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring", 
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         builder = @Builder(disableBuilder = true),
-        uses = {ProductMapper.class, CategoryMapper.class, SiteCatalogMapper.class})
+        uses = {ProductMapper.class, CategoryMapper.class, StoreCatalogMapper.class})
 public interface CatalogMapper {
 
     @Mappings({

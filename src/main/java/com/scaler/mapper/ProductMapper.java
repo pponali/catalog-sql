@@ -10,7 +10,7 @@ public interface ProductMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "businessId", source = "business.id"),
+        @Mapping(target = "businessId", source = "merchant.id"),
         @Mapping(target = "catalogId", source = "catalog.id"),
         @Mapping(target = "categoryIds", expression = "java(entity.getCategories().stream().map(category -> category.getId()).collect(java.util.stream.Collectors.toSet()))"),
         @Mapping(target = "name", source = "name"),
@@ -25,7 +25,7 @@ public interface ProductMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "business", ignore = true),
+        @Mapping(target = "merchant", ignore = true),
         @Mapping(target = "catalog", ignore = true),
         @Mapping(target = "categories", ignore = true),
         @Mapping(target = "name", source = "name"),
@@ -40,7 +40,7 @@ public interface ProductMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({
-        @Mapping(target = "business", ignore = true),
+        @Mapping(target = "merchant", ignore = true),
         @Mapping(target = "catalog", ignore = true),
         @Mapping(target = "categories", ignore = true),
         @Mapping(target = "name", source = "name"),

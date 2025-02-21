@@ -2,15 +2,15 @@ package com.scaler.service.impl;
 
 import com.scaler.dto.SiteCatalogDTO;
 import com.scaler.entity.Catalog;
-import com.scaler.entity.Site;
-import com.scaler.entity.SiteCatalog;
+import com.scaler.entity.Store;
+import com.scaler.entity.StoreCatalog;
 import com.scaler.exception.BusinessException;
 import com.scaler.exception.ResourceNotFoundException;
-import com.scaler.mapper.SiteCatalogMapper;
+import com.scaler.mapper.StoreCatalogMapper;
 import com.scaler.repository.CatalogRepository;
-import com.scaler.repository.SiteCatalogRepository;
+import com.scaler.repository.StoreCatalogRepository;
 import com.scaler.repository.StoreRepository;
-import com.scaler.service.SiteCatalogService;
+import com.scaler.service.StoreCatalogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,57 +21,57 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class StoreCatalogServiceImpl implements SiteCatalogService {
+public class StoreCatalogServiceImpl implements StoreCatalogService {
 
-    private final SiteCatalogRepository siteCatalogRepository;
+    private final StoreCatalogRepository storeCatalogRepository;
     private final StoreRepository storeRepository;
     private final CatalogRepository catalogRepository;
-    private final SiteCatalogMapper siteCatalogMapper;
+    private final StoreCatalogMapper storeCatalogMapper;
 
     @Override
     @Transactional
-    public SiteCatalogDTO assignCatalogToSite(UUID siteId, UUID catalogId, boolean isDefault) {
-        Site site = storeRepository.findById(siteId)
-            .orElseThrow(() -> new ResourceNotFoundException("Site not found with id: " + siteId));
+    public SiteCatalogDTO assignCatalogToSite(UUID storeId, UUID catalogId, boolean isDefault) {
+        Store store = storeRepository.findById(storeId)
+            .orElseThrow(() -> new ResourceNotFoundException("Site not found with id: " + storeId));
         
         Catalog catalog = catalogRepository.findById(catalogId)
             .orElseThrow(() -> new ResourceNotFoundException("Catalog not found with id: " + catalogId));
 
         // Validate that the catalog belongs to the same Merchant as the site
-        if (!catalog.getBusiness().equals(site.getMerchant())) {
+        if (!catalog.getBusiness().equals(store.getMerchant())) {
             throw new BusinessException("Cannot assign catalog to site from different business");
         }
 
         // If setting as default, unset any existing default
         if (isDefault) {
-            siteCatalogRepository.findBySiteIdAndIsDefaultTrue(siteId)
+            storeCatalogRepository.findByStoreIdAndIsDefaultTrue(storeId)
                 .ifPresent(existingDefault -> {
                     existingDefault.setIsDefault(false);
-                    siteCatalogRepository.save(existingDefault);
+                    storeCatalogRepository.save(existingDefault);
                 });
         }
 
-        SiteCatalog siteCatalog = new SiteCatalog();
-        siteCatalog.setId(UUID.randomUUID());
-        siteCatalog.setSite(site);
-        siteCatalog.setCatalog(catalog);
-        siteCatalog.setIsDefault(isDefault);
+        StoreCatalog storeCatalog = new StoreCatalog();
+        storeCatalog.setId(UUID.randomUUID());
+        storeCatalog.setStore(store);
+        storeCatalog.setCatalog(catalog);
+        storeCatalog.setIsDefault(isDefault);
 
-        siteCatalog = siteCatalogRepository.save(siteCatalog);
-        return siteCatalogMapper.toDTO(siteCatalog);
+        storeCatalog = storeCatalogRepository.save(storeCatalog);
+        return storeCatalogMapper.toDTO(storeCatalog);
     }
 
     @Override
     @Transactional
-    public void removeCatalogFromSite(UUID siteId, UUID catalogId) {
-        SiteCatalog siteCatalog = siteCatalogRepository.findBySiteIdAndCatalogId(siteId, catalogId)
-            .orElseThrow(() -> new ResourceNotFoundException("Site-Catalog mapping not found"));
+    public void removeCatalogFromStore(UUID storeId, UUID catalogId) {
+        StoreCatalog storeCatalog = storeCatalogRepository.findByStoreIdAndCatalogId(storeId, catalogId)
+            .orElseThrow(() -> new ResourceNotFoundException("Store-Catalog mapping not found"));
 
-        if (siteCatalog.getIsDefault()) {
-            throw new BusinessException("Cannot remove default catalog from site");
+        if (storeCatalog.getIsDefault()) {
+            throw new BusinessException("Cannot remove default catalog from Store");
         }
 
-        siteCatalogRepository.delete(siteCatalog);
+        storeCatalogRepository.delete(storeCatalog);
     }
 
     @Override
@@ -81,16 +81,16 @@ public class StoreCatalogServiceImpl implements SiteCatalogService {
             throw new ResourceNotFoundException("Site not found with id: " + siteId);
         }
 
-        return siteCatalogRepository.findBySiteId(siteId).stream()
-            .map(siteCatalogMapper::toDTO)
+        return storeCatalogRepository.findByStoreId(siteId).stream()
+            .map(storeCatalogMapper::toDTO)
             .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public SiteCatalogDTO getDefaultCatalog(UUID siteId) {
-        return siteCatalogRepository.findBySiteIdAndIsDefaultTrue(siteId)
-            .map(siteCatalogMapper::toDTO)
+        return storeCatalogRepository.findByStoreIdAndIsDefaultTrue(siteId)
+            .map(storeCatalogMapper::toDTO)
             .orElseThrow(() -> new ResourceNotFoundException("No default catalog found for site: " + siteId));
     }
 
@@ -98,24 +98,24 @@ public class StoreCatalogServiceImpl implements SiteCatalogService {
     @Transactional
     public void setDefaultCatalog(UUID siteId, UUID catalogId) {
         // First, verify the mapping exists
-        SiteCatalog newDefault = siteCatalogRepository.findBySiteIdAndCatalogId(siteId, catalogId)
+        StoreCatalog newDefault = storeCatalogRepository.findByStoreIdAndCatalogId(siteId, catalogId)
             .orElseThrow(() -> new ResourceNotFoundException("Site-Catalog mapping not found"));
 
         // Unset any existing default
-        siteCatalogRepository.findBySiteIdAndIsDefaultTrue(siteId)
+        storeCatalogRepository.findByStoreIdAndIsDefaultTrue(siteId)
             .ifPresent(existingDefault -> {
                 existingDefault.setIsDefault(false);
-                siteCatalogRepository.save(existingDefault);
+                storeCatalogRepository.save(existingDefault);
             });
 
         // Set new default
         newDefault.setIsDefault(true);
-        siteCatalogRepository.save(newDefault);
+        storeCatalogRepository.save(newDefault);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean validateCatalogAccess(UUID siteId, UUID catalogId) {
-        return siteCatalogRepository.findBySiteIdAndCatalogId(siteId, catalogId).isPresent();
+        return storeCatalogRepository.findByStoreIdAndCatalogId(siteId, catalogId).isPresent();
     }
 }

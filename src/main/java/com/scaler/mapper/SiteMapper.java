@@ -1,22 +1,22 @@
 package com.scaler.mapper;
 
 import com.scaler.dto.SiteDTO;
-import com.scaler.entity.Site;
 
 import java.util.List;
 
+import com.scaler.entity.Store;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", 
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {BusinessMapper.class})
+        uses = {MerchantMapper.class})
 public interface SiteMapper {
     
     SiteMapper INSTANCE = Mappers.getMapper(SiteMapper.class);
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "businessId", source = "business.id")
+    @Mapping(target = "merchantId", source = "merchant.id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "domain", source = "domain")
     @Mapping(target = "locale", source = "locale")
@@ -29,10 +29,10 @@ public interface SiteMapper {
     @Mapping(target = "lastModifiedAt", source = "lastModifiedDate")
     @Mapping(target = "createdBy", source = "createdBy")
     @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
-    SiteDTO toDTO(Site site);
+    SiteDTO toDTO(Store site);
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "business", ignore = true)
+    @Mapping(target = "merchant", ignore = true)
     @Mapping(target = "name", source = "name")
     @Mapping(target = "domain", source = "domain")
     @Mapping(target = "locale", source = "locale")
@@ -45,11 +45,11 @@ public interface SiteMapper {
     @Mapping(target = "lastModifiedDate", source = "lastModifiedAt")
     @Mapping(target = "createdBy", source = "createdBy")
     @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
-    Site toEntity(SiteDTO dto);
+    Store toEntity(SiteDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "business", ignore = true)
-    void updateEntityFromDTO(SiteDTO dto, @MappingTarget Site entity);
+    @Mapping(target = "merchant", ignore = true)
+    void updateEntityFromDTO(SiteDTO dto, @MappingTarget Store entity);
 
-    List<SiteDTO> toDTOList(List<Site> entities);
+    List<SiteDTO> toDTOList(List<Store> entities);
 }

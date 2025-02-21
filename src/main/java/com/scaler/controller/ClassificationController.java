@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/classifications")
 @RequiredArgsConstructor
 @Tag(name = "Classification Management", description = "APIs for managing classification attributes and classes")
-public class ClassificationController {
+public class ClassificationController {/*
 
     private final ClassificationService classificationService;
     private final ClassificationMapper mapper;
@@ -200,5 +200,5 @@ public class ClassificationController {
         if (dto.getName() == null || dto.getName().trim().isEmpty()) {
             throw new ValidationException("Classification class name is required");
         }
-    }
+    }*/
 }

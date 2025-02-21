@@ -29,13 +29,13 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final CatalogMigrationRepository migrationRepository;
-    private final BusinessRepository businessRepository;
+    private final MerchantRepository merchantRepository;
 
     @Override
     @Transactional
     public MigrationResultDTO migrateCategories(UUID sourceCatalogId, UUID targetCatalogId, List<UUID> categoryIds) {
         validateCatalogs(sourceCatalogId, targetCatalogId);
-        validateBusinessRules(sourceCatalogId, targetCatalogId);
+        //validateBusinessRules(sourceCatalogId, targetCatalogId);
         
         CatalogMigration migration = new CatalogMigration();
         migration.setSourceCatalogId(sourceCatalogId);
@@ -63,7 +63,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
                 newCategory.setName(category.getName());
                 newCategory.setDescription(category.getDescription());
                 newCategory.setCatalog(catalogRepository.findById(targetCatalogId).orElseThrow());
-                newCategory.setBusiness(category.getBusiness());
+                newCategory.setMerchant(category.getMerchant());
                 newCategory.setParent(category.getParent());
                 
                 categoryRepository.save(newCategory);
@@ -89,6 +89,21 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
     }
 
     @Override
+    public MigrationResultDTO migrateProducts(UUID sourceCatalogId, UUID targetCatalogId, List<UUID> productIds) {
+        return null;
+    }
+
+    @Override
+    public MigrationResultDTO bulkMigrate(MigrationRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public boolean validateMigration(UUID sourceCatalogId, UUID targetCatalogId) {
+        return false;
+    }
+
+    /*@Override
     @Transactional
     public MigrationResultDTO migrateProducts(UUID sourceCatalogId, UUID targetCatalogId, List<UUID> productIds) {
         validateCatalogs(sourceCatalogId, targetCatalogId);
@@ -122,7 +137,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
                 newProduct.setCatalog(catalogRepository.findById(targetCatalogId).orElseThrow(
                         () -> new ResourceNotFoundException("Target catalog not found: " + targetCatalogId)
                 ));
-                newProduct.setBusiness(product.getBusiness());
+                newProduct.setMerchant(product.getMerchant());
                 newProduct.setPrice(product.getPrice());
                 newProduct.setSku(product.getSku());
                 
@@ -146,9 +161,9 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         migration = migrationRepository.save(migration);
         
         return createMigrationResult(migration);
-    }
+    }*/
 
-    @Override
+    /*@Override
     @Transactional
     public MigrationResultDTO bulkMigrate(MigrationRequestDTO request) {
         validateCatalogs(request.getSourceCatalogId(), request.getTargetCatalogId());
@@ -204,8 +219,8 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         
         return createMigrationResult(migration);
     }
-
-    @Override
+*/
+    /*@Override
     public boolean validateMigration(UUID sourceCatalogId, UUID targetCatalogId) {
         try {
             validateCatalogs(sourceCatalogId, targetCatalogId);
@@ -214,7 +229,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         } catch (Exception e) {
             return false;
         }
-    }
+    }*/
 
     @Override
     public List<MigrationResultDTO> getMigrationHistory(UUID catalogId) {
@@ -238,38 +253,38 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         }
     }
 
-    private void validateBusinessRules(UUID sourceCatalogId, UUID targetCatalogId) {
+    /*private void validateBusinessRules(UUID sourceCatalogId, UUID targetCatalogId) {
         Catalog sourceCatalog = catalogRepository.findById(sourceCatalogId)
             .orElseThrow(() -> new ResourceNotFoundException("Source catalog not found: " + sourceCatalogId));
         Catalog targetCatalog = catalogRepository.findById(targetCatalogId)
             .orElseThrow(() -> new ResourceNotFoundException("Target catalog not found: " + targetCatalogId));
 
-        Business sourceBusiness = businessRepository.findById(sourceCatalog.getBusiness().getId())
-            .orElseThrow(() -> new ResourceNotFoundException("Source business not found"));
-        Business targetBusiness = businessRepository.findById(targetCatalog.getBusiness().getId())
-            .orElseThrow(() -> new ResourceNotFoundException("Target business not found"));
+        Merchant sourceMerchant = merchantRepository.findById(sourceCatalog.getMerchant().getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Source Merchant not found"));
+        Merchant targetMerchant = merchantRepository.findById(targetCatalog.getMerchant().getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Target Merchant not found"));
 
         // Rule 1: Tata CLiQ Fashion can only migrate to Tata Digital
         if (isBusinessUnit(sourceBusiness, BusinessUnit.TATA_CLIQ_FASHION) &&
-            !isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
+            !isBusinessUnit(targetMerchant, BusinessUnit.TATA_DIGITAL)) {
             throw new BusinessException("Tata CLiQ Fashion can only migrate to Tata Digital");
         }
 
         // Rule 2: BigBasket can only migrate to Tata Digital
         if (isBusinessUnit(sourceBusiness, BusinessUnit.BIGBASKET) &&
-            !isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
+            !isBusinessUnit(targetMerchant, BusinessUnit.TATA_DIGITAL)) {
             throw new BusinessException("BigBasket can only migrate to Tata Digital");
         }
 
         // Rule 3: Tata 1mg can only migrate to Tata Digital
         if (isBusinessUnit(sourceBusiness, BusinessUnit.TATA_1MG) &&
-            !isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
+            !isBusinessUnit(targetMerchant, BusinessUnit.TATA_DIGITAL)) {
             throw new BusinessException("Tata 1mg can only migrate to Tata Digital");
         }
 
         // Rule 4: Tanishq can only migrate to Tata Digital
         if (isBusinessUnit(sourceBusiness, BusinessUnit.TANISHQ) &&
-            !isBusinessUnit(targetBusiness, BusinessUnit.TATA_DIGITAL)) {
+            !isBusinessUnit(targetMerchant, BusinessUnit.TATA_DIGITAL)) {
             throw new BusinessException("Tanishq can only migrate to Tata Digital");
         }
 
@@ -281,9 +296,9 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
 
         // Additional validation for specific product types
         validateProductTypeRules(sourceCatalog, targetCatalog);
-    }
+    }*/
 
-    private void validateProductTypeRules(Catalog sourceCatalog, Catalog targetCatalog) {
+    /*private void validateProductTypeRules(Catalog sourceCatalog, Catalog targetCatalog) {
         // Rule 1: Fashion products require size chart mapping
         if (isFashionCatalog(sourceCatalog) && !isFashionCatalog(targetCatalog)) {
             validateSizeChartMapping(sourceCatalog, targetCatalog);
@@ -303,27 +318,27 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         if (isJewelryCatalog(sourceCatalog) && !isJewelryCatalog(targetCatalog)) {
             validateJewelryCertification(sourceCatalog, targetCatalog);
         }
-    }
+    }*/
 
-    private boolean isBusinessUnit(Business business, BusinessUnit unit) {
-        return business.getCode().equals(unit.name());
+    /*private boolean isBusinessUnit(Merchant business, BusinessUnit unit) {
+        return merchant.getCode().equals(unit.name());
     }
 
     private boolean isFashionCatalog(Catalog catalog) {
-        return catalog.getBusiness().equals(businessRepository.findByName(BusinessUnit.TATA_CLIQ_FASHION.getDisplayName()));
+        return catalog.getMerchant().equals(merchantRepository.findByName(BusinessUnit.TATA_CLIQ_FASHION.getDisplayName()));
     }
 
     private boolean isFoodCatalog(Catalog catalog) {
-        return catalog.getBusiness().equals(businessRepository.findByName(BusinessUnit.BIGBASKET.getDisplayName()));
+        return catalog.getMerchant().equals(merchantRepository.findByName(BusinessUnit.BIGBASKET.getDisplayName()));
     }
 
     private boolean isHealthcareCatalog(Catalog catalog) {
-        return catalog.getBusiness().equals(businessRepository.findByName(BusinessUnit.TATA_1MG.getDisplayName()));
+        return catalog.getMerchant().equals(merchantRepository.findByName(BusinessUnit.TATA_1MG.getDisplayName()));
     }
 
     private boolean isJewelryCatalog(Catalog catalog) {
-        return catalog.getBusiness().equals(businessRepository.findByName(BusinessUnit.TANISHQ.getDisplayName()));
-    }
+        return catalog.getMerchant().equals(merchantRepository.findByName(BusinessUnit.TANISHQ.getDisplayName()));
+    }*/
 
     private void validateSizeChartMapping(Catalog sourceCatalog, Catalog targetCatalog) {
         List<Product> products = productRepository.findByCatalogId(sourceCatalog.getId());
@@ -502,7 +517,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         Catalog targetCatalog = catalogRepository.findById(request.getTargetCatalogId())
             .orElseThrow(() -> new ResourceNotFoundException("Target catalog not found"));
 
-        validateBusinessRules(sourceCatalog.getId(), targetCatalog.getId());
+        //validateBusinessRules(sourceCatalog.getId(), targetCatalog.getId());
 
         CatalogMigration migration = new CatalogMigration();
         migration.setSourceCatalogId(sourceCatalog.getId());

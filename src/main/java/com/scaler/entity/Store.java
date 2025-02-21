@@ -13,8 +13,8 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"business", "siteCatalogs"})
-@EqualsAndHashCode(callSuper = true, exclude = {"business", "siteCatalogs"})
+@ToString(callSuper = true, exclude = {"merchant", "storeCatalogs"})
+@EqualsAndHashCode(callSuper = true, exclude = {"merchant", "storeCatalogs"})
 public class Store extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
@@ -45,15 +45,15 @@ public class Store extends BaseEntity {
     private Merchant merchant;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-    private Set<SiteCatalog> siteCatalogs = new HashSet<>();
+    private Set<StoreCatalog> storeCatalogs = new HashSet<>();
 
-    public void addSiteCatalog(SiteCatalog siteCatalog) {
-        siteCatalogs.add(siteCatalog);
-        siteCatalog.setStore(this);
+    public void addSiteCatalog(StoreCatalog storeCatalog) {
+        storeCatalogs.add(storeCatalog);
+        storeCatalog.setStore(this);
     }
 
-    public void removeSiteCatalog(SiteCatalog siteCatalog) {
-        siteCatalogs.remove(siteCatalog);
-        siteCatalog.setStore(null);
+    public void removeSiteCatalog(StoreCatalog storeCatalog) {
+        storeCatalogs.remove(storeCatalog);
+        storeCatalog.setStore(null);
     }
 }

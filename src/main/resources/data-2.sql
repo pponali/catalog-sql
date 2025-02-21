@@ -22,7 +22,7 @@ VALUES
 ('990e8400-e29b-41d4-a716-446655440008', 'OZ_WEIGHT', 'Ounce', 'WEIGHT', true, 'oz', 'Imperial weight measurement', '990e8400-e29b-41d4-a716-446655440004', 0.0283495, '660e8400-e29b-41d4-a716-446655440000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system');
 
 -- Insert businesses
-INSERT INTO business (id, code, name, type, status, description, created_date, last_modified_date, created_by, last_modified_by)
+INSERT INTO Merchant (id, code, name, type, status, description, created_date, last_modified_date, created_by, last_modified_by)
 VALUES
 ('880e8400-e29b-41d4-a716-446655440010', 'LUXFASHION', 'Luxury Fashion House', 'RETAIL', 'ACTIVE', 'High-end fashion retail business', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),
 ('880e8400-e29b-41d4-a716-446655440011', 'SPORTSWEAR', 'Sports & Active Wear', 'RETAIL', 'ACTIVE', 'Sports and athletic wear retail', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'system', 'system'),

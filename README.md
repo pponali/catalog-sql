@@ -138,7 +138,7 @@ public @interface ProductFeatureValueValidator {
 
 ### 4. Drools Rules Engine Integration
 
-Complex business validations are handled by Drools rules engine:
+Complex Merchant validations are handled by Drools rules engine:
 
 #### Category-Specific Rules
 ```java
@@ -179,7 +179,7 @@ end
    - Allowed values validation
 
 2. **Service Level**
-   - Complex business rules
+   - Complex Merchant rules
    - Cross-field validation
    - Category-specific validation
    - Feature dependency validation
@@ -194,7 +194,7 @@ end
 
 - Detailed error messages
 - Field-level validation errors
-- Business rule violation errors
+- Merchant rule violation errors
 - Category-specific error messages
 - Localized error messages
 

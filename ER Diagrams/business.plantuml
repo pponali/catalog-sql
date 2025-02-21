@@ -4,7 +4,7 @@
 top to bottom direction
 skinparam linetype ortho
 
-class business {
+class Merchant {
    code: varchar(255)
    name: varchar(255)
    description: text
@@ -214,15 +214,15 @@ class unit_of_measure {
    id: uuid
 }
 
-catalog                    -[#595959,plain]-^  business                  : "business_id:id"
+catalog                    -[#595959,plain]-^  Merchant                  : "business_id:id"
 catalog_category           -[#595959,plain]-^  catalog                   : "catalog_id:id"
 catalog_category           -[#595959,plain]-^  category                  : "category_id:id"
-category                   -[#595959,plain]-^  business                  : "business_id:id"
+category                   -[#595959,plain]-^  Merchant                  : "business_id:id"
 category                   -[#595959,plain]-^  catalog                   : "catalog_id:id"
 category                   -[#595959,plain]-^  category                  : "parent_id:id"
 category_feature_template  -[#595959,plain]-^  category                  : "category_id:id"
 category_feature_template  -[#595959,plain]-^  unit                      : "unit_id:id"
-product                    -[#595959,plain]-^  business                  : "business_id:id"
+product                    -[#595959,plain]-^  Merchant                  : "business_id:id"
 product                    -[#595959,plain]-^  catalog                   : "catalog_id:id"
 product                    -[#595959,plain]-^  unit_of_measure           : "unit_of_measure_id:id"
 product_attribute          -[#595959,plain]-^  product                   : "product_id:id"
@@ -234,7 +234,7 @@ product_feature            -[#595959,plain]-^  unit                      : "unit
 product_feature_value      -[#595959,plain]-^  category_feature_template : "template_id:id"
 product_feature_value      -[#595959,plain]-^  product                   : "product_id:id"
 product_feature_value      -[#595959,plain]-^  product_feature           : "feature_id:id"
-site                       -[#595959,plain]-^  business                  : "business_id:id"
+site                       -[#595959,plain]-^  Merchant                  : "business_id:id"
 site_catalog               -[#595959,plain]-^  catalog                   : "catalog_id:id"
 site_catalog               -[#595959,plain]-^  site                      : "site_id:id"
 unit_of_measure            -[#595959,plain]-^  unit                      : "unit_id:id"

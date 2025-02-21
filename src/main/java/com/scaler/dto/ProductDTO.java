@@ -39,7 +39,7 @@ public class ProductDTO {
     private String sku;
     private Double price;
 
-    @NotNull(message = "Business ID is required")
+    @NotNull(message = "Merchant ID is required")
     private UUID businessId;
 
     private UUID catalogId;

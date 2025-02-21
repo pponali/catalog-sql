@@ -21,7 +21,7 @@ public interface CategoryMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "businessId", source = "business.id"),
+        @Mapping(target = "businessId", source = "merchant.id"),
         @Mapping(target = "catalogId", source = "catalog.id"),
         @Mapping(target = "parentId", source = "parent.id"),
         @Mapping(target = "code", source = "code"),
@@ -35,7 +35,7 @@ public interface CategoryMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "business", ignore = true),
+        @Mapping(target = "merchant", ignore = true),
         @Mapping(target = "catalog", ignore = true),
         @Mapping(target = "parent", ignore = true),
         @Mapping(target = "code", source = "code"),

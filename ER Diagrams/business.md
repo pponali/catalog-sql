@@ -1,6 +1,6 @@
 classDiagram
 direction BT
-class business {
+class Merchant {
    varchar(255) code
    varchar(255) name
    text description
@@ -210,15 +210,15 @@ class unit_of_measure {
    uuid id
 }
 
-catalog  -->  business : business_id:id
+catalog  -->  Merchant : business_id:id
 catalog_category  -->  catalog : catalog_id:id
 catalog_category  -->  category : category_id:id
-category  -->  business : business_id:id
+category  -->  Merchant : business_id:id
 category  -->  catalog : catalog_id:id
 category  -->  category : parent_id:id
 category_feature_template  -->  category : category_id:id
 category_feature_template  -->  unit : unit_id:id
-product  -->  business : business_id:id
+product  -->  Merchant : business_id:id
 product  -->  catalog : catalog_id:id
 product  -->  unit_of_measure : unit_of_measure_id:id
 product_attribute  -->  product : product_id:id
@@ -230,7 +230,7 @@ product_feature  -->  unit : unit_id:id
 product_feature_value  -->  category_feature_template : template_id:id
 product_feature_value  -->  product : product_id:id
 product_feature_value  -->  product_feature : feature_id:id
-site  -->  business : business_id:id
+site  -->  Merchant : business_id:id
 site_catalog  -->  catalog : catalog_id:id
 site_catalog  -->  site : site_id:id
 unit_of_measure  -->  unit : unit_id:id

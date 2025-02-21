@@ -18,8 +18,26 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("SELECT p FROM Product p JOIN p.categories c WHERE c = :category")
     List<Product> findByCategory(@Param("category") Category category);
 
-    List<Product> findByBusinessId(UUID businessId);
-    List<Product> findByBusinessIdAndCategories(UUID businessId, Category category);
-    Optional<Product> findByBusinessIdAndId(UUID businessId, UUID id);
+    List<Product> findByMerchantId(UUID merchantId);
+    List<Product> findByMerchantIdAndCategories(UUID merchantId, Category category);
+    Optional<Product> findByMerchantIdAndId(UUID merchantId, UUID id);
     List<Product> findByCatalogId(UUID catalogId);
+
+    @Query("SELECT DISTINCT p FROM Product p " +
+           "JOIN p.channels c " +
+           "WHERE p.merchant.id = :merchantId " +
+           "AND c.id = :channelId")
+    List<Product> findByMerchantAndChannel(
+            @Param("merchantId") Long merchantId,
+            @Param("channelId") Long channelId);
+            
+    @Query("SELECT DISTINCT p FROM Product p " +
+           "JOIN p.channels c " +
+           "WHERE p.merchant.id = :merchantId " +
+           "AND c.id = :channelId " +
+           "AND p.lineOfBusiness.id = :lineOfBusinessId")
+    List<Product> findByMerchantChannelAndLob(
+            @Param("merchantId") Long merchantId,
+            @Param("channelId") Long channelId,
+            @Param("lineOfBusinessId") Long lineOfBusinessId);
 }

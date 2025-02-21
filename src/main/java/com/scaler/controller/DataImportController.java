@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/import")
 @RequiredArgsConstructor
-public class DataImportController {
+public class DataImportController {/*
 
     private final DataImportService importService;
 
@@ -21,5 +21,5 @@ public class DataImportController {
     public ResponseEntity<ImportResult> importData(@RequestParam("file") MultipartFile file) {
         ImportResult result = importService.importData(file);
         return ResponseEntity.ok(result);
-    }
+    }*/
 }

@@ -20,19 +20,19 @@ public interface ProductFeatureService {
     ProductFeature findById(UUID id);
     
     /**
-     * Find a product feature by product and category feature template
-     * @param product The product to find feature for
-     * @param template The category feature template to find feature for
+     * Find a product feature by product id and category feature template id
+     * @param productId The id of the product to find feature for
+     * @param templateId The id of the category feature template to find feature for
      * @return The product feature
      */
-    ProductFeature findByProductAndTemplate(Product product, CategoryFeatureTemplate template);
+    ProductFeature findByProductIdAndTemplateId(UUID productId, UUID templateId);
     
     /**
      * Find all features for a product
-     * @param product The product to find features for
+     * @param productId The id of the product to find features for
      * @return List of product features
      */
-    List<ProductFeature> findByProduct(Product product);
+    List<ProductFeature> findByProductId(UUID productId);
     
     /**
      * Save a product feature
@@ -42,14 +42,14 @@ public interface ProductFeatureService {
     ProductFeature save(ProductFeature feature);
     
     /**
-     * Delete a product feature
-     * @param feature The product feature to delete
+     * Delete a product feature by id
+     * @param id The id of the product feature to delete
      */
-    void delete(ProductFeature feature);
+    void deleteById(UUID id);
     
     /**
-     * Delete all features for a product
-     * @param product The product to delete features for
+     * Delete all features for a product by product id
+     * @param productId The id of the product to delete features for
      */
-    void deleteByProduct(Product product);
+    void deleteByProductId(UUID productId);
 }

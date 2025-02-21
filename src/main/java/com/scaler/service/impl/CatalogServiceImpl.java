@@ -4,7 +4,7 @@ import com.scaler.dto.CatalogDTO;
 import com.scaler.entity.Catalog;
 import com.scaler.exception.ResourceNotFoundException;
 import com.scaler.mapper.CatalogMapper;
-import com.scaler.repository.BusinessRepository;
+import com.scaler.repository.MerchantRepository;
 import com.scaler.repository.CatalogRepository;
 import com.scaler.service.CatalogService;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
 public class CatalogServiceImpl implements CatalogService {
     
     private final CatalogRepository catalogRepository;
-    private final BusinessRepository businessRepository;
+    private final MerchantRepository merchantRepository;
     private final CatalogMapper catalogMapper;
 
     @Override
     @Transactional
     public CatalogDTO createCatalog(CatalogDTO catalogDTO) {
-        if (!businessRepository.existsById(catalogDTO.getBusinessId())) {
-            throw new ResourceNotFoundException("Business not found with id: " + catalogDTO.getBusinessId());
+        if (!merchantRepository.existsById(catalogDTO.getBusinessId())) {
+            throw new ResourceNotFoundException("Merchant not found with id: " + catalogDTO.getBusinessId());
         }
 
         Catalog catalog = catalogMapper.toEntity(catalogDTO);
@@ -41,8 +41,8 @@ public class CatalogServiceImpl implements CatalogService {
         Catalog catalog = catalogRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Catalog not found with id: " + id));
         
-        if (!businessRepository.existsById(catalogDTO.getBusinessId())) {
-            throw new ResourceNotFoundException("Business not found with id: " + catalogDTO.getBusinessId());
+        if (!merchantRepository.existsById(catalogDTO.getBusinessId())) {
+            throw new ResourceNotFoundException("Merchant not found with id: " + catalogDTO.getBusinessId());
         }
 
         catalog.setName(catalogDTO.getName());
@@ -71,8 +71,8 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     @Transactional(readOnly = true)
     public List<CatalogDTO> getCatalogsByBusiness(UUID businessId) {
-        if (!businessRepository.existsById(businessId)) {
-            throw new ResourceNotFoundException("Business not found with id: " + businessId);
+        if (!merchantRepository.existsById(businessId)) {
+            throw new ResourceNotFoundException("Merchant not found with id: " + businessId);
         }
         return catalogRepository.findByBusinessId(businessId).stream()
             .map(catalogMapper::toDTO)

@@ -1,8 +1,6 @@
 package com.scaler.controller;
 
 import com.scaler.dto.MerchantDTO;
-import com.scaler.entity.Merchant;
-import com.scaler.service.MerchantService;
 import com.scaler.service.MerchantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

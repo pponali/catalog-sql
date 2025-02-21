@@ -13,8 +13,8 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"products", "catalogs"})
-@EqualsAndHashCode(callSuper = true, exclude = {"products", "catalogs"})
+@ToString(callSuper = true, exclude = {"catalogs"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalogs"})
 public class Merchant extends BaseEntity {
     
     @Column(name = "code", nullable = false, unique = true)
@@ -28,9 +28,6 @@ public class Merchant extends BaseEntity {
     
     @Column(name = "status")
     private String status;
-    
-    @OneToMany(mappedBy = "merchant")
-    private Set<Product> products = new HashSet<>();
     
     @ManyToMany(mappedBy = "merchants")
     private Set<Catalog> catalogs = new HashSet<>();

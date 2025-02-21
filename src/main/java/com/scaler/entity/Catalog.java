@@ -15,27 +15,28 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"business", "products", "categories", "siteCatalogs"})
-@EqualsAndHashCode(callSuper = true, exclude = {"business", "products", "categories", "siteCatalogs"})
+@ToString(callSuper = true, exclude = {"products", "merchants", "channels", "linesOfBusiness", "business", "categories", "siteCatalogs"})
+@EqualsAndHashCode(callSuper = true, exclude = {"products", "merchants", "channels", "linesOfBusiness", "business", "categories", "siteCatalogs"})
 public class Catalog extends BaseEntity {
+    
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
+    
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "code", nullable = false)
-    private String code;
-
-    @Column(name = "type")
-    private String type;
-
-    @Column(name = "status")
-    private String status;
-
+    
     @Column(name = "description")
     private String description;
-
+    
+    @Column(name = "status")
+    private String status;
+    
+    @Column(name = "type")
+    private String type;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id")
-    private Business business;
+    private Merchant business;
 
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
@@ -44,8 +45,32 @@ public class Catalog extends BaseEntity {
     private List<Category> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-    private Set<SiteCatalog> siteCatalogs = new HashSet<>();
+    private Set<StoreCatalog> siteCatalogs = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "catalog_merchants",
+        joinColumns = @JoinColumn(name = "catalog_id"),
+        inverseJoinColumns = @JoinColumn(name = "merchant_id")
+    )
+    private Set<Merchant> merchants = new HashSet<>();
+    
+    @ManyToMany
+    @JoinTable(
+        name = "catalog_channels",
+        joinColumns = @JoinColumn(name = "catalog_id"),
+        inverseJoinColumns = @JoinColumn(name = "channel_id")
+    )
+    private Set<Channel> channels = new HashSet<>();
+    
+    @ManyToMany
+    @JoinTable(
+        name = "catalog_lines_of_business",
+        joinColumns = @JoinColumn(name = "catalog_id"),
+        inverseJoinColumns = @JoinColumn(name = "line_of_business_id")
+    )
+    private List<LineOfBusiness> lineOfBusinesses = new ArrayList<>();
+    
     public void addProduct(Product product) {
         products.add(product);
         product.setCatalog(this);
@@ -66,13 +91,43 @@ public class Catalog extends BaseEntity {
         category.setCatalog(null);
     }
 
-    public void addSiteCatalog(SiteCatalog siteCatalog) {
+    public void addSiteCatalog(StoreCatalog siteCatalog) {
         siteCatalogs.add(siteCatalog);
         siteCatalog.setCatalog(this);
     }
 
-    public void removeSiteCatalog(SiteCatalog siteCatalog) {
+    public void removeSiteCatalog(StoreCatalog siteCatalog) {
         siteCatalogs.remove(siteCatalog);
         siteCatalog.setCatalog(null);
+    }
+    
+    public void addMerchant(Merchant merchant) {
+        merchants.add(merchant);
+        merchant.getCatalogs().add(this);
+    }
+    
+    public void removeMerchant(Merchant merchant) {
+        merchants.remove(merchant);
+        merchant.getCatalogs().remove(this);
+    }
+    
+    public void addChannel(Channel channel) {
+        channels.add(channel);
+        channel.getCatalogs().add(this);
+    }
+    
+    public void removeChannel(Channel channel) {
+        channels.remove(channel);
+        channel.getCatalogs().remove(this);
+    }
+    
+    public void addLineOfBusiness(LineOfBusiness lineOfBusiness) {
+        lineOfBusinesses.add(lineOfBusiness);
+        lineOfBusiness.getCatalogs().add(this);
+    }
+    
+    public void removeLineOfBusiness(LineOfBusiness lineOfBusiness) {
+        lineOfBusinesses.remove(lineOfBusiness);
+        lineOfBusiness.getCatalogs().remove(this);
     }
 }

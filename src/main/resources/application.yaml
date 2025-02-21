@@ -27,11 +27,11 @@ spring:
     init:
       mode: always
       data-locations: 
-        - classpath:data.sql
-        - classpath:data-1.sql
+#        - classpath:data.sql
+#        - classpath:data-1.sql
 #        - classpath:data-2.sql
       schema-locations:
-        - classpath:schema.sql
+#        - classpath:schema.sql
       continue-on-error: false
       platform: postgresql
   cache:

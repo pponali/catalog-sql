@@ -1,9 +1,9 @@
 package com.scaler.validation;
 
-import com.scaler.entity.ProductFeatureValue;
 import com.scaler.entity.CategoryFeatureTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scaler.entity.ProductFeatureValue;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Constraint;

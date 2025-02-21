@@ -28,7 +28,7 @@ public class StoreCatalogController {
     public ResponseEntity<Void> removeCatalogFromSite(
             @PathVariable UUID siteId,
             @PathVariable UUID catalogId) {
-        siteCatalogService.removeCatalogFromSite(siteId, catalogId);
+        siteCatalogService.removeCatalogFromStore(siteId, catalogId);
         return ResponseEntity.noContent().build();
     }
 

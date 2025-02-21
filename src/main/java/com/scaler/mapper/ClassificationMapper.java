@@ -2,7 +2,7 @@ package com.scaler.mapper;
 
 import com.scaler.dto.ClassificationAttributeDTO;
 import com.scaler.dto.ClassificationClassDTO;
-import com.scaler.entity.Business;
+import com.scaler.entity.Merchant;
 import com.scaler.entity.Catalog;
 import com.scaler.entity.Category;
 import com.scaler.entity.ClassificationAttribute;
@@ -34,7 +34,7 @@ public interface ClassificationMapper {
         @Mapping(target = "parentId", source = "parent.id"),
         @Mapping(target = "inheritFeatures", source = "inheritFeatures"),
         @Mapping(target = "metadata", source = "metadata"),
-        @Mapping(target = "businessId", source = "business.id"),
+        @Mapping(target = "merchantId", source = "merchant.id"),
         @Mapping(target = "catalogId", source = "catalog.id")
     })
     ClassificationClassDTO toDTO(ClassificationClass entity);
@@ -47,10 +47,10 @@ public interface ClassificationMapper {
             entity.setParent(parent);
         }
         
-        if (dto.getBusinessId() != null) {
-            Business business = new Business();
-            business.setId(dto.getBusinessId());
-            entity.setBusiness(business);
+        if (dto.getMerchantId() != null) {
+            Merchant merchant = new Merchant();
+            merchant.setId(dto.getMerchantId());
+            entity.setMerchant(merchant);
         }
         
         if (dto.getCatalogId() != null) {
@@ -68,7 +68,7 @@ public interface ClassificationMapper {
         @Mapping(target = "inheritFeatures", source = "inheritFeatures"),
         @Mapping(target = "metadata", source = "metadata"),
         @Mapping(target = "parent", ignore = true),
-        @Mapping(target = "business", ignore = true),
+        @Mapping(target = "merchant", ignore = true),
         @Mapping(target = "catalog", ignore = true),
         @Mapping(target = "attributeAssignments", ignore = true),
         @Mapping(target = "children", ignore = true),

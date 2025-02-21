@@ -21,7 +21,7 @@ public class ClassificationClassDTO {
     private String type;
     private String status;
     private UUID parentId;
-    private UUID businessId;
+    private UUID merchantId;
     private UUID catalogId;
     private List<ClassificationAttributeDTO> attributes;
     private boolean inheritFeatures;

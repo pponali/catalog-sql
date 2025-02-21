@@ -53,21 +53,21 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
     }
 
     @Override
-    public ProductFeature findByProductAndTemplate(Product product, CategoryFeatureTemplate template) {
+    public ProductFeature findByProductIdAndTemplateId(UUID productId, UUID templateId) {
         String operationId = UUID.randomUUID().toString();
-        log.debug("Operation ID: {} - Finding ProductFeature by Product ID: {} and Template Code: {}", 
-            operationId, product.getId(), template.getCode());
+        log.debug("Operation ID: {} - Finding ProductFeature by Product ID: {} and Template ID: {}", 
+            operationId, productId, templateId);
         
         try {
-            return featureRepository.findByProductAndTemplate(product, template)
+            return featureRepository.findByProductIdAndTemplateId(productId, templateId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                     String.format("Feature not found for product %s and template %s", 
-                        product.getId(), template.getCode())));
+                        productId, templateId)));
         } catch (ResourceNotFoundException e) {
             log.error("Operation ID: {} - {}", operationId, e.getMessage());
             throw e;
         } catch (Exception e) {
-            log.error("Operation ID: {} - Unexpected error while finding ProductFeature by Product and Template", 
+            log.error("Operation ID: {} - Unexpected error while finding ProductFeature by Product ID and Template ID", 
                 operationId, e);
             throw new ServiceException("Failed to retrieve product feature", e);
         }
@@ -107,17 +107,16 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
     }
 
     @Override
-    public void delete(ProductFeature feature) {
+    public void deleteById(UUID id) {
         String operationId = UUID.randomUUID().toString();
-        log.info("Operation ID: {} - Deleting ProductFeature with ID: {}", 
-            operationId, feature != null ? feature.getId() : null);
+        log.info("Operation ID: {} - Deleting ProductFeature with ID: {}", operationId, id);
         
         try {
-            if (feature == null) {
-                throw new ValidationException("ProductFeature cannot be null");
+            if (id == null) {
+                throw new ValidationException("ProductFeature ID cannot be null");
             }
             
-            featureRepository.delete(feature);
+            featureRepository.deleteById(id);
             log.info("Operation ID: {} - Successfully deleted ProductFeature", operationId);
             
         } catch (ValidationException e) {
@@ -130,46 +129,44 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
     }
 
     @Override
-    public void deleteByProduct(Product product) {
+    public void deleteByProductId(UUID productId) {
         String operationId = UUID.randomUUID().toString();
-        log.info("Operation ID: {} - Deleting ProductFeatures for Product ID: {}", 
-            operationId, product != null ? product.getId() : null);
+        log.info("Operation ID: {} - Deleting ProductFeatures for Product ID: {}", operationId, productId);
         
         try {
-            if (product == null) {
-                throw new ValidationException("Product cannot be null");
+            if (productId == null) {
+                throw new ValidationException("Product ID cannot be null");
             }
             
-            featureRepository.deleteByProduct(product);
+            featureRepository.deleteByProductId(productId);
             log.info("Operation ID: {} - Successfully deleted ProductFeatures for Product", operationId);
             
         } catch (ValidationException e) {
             log.error("Operation ID: {} - Validation error: {}", operationId, e.getMessage());
             throw e;
         } catch (Exception e) {
-            log.error("Operation ID: {} - Unexpected error while deleting ProductFeatures by Product", operationId, e);
+            log.error("Operation ID: {} - Unexpected error while deleting ProductFeatures by Product ID", operationId, e);
             throw new ServiceException("Failed to delete product features", e);
         }
     }
 
     @Override
-    public List<ProductFeature> findByProduct(Product product) {
+    public List<ProductFeature> findByProductId(UUID productId) {
         String operationId = UUID.randomUUID().toString();
-        log.debug("Operation ID: {} - Finding ProductFeatures by Product ID: {}", 
-            operationId, product != null ? product.getId() : null);
+        log.debug("Operation ID: {} - Finding ProductFeatures by Product ID: {}", operationId, productId);
         
         try {
-            if (product == null) {
-                throw new ValidationException("Product cannot be null");
+            if (productId == null) {
+                throw new ValidationException("Product ID cannot be null");
             }
             
-            return featureRepository.findByProduct(product);
+            return featureRepository.findByProductId(productId);
             
         } catch (ValidationException e) {
             log.error("Operation ID: {} - Validation error: {}", operationId, e.getMessage());
             throw e;
         } catch (Exception e) {
-            log.error("Operation ID: {} - Unexpected error while finding ProductFeatures by Product", operationId, e);
+            log.error("Operation ID: {} - Unexpected error while finding ProductFeatures by Product ID", operationId, e);
             throw new ServiceException("Failed to retrieve product features", e);
         }
     }

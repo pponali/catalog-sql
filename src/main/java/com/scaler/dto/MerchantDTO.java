@@ -16,15 +16,15 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BusinessDTO {
+public class MerchantDTO {
     private UUID id;
 
-    @NotBlank(message = "Business name is required")
-    @Size(min = 2, max = 255, message = "Business name must be between 2 and 255 characters")
+    @NotBlank(message = "Merchant name is required")
+    @Size(min = 2, max = 255, message = "Merchant name must be between 2 and 255 characters")
     private String name;
 
-    @NotBlank(message = "Business code is required")
-    @Size(min = 2, max = 50, message = "Business code must be between 2 and 50 characters")
+    @NotBlank(message = "Merchant code is required")
+    @Size(min = 2, max = 50, message = "Merchant code must be between 2 and 50 characters")
     private String code;
 
     @Size(max = 1000, message = "Description cannot exceed 1000 characters")
@@ -39,9 +39,9 @@ public class BusinessDTO {
     private String createdBy;
     private String lastModifiedBy;
 
-    @Builder.Default
+    @lombok.Builder.Default
     private List<CatalogDTO> catalogs = new ArrayList<>();
     
-    @Builder.Default
+    @lombok.Builder.Default
     private List<SiteDTO> sites = new ArrayList<>();
 }
