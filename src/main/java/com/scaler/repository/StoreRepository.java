@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface SiteRepository extends JpaRepository<Site, UUID> {
-    List<Site> findByBusinessId(UUID businessId);
+    List<Site> findByMerchantId(UUID merchantId);
 }

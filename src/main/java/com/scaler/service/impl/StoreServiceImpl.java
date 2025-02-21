@@ -4,9 +4,9 @@ import com.scaler.dto.SiteDTO;
 import com.scaler.entity.Site;
 import com.scaler.exception.ResourceNotFoundException;
 import com.scaler.mapper.SiteMapper;
-import com.scaler.repository.BusinessRepository;
+import com.scaler.repository.MerchantRepository;
 import com.scaler.repository.SiteRepository;
-import com.scaler.service.SiteService;
+import com.scaler.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,17 +17,17 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class SiteServiceImpl implements SiteService {
+public class StoreServiceImpl implements StoreService {
     
     private final SiteRepository siteRepository;
-    private final BusinessRepository businessRepository;
+    private final MerchantRepository merchantRepository;
     private final SiteMapper siteMapper;
 
     @Override
     @Transactional
     public SiteDTO createSite(SiteDTO siteDTO) {
-        if (!businessRepository.existsById(siteDTO.getBusinessId())) {
-            throw new ResourceNotFoundException("Business not found with id: " + siteDTO.getBusinessId());
+        if (!merchantRepository.existsById(siteDTO.getMerchantId())) {
+            throw new ResourceNotFoundException("Merchant not found with id: " + siteDTO.getMerchantId());
         }
 
         Site site = siteMapper.toEntity(siteDTO);
@@ -41,8 +41,8 @@ public class SiteServiceImpl implements SiteService {
         Site site = siteRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Site not found with id: " + id));
         
-        if (!businessRepository.existsById(siteDTO.getBusinessId())) {
-            throw new ResourceNotFoundException("Business not found with id: " + siteDTO.getBusinessId());
+        if (!merchantRepository.existsById(siteDTO.getMerchantId())) {
+            throw new ResourceNotFoundException("Merchant not found with id: " + siteDTO.getMerchantId());
         }
 
         site.setName(siteDTO.getName());
@@ -73,8 +73,8 @@ public class SiteServiceImpl implements SiteService {
     @Override
     @Transactional(readOnly = true)
     public List<SiteDTO> getSitesByBusiness(UUID businessId) {
-        if (!businessRepository.existsById(businessId)) {
-            throw new ResourceNotFoundException("Business not found with id: " + businessId);
+        if (!merchantRepository.existsById(businessId)) {
+            throw new ResourceNotFoundException("Merchant not found with id: " + businessId);
         }
         return siteRepository.findByBusinessId(businessId).stream()
             .map(siteMapper::toDTO)

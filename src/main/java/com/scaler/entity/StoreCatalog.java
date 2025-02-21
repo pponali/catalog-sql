@@ -7,17 +7,17 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "site_catalog")
+@Table(name = "store_catalog")
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"site", "catalog"})
-@EqualsAndHashCode(callSuper = true, exclude = {"site", "catalog"})
-public class SiteCatalog extends BaseEntity {
+@ToString(callSuper = true, exclude = {"store", "catalog"})
+@EqualsAndHashCode(callSuper = true, exclude = {"store", "catalog"})
+public class StoreCatalog extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "site_id", nullable = false)
-    private Site site;
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "catalog_id", nullable = false)

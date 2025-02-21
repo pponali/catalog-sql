@@ -4,7 +4,7 @@ import com.scaler.dto.SiteCatalogDTO;
 import java.util.List;
 import java.util.UUID;
 
-public interface SiteCatalogService {
+public interface StoreCatalogService {
     SiteCatalogDTO assignCatalogToSite(UUID siteId, UUID catalogId, boolean isDefault);
     void removeCatalogFromSite(UUID siteId, UUID catalogId);
     List<SiteCatalogDTO> getCatalogsBySite(UUID siteId);

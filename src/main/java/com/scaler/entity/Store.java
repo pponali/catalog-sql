@@ -8,14 +8,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "site")
+@Table(name = "store")
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"business", "siteCatalogs"})
 @EqualsAndHashCode(callSuper = true, exclude = {"business", "siteCatalogs"})
-public class Site extends BaseEntity {
+public class Store extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -42,18 +42,18 @@ public class Site extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id", nullable = false)
-    private Business business;
+    private Merchant merchant;
 
-    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private Set<SiteCatalog> siteCatalogs = new HashSet<>();
 
     public void addSiteCatalog(SiteCatalog siteCatalog) {
         siteCatalogs.add(siteCatalog);
-        siteCatalog.setSite(this);
+        siteCatalog.setStore(this);
     }
 
     public void removeSiteCatalog(SiteCatalog siteCatalog) {
         siteCatalogs.remove(siteCatalog);
-        siteCatalog.setSite(null);
+        siteCatalog.setStore(null);
     }
 }

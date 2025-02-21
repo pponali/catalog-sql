@@ -1,7 +1,7 @@
 package com.scaler.controller;
 
 import com.scaler.dto.SiteCatalogDTO;
-import com.scaler.service.SiteCatalogService;
+import com.scaler.service.StoreCatalogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/site-catalogs")
 @RequiredArgsConstructor
-public class SiteCatalogController {
+public class StoreCatalogController {
     
-    private final SiteCatalogService siteCatalogService;
+    private final StoreCatalogService siteCatalogService;
 
     @PostMapping("/sites/{siteId}/catalogs/{catalogId}")
     public ResponseEntity<SiteCatalogDTO> assignCatalogToSite(

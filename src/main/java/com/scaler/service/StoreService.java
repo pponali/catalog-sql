@@ -4,7 +4,7 @@ import com.scaler.dto.SiteDTO;
 import java.util.List;
 import java.util.UUID;
 
-public interface SiteService {
+public interface StoreService {
     SiteDTO createSite(SiteDTO siteDTO);
     SiteDTO updateSite(UUID id, SiteDTO siteDTO);
     SiteDTO getSite(UUID id);

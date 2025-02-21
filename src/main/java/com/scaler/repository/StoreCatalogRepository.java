@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface SiteCatalogRepository extends JpaRepository<SiteCatalog, SiteCatalogId> {
+public interface StoreCatalogRepository extends JpaRepository<SiteCatalog, SiteCatalogId> {
     List<SiteCatalog> findBySiteId(UUID siteId);
     List<SiteCatalog> findByCatalogId(UUID catalogId);
     Optional<SiteCatalog> findBySiteIdAndIsDefaultTrue(UUID siteId);

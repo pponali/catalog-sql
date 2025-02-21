@@ -1,14 +1,14 @@
 package com.scaler.mapper;
 
-import com.scaler.dto.BusinessDTO;
-import com.scaler.entity.Business;
+import com.scaler.dto.MerchantDTO;
+import com.scaler.entity.Merchant;
 import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {CatalogMapper.class, SiteMapper.class})
-public interface BusinessMapper {
+public interface MerchantMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
@@ -19,10 +19,9 @@ public interface BusinessMapper {
         @Mapping(target = "lastModifiedAt", source = "lastModifiedDate"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
-        @Mapping(target = "catalogs", source = "catalogs"),
-        @Mapping(target = "sites", source = "sites")
+        @Mapping(target = "catalogs", source = "catalogs")
     })
-    BusinessDTO toDTO(Business entity);
+    MerchantDTO toDTO(Merchant entity);
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
@@ -33,13 +32,12 @@ public interface BusinessMapper {
         @Mapping(target = "lastModifiedDate", source = "lastModifiedAt"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
-        @Mapping(target = "catalogs", ignore = true),
-        @Mapping(target = "sites", ignore = true)
+        @Mapping(target = "catalogs", ignore = true)
     })
-    Business toEntity(BusinessDTO dto);
+    Merchant toEntity(MerchantDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(@MappingTarget Business entity, BusinessDTO dto);
+    void updateEntity(@MappingTarget Merchant entity, MerchantDTO dto);
 
-    List<BusinessDTO> toDTOList(List<Business> entities);
+    List<MerchantDTO> toDTOList(List<Merchant> entities);
 }

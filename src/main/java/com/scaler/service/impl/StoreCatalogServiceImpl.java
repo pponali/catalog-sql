@@ -4,13 +4,12 @@ import com.scaler.dto.SiteCatalogDTO;
 import com.scaler.entity.Catalog;
 import com.scaler.entity.Site;
 import com.scaler.entity.SiteCatalog;
-import com.scaler.entity.SiteCatalogId;
 import com.scaler.exception.BusinessException;
 import com.scaler.exception.ResourceNotFoundException;
 import com.scaler.mapper.SiteCatalogMapper;
 import com.scaler.repository.CatalogRepository;
 import com.scaler.repository.SiteCatalogRepository;
-import com.scaler.repository.SiteRepository;
+import com.scaler.repository.StoreRepository;
 import com.scaler.service.SiteCatalogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,24 +21,24 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class SiteCatalogServiceImpl implements SiteCatalogService {
+public class StoreCatalogServiceImpl implements SiteCatalogService {
 
     private final SiteCatalogRepository siteCatalogRepository;
-    private final SiteRepository siteRepository;
+    private final StoreRepository storeRepository;
     private final CatalogRepository catalogRepository;
     private final SiteCatalogMapper siteCatalogMapper;
 
     @Override
     @Transactional
     public SiteCatalogDTO assignCatalogToSite(UUID siteId, UUID catalogId, boolean isDefault) {
-        Site site = siteRepository.findById(siteId)
+        Site site = storeRepository.findById(siteId)
             .orElseThrow(() -> new ResourceNotFoundException("Site not found with id: " + siteId));
         
         Catalog catalog = catalogRepository.findById(catalogId)
             .orElseThrow(() -> new ResourceNotFoundException("Catalog not found with id: " + catalogId));
 
-        // Validate that the catalog belongs to the same business as the site
-        if (!catalog.getBusiness().equals(site.getBusiness())) {
+        // Validate that the catalog belongs to the same Merchant as the site
+        if (!catalog.getBusiness().equals(site.getMerchant())) {
             throw new BusinessException("Cannot assign catalog to site from different business");
         }
 
@@ -78,7 +77,7 @@ public class SiteCatalogServiceImpl implements SiteCatalogService {
     @Override
     @Transactional(readOnly = true)
     public List<SiteCatalogDTO> getCatalogsBySite(UUID siteId) {
-        if (!siteRepository.existsById(siteId)) {
+        if (!storeRepository.existsById(siteId)) {
             throw new ResourceNotFoundException("Site not found with id: " + siteId);
         }
 

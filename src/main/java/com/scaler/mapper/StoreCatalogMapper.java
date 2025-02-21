@@ -1,7 +1,7 @@
 package com.scaler.mapper;
 
 import com.scaler.dto.SiteCatalogDTO;
-import com.scaler.entity.SiteCatalog;
+import com.scaler.entity.StoreCatalog;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -10,9 +10,9 @@ import java.util.Set;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface SiteCatalogMapper extends JsonNodeMapper {
-    
-    SiteCatalogMapper INSTANCE = Mappers.getMapper(SiteCatalogMapper.class);
+public interface StoreCatalogMapper extends JsonNodeMapper {
+
+    StoreCatalogMapper INSTANCE = Mappers.getMapper(StoreCatalogMapper.class);
 
     @Mappings({
         @Mapping(target = "siteId", expression = "java(entitySiteId(entity))"),
@@ -27,12 +27,12 @@ public interface SiteCatalogMapper extends JsonNodeMapper {
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })
-    SiteCatalogDTO toDTO(SiteCatalog entity);
+    SiteCatalogDTO toDTO(StoreCatalog entity);
 
     @InheritInverseConfiguration
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "site", ignore = true),
+        @Mapping(target = "store", ignore = true),
         @Mapping(target = "catalog", ignore = true),
         @Mapping(target = "isDefault", source = "isDefault"),
         @Mapping(target = "status", source = "status"),
@@ -43,20 +43,20 @@ public interface SiteCatalogMapper extends JsonNodeMapper {
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })
-    SiteCatalog toEntity(SiteCatalogDTO dto);
+    StoreCatalog toEntity(SiteCatalogDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(@MappingTarget SiteCatalog entity, SiteCatalogDTO dto);
+    void updateEntity(@MappingTarget StoreCatalog entity, SiteCatalogDTO dto);
 
-    List<SiteCatalogDTO> toDTOList(List<SiteCatalog> entities);
+    List<SiteCatalogDTO> toDTOList(List<StoreCatalog> entities);
 
-    Set<SiteCatalogDTO> toDTOSet(Set<SiteCatalog> entities);
+    Set<SiteCatalogDTO> toDTOSet(Set<StoreCatalog> entities);
 
-    default UUID entitySiteId(SiteCatalog entity) {
-        return entity != null && entity.getSite() != null ? entity.getSite().getId() : null;
+    default UUID entitySiteId(StoreCatalog entity) {
+        return entity != null && entity.getStore() != null ? entity.getStore().getId() : null;
     }
 
-    default UUID entityCatalogId(SiteCatalog entity) {
+    default UUID entityCatalogId(StoreCatalog entity) {
         return entity != null && entity.getCatalog() != null ? entity.getCatalog().getId() : null;
     }
 }
