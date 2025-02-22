@@ -28,6 +28,9 @@ public class Channel extends BaseEntity {
     
     @Column(name = "status")
     private String status;
+
+    @Column(name = "type")
+    private String type;
     
     @ManyToMany(mappedBy = "channels")
     private Set<Product> products = new HashSet<>();

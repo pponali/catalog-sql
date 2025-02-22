@@ -1,0 +1,33 @@
+package com.scaler.rules.validation;
+
+import com.scaler.entity.Merchant;
+
+global java.util.List errors;
+
+rule "Validate Merchant Name"
+when
+    $merchant: Merchant(name == null || name.trim().isEmpty())
+then
+    errors.add("Merchant name cannot be empty");
+end
+
+rule "Validate Merchant Code"
+when
+    $merchant: Merchant(code == null || code.trim().isEmpty())
+then
+    errors.add("Merchant code cannot be empty");
+end
+
+rule "Validate Merchant Status"
+when
+    $merchant: Merchant(status == null)
+then
+    errors.add("Merchant status cannot be null");
+end
+
+rule "Validate Merchant Contact"
+when
+    $merchant: Merchant(contactEmail == null || contactEmail.trim().isEmpty())
+then
+    errors.add("Merchant contact email cannot be empty");
+end

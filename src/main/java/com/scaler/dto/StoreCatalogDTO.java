@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SiteCatalogDTO {
+public class StoreCatalogDTO {
     private UUID id;
 
     @NotNull(message = "Site ID is required")

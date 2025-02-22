@@ -2,12 +2,10 @@ package com.scaler.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scaler.entity.Category;
-import com.scaler.entity.CategoryFeatureTemplate;
-import com.scaler.entity.ProductFeature;
-import com.scaler.entity.ProductFeatureValue;
+import com.scaler.entity.*;
 import com.scaler.enums.FeatureValueType;
 import com.scaler.exception.ValidationException;
+import com.scaler.repository.ValidationResultRepository;
 import com.scaler.validation.fact.CategoryValidationFact;
 import com.scaler.validation.fact.FeatureValidationFact;
 import com.scaler.validation.rule.ValidationRules;
@@ -17,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +31,44 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ValidationService {
 
+    private final ValidationResultRepository validationResultRepository;
     private final KieContainer kieContainer;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Transactional
+    public ValidationResult validateProductFeature(ProductFeature feature) {
+        // Clear previous validation results
+        validationResultRepository.deleteByEntityIdAndEntityType(feature.getId(), "PRODUCT_FEATURE");
+        
+        // Create new validation result
+        ValidationResult result = ValidationResult.builder()
+            .entityId(feature.getId())
+            .entityType("PRODUCT_FEATURE")
+            .fieldName(feature.getCode())
+            .status(ValidationStatus.PENDING)
+            .build();
+        
+        // Get KieSession and execute rules
+        KieSession kieSession = kieContainer.newKieSession();
+        List<String> errors = new ArrayList<>();
+        kieSession.setGlobal("errors", errors);
+        
+        try {
+            kieSession.insert(feature);
+            kieSession.fireAllRules();
+            
+            // Update validation result
+            if (!errors.isEmpty()) {
+                errors.forEach(result::addError);
+            } else {
+                result.setStatus(ValidationStatus.PASSED);
+            }
+            
+            return validationResultRepository.save(result);
+        } finally {
+            kieSession.dispose();
+        }
+    }
 
     /**
      * Validates a single product feature value against provided validation rules.

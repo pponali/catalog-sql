@@ -1,6 +1,6 @@
 package com.scaler.controller;
 
-import com.scaler.dto.SiteCatalogDTO;
+import com.scaler.dto.StoreCatalogDTO;
 import com.scaler.service.StoreCatalogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class StoreCatalogController {
     private final StoreCatalogService siteCatalogService;
 
     @PostMapping("/sites/{siteId}/catalogs/{catalogId}")
-    public ResponseEntity<SiteCatalogDTO> assignCatalogToSite(
+    public ResponseEntity<StoreCatalogDTO> assignCatalogToSite(
             @PathVariable UUID siteId,
             @PathVariable UUID catalogId,
             @RequestParam(defaultValue = "false") boolean isDefault) {
@@ -33,12 +33,12 @@ public class StoreCatalogController {
     }
 
     @GetMapping("/sites/{siteId}/catalogs")
-    public ResponseEntity<List<SiteCatalogDTO>> getCatalogsBySite(@PathVariable UUID siteId) {
+    public ResponseEntity<List<StoreCatalogDTO>> getCatalogsBySite(@PathVariable UUID siteId) {
         return ResponseEntity.ok(siteCatalogService.getCatalogsBySite(siteId));
     }
 
     @GetMapping("/sites/{siteId}/catalogs/default")
-    public ResponseEntity<SiteCatalogDTO> getDefaultCatalog(@PathVariable UUID siteId) {
+    public ResponseEntity<StoreCatalogDTO> getDefaultCatalog(@PathVariable UUID siteId) {
         return ResponseEntity.ok(siteCatalogService.getDefaultCatalog(siteId));
     }
 

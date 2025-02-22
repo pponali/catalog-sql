@@ -1,0 +1,26 @@
+package com.scaler.rules.validation;
+
+import com.scaler.entity.Catalog;
+
+global java.util.List errors;
+
+rule "Validate Catalog Name"
+when
+    $catalog: Catalog(name == null || name.trim().isEmpty())
+then
+    errors.add("Catalog name cannot be empty");
+end
+
+rule "Validate Catalog Description"
+when
+    $catalog: Catalog(description == null || description.trim().isEmpty())
+then
+    errors.add("Catalog description cannot be empty");
+end
+
+rule "Validate Catalog Status"
+when
+    $catalog: Catalog(status == null)
+then
+    errors.add("Catalog status cannot be null");
+end

@@ -15,8 +15,8 @@ import java.util.Set;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"catalog", "categories", "features", "merchant", "unitOfMeasure", "channels", "lineOfBusiness"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "categories", "features", "merchant", "unitOfMeasure", "channels", "lineOfBusiness"})
+@ToString(callSuper = true, exclude = {"catalog", "categories", "features", "merchant", "unitOfMeasure", "channels", "lineOfBusiness", "sellers"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "categories", "features", "merchant", "unitOfMeasure", "channels", "lineOfBusiness", "sellers"})
 public class Product extends BaseEntity {
     @Column(name = "code", nullable = false)
     private String code;
@@ -80,6 +80,14 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "line_of_business_id", nullable = false)
     private LineOfBusiness lineOfBusiness;
 
+    @ManyToMany
+    @JoinTable(
+        name = "product_sellers",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "seller_id")
+    )
+    private Set<Seller> sellers = new HashSet<>();
+
     public void addCategory(Category category) {
         categories.add(category);
         category.getProducts().add(this);
@@ -98,6 +106,16 @@ public class Product extends BaseEntity {
     public void removeFeature(ProductFeature feature) {
         features.remove(feature);
         feature.setProduct(null);
+    }
+
+    public void addSeller(Seller seller) {
+        sellers.add(seller);
+        seller.getProducts().add(this);
+    }
+
+    public void removeSeller(Seller seller) {
+        sellers.remove(seller);
+        seller.getProducts().remove(this);
     }
     
     public void addChannel(Channel channel) {

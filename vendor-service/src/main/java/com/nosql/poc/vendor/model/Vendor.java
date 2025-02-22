@@ -13,6 +13,9 @@ import java.util.Map;
 public class Vendor {
     @Id
     private String id;
+
+    @NotNull
+    private SellerType sellerType = SellerType.SECONDARY;
     
     @NotBlank
     private String vendorId;

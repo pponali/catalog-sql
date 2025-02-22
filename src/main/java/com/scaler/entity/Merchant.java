@@ -28,6 +28,9 @@ public class Merchant extends BaseEntity {
     
     @Column(name = "status")
     private String status;
+
+    @Column(name = "contact_email")
+    private String contactEmail;
     
     @ManyToMany(mappedBy = "merchants")
     private Set<Catalog> catalogs = new HashSet<>();

@@ -24,8 +24,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 @RequiredArgsConstructor
 public class CatalogMigrationServiceImpl implements CatalogMigrationService {
+    @Override
+    public MigrationResultDTO migrateCategories(UUID sourceCatalogId, UUID targetCatalogId, List<UUID> categoryIds) {
+        return null;
+    }
 
-    private final CatalogRepository catalogRepository;
+    @Override
+    public MigrationResultDTO migrateProducts(UUID sourceCatalogId, UUID targetCatalogId, List<UUID> productIds) {
+        return null;
+    }
+
+    @Override
+    public MigrationResultDTO bulkMigrate(MigrationRequestDTO request) {
+        return null;
+    }
+
+    @Override
+    public boolean validateMigration(UUID sourceCatalogId, UUID targetCatalogId) {
+        return false;
+    }
+
+    @Override
+    public List<MigrationResultDTO> getMigrationHistory(UUID catalogId) {
+        return List.of();
+    }
+
+    /*private final CatalogRepository catalogRepository;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final CatalogMigrationRepository migrationRepository;
@@ -103,7 +127,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         return false;
     }
 
-    /*@Override
+    @Override
     @Transactional
     public MigrationResultDTO migrateProducts(UUID sourceCatalogId, UUID targetCatalogId, List<UUID> productIds) {
         validateCatalogs(sourceCatalogId, targetCatalogId);
@@ -161,9 +185,9 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         migration = migrationRepository.save(migration);
         
         return createMigrationResult(migration);
-    }*/
+    }
 
-    /*@Override
+    @Override
     @Transactional
     public MigrationResultDTO bulkMigrate(MigrationRequestDTO request) {
         validateCatalogs(request.getSourceCatalogId(), request.getTargetCatalogId());
@@ -219,8 +243,8 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         
         return createMigrationResult(migration);
     }
-*/
-    /*@Override
+
+    @Override
     public boolean validateMigration(UUID sourceCatalogId, UUID targetCatalogId) {
         try {
             validateCatalogs(sourceCatalogId, targetCatalogId);
@@ -229,7 +253,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         } catch (Exception e) {
             return false;
         }
-    }*/
+    }
 
     @Override
     public List<MigrationResultDTO> getMigrationHistory(UUID catalogId) {
@@ -253,7 +277,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         }
     }
 
-    /*private void validateBusinessRules(UUID sourceCatalogId, UUID targetCatalogId) {
+    private void validateBusinessRules(UUID sourceCatalogId, UUID targetCatalogId) {
         Catalog sourceCatalog = catalogRepository.findById(sourceCatalogId)
             .orElseThrow(() -> new ResourceNotFoundException("Source catalog not found: " + sourceCatalogId));
         Catalog targetCatalog = catalogRepository.findById(targetCatalogId)
@@ -296,9 +320,9 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
 
         // Additional validation for specific product types
         validateProductTypeRules(sourceCatalog, targetCatalog);
-    }*/
+    }
 
-    /*private void validateProductTypeRules(Catalog sourceCatalog, Catalog targetCatalog) {
+    private void validateProductTypeRules(Catalog sourceCatalog, Catalog targetCatalog) {
         // Rule 1: Fashion products require size chart mapping
         if (isFashionCatalog(sourceCatalog) && !isFashionCatalog(targetCatalog)) {
             validateSizeChartMapping(sourceCatalog, targetCatalog);
@@ -318,9 +342,9 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         if (isJewelryCatalog(sourceCatalog) && !isJewelryCatalog(targetCatalog)) {
             validateJewelryCertification(sourceCatalog, targetCatalog);
         }
-    }*/
+    }
 
-    /*private boolean isBusinessUnit(Merchant business, BusinessUnit unit) {
+    private boolean isBusinessUnit(Merchant business, BusinessUnit unit) {
         return merchant.getCode().equals(unit.name());
     }
 
@@ -338,7 +362,7 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
 
     private boolean isJewelryCatalog(Catalog catalog) {
         return catalog.getMerchant().equals(merchantRepository.findByName(BusinessUnit.TANISHQ.getDisplayName()));
-    }*/
+    }
 
     private void validateSizeChartMapping(Catalog sourceCatalog, Catalog targetCatalog) {
         List<Product> products = productRepository.findByCatalogId(sourceCatalog.getId());
@@ -549,6 +573,6 @@ public class CatalogMigrationServiceImpl implements CatalogMigrationService {
         migrationRepository.save(migration);
 
         return migration.getStatus() == MigrationStatus.COMPLETED;
-    }
+    }*/
 
 }

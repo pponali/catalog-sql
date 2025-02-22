@@ -6,6 +6,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "product_feature")
@@ -16,6 +18,10 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "featureValues"})
 @ToString(callSuper = true, exclude = {"product", "template", "featureValues"})
 public class ProductFeature extends BaseEntity {
+    
+    public String getValue() {
+        return defaultValue;
+    }
     @Column(nullable = false)
     private String code;
 

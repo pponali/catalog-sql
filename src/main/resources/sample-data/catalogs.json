@@ -1,0 +1,51 @@
+{
+  "catalogs": [
+    {
+      "id": "6p7q8r9s-0t1u-2v3w-4x5y-6z7a8b9c0d1e",
+      "code": "TATACLIQ_FASHION",
+      "name": "Tata CLiQ Fashion Catalog",
+      "description": "Fashion and lifestyle products catalog",
+      "status": "ACTIVE",
+      "type": "PRODUCT",
+      "businessId": "6f7g8h9i-0j1k-2l3m-4n5o-6p7q8r9s0t1u",
+      "merchantIds": ["6f7g8h9i-0j1k-2l3m-4n5o-6p7q8r9s0t1u"],
+      "channelIds": [
+        "1k2l3m4n-5o6p-7q8r-9s0t-1u2v3w4x5y6z",
+        "2l3m4n5o-6p7q-8r9s-0t1u-2v3w4x5y6z7a"
+      ]
+    },
+    {
+      "id": "7q8r9s0t-1u2v-3w4x-5y6z-7a8b9c0d1e2f",
+      "code": "1MG_HEALTHCARE",
+      "name": "1mg Healthcare Catalog",
+      "description": "Healthcare and wellness products catalog",
+      "status": "ACTIVE",
+      "type": "PRODUCT",
+      "businessId": "7g8h9i0j-1k2l-3m4n-5o6p-7q8r9s0t1u2v",
+      "merchantIds": ["7g8h9i0j-1k2l-3m4n-5o6p-7q8r9s0t1u2v"],
+      "channelIds": ["3m4n5o6p-7q8r-9s0t-1u2v-3w4x5y6z7a8b"]
+    },
+    {
+      "id": "8r9s0t1u-2v3w-4x5y-6z7a-8b9c0d1e2f3g",
+      "code": "BIGBASKET_GROCERY",
+      "name": "BigBasket Grocery Catalog",
+      "description": "Grocery and household items catalog",
+      "status": "ACTIVE",
+      "type": "PRODUCT",
+      "businessId": "8h9i0j1k-2l3m-4n5o-6p7q-8r9s0t1u2v3w",
+      "merchantIds": ["8h9i0j1k-2l3m-4n5o-6p7q-8r9s0t1u2v3w"],
+      "channelIds": ["4n5o6p7q-8r9s-0t1u-2v3w-4x5y6z7a8b9c"]
+    },
+    {
+      "id": "9s0t1u2v-3w4x-5y6z-7a8b-9c0d1e2f3g4h",
+      "code": "CROMA_ELECTRONICS",
+      "name": "Croma Electronics Catalog",
+      "description": "Electronics and appliances catalog",
+      "status": "ACTIVE",
+      "type": "PRODUCT",
+      "businessId": "9i0j1k2l-3m4n-5o6p-7q8r-9s0t1u2v3w4x",
+      "merchantIds": ["9i0j1k2l-3m4n-5o6p-7q8r-9s0t1u2v3w4x"],
+      "channelIds": ["5o6p7q8r-9s0t-1u2v-3w4x-5y6z7a8b9c0d"]
+    }
+  ]
+}

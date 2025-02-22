@@ -1,6 +1,6 @@
 package com.scaler.mapper;
 
-import com.scaler.dto.SiteCatalogDTO;
+import com.scaler.dto.StoreCatalogDTO;
 import com.scaler.entity.StoreCatalog;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -27,7 +27,7 @@ public interface StoreCatalogMapper extends JsonNodeMapper {
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })
-    SiteCatalogDTO toDTO(StoreCatalog entity);
+    StoreCatalogDTO toDTO(StoreCatalog entity);
 
     @InheritInverseConfiguration
     @Mappings({
@@ -43,14 +43,14 @@ public interface StoreCatalogMapper extends JsonNodeMapper {
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     })
-    StoreCatalog toEntity(SiteCatalogDTO dto);
+    StoreCatalog toEntity(StoreCatalogDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(@MappingTarget StoreCatalog entity, SiteCatalogDTO dto);
+    void updateEntity(@MappingTarget StoreCatalog entity, StoreCatalogDTO dto);
 
-    List<SiteCatalogDTO> toDTOList(List<StoreCatalog> entities);
+    List<StoreCatalogDTO> toDTOList(List<StoreCatalog> entities);
 
-    Set<SiteCatalogDTO> toDTOSet(Set<StoreCatalog> entities);
+    Set<StoreCatalogDTO> toDTOSet(Set<StoreCatalog> entities);
 
     default UUID entitySiteId(StoreCatalog entity) {
         return entity != null && entity.getStore() != null ? entity.getStore().getId() : null;

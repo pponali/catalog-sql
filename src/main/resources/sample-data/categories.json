@@ -1,0 +1,49 @@
+{
+  "categories": [
+    {
+      "id": "0t1u2v3w-4x5y-6z7a-8b9c-0d1e2f3g4h5i",
+      "code": "MENS_FASHION",
+      "name": "Men's Fashion",
+      "description": "Men's clothing and accessories",
+      "status": "ACTIVE",
+      "catalogId": "6p7q8r9s-0t1u-2v3w-4x5y-6z7a8b9c0d1e",
+      "parentId": null
+    },
+    {
+      "id": "1u2v3w4x-5y6z-7a8b-9c0d-1e2f3g4h5i6j",
+      "code": "MENS_TSHIRTS",
+      "name": "Men's T-Shirts",
+      "description": "Men's t-shirts and tops",
+      "status": "ACTIVE",
+      "catalogId": "6p7q8r9s-0t1u-2v3w-4x5y-6z7a8b9c0d1e",
+      "parentId": "0t1u2v3w-4x5y-6z7a-8b9c-0d1e2f3g4h5i"
+    },
+    {
+      "id": "2v3w4x5y-6z7a-8b9c-0d1e-2f3g4h5i6j7k",
+      "code": "MEDICINES",
+      "name": "Medicines",
+      "description": "Prescription and over-the-counter medicines",
+      "status": "ACTIVE",
+      "catalogId": "7q8r9s0t-1u2v-3w4x-5y6z-7a8b9c0d1e2f",
+      "parentId": null
+    },
+    {
+      "id": "3w4x5y6z-7a8b-9c0d-1e2f-3g4h5i6j7k8l",
+      "code": "FRESH_VEGETABLES",
+      "name": "Fresh Vegetables",
+      "description": "Fresh vegetables and greens",
+      "status": "ACTIVE",
+      "catalogId": "8r9s0t1u-2v3w-4x5y-6z7a-8b9c0d1e2f3g",
+      "parentId": null
+    },
+    {
+      "id": "4x5y6z7a-8b9c-0d1e-2f3g-4h5i6j7k8l9m",
+      "code": "SMARTPHONES",
+      "name": "Smartphones",
+      "description": "Mobile phones and smartphones",
+      "status": "ACTIVE",
+      "catalogId": "9s0t1u2v-3w4x-5y6z-7a8b-9c0d1e2f3g4h",
+      "parentId": null
+    }
+  ]
+}

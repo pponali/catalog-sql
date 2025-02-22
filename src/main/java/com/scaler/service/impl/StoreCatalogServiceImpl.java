@@ -1,6 +1,6 @@
 package com.scaler.service.impl;
 
-import com.scaler.dto.SiteCatalogDTO;
+import com.scaler.dto.StoreCatalogDTO;
 import com.scaler.entity.Catalog;
 import com.scaler.entity.Store;
 import com.scaler.entity.StoreCatalog;
@@ -30,7 +30,7 @@ public class StoreCatalogServiceImpl implements StoreCatalogService {
 
     @Override
     @Transactional
-    public SiteCatalogDTO assignCatalogToSite(UUID storeId, UUID catalogId, boolean isDefault) {
+    public StoreCatalogDTO assignCatalogToSite(UUID storeId, UUID catalogId, boolean isDefault) {
         Store store = storeRepository.findById(storeId)
             .orElseThrow(() -> new ResourceNotFoundException("Site not found with id: " + storeId));
         
@@ -76,7 +76,7 @@ public class StoreCatalogServiceImpl implements StoreCatalogService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SiteCatalogDTO> getCatalogsBySite(UUID siteId) {
+    public List<StoreCatalogDTO> getCatalogsBySite(UUID siteId) {
         if (!storeRepository.existsById(siteId)) {
             throw new ResourceNotFoundException("Site not found with id: " + siteId);
         }
@@ -88,7 +88,7 @@ public class StoreCatalogServiceImpl implements StoreCatalogService {
 
     @Override
     @Transactional(readOnly = true)
-    public SiteCatalogDTO getDefaultCatalog(UUID siteId) {
+    public StoreCatalogDTO getDefaultCatalog(UUID siteId) {
         return storeCatalogRepository.findByStoreIdAndIsDefaultTrue(siteId)
             .map(storeCatalogMapper::toDTO)
             .orElseThrow(() -> new ResourceNotFoundException("No default catalog found for site: " + siteId));

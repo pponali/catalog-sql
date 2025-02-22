@@ -6,15 +6,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface ProductInventoryRepository extends JpaRepository<ProductInventory, Long> {
+public interface ProductInventoryRepository extends JpaRepository<ProductInventory, UUID> {
     
     @Query("SELECT pi FROM ProductInventory pi " +
            "WHERE pi.product.id = :productId " +
-           "AND pi.merchant.id = :merchantId " +
-           "AND pi.channel.id = :channelId")
-    Optional<ProductInventory> findByProductMerchantAndChannel(
-            @Param("productId") Long productId,
-            @Param("merchantId") Long merchantId,
-            @Param("channelId") Long channelId);
+           "AND (:merchantId IS NULL OR pi.merchant.id = :merchantId) " +
+           "AND (:channelId IS NULL OR pi.channel.id = :channelId)")
+    Optional<ProductInventory> findByProductIdAndMerchantIdAndChannelId(
+            @Param("productId") UUID productId,
+            @Param("merchantId") UUID merchantId,
+            @Param("channelId") UUID channelId);
 }

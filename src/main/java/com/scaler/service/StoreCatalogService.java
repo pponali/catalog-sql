@@ -1,14 +1,15 @@
 package com.scaler.service;
 
-import com.scaler.dto.SiteCatalogDTO;
+import com.scaler.dto.StoreCatalogDTO;
+
 import java.util.List;
 import java.util.UUID;
 
 public interface StoreCatalogService {
-    SiteCatalogDTO assignCatalogToSite(UUID siteId, UUID catalogId, boolean isDefault);
+    StoreCatalogDTO assignCatalogToSite(UUID siteId, UUID catalogId, boolean isDefault);
     void removeCatalogFromStore(UUID siteId, UUID catalogId);
-    List<SiteCatalogDTO> getCatalogsBySite(UUID siteId);
-    SiteCatalogDTO getDefaultCatalog(UUID siteId);
+    List<StoreCatalogDTO> getCatalogsBySite(UUID siteId);
+    StoreCatalogDTO getDefaultCatalog(UUID siteId);
     void setDefaultCatalog(UUID siteId, UUID catalogId);
     boolean validateCatalogAccess(UUID siteId, UUID catalogId);
 }

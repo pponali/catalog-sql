@@ -51,5 +51,5 @@ public class CatalogDTO {
     private List<CategoryDTO> categories = new ArrayList<>();
 
     @Builder.Default
-    private Set<SiteCatalogDTO> siteCatalogs = new HashSet<>();
+    private Set<StoreCatalogDTO> siteCatalogs = new HashSet<>();
 }

@@ -93,6 +93,10 @@ public class CategoryFeatureTemplate extends FeatureTemplate {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    public UUID getCategoryId() {
+        return category != null ? category.getId() : null;
+    }
+
     @OneToMany(mappedBy = "template", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductFeature> features = new HashSet<>();
 

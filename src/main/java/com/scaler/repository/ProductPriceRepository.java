@@ -7,16 +7,16 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface ProductPriceRepository extends JpaRepository<ProductPrice, Long> {
+public interface ProductPriceRepository extends JpaRepository<ProductPrice, UUID> {
     
-    /*@Query("SELECT pp FROM ProductPrice pp WHERE pp.product.id = :productId " +
-           "AND (pp.channel.id = :channelId OR pp.channel IS NULL) " +
-           "AND (pp.lineOfBusiness.id = :lobId OR pp.lineOfMerchant IS NULL) " +
+    @Query("SELECT pp FROM ProductPrice pp " +
+           "WHERE pp.product.id = :productId " +
+           "AND (:channelId IS NULL OR pp.channel.id = :channelId) " +
            "AND pp.isActive = true " +
-           "ORDER BY pp.channel.id NULLS LAST, pp.lineOfBusiness.id NULLS LAST")
+           "ORDER BY pp.channel.id NULLS LAST")
     List<ProductPrice> findActiveProductPrices(
-            @Param("productId") Long productId,
-            @Param("channelId") Long channelId,
-            @Param("lobId") Long lobId);*/
+            @Param("productId") UUID productId,
+            @Param("channelId") UUID channelId);
 }

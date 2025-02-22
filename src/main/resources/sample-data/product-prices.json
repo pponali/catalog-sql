@@ -1,0 +1,48 @@
+{
+  "productPrices": [
+    {
+      "id": "9c0d1e2f-3g4h-5i6j-7k8l-9m0n1o2p3q4r",
+      "productId": "5y6z7a8b-9c0d-1e2f-3g4h-5i6j7k8l9m0n",
+      "merchantId": "6f7g8h9i-0j1k-2l3m-4n5o-6p7q8r9s0t1u",
+      "channelId": "1k2l3m4n-5o6p-7q8r-9s0t-1u2v3w4x5y6z",
+      "basePrice": 599.00,
+      "currency": "INR",
+      "status": "ACTIVE",
+      "startDate": "2025-02-21T00:00:00Z",
+      "endDate": "2025-12-31T23:59:59Z"
+    },
+    {
+      "id": "0d1e2f3g-4h5i-6j7k-8l9m-0n1o2p3q4r5s",
+      "productId": "6z7a8b9c-0d1e-2f3g-4h5i-6j7k8l9m0n1o",
+      "merchantId": "7g8h9i0j-1k2l-3m4n-5o6p-7q8r9s0t1u2v",
+      "channelId": "3m4n5o6p-7q8r-9s0t-1u2v-3w4x5y6z7a8b",
+      "basePrice": 15.50,
+      "currency": "INR",
+      "status": "ACTIVE",
+      "startDate": "2025-02-21T00:00:00Z",
+      "endDate": "2025-12-31T23:59:59Z"
+    },
+    {
+      "id": "1e2f3g4h-5i6j-7k8l-9m0n-1o2p3q4r5s6t",
+      "productId": "7a8b9c0d-1e2f-3g4h-5i6j-7k8l9m0n1o2p",
+      "merchantId": "8h9i0j1k-2l3m-4n5o-6p7q-8r9s0t1u2v3w",
+      "channelId": "4n5o6p7q-8r9s-0t1u-2v3w-4x5y6z7a8b9c",
+      "basePrice": 40.00,
+      "currency": "INR",
+      "status": "ACTIVE",
+      "startDate": "2025-02-21T00:00:00Z",
+      "endDate": "2025-12-31T23:59:59Z"
+    },
+    {
+      "id": "2f3g4h5i-6j7k-8l9m-0n1o-2p3q4r5s6t7u",
+      "productId": "8b9c0d1e-2f3g-4h5i-6j7k-8l9m0n1o2p3q",
+      "merchantId": "9i0j1k2l-3m4n-5o6p-7q8r-9s0t1u2v3w4x",
+      "channelId": "5o6p7q8r-9s0t-1u2v-3w4x-5y6z7a8b9c0d",
+      "basePrice": 134900.00,
+      "currency": "INR",
+      "status": "ACTIVE",
+      "startDate": "2025-02-21T00:00:00Z",
+      "endDate": "2025-12-31T23:59:59Z"
+    }
+  ]
+}

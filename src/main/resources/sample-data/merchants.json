@@ -1,0 +1,49 @@
+{
+  "merchants": [
+    {
+      "id": "6f7g8h9i-0j1k-2l3m-4n5o-6p7q8r9s0t1u",
+      "code": "TATA_CLIQ",
+      "name": "Tata CLiQ",
+      "description": "Tata Group's e-commerce platform",
+      "status": "ACTIVE",
+      "type": "RETAIL",
+      "lineOfBusinessId": "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p"
+    },
+    {
+      "id": "7g8h9i0j-1k2l-3m4n-5o6p-7q8r9s0t1u2v",
+      "code": "TATA_1MG",
+      "name": "Tata 1mg",
+      "description": "Online pharmacy and healthcare platform",
+      "status": "ACTIVE",
+      "type": "HEALTHCARE",
+      "lineOfBusinessId": "2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q"
+    },
+    {
+      "id": "8h9i0j1k-2l3m-4n5o-6p7q-8r9s0t1u2v3w",
+      "code": "BIGBASKET",
+      "name": "BigBasket",
+      "description": "Online grocery delivery platform",
+      "status": "ACTIVE",
+      "type": "GROCERY",
+      "lineOfBusinessId": "3c4d5e6f-7g8h-9i0j-1k2l-3m4n5o6p7q8r"
+    },
+    {
+      "id": "9i0j1k2l-3m4n-5o6p-7q8r-9s0t1u2v3w4x",
+      "code": "TATA_CROMA",
+      "name": "Tata Croma",
+      "description": "Electronics retail chain",
+      "status": "ACTIVE",
+      "type": "ELECTRONICS",
+      "lineOfBusinessId": "4d5e6f7g-8h9i-0j1k-2l3m-4n5o6p7q8r9s"
+    },
+    {
+      "id": "0j1k2l3m-4n5o-6p7q-8r9s-0t1u2v3w4x5y",
+      "code": "TANISHQ",
+      "name": "Tanishq",
+      "description": "Jewelry retail chain",
+      "status": "ACTIVE",
+      "type": "JEWELRY",
+      "lineOfBusinessId": "5e6f7g8h-9i0j-1k2l-3m4n-5o6p7q8r9s0t"
+    }
+  ]
+}
