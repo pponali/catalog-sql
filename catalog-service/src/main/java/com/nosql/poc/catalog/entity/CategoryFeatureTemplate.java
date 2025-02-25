@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Document(collection = "category_feature_template")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"category", "features"})

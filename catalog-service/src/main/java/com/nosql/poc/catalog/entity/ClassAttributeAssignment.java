@@ -8,7 +8,7 @@ import java.util.*;
 
 @Document(collection = "class_attribute")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")

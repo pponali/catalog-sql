@@ -4,20 +4,21 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
-@Builder
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class SiteDTO {
-    private UUID id;
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class SiteDTO extends BaseDTO {
+
 
     @NotNull(message = "Merchant ID is required")
     private UUID merchantId;
@@ -47,8 +48,4 @@ public class SiteDTO {
     private boolean active;
     private String timezone;
     private String status;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
-    private String createdBy;
-    private String lastModifiedBy;
 }

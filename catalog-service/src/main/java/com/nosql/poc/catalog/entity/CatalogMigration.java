@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Document(collection = "catalog_migration")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)

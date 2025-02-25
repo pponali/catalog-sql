@@ -1,5 +1,7 @@
 package com.scaler.exception;
 
+import java.util.List;
+
 /**
  * Exception thrown when validation fails
  */
@@ -21,5 +23,9 @@ public class ValidationException extends BaseServiceException {
     
     public ValidationException(String message, Throwable cause, String errorCode, Object... parameters) {
         super(message, cause, errorCode, parameters);
+    }
+
+    public ValidationException(String validationFailed, List<String> errors) {
+        super(validationFailed, DEFAULT_ERROR_CODE, errors.toArray());
     }
 }

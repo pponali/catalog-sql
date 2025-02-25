@@ -4,6 +4,7 @@ import com.scaler.dto.ProductSearchCriteria;
 import com.scaler.entity.Product;
 import com.scaler.entity.Seller;
 import com.scaler.entity.Category;
+import com.scaler.entity.ProductCategory;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -44,7 +45,8 @@ public class ProductSpecification {
             
             // Category criteria
             if (criteria.getCategoryIds() != null && !criteria.getCategoryIds().isEmpty()) {
-                Join<Product, Category> categoryJoin = root.join("categories");
+                Join<Product, ProductCategory> productCategoryJoin = root.join("productCategories");
+                Join<ProductCategory, Category> categoryJoin = productCategoryJoin.join("category");
                 predicates.add(categoryJoin.get("id").in(criteria.getCategoryIds()));
             }
             

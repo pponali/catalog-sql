@@ -16,11 +16,10 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryFeatureTemplateDTO {
-    private UUID id;
+public class CategoryFeatureTemplateDTO extends BaseDTO {
     private String version;
 
     @NotNull(message = "Category ID is required")
@@ -64,10 +63,6 @@ public class CategoryFeatureTemplateDTO {
 
     private String metadata = "";
 
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
-    private String createdBy;
-    private String lastModifiedBy;
 
     @JsonIgnore
     private Set<ProductFeatureDTO> features = new HashSet<>();

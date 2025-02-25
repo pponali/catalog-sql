@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "unit")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)

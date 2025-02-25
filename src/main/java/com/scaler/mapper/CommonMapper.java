@@ -17,36 +17,51 @@ import java.util.Locale;
 
 @Component
 public class CommonMapper {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a", new Locale("en", "IN"));
+    private static final DateTimeFormatter[] formatters = {
+        DateTimeFormatter.ISO_DATE_TIME,
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
+        DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a", new Locale("en", "IN"))
+    };
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Named("formatDateTime")
     public String formatDateTime(LocalDateTime dateTime) {
-        return dateTime != null ? formatter.format(dateTime) : null;
+        return dateTime != null ? formatters[0].format(dateTime) : null;
     }
 
     @Named("parseDateTime")
     public LocalDateTime parseDateTime(String dateTime) {
-        return dateTime != null ? LocalDateTime.parse(dateTime, formatter) : null;
+        if (dateTime == null) return null;
+        
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                return LocalDateTime.parse(dateTime, formatter);
+            } catch (Exception e) {
+                // Try next formatter
+            }
+        }
+        throw new IllegalArgumentException("Unable to parse date: " + dateTime);
     }
 
-    @Named("mapJsonNodeToString")
-    public String mapJsonNodeToString(JsonNode jsonNode) {
+    @Named("jsonStringToJsonNode")
+    public JsonNode jsonStringToJsonNode(String value) {
+        if (value == null || value.isEmpty() || value.equals("\"\"")) return null;
         try {
-            return jsonNode != null ? objectMapper.writeValueAsString(jsonNode) : null;
+            return objectMapper.readTree(value);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting JsonNode to String", e);
+            throw new RuntimeException("Error converting String to JsonNode: " + value, e);
         }
     }
 
-    @Named("mapStringToJsonNode")
-    public JsonNode mapStringToJsonNode(String json) {
+    @Named("jsonNodeToString")
+    public String jsonNodeToString(JsonNode jsonNode) {
+        if (jsonNode == null) return null;
         try {
-            return json != null ? objectMapper.readTree(json) : null;
+            return objectMapper.writeValueAsString(jsonNode);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting String to JsonNode", e);
+            throw new RuntimeException("Error converting JsonNode to String", e);
         }
     }
 

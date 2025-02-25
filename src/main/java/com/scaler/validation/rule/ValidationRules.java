@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "validation_rules")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class ValidationRules {

@@ -3,16 +3,16 @@ package com.scaler.dto;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductFeatureValueDTO {
-    private UUID id;
+public class ProductFeatureValueDTO extends BaseDTO {
 
     @NotNull(message = "Product ID is required")
     private UUID productId;
@@ -26,17 +26,9 @@ public class ProductFeatureValueDTO {
     private String type;
     private String unit;
     private String unitOfMeasure;
-    private String status;
-    private String validationStatus;
-    private String validationPattern;
-    private String validationMessage;
+    private ValidationResultDTO validationResult;
     private String metadata;
     private String attributeValues;
-
-    private String createdDate;
-    private String lastModifiedDate;
-    private String createdBy;
-    private String lastModifiedBy;
 
     @ToString.Exclude
     private ProductDTO product;
@@ -50,13 +42,5 @@ public class ProductFeatureValueDTO {
 
     public void setAttributeValue(JsonNode value) {
         this.attributeValues = value != null ? value.toString() : null;
-    }
-
-    public void setValidationStatus(String status) {
-        this.validationStatus = status;
-    }
-
-    public void setValidationMessage(String message) {
-        this.validationMessage = message;
     }
 }

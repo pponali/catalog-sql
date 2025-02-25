@@ -25,10 +25,6 @@ public interface SiteMapper {
     @Mapping(target = "active", source = "active")
     @Mapping(target = "timezone", source = "timezone")
     @Mapping(target = "status", source = "status")
-    @Mapping(target = "createdAt", source = "createdDate")
-    @Mapping(target = "lastModifiedAt", source = "lastModifiedDate")
-    @Mapping(target = "createdBy", source = "createdBy")
-    @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     SiteDTO toDTO(Store site);
 
     @Mapping(target = "id", source = "id")
@@ -41,10 +37,6 @@ public interface SiteMapper {
     @Mapping(target = "active", source = "active")
     @Mapping(target = "timezone", source = "timezone")
     @Mapping(target = "status", source = "status")
-    @Mapping(target = "createdDate", source = "createdAt")
-    @Mapping(target = "lastModifiedDate", source = "lastModifiedAt")
-    @Mapping(target = "createdBy", source = "createdBy")
-    @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
     Store toEntity(SiteDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

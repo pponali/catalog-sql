@@ -3,10 +3,8 @@ package com.scaler.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,10 +14,12 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
-@Builder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CatalogDTO {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class CatalogDTO extends BaseDTO {
     private UUID id;
 
     @NotBlank(message = "Catalog code is required")
@@ -38,11 +38,6 @@ public class CatalogDTO {
 
     @NotNull(message = "Merchant ID is required")
     private UUID businessId;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
-    private String createdBy;
-    private String lastModifiedBy;
 
     @Builder.Default
     private List<ProductDTO> products = new ArrayList<>();

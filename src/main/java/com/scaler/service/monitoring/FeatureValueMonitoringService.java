@@ -109,14 +109,14 @@ public class FeatureValueMonitoringService {
         
         // Calculate metrics
         long totalValues = values.size();
-        long validValues = values.stream()
+        /*long validValues = values.stream()
                 .filter(v -> "VALID".equals(v.getValidationStatus()))
-                .count();
+                .count();*/
         
         return MonitoringMetrics.builder()
                 .featureId(featureId)
                 .totalValues(totalValues)
-                .validValues(validValues)
+                //.validValues(validValues)
                 .lastUpdateTime(lastUpdateTimes.get(featureId))
                 .build();
     }

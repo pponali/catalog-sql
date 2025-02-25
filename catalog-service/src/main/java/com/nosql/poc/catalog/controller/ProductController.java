@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping(/products")
 @RequiredArgsConstructor
 @Tag(name = "Product Management", description = "APIs for managing product catalog")
 public class ProductController {
@@ -49,7 +49,7 @@ public class ProductController {
         log.info("Creating new product with name: {}", request.getName());
         Product product = productService.createProduct(request.toProduct());
         return ResponseEntity
-            .created(URI.create("/api/v1/products/" + product.getId()))
+            .created(URI.create(/products/" + product.getId()))
             .body(ProductResponse.fromProduct(product));
     }
     

@@ -12,11 +12,11 @@ import java.util.Set;
 @Entity
 @Table(name = "catalog")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"products", "merchants", "channels", "linesOfBusiness", "business", "categories", "siteCatalogs"})
-@EqualsAndHashCode(callSuper = true, exclude = {"products", "merchants", "channels", "linesOfBusiness", "business", "categories", "siteCatalogs"})
+@ToString(callSuper = true, exclude = {"products", "merchants", "channels", "business", "categories", "siteCatalogs"})
+@EqualsAndHashCode(callSuper = true, exclude = {"products", "merchants", "channels",  "business", "categories", "siteCatalogs"})
 public class Catalog extends BaseEntity {
     
     @Column(name = "code", nullable = false, unique = true)
@@ -63,14 +63,7 @@ public class Catalog extends BaseEntity {
     )
     private Set<Channel> channels = new HashSet<>();
     
-    @ManyToMany
-    @JoinTable(
-        name = "catalog_lines_of_business",
-        joinColumns = @JoinColumn(name = "catalog_id"),
-        inverseJoinColumns = @JoinColumn(name = "line_of_business_id")
-    )
-    private List<LineOfBusiness> lineOfBusinesses = new ArrayList<>();
-    
+
     public void addProduct(Product product) {
         products.add(product);
         product.setCatalog(this);
@@ -121,13 +114,5 @@ public class Catalog extends BaseEntity {
         channel.getCatalogs().remove(this);
     }
     
-    public void addLineOfBusiness(LineOfBusiness lineOfBusiness) {
-        lineOfBusinesses.add(lineOfBusiness);
-        lineOfBusiness.getCatalogs().add(this);
-    }
-    
-    public void removeLineOfBusiness(LineOfBusiness lineOfBusiness) {
-        lineOfBusinesses.remove(lineOfBusiness);
-        lineOfBusiness.getCatalogs().remove(this);
-    }
+
 }

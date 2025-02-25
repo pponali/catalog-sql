@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -100,39 +98,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
-    @ExceptionHandler({AuthenticationException.class})
-    public ResponseEntity<ErrorResponse> handleAuthenticationException(
-            AuthenticationException ex, WebRequest request) {
-        String errorId = generateErrorId();
-        log.error("Error ID: {} - Authentication error: {}", errorId, ex.getMessage(), ex);
-        
-        ErrorResponse errorResponse = new ErrorResponse(
-            errorId,
-            HttpStatus.UNAUTHORIZED.value(),
-            ErrorCodes.SECURITY_UNAUTHORIZED,
-            "Authentication failed",
-            LocalDateTime.now()
-        );
-        
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-    }
 
-    @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<ErrorResponse> handleAccessDeniedException(
-            AccessDeniedException ex, WebRequest request) {
-        String errorId = generateErrorId();
-        log.error("Error ID: {} - Access denied: {}", errorId, ex.getMessage(), ex);
-        
-        ErrorResponse errorResponse = new ErrorResponse(
-            errorId,
-            HttpStatus.FORBIDDEN.value(),
-            ErrorCodes.SECURITY_FORBIDDEN,
-            "Access denied",
-            LocalDateTime.now()
-        );
-        
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
-    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralExceptions(Exception ex, WebRequest request) {

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,6 +57,10 @@ public class StoreCatalogServiceImpl implements StoreCatalogService {
         storeCatalog.setStore(store);
         storeCatalog.setCatalog(catalog);
         storeCatalog.setIsDefault(isDefault);
+        storeCatalog.setCreatedBy("system");
+        storeCatalog.setLastModifiedBy("system");
+        storeCatalog.setCreatedDate(LocalDateTime.now());
+        storeCatalog.setLastModifiedDate(LocalDateTime.now());
 
         storeCatalog = storeCatalogRepository.save(storeCatalog);
         return storeCatalogMapper.toDTO(storeCatalog);

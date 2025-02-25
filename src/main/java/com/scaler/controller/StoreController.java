@@ -1,6 +1,6 @@
 package com.scaler.controller;
 
-import com.scaler.dto.SiteDTO;
+import com.scaler.dto.StoreDTO;
 import com.scaler.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,37 +13,37 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/sites")
+@RequestMapping("/api/stores")
 @RequiredArgsConstructor
 public class StoreController {
     
     private final StoreService storeService;
 
     @PostMapping
-    public ResponseEntity<SiteDTO> createSite(@Valid @RequestBody SiteDTO siteDTO) {
-        SiteDTO createdSite = storeService.createSite(siteDTO);
+    public ResponseEntity<StoreDTO> createStore(@Valid @RequestBody StoreDTO storeDTO) {
+        StoreDTO createdStore = storeService.createStore(storeDTO);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
-            .buildAndExpand(createdSite.getId())
+            .buildAndExpand(createdStore.getId())
             .toUri();
-        return ResponseEntity.created(location).body(createdSite);
+        return ResponseEntity.created(location).body(createdStore);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SiteDTO> updateSite(
+    public ResponseEntity<StoreDTO> updateSite(
             @PathVariable UUID id,
-            @Valid @RequestBody SiteDTO siteDTO) {
-        return ResponseEntity.ok(storeService.updateSite(id, siteDTO));
+            @Valid @RequestBody StoreDTO storeDTO) {
+        return ResponseEntity.ok(storeService.updateStore(id, storeDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SiteDTO> getSite(@PathVariable UUID id) {
+    public ResponseEntity<StoreDTO> getSite(@PathVariable UUID id) {
         return ResponseEntity.ok(storeService.getSite(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<SiteDTO>> getAllSites(
+    public ResponseEntity<List<StoreDTO>> getAllSites(
             @RequestParam(required = false) UUID businessId) {
         if (businessId != null) {
             return ResponseEntity.ok(storeService.getSitesByBusiness(businessId));

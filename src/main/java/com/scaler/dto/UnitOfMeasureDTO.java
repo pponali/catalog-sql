@@ -1,11 +1,13 @@
 package com.scaler.dto;
 
-import lombok.Data;
-import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Data
-public class UnitOfMeasureDTO {
-    private UUID id;
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
+public class UnitOfMeasureDTO extends BaseDTO {
     private String code;
     private String name;
     private String description;

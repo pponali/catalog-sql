@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/site-catalogs")
+@RequestMapping("/site-catalogs")
 @RequiredArgsConstructor
 public class StoreCatalogController {
     

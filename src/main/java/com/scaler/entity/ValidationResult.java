@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "validation_result")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)

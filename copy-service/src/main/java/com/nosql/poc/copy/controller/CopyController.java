@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/copy")
+@RequestMapping(/copy")
 @RequiredArgsConstructor
 public class CopyController {
     

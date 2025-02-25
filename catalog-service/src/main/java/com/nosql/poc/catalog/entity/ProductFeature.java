@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Document(collection = "product_feature")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "featureValues"})

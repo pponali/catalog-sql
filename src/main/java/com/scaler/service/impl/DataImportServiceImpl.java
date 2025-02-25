@@ -3,6 +3,7 @@ package com.scaler.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.dto.ImportResult;
 import com.scaler.entity.Product;
+import com.scaler.entity.ProductCategory;
 import com.scaler.entity.UnitOfMeasure;
 import com.scaler.repository.ProductRepository;
 import com.scaler.repository.UnitOfMeasureRepository;
@@ -66,7 +67,14 @@ public class DataImportServiceImpl implements DataImportService {
                         product.setDescription((String) productData.get("description"));
                         product.setSku((String) productData.get("sku"));
                         product.setStatus((String) productData.get("status"));
-                        product.setCategories(Collections.singleton(categoryService.findByCode((String) productData.get("categoryCode"))));
+                        // Create ProductCategory relationship
+                        ProductCategory productCategory = ProductCategory.builder()
+                            .product(product)
+                            .category(categoryService.findByCode((String) productData.get("categoryCode")))
+                            .isPrimary(true)
+                            .displayOrder(0)
+                            .build();
+                        product.setProductCategories(Collections.singleton(productCategory));
                         
                         if (productData.get("unitOfMeasure") != null) {
                             UnitOfMeasure unitOfMeasure = unitOfMeasureRepository.findById(UUID.fromString((String) productData.get("unitOfMeasure"))).orElse(null);

@@ -3,14 +3,17 @@ package com.scaler.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
 @Table(name = "store")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"merchant", "storeCatalogs"})
@@ -40,9 +43,17 @@ public class Store extends BaseEntity {
     @Column(name = "status")
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "store_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StoreType storeType;
+
+    @ManyToOne
     @JoinColumn(name = "business_id", nullable = false)
     private Merchant merchant;
+
+    @Column(name = "metadata", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<String, Object> metadata;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private Set<StoreCatalog> storeCatalogs = new HashSet<>();

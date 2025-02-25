@@ -2,22 +2,20 @@ package com.scaler.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Data
-@Builder
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class SellerDTO {
-    private UUID id;
+public class SellerDTO extends BaseDTO {
 
     @NotBlank(message = "Seller name is required")
     @Size(min = 2, max = 255, message = "Seller name must be between 2 and 255 characters")
@@ -40,10 +38,6 @@ public class SellerDTO {
     private String contactPhone;
     private String address;
 
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
-    private String createdBy;
-    private String lastModifiedBy;
 
     @Builder.Default
     private List<ProductDTO> products = new ArrayList<>();

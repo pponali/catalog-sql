@@ -17,11 +17,11 @@ import java.util.UUID;
 @DiscriminatorValue("STANDARD")
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"parent", "children", "templates", "products", "business", "catalog"})
-@ToString(callSuper = true, exclude = {"parent", "children", "templates", "products", "business", "catalog"})
+@EqualsAndHashCode(callSuper = true, exclude = {"parent", "children", "templates", "productCategories", "business", "catalog"})
+@ToString(callSuper = true, exclude = {"parent", "children", "templates", "productCategories", "business", "catalog"})
 public class Category extends BaseEntity {
     @Column(unique = false, nullable = false)
     private String code;
@@ -43,14 +43,14 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CategoryFeatureTemplate> templates = new HashSet<>();
 
-    @ManyToMany(mappedBy = "categories")
-    private Set<Product> products = new HashSet<>();
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<ProductCategory> productCategories = new HashSet<>();
 
     public void addTemplate(CategoryFeatureTemplate template) {
         templates.add(template);
@@ -62,14 +62,14 @@ public class Category extends BaseEntity {
         template.setCategory(null);
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
-        product.getCategories().add(this);
+    public void addProductCategory(ProductCategory productCategory) {
+        productCategories.add(productCategory);
+        productCategory.setCategory(this);
     }
 
-    public void removeProduct(Product product) {
-        products.remove(product);
-        product.getCategories().remove(this);
+    public void removeProductCategory(ProductCategory productCategory) {
+        productCategories.remove(productCategory);
+        productCategory.setCategory(null);
     }
 
     public void addChild(Category child) {

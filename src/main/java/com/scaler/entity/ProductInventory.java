@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "product_inventory")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)

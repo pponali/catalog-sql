@@ -1,7 +1,10 @@
 package com.scaler.entity;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 @Entity
 @Table(name = "product_feature")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "featureValues"})
@@ -50,7 +53,7 @@ public class ProductFeature extends BaseEntity {
     private String defaultValue;
 
     @Column(name = "feature_type")
-    private String featureType = "STRING";
+    private String featureType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_of_measure_id")
@@ -75,10 +78,12 @@ public class ProductFeature extends BaseEntity {
     private boolean multiValued;
 
     @Column(columnDefinition = "jsonb")
-    private String metadata;
+    @JdbcTypeCode(SqlTypes.JSON)
+    private JsonNode metadata;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
+    @JdbcTypeCode(SqlTypes.UUID)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)

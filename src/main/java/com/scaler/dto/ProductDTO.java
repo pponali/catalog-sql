@@ -13,13 +13,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
-@SuperBuilder
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDTO {
-    private UUID id;
-
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class ProductDTO extends BaseDTO {
     @NotBlank(message = "Product code is required")
     @Size(min = 2, max = 50, message = "Product code must be between 2 and 50 characters")
     private String code;
@@ -40,15 +41,12 @@ public class ProductDTO {
     private Double price;
 
     @NotNull(message = "Merchant ID is required")
-    private UUID businessId;
+    private UUID merchantId;
 
     private UUID catalogId;
-    private UUID unitOfMeasureId;
 
-    private String createdDate;
-    private String lastModifiedDate;
-    private String createdBy;
-    private String lastModifiedBy;
+    @Builder.Default
+    private Set<SellerProductDTO> sellerProducts = new HashSet<>();
 
     private Set<UUID> categoryIds = new HashSet<>();
 

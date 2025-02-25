@@ -4,13 +4,17 @@ import com.scaler.dto.ProductFeatureDTO;
 import com.scaler.entity.ProductFeature;
 import com.scaler.mapper.util.MapperUtils;
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {ProductFeatureValueMapper.class, CommonMapper.class, MapperUtils.class})
-public interface ProductFeatureMapper {
+        uses = {ProductFeatureValueMapper.class, CommonMapper.class, MapperUtils.class},
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public interface ProductFeatureMapper extends JsonNodeMapper {
+
+    ProductFeatureMapper INSTANCE = Mappers.getMapper(ProductFeatureMapper.class);
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
@@ -19,10 +23,8 @@ public interface ProductFeatureMapper {
         @Mapping(target = "unitOfMeasureId", source = "unitOfMeasure.id"),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
-        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "mapJsonNodeToString"),
-        @Mapping(target = "featureValues", source = "featureValues"),
-        @Mapping(target = "createdDate", qualifiedByName = "formatDateTime"),
-        @Mapping(target = "lastModifiedDate", qualifiedByName = "formatDateTime")
+        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString"),
+        @Mapping(target = "featureValues", source = "featureValues")
     })
     ProductFeatureDTO toDTO(ProductFeature entity);
 
@@ -33,10 +35,8 @@ public interface ProductFeatureMapper {
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
-        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "mapStringToJsonNode"),
-        @Mapping(target = "featureValues", source = "featureValues"),
-        @Mapping(target = "createdDate", qualifiedByName = "parseDateTime"),
-        @Mapping(target = "lastModifiedDate", qualifiedByName = "parseDateTime")
+        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode"),
+        @Mapping(target = "featureValues", source = "featureValues")
     })
     ProductFeature toEntity(ProductFeatureDTO dto);
 
@@ -47,7 +47,7 @@ public interface ProductFeatureMapper {
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
-        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "mapStringToJsonNode"),
+        @Mapping(target = "metadata", source = "metadata"),
         @Mapping(target = "featureValues", source = "featureValues")
     })
     void updateEntity(@MappingTarget ProductFeature entity, ProductFeatureDTO dto);

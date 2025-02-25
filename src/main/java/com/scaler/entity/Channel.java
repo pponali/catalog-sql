@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "channel")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"products", "catalogs"})

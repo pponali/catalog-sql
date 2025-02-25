@@ -2,7 +2,6 @@ package rules;
 
 import com.scaler.validation.fact.CategoryValidationFact;
 import com.scaler.entity.Category;
-import com.scaler.entity.ClassificationClass;
 import java.util.regex.Pattern;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;

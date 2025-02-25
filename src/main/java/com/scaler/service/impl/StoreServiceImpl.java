@@ -1,9 +1,10 @@
 package com.scaler.service.impl;
 
-import com.scaler.dto.SiteDTO;
+
+import com.scaler.dto.StoreDTO;
 import com.scaler.entity.Store;
 import com.scaler.exception.ResourceNotFoundException;
-import com.scaler.mapper.SiteMapper;
+import com.scaler.mapper.StoreMapper;
 import com.scaler.repository.MerchantRepository;
 import com.scaler.repository.StoreRepository;
 import com.scaler.service.StoreService;
@@ -21,63 +22,63 @@ public class StoreServiceImpl implements StoreService {
     
     private final StoreRepository storeRepository;
     private final MerchantRepository merchantRepository;
-    private final SiteMapper siteMapper;
+    private final StoreMapper storeMapper;
 
     @Override
     @Transactional
-    public SiteDTO createSite(SiteDTO siteDTO) {
+    public StoreDTO createStore(StoreDTO siteDTO) {
         if (!merchantRepository.existsById(siteDTO.getMerchantId())) {
             throw new ResourceNotFoundException("Merchant not found with id: " + siteDTO.getMerchantId());
         }
 
-        Store store = siteMapper.toEntity(siteDTO);
+        Store store = storeMapper.toEntity(siteDTO);
         store = storeRepository.save(store);
-        return siteMapper.toDTO(store);
+        return storeMapper.toDTO(store);
     }
 
     @Override
     @Transactional
-    public SiteDTO updateSite(UUID id, SiteDTO siteDTO) {
+    public StoreDTO updateStore(UUID id, StoreDTO storeDTO) {
         Store store = storeRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Site not found with id: " + id));
         
-        if (!merchantRepository.existsById(siteDTO.getMerchantId())) {
-            throw new ResourceNotFoundException("Merchant not found with id: " + siteDTO.getMerchantId());
+        if (!merchantRepository.existsById(storeDTO.getMerchantId())) {
+            throw new ResourceNotFoundException("Merchant not found with id: " + storeDTO.getMerchantId());
         }
 
-        store.setName(siteDTO.getName());
-        store.setDomain(siteDTO.getDomain());
-        store.setLocale(siteDTO.getLocale());
-        store.setCurrency(siteDTO.getCurrency());
+        store.setName(storeDTO.getName());
+        store.setDomain(storeDTO.getDomain());
+        store.setLocale(storeDTO.getLocale());
+        store.setCurrency(storeDTO.getCurrency());
         
         store = storeRepository.save(store);
-        return siteMapper.toDTO(store);
+        return storeMapper.toDTO(store);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public SiteDTO getSite(UUID id) {
+    public StoreDTO getSite(UUID id) {
         Store store = storeRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Site not found with id: " + id));
-        return siteMapper.toDTO(store);
+        return storeMapper.toDTO(store);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<SiteDTO> getAllSites() {
+    public List<StoreDTO> getAllSites() {
         return storeRepository.findAll().stream()
-            .map(siteMapper::toDTO)
+            .map(storeMapper::toDTO)
             .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<SiteDTO> getSitesByBusiness(UUID businessId) {
+    public List<StoreDTO> getSitesByBusiness(UUID businessId) {
         if (!merchantRepository.existsById(businessId)) {
             throw new ResourceNotFoundException("Merchant not found with id: " + businessId);
         }
         return storeRepository.findByMerchantId(businessId).stream()
-            .map(siteMapper::toDTO)
+            .map(storeMapper::toDTO)
             .collect(Collectors.toList());
     }
 

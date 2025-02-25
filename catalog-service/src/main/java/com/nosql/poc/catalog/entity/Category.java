@@ -13,7 +13,7 @@ import java.util.UUID;
 @Document(collection = "category")
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"parent", "children", "templates", "products", "business", "catalog"})

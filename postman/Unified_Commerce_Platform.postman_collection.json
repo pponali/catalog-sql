@@ -1,0 +1,307 @@
+{
+  "info": {
+    "name": "Unified Commerce Platform",
+    "description": "API collection for testing the Unified Commerce Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Setup Master Data",
+      "item": [
+        {
+          "name": "Create Store (Tata CLiQ)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/stores",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "TATACLIQ",
+                "name": "Tata CLiQ",
+                "description": "Tata CLiQ Fashion Store",
+                "status": "ACTIVE",
+                "metadata": {
+                  "type": "fashion",
+                  "region": "India"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Merchant",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/merchants",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "TATA_FASHION",
+                "name": "Tata Fashion",
+                "description": "Tata Fashion Division",
+                "status": "ACTIVE"
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Catalog",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/catalogs",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "FASHION_CATALOG",
+                "name": "Fashion Catalog",
+                "description": "Main fashion catalog",
+                "status": "ACTIVE"
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Store-Catalog Mapping",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/store-catalogs",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "storeId": "{{storeId}}",
+                "catalogId": "{{catalogId}}",
+                "status": "ACTIVE"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Category Setup",
+      "item": [
+        {
+          "name": "Create Parent Category",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/categories",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "APPAREL",
+                "name": "Apparel",
+                "description": "All apparel products",
+                "merchantId": "{{merchantId}}",
+                "catalogId": "{{catalogId}}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Category Feature Template",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/categories/{{categoryId}}/templates",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "SIZE",
+                "name": "Size",
+                "description": "Product size",
+                "attributeType": "STRING",
+                "validationPattern": "^(XS|S|M|L|XL|XXL)$",
+                "allowedValues": "XS,S,M,L,XL,XXL",
+                "featureType": "VARIANT",
+                "dataType": "STRING",
+                "unitOfMeasure": "SIZE"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Product Management",
+      "item": [
+        {
+          "name": "Create Simple Product",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/products",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "TSHIRT-001",
+                "name": "Cotton T-Shirt",
+                "description": "Pure cotton t-shirt",
+                "productType": "SIMPLE",
+                "status": "ACTIVE",
+                "merchantId": "{{merchantId}}",
+                "catalogId": "{{catalogId}}",
+                "categories": ["{{categoryId}}"],
+                "features": [
+                  {
+                    "code": "SIZE",
+                    "name": "Size",
+                    "value": "M",
+                    "unitOfMeasure": "SIZE"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Configurable Product",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/products",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "TSHIRT-CONFIG-001",
+                "name": "Cotton T-Shirt (Configurable)",
+                "description": "Configurable cotton t-shirt",
+                "productType": "CONFIGURABLE",
+                "status": "ACTIVE",
+                "merchantId": "{{merchantId}}",
+                "catalogId": "{{catalogId}}",
+                "categories": ["{{categoryId}}"],
+                "variantConfig": {
+                  "variantAttributeCodes": "SIZE,COLOR",
+                  "variants": [
+                    {
+                      "code": "TSHIRT-001-M-RED",
+                      "attributes": {
+                        "SIZE": "M",
+                        "COLOR": "RED"
+                      }
+                    },
+                    {
+                      "code": "TSHIRT-001-L-BLUE",
+                      "attributes": {
+                        "SIZE": "L",
+                        "COLOR": "BLUE"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Product Features",
+      "item": [
+        {
+          "name": "Add Product Feature",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/products/{{productId}}/features",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "MATERIAL",
+                "name": "Material",
+                "value": "100% Cotton",
+                "unitOfMeasure": "MATERIAL_TYPE"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Feature Value",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/products/{{productId}}/features/{{featureId}}/values",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "value": "95% Cotton, 5% Elastane",
+                "unitOfMeasure": "MATERIAL_TYPE"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Pricing and Inventory",
+      "item": [
+        {
+          "name": "Set Product Price",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/products/{{productId}}/prices",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "price": 999.99,
+                "currency": "INR",
+                "channelId": "{{channelId}}",
+                "isActive": true
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Inventory",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/products/{{productId}}/inventory",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "quantity": 100,
+                "status": "IN_STOCK",
+                "warehouseId": "{{warehouseId}}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Validation Rules",
+      "item": [
+        {
+          "name": "Add Validation Rule",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/validation-rules",
+            "body": {
+              "mode": "raw",
+              "raw": {
+                "code": "SIZE_VALIDATION",
+                "name": "Size Validation",
+                "description": "Validates product size",
+                "ruleType": "REGEX",
+                "pattern": "^(XS|S|M|L|XL|XXL)$",
+                "errorMessage": "Invalid size value"
+              }
+            }
+          }
+        },
+        {
+          "name": "Validate Product",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/products/{{productId}}/validate",
+            "body": {
+              "mode": "raw",
+              "raw": {}
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Document(collection = "channel")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"products", "catalogs"})

@@ -8,7 +8,7 @@ import java.util.*;
 
 @Document(collection = "classification_class")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)

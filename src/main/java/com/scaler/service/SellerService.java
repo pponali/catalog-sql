@@ -3,6 +3,7 @@ package com.scaler.service;
 import com.scaler.dto.ProductDTO;
 import com.scaler.dto.SellerDTO;
 import com.scaler.entity.Seller;
+import com.scaler.entity.SellerProduct;
 import com.scaler.exception.ResourceNotFoundException;
 import com.scaler.mapper.ProductMapper;
 import com.scaler.mapper.SellerMapper;
@@ -75,8 +76,8 @@ public class SellerService {
     public List<ProductDTO> getSellerProducts(UUID id) {
         Seller seller = sellerRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + id));
-        return seller.getProducts().stream()
-            .map(productMapper::toDTO)
+        return seller.getSellerProducts().stream()
+            .map(sellerProduct -> productMapper.toDTO(sellerProduct.getProduct()))
             .toList();
     }
 
@@ -88,7 +89,13 @@ public class SellerService {
         var product = productRepository.findById(productId)
             .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
         
-        seller.getProducts().add(product);
+        SellerProduct sellerProduct = SellerProduct.builder()
+            .seller(seller)
+            .product(product)
+            .status("ACTIVE")
+            .build();
+            
+        seller.addSellerProduct(sellerProduct);
         sellerRepository.save(seller);
     }
 
@@ -97,7 +104,7 @@ public class SellerService {
         Seller seller = sellerRepository.findById(sellerId)
             .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + sellerId));
         
-        seller.getProducts().removeIf(product -> product.getId().equals(productId));
+        seller.getSellerProducts().removeIf(sellerProduct -> sellerProduct.getProduct().getId().equals(productId));
         sellerRepository.save(seller);
     }
 }

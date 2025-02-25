@@ -9,7 +9,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "unit_of_measure")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)

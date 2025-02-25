@@ -3,9 +3,7 @@ package com.scaler.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -13,12 +11,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
-@SuperBuilder
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductFeatureDTO {
-    private UUID id;
+public class ProductFeatureDTO extends BaseDTO {
 
     @NotNull(message = "Product ID is required")
     private UUID productId;

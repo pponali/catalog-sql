@@ -1,21 +1,24 @@
 package com.scaler.dto;
 
+import com.scaler.entity.FeatureType;
 import com.scaler.entity.UnitOfMeasure;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class FeatureTemplateDTO {
-    private UUID id;
+@SuperBuilder(toBuilder = true)
+
+public class FeatureTemplateDTO extends BaseDTO {
     private String templateType;
     private String name;
     private String description;
-    private String featureType;
+    private FeatureType featureType;
     private String dataType;
     private String inputType;
     private String validationPattern;
@@ -23,6 +26,7 @@ public class FeatureTemplateDTO {
     private String maxValue;
     private String allowedValues;
     private String defaultValue;
+    private String metadata;
     private UUID unitId;
     private UnitOfMeasure unit;
     private Boolean required = false;
@@ -33,8 +37,4 @@ public class FeatureTemplateDTO {
     private Boolean comparable = true;
     private Boolean visible = true;
     private Boolean editable = true;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
-    private String createdBy;
-    private String lastModifiedBy;
 }

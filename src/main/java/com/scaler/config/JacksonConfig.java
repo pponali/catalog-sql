@@ -12,6 +12,7 @@ public class JacksonConfig {
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.enable(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS);
         return objectMapper;
     }
 }

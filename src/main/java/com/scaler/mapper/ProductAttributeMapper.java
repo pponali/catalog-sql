@@ -13,17 +13,13 @@ public abstract class ProductAttributeMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "productId", source = "product.id"),
-        @Mapping(target = "createdDate", qualifiedByName = "formatDateTime"),
-        @Mapping(target = "lastModifiedDate", qualifiedByName = "formatDateTime")
+        @Mapping(target = "productId", source = "product.id")
     })
     public abstract ProductAttributeDTO toDTO(ProductAttribute entity);
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
         @Mapping(target = "product.id", source = "productId"),
-        @Mapping(target = "createdDate", qualifiedByName = "parseDateTime"),
-        @Mapping(target = "lastModifiedDate", qualifiedByName = "parseDateTime"),
         @Mapping(target = "product", ignore = true)
     })
     public abstract ProductAttribute toEntity(ProductAttributeDTO dto);

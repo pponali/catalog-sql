@@ -2,15 +2,14 @@ package com.scaler.mapper;
 
 import com.scaler.dto.FeatureTemplateDTO;
 import com.scaler.entity.FeatureTemplate;
+import com.scaler.mapper.util.MapperUtils;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface FeatureTemplateMapper {
-    
-    FeatureTemplateMapper INSTANCE = Mappers.getMapper(FeatureTemplateMapper.class);
-
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {CommonMapper.class, MapperUtils.class},
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public interface FeatureTemplateMapper extends JsonNodeMapper{
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "description", source = "description")
@@ -32,10 +31,7 @@ public interface FeatureTemplateMapper {
     @Mapping(target = "comparable", source = "comparable")
     @Mapping(target = "visible", source = "visible")
     @Mapping(target = "editable", source = "editable")
-    @Mapping(target = "createdAt", source = "createdDate")
-    @Mapping(target = "lastModifiedAt", source = "lastModifiedDate")
-    @Mapping(target = "createdBy", source = "createdBy")
-    @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
+    @Mapping(target = "metadata", source = "metadata" , qualifiedByName = "jsonNodeToString")
     FeatureTemplateDTO toDTO(FeatureTemplate entity);
 
     @Mapping(target = "id", source = "id")
@@ -58,10 +54,7 @@ public interface FeatureTemplateMapper {
     @Mapping(target = "comparable", source = "comparable")
     @Mapping(target = "visible", source = "visible")
     @Mapping(target = "editable", source = "editable")
-    @Mapping(target = "createdDate", source = "createdAt")
-    @Mapping(target = "lastModifiedDate", source = "lastModifiedAt")
-    @Mapping(target = "createdBy", source = "createdBy")
-    @Mapping(target = "lastModifiedBy", source = "lastModifiedBy")
+    @Mapping(target = "metadata", source = "metadata" , qualifiedByName = "jsonStringToJsonNode")
     FeatureTemplate toEntity(FeatureTemplateDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

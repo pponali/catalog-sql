@@ -8,6 +8,8 @@ import com.scaler.entity.Product;
 import com.scaler.entity.ProductFeature;
 import com.scaler.entity.ProductFeatureValue;
 import com.scaler.entity.UnitOfMeasure;
+import com.scaler.entity.ValidationResult;
+import com.scaler.dto.ValidationResultDTO;
 import com.scaler.exception.ValidationException;
 import com.scaler.service.ProductFeatureService;
 import jakarta.validation.Valid;
@@ -23,11 +25,12 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/product-features")
+@RequestMapping("/product-features")
 @RequiredArgsConstructor
 public class ProductFeatureController {
 
     private final ProductFeatureService productFeatureService;
+    private final ObjectMapper objectMapper;
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductFeatureDTO> getById(@PathVariable UUID id) {
@@ -110,7 +113,7 @@ public class ProductFeatureController {
                 .comparable(feature.isComparable())
                 .required(feature.isRequired())
                 .multiValued(feature.isMultiValued())
-                .metadata(feature.getMetadata())
+                .metadata(feature.getMetadata() != null ? feature.getMetadata().toString() : null)
                 .createdDate(feature.getCreatedDate().toString())
                 .lastModifiedDate(feature.getLastModifiedDate().toString())
                 .createdBy(feature.getCreatedBy())
@@ -151,7 +154,12 @@ public class ProductFeatureController {
         feature.setComparable(dto.isComparable());
         feature.setRequired(dto.isRequired());
         feature.setMultiValued(dto.isMultiValued());
-        feature.setMetadata(dto.getMetadata());
+        try {
+            feature.setMetadata(dto.getMetadata() != null ? objectMapper.readTree(dto.getMetadata()) : null);
+        } catch (Exception e) {
+            log.error("Error parsing metadata JSON", e);
+            throw new RuntimeException("Invalid metadata JSON format", e);
+        }
 
         if (dto.getUnitOfMeasureId() != null) {
             UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
@@ -178,10 +186,15 @@ public class ProductFeatureController {
                 .type(value.getType())
                 .unit(value.getUnit())
                 .unitOfMeasure(value.getUnitOfMeasure())
-                .status(value.getStatus())
-                .validationStatus(value.getValidationStatus())
-                .validationPattern(value.getValidationPattern())
-                .validationMessage(value.getValidationMessage())
+                .validationResult(value.getValidationResult() != null ? 
+                    ValidationResultDTO.builder()
+                        .id(value.getValidationResult().getId())
+                        .entityId(value.getValidationResult().getEntityId())
+                        .entityType(value.getValidationResult().getEntityType())
+                        .fieldName(value.getValidationResult().getFieldName())
+                        .status(value.getValidationResult().getStatus())
+                        .errors(value.getValidationResult().getErrors())
+                        .build() : null)
                 .metadata(value.getMetadata() != null ? value.getMetadata().toString() : null)
                 .createdDate(value.getCreatedDate().toString())
                 .lastModifiedDate(value.getLastModifiedDate().toString())
@@ -196,10 +209,16 @@ public class ProductFeatureController {
         value.setType(dto.getType());
         value.setUnit(dto.getUnit());
         value.setUnitOfMeasure(dto.getUnitOfMeasure());
-        value.setStatus(dto.getStatus());
-        value.setValidationStatus(dto.getValidationStatus());
-        value.setValidationPattern(dto.getValidationPattern());
-        value.setValidationMessage(dto.getValidationMessage());
+        if (dto.getValidationResult() != null) {
+            ValidationResult validationResult = new ValidationResult();
+            validationResult.setId(dto.getValidationResult().getId());
+            validationResult.setEntityId(dto.getValidationResult().getEntityId());
+            validationResult.setEntityType(dto.getValidationResult().getEntityType());
+            validationResult.setFieldName(dto.getValidationResult().getFieldName());
+            validationResult.setStatus(dto.getValidationResult().getStatus());
+            validationResult.setErrors(dto.getValidationResult().getErrors());
+            value.setValidationResult(validationResult);
+        }
         value.setAttributeValue(dto.getAttributeValues() != null ? 
             new ObjectMapper().valueToTree(dto.getAttributeValues()) : null);
         value.setMetadata(dto.getMetadata() != null ? 

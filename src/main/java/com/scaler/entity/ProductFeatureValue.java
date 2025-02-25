@@ -12,8 +12,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "product_feature_value")
-@Data
-@SuperBuilder
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"product", "feature"})
@@ -21,7 +22,8 @@ import java.util.UUID;
 public class ProductFeatureValue extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
+    @JdbcTypeCode(SqlTypes.UUID)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,17 +42,9 @@ public class ProductFeatureValue extends BaseEntity {
     @Column(name = "unit_of_measure")
     private String unitOfMeasure;
 
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "validation_status")
-    private String validationStatus;
-
-    @Column(name = "validation_pattern")
-    private String validationPattern;
-
-    @Column(name = "validation_message")
-    private String validationMessage;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "validation_result_id")
+    private ValidationResult validationResult;
 
     @Column(name = "attribute_values", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
@@ -82,11 +76,4 @@ public class ProductFeatureValue extends BaseEntity {
         this.attributeValues = value;
     }
 
-    public void setValidationStatus(String status) {
-        this.validationStatus = status;
-    }
-
-    public void setValidationMessage(String message) {
-        this.validationMessage = message;
-    }
 }

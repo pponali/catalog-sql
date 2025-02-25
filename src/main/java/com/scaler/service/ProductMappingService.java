@@ -50,7 +50,6 @@ public class ProductMappingService {
             .featureId(feature.getId())
             .type(feature.getFeatureType())
             .unit(feature.getUnitOfMeasure() != null ? feature.getUnitOfMeasure().getCode() : null)
-            .status("ACTIVE")
             .createdBy("system")
             .lastModifiedBy("system")
             .createdDate(LocalDateTime.now().toString())
@@ -96,6 +95,23 @@ public class ProductMappingService {
 
     public Product toEntity(ProductDTO dto) {
         Product product = productMapper.toEntity(dto);
+        
+        // Initialize collections
+        if (product.getProductCategories() == null) {
+            product.setProductCategories(new HashSet<>());
+        }
+        if (product.getFeatures() == null) {
+            product.setFeatures(new HashSet<>());
+        }
+        if (product.getAttributes() == null) {
+            product.setAttributes(new ArrayList<>());
+        }
+        if (product.getChannels() == null) {
+            product.setChannels(new HashSet<>());
+        }
+
+        
+        // Set features if provided in DTO
         if (dto.getFeatures() != null) {
             Set<ProductFeature> features = dto.getFeatures().stream()
                 .map(productFeatureMapper::toEntity)
@@ -103,6 +119,7 @@ public class ProductMappingService {
             product.setFeatures(features);
             features.forEach(feature -> feature.setProduct(product));
         }
+        
         return product;
     }
 }

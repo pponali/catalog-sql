@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/catalog-migrations")
+@RequestMapping(/catalog-migrations")
 @RequiredArgsConstructor
 @Tag(name = "Catalog Migration", description = "APIs for managing catalog migrations")
 public class CatalogMigrationController {

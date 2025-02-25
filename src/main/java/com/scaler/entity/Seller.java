@@ -4,19 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "sellers")
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, exclude = {"sellerProducts"})
+@EqualsAndHashCode(callSuper = true, exclude = {"sellerProducts"})
 public class Seller extends BaseEntity {
 
     @Column(nullable = false)
@@ -46,14 +44,18 @@ public class Seller extends BaseEntity {
     @Column(length = 500)
     private String address;
 
-    @ManyToMany
-    @JoinTable(
-        name = "seller_products",
-        joinColumns = @JoinColumn(name = "seller_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    @Builder.Default
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SellerProduct> sellerProducts = new HashSet<>();
+
+    public void addSellerProduct(SellerProduct sellerProduct) {
+        sellerProducts.add(sellerProduct);
+        sellerProduct.setSeller(this);
+    }
+
+    public void removeSellerProduct(SellerProduct sellerProduct) {
+        sellerProducts.remove(sellerProduct);
+        sellerProduct.setSeller(null);
+    }
 
     @ManyToMany
     @JoinTable(
@@ -61,6 +63,5 @@ public class Seller extends BaseEntity {
         joinColumns = @JoinColumn(name = "seller_id"),
         inverseJoinColumns = @JoinColumn(name = "catalog_id")
     )
-    @Builder.Default
     private List<Catalog> catalogs = new ArrayList<>();
 }

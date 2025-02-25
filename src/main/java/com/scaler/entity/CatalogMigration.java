@@ -17,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "catalog_migration")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Document(collection = "product_feature_value")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"product", "feature"})

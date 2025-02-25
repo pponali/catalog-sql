@@ -2,6 +2,8 @@ package com.scaler.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -11,12 +13,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product")
-@Data
-@SuperBuilder
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"catalog", "categories", "features", "merchant", "unitOfMeasure", "channels", "lineOfBusiness", "sellers"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "categories", "features", "merchant", "unitOfMeasure", "channels", "lineOfBusiness", "sellers"})
+@ToString(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels",  "sellerProducts"})
 public class Product extends BaseEntity {
     @Column(name = "code", nullable = false)
     private String code;
@@ -28,12 +31,13 @@ public class Product extends BaseEntity {
     private String description;
 
     @Column(name = "product_type", nullable = false)
-    private String productType;
+    private ProductType productType;
 
     @Column(name = "status")
     private String status;
 
     @Column(name = "metadata", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String metadata;
 
     @Column(name = "sku")
@@ -42,13 +46,8 @@ public class Product extends BaseEntity {
     @Column(name = "price")
     private Double price;
 
-    @ManyToMany
-    @JoinTable(
-        name = "product_categories",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories = new HashSet<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<ProductCategory> productCategories = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductAttribute> attributes = new ArrayList<>();
@@ -75,27 +74,18 @@ public class Product extends BaseEntity {
         inverseJoinColumns = @JoinColumn(name = "channel_id")
     )
     private Set<Channel> channels = new HashSet<>();
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "line_of_business_id", nullable = false)
-    private LineOfBusiness lineOfBusiness;
 
-    @ManyToMany
-    @JoinTable(
-        name = "product_sellers",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "seller_id")
-    )
-    private Set<Seller> sellers = new HashSet<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<SellerProduct> sellerProducts = new HashSet<>();
 
-    public void addCategory(Category category) {
-        categories.add(category);
-        category.getProducts().add(this);
+    public void addProductCategory(ProductCategory productCategory) {
+        productCategories.add(productCategory);
+        productCategory.setProduct(this);
     }
 
-    public void removeCategory(Category category) {
-        categories.remove(category);
-        category.getProducts().remove(this);
+    public void removeProductCategory(ProductCategory productCategory) {
+        productCategories.remove(productCategory);
+        productCategory.setProduct(null);
     }
 
     public void addFeature(ProductFeature feature) {
@@ -108,14 +98,14 @@ public class Product extends BaseEntity {
         feature.setProduct(null);
     }
 
-    public void addSeller(Seller seller) {
-        sellers.add(seller);
-        seller.getProducts().add(this);
+    public void addSellerProduct(SellerProduct sellerProduct) {
+        sellerProducts.add(sellerProduct);
+        sellerProduct.setProduct(this);
     }
 
-    public void removeSeller(Seller seller) {
-        sellers.remove(seller);
-        seller.getProducts().remove(this);
+    public void removeSellerProduct(SellerProduct sellerProduct) {
+        sellerProducts.remove(sellerProduct);
+        sellerProduct.setProduct(null);
     }
     
     public void addChannel(Channel channel) {

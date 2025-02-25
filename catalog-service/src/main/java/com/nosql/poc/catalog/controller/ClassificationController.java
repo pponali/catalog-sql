@@ -1,12 +1,6 @@
 package com.nosql.poc.catalog.controller;
 
-import com.scaler.dto.ClassificationAttributeDTO;
-import com.scaler.dto.ClassificationClassDTO;
-import com.scaler.entity.ClassificationAttribute;
-import com.scaler.entity.ClassificationClass;
 import com.scaler.exception.ValidationException;
-import com.scaler.mapper.ClassificationMapper;
-import com.scaler.service.ClassificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

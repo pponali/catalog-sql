@@ -5,16 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@Builder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoreCatalogDTO {
-    private UUID id;
+public class StoreCatalogDTO extends BaseDTO {
 
     @NotNull(message = "Site ID is required")
     private UUID siteId;
@@ -28,10 +28,6 @@ public class StoreCatalogDTO {
     private String status;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
-    private String createdBy;
-    private String lastModifiedBy;
 
     public Boolean getIsDefault() {
         return isDefault;

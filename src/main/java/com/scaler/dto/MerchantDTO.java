@@ -2,21 +2,22 @@ package com.scaler.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Data
-@Builder
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class MerchantDTO {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class MerchantDTO extends BaseDTO {
     private UUID id;
 
     @NotBlank(message = "Merchant name is required")
@@ -34,14 +35,7 @@ public class MerchantDTO {
 
     private String status;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
-    private String createdBy;
-    private String lastModifiedBy;
-
-    @lombok.Builder.Default
     private List<CatalogDTO> catalogs = new ArrayList<>();
-    
-    @lombok.Builder.Default
+
     private List<SiteDTO> sites = new ArrayList<>();
 }

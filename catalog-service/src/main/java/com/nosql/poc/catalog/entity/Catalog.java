@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Document(collection = "catalog")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"products", "merchants", "channels", "linesOfBusiness", "business", "categories", "siteCatalogs"})

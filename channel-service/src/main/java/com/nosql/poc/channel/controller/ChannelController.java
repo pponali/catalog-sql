@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/channels")
+@RequestMapping(/channels")
 @RequiredArgsConstructor
 public class ChannelController {
     

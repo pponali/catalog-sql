@@ -7,9 +7,11 @@ import org.mapstruct.*;
 import java.util.List;
 import java.util.Set;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {CommonMapper.class})
-public interface ProductFeatureValueMapper {
+@Mapper(componentModel = "spring", 
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {CommonMapper.class},
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public interface ProductFeatureValueMapper extends JsonNodeMapper {
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
@@ -19,14 +21,8 @@ public interface ProductFeatureValueMapper {
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),
         @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
-        @Mapping(target = "status", source = "status"),
-        @Mapping(target = "validationStatus", source = "validationStatus"),
-        @Mapping(target = "validationPattern", source = "validationPattern"),
-        @Mapping(target = "validationMessage", source = "validationMessage"),
-        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "mapJsonNodeToString"),
-        @Mapping(target = "attributeValues", source = "attributeValues", qualifiedByName = "mapJsonNodeToString"),
-        @Mapping(target = "createdDate", qualifiedByName = "formatDateTime"),
-        @Mapping(target = "lastModifiedDate", qualifiedByName = "formatDateTime"),
+        @Mapping(target = "metadata", source = "metadata" , qualifiedByName = "jsonNodeToString"),
+        @Mapping(target = "attributeValues", source = "attributeValues", qualifiedByName = "jsonNodeToString"),
         @Mapping(target = "product", ignore = true),
         @Mapping(target = "feature", ignore = true)
     })
@@ -40,14 +36,8 @@ public interface ProductFeatureValueMapper {
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),
         @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
-        @Mapping(target = "status", source = "status"),
-        @Mapping(target = "validationStatus", source = "validationStatus"),
-        @Mapping(target = "validationPattern", source = "validationPattern"),
-        @Mapping(target = "validationMessage", source = "validationMessage"),
-        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "mapStringToJsonNode"),
-        @Mapping(target = "attributeValues", source = "attributeValues", qualifiedByName = "mapStringToJsonNode"),
-        @Mapping(target = "createdDate", qualifiedByName = "parseDateTime"),
-        @Mapping(target = "lastModifiedDate", qualifiedByName = "parseDateTime")
+        @Mapping(target = "metadata", source = "metadata" , qualifiedByName = "jsonStringToJsonNode"),
+        @Mapping(target = "attributeValues", source = "attributeValues" , qualifiedByName = "jsonStringToJsonNode")
     })
     ProductFeatureValue toEntity(ProductFeatureValueDTO dto);
 
@@ -59,12 +49,8 @@ public interface ProductFeatureValueMapper {
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),
         @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
-        @Mapping(target = "status", source = "status"),
-        @Mapping(target = "validationStatus", source = "validationStatus"),
-        @Mapping(target = "validationPattern", source = "validationPattern"),
-        @Mapping(target = "validationMessage", source = "validationMessage"),
-        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "mapStringToJsonNode"),
-        @Mapping(target = "attributeValues", source = "attributeValues", qualifiedByName = "mapStringToJsonNode")
+        @Mapping(target = "metadata", source = "metadata" , qualifiedByName = "jsonStringToJsonNode"),
+        @Mapping(target = "attributeValues", source = "attributeValues" , qualifiedByName = "jsonStringToJsonNode")
     })
     void updateEntity(@MappingTarget ProductFeatureValue entity, ProductFeatureValueDTO dto);
 

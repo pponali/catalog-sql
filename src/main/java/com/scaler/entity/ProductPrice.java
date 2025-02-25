@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "product_price")
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
@@ -25,8 +25,8 @@ public class ProductPrice extends BaseEntity {
     private Channel channel;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "line_of_business_id")
-    private LineOfBusiness lineOfBusiness;
+    @JoinColumn(name = "merchat_id", nullable = false)
+    private Merchant merchant;
     
     @Column(name = "price", nullable = false)
     private BigDecimal price;

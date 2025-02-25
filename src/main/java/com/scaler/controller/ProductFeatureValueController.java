@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/feature-values")
+@RequestMapping("/feature-values")
 @Tag(name = "Product Feature Value API", description = "APIs for managing product feature values")
 @Validated
 @Slf4j

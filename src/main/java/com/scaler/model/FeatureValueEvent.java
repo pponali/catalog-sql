@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "feature_value_event")

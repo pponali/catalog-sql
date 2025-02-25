@@ -1,13 +1,19 @@
 package com.scaler.entity;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.scaler.constants.FeatureConstants;
+import com.scaler.mapper.JsonNodeMapper;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "feature_template")
-@Data
-@SuperBuilder
+@Getter
+@Setter
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -24,13 +30,13 @@ public class FeatureTemplate extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "feature_type", nullable = false)
-    private String featureType;
+    @Column(name = "feature_type", nullable = true)
+    private FeatureType featureType;
 
-    @Column(name = "data_type", nullable = false)
+    @Column(name = "data_type", nullable = true)
     private String dataType;
 
-    @Column(name = "input_type", nullable = false)
+    @Column(name = "input_type", nullable = true)
     private String inputType;
 
     @Column(name = "validation_pattern")
@@ -75,4 +81,8 @@ public class FeatureTemplate extends BaseEntity {
 
     @Column(name = "editable")
     private Boolean editable = true;
+
+    @Column(columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private JsonNode metadata;
 }

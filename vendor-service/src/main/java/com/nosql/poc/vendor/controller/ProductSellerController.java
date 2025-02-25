@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/product-sellers")
+@RequestMapping(/product-sellers")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Product Seller Management", description = "APIs for managing product sellers")
@@ -27,7 +27,7 @@ public class ProductSellerController {
     public ResponseEntity<ProductSeller> addSellerToProduct(@Valid @RequestBody ProductSeller productSeller) {
         ProductSeller saved = productSellerService.addSellerToProduct(productSeller);
         return ResponseEntity
-            .created(URI.create("/api/v1/product-sellers/" + saved.getId()))
+            .created(URI.create(/product-sellers/" + saved.getId()))
             .body(saved);
     }
 

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/audit")
+@RequestMapping("/audit")
 @Tag(name = "Feature Value Audit API", description = "APIs for querying audit logs")
 @Validated
 @Slf4j

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/catalogs")
+@RequestMapping(/catalogs")
 @RequiredArgsConstructor
 public class CatalogController {
     private final CatalogService catalogService;
