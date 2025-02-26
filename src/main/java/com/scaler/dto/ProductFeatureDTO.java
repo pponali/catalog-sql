@@ -1,5 +1,6 @@
 package com.scaler.dto;
 
+import com.scaler.entity.FeatureType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,10 +17,13 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class ProductFeatureDTO extends BaseDTO {
 
-    @NotNull(message = "Product ID is required")
+    private Set<ProductFeatureMappingDTO> productMappings = new HashSet<>();
+
     private UUID productId;
+    private Set<ProductFeatureValueDTO> featureValues = new HashSet<>();
 
     private UUID templateId;
 
@@ -44,7 +48,7 @@ public class ProductFeatureDTO extends BaseDTO {
     private String defaultValue;
 
     @NotBlank(message = "Feature type is required")
-    private String featureType;
+    private FeatureType featureType;
 
     private UUID unitOfMeasureId;
 
@@ -84,9 +88,4 @@ public class ProductFeatureDTO extends BaseDTO {
     private String lastModifiedDate;
     private String createdBy;
     private String lastModifiedBy;
-
-    /**
-     * Set of feature values
-     */
-    private Set<ProductFeatureValueDTO> featureValues = new HashSet<>();
 }

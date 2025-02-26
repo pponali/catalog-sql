@@ -94,13 +94,13 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
     @Override
     @Transactional
     public void deleteByFeature(UUID featureId) {
-        repository.deleteByFeatureId(featureId);
+        repository.deleteByFeatureMappingFeatureId(featureId);
     }
 
     @Override
     public void validateFeatureValue(ProductFeatureValueDTO dto) {
-        ProductFeature feature = featureRepository.findById(dto.getFeatureId())
-                .orElseThrow(() -> new ResourceNotFoundException("Feature not found with id: " + dto.getFeatureId()));
+        ProductFeature feature = featureRepository.findById(dto.getFeatureMapping().getFeature().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Feature not found with id: " + dto.getFeatureMapping().getFeature().getId()));
 
         // Validate unit if specified
         if (dto.getUnitOfMeasure() != null) {
@@ -184,7 +184,7 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public List<ProductFeatureValueDTO> findByFeatureWithValues(UUID featureId) {
-        return convertToDTOList(repository.findByFeatureIdAndAttributeValuesIsNotNull(featureId));
+        return convertToDTOList(repository.findByFeatureMappingFeatureIdAndAttributeValuesIsNotNull(featureId));
     }
 
     @Override

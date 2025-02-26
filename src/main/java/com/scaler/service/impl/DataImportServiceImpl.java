@@ -115,7 +115,7 @@ public class DataImportServiceImpl implements DataImportService {
                 .type((String) unitData.get("type"))
                 .displaySymbol((String) unitData.get("displaySymbol"))
                 .active(Boolean.TRUE.equals(unitData.get("active")))
-                .metadata((String) unitData.get("metadata"))
+                .metadata(objectMapper.valueToTree(unitData.get("metadata")))
                 .conversionFactor(Double.valueOf(unitData.get("conversionFactor").toString()))
                 .build();
     }

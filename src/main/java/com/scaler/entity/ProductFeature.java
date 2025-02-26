@@ -53,7 +53,7 @@ public class ProductFeature extends BaseEntity {
     private String defaultValue;
 
     @Column(name = "feature_type")
-    private String featureType;
+    private FeatureType featureType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_of_measure_id")
@@ -81,26 +81,36 @@ public class ProductFeature extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode metadata;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    @JdbcTypeCode(SqlTypes.UUID)
-    private Product product;
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductFeatureMapping> productMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_id")
     private CategoryFeatureTemplate template;
 
-    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
-    @lombok.Builder.Default
-    private Set<ProductFeatureValue> featureValues = new HashSet<>();
 
-    public void addFeatureValue(ProductFeatureValue value) {
-        featureValues.add(value);
-        value.setFeature(this);
+
+    public void addProductMapping(ProductFeatureMapping mapping) {
+        productMappings.add(mapping);
+        mapping.setFeature(this);
     }
 
-    public void removeFeatureValue(ProductFeatureValue value) {
-        featureValues.remove(value);
-        value.setFeature(null);
+    public void removeProductMapping(ProductFeatureMapping mapping) {
+        productMappings.remove(mapping);
+        mapping.setFeature(null);
     }
+
+    public ProductFeatureMapping getFeatureMapping() {
+        return productMappings.isEmpty() ? null : productMappings.iterator().next();
+    }
+
+    public Set<ProductFeatureValue> getFeatureValues() {
+        Set<ProductFeatureValue> values = new HashSet<>();
+        for (ProductFeatureMapping mapping : productMappings) {
+            values.addAll(mapping.getFeatureValues());
+        }
+        return values;
+    }
+
+
 }

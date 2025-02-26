@@ -7,7 +7,8 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {ProductFeatureMapper.class, SellerProductMapper.class, CommonMapper.class, MapperUtils.class})
+        uses = {SellerProductMapper.class, CommonMapper.class, MapperUtils.class, ProductFeatureMapper.class, ProductFeatureValueMapper.class})
+@DecoratedWith(ProductMapperDecorator.class)
 public interface ProductMapper  {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
@@ -18,8 +19,7 @@ public interface ProductMapper  {
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "code", source = "code"),
-            @Mapping(target = "status", source = "status"),
-            @Mapping(target = "features", source = "features")
+            @Mapping(target = "status", source = "status")
     })
     ProductDTO toDTO(Product entity);
 
@@ -31,8 +31,7 @@ public interface ProductMapper  {
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "code", source = "code"),
-            @Mapping(target = "status", source = "status"),
-            @Mapping(target = "features", source = "features")
+            @Mapping(target = "status", source = "status")
     })
     Product toEntity(ProductDTO dto);
 
@@ -44,8 +43,7 @@ public interface ProductMapper  {
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "code", source = "code"),
-            @Mapping(target = "status", source = "status"),
-            @Mapping(target = "features", source = "features")
+            @Mapping(target = "status", source = "status")
     })
     void updateEntity(@MappingTarget Product entity, ProductDTO dto);
 }

@@ -53,7 +53,7 @@ public class Product extends BaseEntity {
     private List<ProductAttribute> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductFeature> features = new HashSet<>();
+    private Set<ProductFeatureMapping> featureMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchant_id", nullable = false)
@@ -88,14 +88,14 @@ public class Product extends BaseEntity {
         productCategory.setProduct(null);
     }
 
-    public void addFeature(ProductFeature feature) {
-        features.add(feature);
-        feature.setProduct(this);
+    public void addFeatureMapping(ProductFeatureMapping mapping) {
+        featureMappings.add(mapping);
+        mapping.setProduct(this);
     }
 
-    public void removeFeature(ProductFeature feature) {
-        features.remove(feature);
-        feature.setProduct(null);
+    public void removeFeatureMapping(ProductFeatureMapping mapping) {
+        featureMappings.remove(mapping);
+        mapping.setProduct(null);
     }
 
     public void addSellerProduct(SellerProduct sellerProduct) {

@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
 
 public class FeatureTemplateDTO extends BaseDTO {
     private String templateType;

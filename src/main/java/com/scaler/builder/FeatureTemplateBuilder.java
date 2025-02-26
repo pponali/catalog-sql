@@ -1,4 +1,4 @@
-package com.scaler.util;
+package com.scaler.builder;
 
 import static com.scaler.constants.FeatureConstants.*;
 import com.scaler.constants.FeatureConstants;
@@ -7,6 +7,7 @@ import com.scaler.entity.CategoryFeatureTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scaler.entity.FeatureType;
+import com.scaler.entity.UnitOfMeasure;
 import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 
@@ -83,7 +84,7 @@ public class FeatureTemplateBuilder {
      * @param category Parent category
      * @return CategoryFeatureTemplate for laptop RAM
      */
-    public static CategoryFeatureTemplate createLaptopRamTemplate(Category category) {
+    public static CategoryFeatureTemplate createLaptopRamTemplate(Category category, UnitOfMeasure gbUnit) {
         return CategoryFeatureTemplate.builder()
                 .code(LAPTOP_RAM)
                 .name("RAM")  // Required in parent
@@ -119,7 +120,7 @@ public class FeatureTemplateBuilder {
      * @param category Parent category
      * @return CategoryFeatureTemplate for laptop storage
      */
-    public static CategoryFeatureTemplate createLaptopStorageTemplate(Category category) {
+    public static CategoryFeatureTemplate createLaptopStorageTemplate(Category category, UnitOfMeasure tbUnit) {
         return CategoryFeatureTemplate.builder()
                 .code(LAPTOP_STORAGE)
                 .name("Storage")  // Required in parent
@@ -147,6 +148,65 @@ public class FeatureTemplateBuilder {
                 .category(category)
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
+                .build();
+    }
+
+
+    public static CategoryFeatureTemplate createGoldPurityTemplate(Category category) {
+        return CategoryFeatureTemplate.builder()
+                .code("GOLD-PURITY")
+                .name("Gold Purity")
+                .description("Gold Purity in Karats")
+                .attributeType("SPECIFICATION")
+                .validationPattern("")
+                .minValue("14")
+                .maxValue("24")
+                .allowedValues("14K,18K,22K,24K")
+                .defaultValue("22K")
+                .featureType(FeatureType.ENUM)
+                .dataType("STRING")
+                .inputType("DROPDOWN")
+                .visible(true)
+                .filterable(true)
+                .inherited(false)
+                .hidden(false)
+                .editable(true)
+                .searchable(true)
+                .comparable(true)
+                .mandatory(true)
+                .multiValued(false)
+                .category(category)
+                .createdBy(SYSTEM_USER)
+                .lastModifiedBy(SYSTEM_USER)
+                .build();
+    }
+
+    public static CategoryFeatureTemplate createGoldWeightTemplate(Category category, UnitOfMeasure gramUnit) {
+        return CategoryFeatureTemplate.builder()
+                .code("GOLD-WEIGHT")
+                .name("Gold Weight")
+                .description("Weight of Gold")
+                .attributeType("SPECIFICATION")
+                .validationPattern("")
+                .minValue("1")
+                .maxValue("1000")
+                .defaultValue("")
+                .featureType(FeatureType.NUMBER)
+                .dataType("DECIMAL")
+                .inputType("NUMBER")
+                .visible(true)
+                .filterable(true)
+                .inherited(false)
+                .hidden(false)
+                .editable(true)
+                .searchable(true)
+                .comparable(true)
+                .mandatory(true)
+                .multiValued(false)
+                .category(category)
+                .unit(gramUnit)
+                .createdBy(SYSTEM_USER)
+                .lastModifiedBy(SYSTEM_USER)
                 .build();
     }
 }

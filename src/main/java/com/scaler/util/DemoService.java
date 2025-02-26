@@ -2,13 +2,15 @@ package com.scaler.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scaler.entity.*;
 import com.scaler.repository.*;
+import com.scaler.builder.*;
 import com.scaler.service.CategoryFeatureTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import static com.scaler.constants.FeatureConstants.*;
 
 
@@ -40,177 +42,72 @@ public class DemoService {
     private ProductFeatureRepository productFeatureRepository;
     @Autowired
     private ProductFeatureValueRepository productFeatureValueRepository;
+    @Autowired
+    private UnitOfMeasureRepository unitOfMeasureRepository;
+    @Autowired
+    private ProductFeatureMappingRepository productFeatureMappingRepository;
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
 
 
+    @Transactional
     public void setup() throws JsonProcessingException {
-        Merchant tatacliqmerchant = Merchant.builder()
-                .code("TCLQ-001")
-                .name("Tata CLiQ")
-                .description("Tata CLiQ - Tata Group's E-commerce Platform")
-                .status("ACTIVE")
-                .contactEmail("support@tatacliq.com")
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
+        // Create merchants
+        Merchant tataCliq = merchantRepository.save(MerchantBuilder.createTataCliqMerchant());
+        Merchant tata1mg = merchantRepository.save(MerchantBuilder.createTata1mgMerchant());
+        Merchant bigBasket = merchantRepository.save(MerchantBuilder.createBigBasketMerchant());
+        Merchant croma = merchantRepository.save(MerchantBuilder.createCromaMerchant());
+        Merchant tanishq = merchantRepository.save(MerchantBuilder.createTanishqMerchant());
 
-        merchantRepository.save(tatacliqmerchant);
+        // Create stores
+        Store tataCliqStore = storeRepository.save(StoreBuilder.createTataCliqStore(tataCliq));
+        Store tata1mgStore = storeRepository.save(StoreBuilder.createTata1mgStore(tata1mg));
+        Store bigBasketStore = storeRepository.save(StoreBuilder.createBigBasketStore(bigBasket));
+        Store cromaStore = storeRepository.save(StoreBuilder.createCromaStore(croma));
+        Store tanishqStore = storeRepository.save(StoreBuilder.createTanishqStore(tanishq));
 
-        Catalog cligCatalog = Catalog.builder()
-                .code("CLIG-001")
-                .name("CLIG")
-                .description("CLIG Catalog")
-                .status("ACTIVE")
-                .type("CLIG")
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
-                .build();
+        // Create catalogs
+        Catalog fashionCatalog = catalogRepository.save(CatalogBuilder.createFashionCatalog(tataCliq));
+        Catalog groceryCatalog = catalogRepository.save(CatalogBuilder.createGroceryCatalog(bigBasket));
+        Catalog pharmaCatalog = catalogRepository.save(CatalogBuilder.createPharmaCatalog(tata1mg));
+        Catalog cromaCatalog = catalogRepository.save(CatalogBuilder.createElectronicsCatalog(croma));
+        Catalog jewelryCatalog = catalogRepository.save(CatalogBuilder.createJewelryCatalog(tanishq));
 
-        catalogRepository.save(cligCatalog);
+        // Create store-catalog relationships
+        storeCatalogRepository.save(StoreCatalogBuilder.createStoreCatalog(tataCliqStore, fashionCatalog));
+        storeCatalogRepository.save(StoreCatalogBuilder.createStoreCatalog(tata1mgStore, pharmaCatalog));
+        storeCatalogRepository.save(StoreCatalogBuilder.createStoreCatalog(bigBasketStore, groceryCatalog));
+        storeCatalogRepository.save(StoreCatalogBuilder.createStoreCatalog(cromaStore, cromaCatalog));
+        storeCatalogRepository.save(StoreCatalogBuilder.createStoreCatalog(tanishqStore, jewelryCatalog));
 
-        merchantRepository.save(tatacliqmerchant);
+        // Create categories
+        Category laptopCategory = categoryRepository.save(CategoryBuilder.createLaptopCategory(fashionCatalog, tataCliq));
+        Category smartphoneCategory = categoryRepository.save(CategoryBuilder.createSmartphoneCategory(fashionCatalog, tataCliq));
+        Category necklaceCategory = categoryRepository.save(CategoryBuilder.createGoldNecklaceCategory(jewelryCatalog, tanishq));
+        Category bangleCategory = categoryRepository.save(CategoryBuilder.createGoldBangleCategory(jewelryCatalog, tanishq));
+        Category freshProduceCategory = categoryRepository.save(CategoryBuilder.createFreshProduceCategory(groceryCatalog, bigBasket));
+        Category medicinesCategory = categoryRepository.save(CategoryBuilder.createMedicinesCategory(pharmaCatalog, tata1mg));
 
-        Store tatacliqonliestore = Store.builder()
-                .name("CLIG")
-                .domain("tataclig.com")
-                .merchant(tatacliqmerchant)
-                .locale("en")
-                .currency("INR")
-                .description("CLIG Store")
-                .active(true)
-                .timezone("Asia/Kolkata")
-                .status("ACTIVE")
-                .storeType(StoreType.ONLINE)
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
+        // Create units of measure
+        UnitOfMeasure gbUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createGBUnit());
+        UnitOfMeasure tbUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createTBUnit());
+        UnitOfMeasure kgUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createKGUnit());
+        UnitOfMeasure pcsUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createPiecesUnit());
+        UnitOfMeasure gramUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createGramUnit());
 
-        storeRepository.save(tatacliqonliestore);
-
-
-        StoreCatalog storeCatalog = StoreCatalog.builder()
-                .store(tatacliqonliestore)
-                .catalog(cligCatalog)
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
-
-        storeCatalogRepository.save(storeCatalog);
-
-
-        Category category = Category.builder()
-                .code("CLIG-001")
-                .name("CLIG")
-                .merchant(tatacliqmerchant)
-                .description("Lipstick")
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .catalog(cligCatalog)
-                .build();
-        categoryRepository.save(category);
-
-
-        Product cliqProduct = Product.builder()
-                .code("CLIG-001")
-                .name("CLIG")
-                .description("Lipstick")
-                .status("ACTIVE")
-                .productType(ProductType.SIMPLE)
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .catalog(cligCatalog)
-                .merchant(tatacliqmerchant)
-                .build();
-        productRepository.save(cliqProduct);
-
-        CategoryFeatureTemplate laptopProcessor = FeatureTemplateBuilder.createLaptopProcessorTemplate(category);
-        CategoryFeatureTemplate laptopRam = FeatureTemplateBuilder.createLaptopRamTemplate(category);
-        CategoryFeatureTemplate laptopStorage = FeatureTemplateBuilder.createLaptopStorageTemplate(category);
-
+        // Create feature templates for laptops
+        CategoryFeatureTemplate laptopProcessor = FeatureTemplateBuilder.createLaptopProcessorTemplate(laptopCategory);
+        CategoryFeatureTemplate laptopRam = FeatureTemplateBuilder.createLaptopRamTemplate(laptopCategory, gbUnit);
+        CategoryFeatureTemplate laptopStorage = FeatureTemplateBuilder.createLaptopStorageTemplate(laptopCategory, tbUnit);
 
         categoryFeatureTemplateRepository.save(laptopProcessor);
         categoryFeatureTemplateRepository.save(laptopRam);
         categoryFeatureTemplateRepository.save(laptopStorage);
 
-
-        ProductFeature processor = ProductFeature.builder()
-                .code(LAPTOP_PROCESSOR)
-                .name("Processor")
-                .description("Laptop Processor Specifications")
-                .attributeType(SPECIFICATION)
-                .validationPattern("")
-                .minValue("")
-                .maxValue("")
-                .allowedValues(PROCESSOR_VALUES)
-                .defaultValue("")
-                .featureType(ENUM)
-                .visible(true)
-                .comparable(true)
-                .editable(true)
-                .searchable(true)
-                .required(true)
-                .multiValued(false)
-                .metadata(objectMapper.readTree("{"
-                        + "\"displayOrder\": 1,"
-                        + "\"group\": \"Technical Specifications\","
-                        + "\"tooltip\": \"Processor model that powers the laptop\""
-                        + "}"))
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
-
-        ProductFeature ram = ProductFeature.builder()
-                .code(LAPTOP_RAM)
-                .name("RAM")
-                .description("Laptop Memory (RAM) Specifications")
-                .attributeType(SPECIFICATION)
-                .validationPattern(RAM_PATTERN)
-                .minValue("4")
-                .maxValue("128")
-                .allowedValues(RAM_VALUES)
-                .defaultValue(DEFAULT_RAM)
-                .featureType(ENUM)
-                .visible(true)
-                .comparable(true)
-                .editable(true)
-                .searchable(true)
-                .required(true)
-                .multiValued(false)
-                .metadata(objectMapper.readTree("{"
-                        + "\"displayOrder\": 2,"
-                        + "\"group\": \"Technical Specifications\","
-                        + "\"tooltip\": \"Amount of RAM installed in the laptop\""
-                        + "}"))
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
-
-        ProductFeature storage = ProductFeature.builder()
-                .code(LAPTOP_STORAGE)
-                .name("Storage")
-                .description("Laptop Storage Specifications")
-                .attributeType(SPECIFICATION)
-                .validationPattern(STORAGE_PATTERN)
-                .minValue("128")
-                .maxValue("4096")
-                .allowedValues(STORAGE_VALUES)
-                .defaultValue(DEFAULT_STORAGE)
-                .featureType(ENUM)
-                .visible(true)
-                .comparable(true)
-                .editable(true)
-                .searchable(true)
-                .required(true)
-                .multiValued(false)
-                .metadata(objectMapper.readTree("{"
-                        + "\"displayOrder\": 3,"
-                        + "\"group\": \"Technical Specifications\","
-                        + "\"tooltip\": \"Storage capacity of the laptop\""
-                        + "}"))
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
+        // Create product features
+        ProductFeature processor = ProductFeatureBuilder.createLaptopProcessorFeature();
+        ProductFeature ram = ProductFeatureBuilder.createLaptopRamFeature(gbUnit);
+        ProductFeature storage = ProductFeatureBuilder.createLaptopStorageFeature(tbUnit);
 
         productFeatureRepository.save(processor);
         productFeatureRepository.save(ram);
@@ -218,92 +115,60 @@ public class DemoService {
 
 
 
-        // Processor Feature Value
-        ProductFeatureValue processorValue = ProductFeatureValue.builder()
-                .product(cliqProduct)  // Reference to the MacBook Pro product
-                .feature(processor)  // Reference to the processor feature
-                .templateId(laptopProcessor.getId())  // Reference to the template ID
-                .type("SPECIFICATION")
-                .unit("")
-                .unitOfMeasure("")
-                .attributeValues(objectMapper.readTree("{" +
-                        "\"value\": \"Apple M2 Pro\"," +
-                        "\"displayValue\": \"Apple M2 Pro\"," +
-                        "\"additionalInfo\": {" +
-                        "\"cores\": \"12-core\"," +
-                        "\"architecture\": \"ARM\"," +
-                        "\"generation\": \"2nd Gen\"" +
-                        "}" +
-                        "}"))
-                .metadata(objectMapper.readTree("{" +
-                        "\"displayOrder\": 1," +
-                        "\"group\": \"Technical Specifications\"," +
-                        "\"importance\": \"HIGH\"" +
-                        "}"))
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
+        // Create products
+        Product macBookPro = productRepository.save(ProductBuilder.createMacBookPro(laptopCategory, tataCliq));
+        Product dellXPS = productRepository.save(ProductBuilder.createDellXPS(laptopCategory, tataCliq));
+        Product iPhone = productRepository.save(ProductBuilder.createIPhone(smartphoneCategory, tataCliq));
+        Product goldNecklace = productRepository.save(ProductBuilder.createGoldNecklace(necklaceCategory, tanishq));
+        Product goldBangles = productRepository.save(ProductBuilder.createGoldBangles(bangleCategory, tanishq));
 
-// RAM Feature Value
-        ProductFeatureValue ramValue = ProductFeatureValue.builder()
-                .product(cliqProduct)  // Reference to the MacBook Pro product
-                .feature(ram)  // Reference to the RAM feature
-                .templateId(laptopRam.getId())  // Reference to the template ID
-                .type("SPECIFICATION")
-                .unit("GB")
-                .unitOfMeasure("GB")
-                .attributeValues(objectMapper.readTree("{" +
-                        "\"value\": \"16\"," +
-                        "\"displayValue\": \"16 GB\"," +
-                        "\"additionalInfo\": {" +
-                        "\"type\": \"Unified Memory\"," +
-                        "\"speed\": \"6400MHz\"," +
-                        "\"technology\": \"LPDDR5\"" +
-                        "}" +
-                        "}"))
-                .metadata(objectMapper.readTree("{" +
-                        "\"displayOrder\": 2," +
-                        "\"group\": \"Technical Specifications\"," +
-                        "\"importance\": \"HIGH\"" +
-                        "}"))
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
+        // Create feature mappings and values for MacBook Pro
+        ProductFeatureMapping macBookProcessor = createAndSaveMapping(macBookPro, processor);
+        ProductFeatureMapping macBookRam = createAndSaveMapping(macBookPro, ram);
+        ProductFeatureMapping macBookStorage = createAndSaveMapping(macBookPro, storage);
+        
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(macBookProcessor, "Apple M2 Pro"));
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(macBookRam, "16GB"));
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(macBookStorage, "512GB"));
 
-// Storage Feature Value
-        ProductFeatureValue storageValue = ProductFeatureValue.builder()
-                .product(cliqProduct)  // Reference to the MacBook Pro product
-                .feature(storage)  // Reference to the storage feature
-                .templateId(laptopStorage.getId())  // Reference to the template ID
-                .type("SPECIFICATION")
-                .unit("GB")
-                .unitOfMeasure("GB")
-                .attributeValues(objectMapper.readTree("{" +
-                        "\"value\": \"512\"," +
-                        "\"displayValue\": \"512 GB\"," +
-                        "\"additionalInfo\": {" +
-                        "\"type\": \"SSD\"," +
-                        "\"technology\": \"NVMe\"," +
-                        "\"readSpeed\": \"3500 MB/s\"," +
-                        "\"writeSpeed\": \"3000 MB/s\"" +
-                        "}" +
-                        "}"))
-                .metadata(objectMapper.readTree("{" +
-                        "\"displayOrder\": 3," +
-                        "\"group\": \"Technical Specifications\"," +
-                        "\"importance\": \"HIGH\"" +
-                        "}"))
-                .createdBy("system")
-                .lastModifiedBy("system")
-                .build();
+        // Create feature mappings and values for Dell XPS
+        ProductFeatureMapping dellProcessor = createAndSaveMapping(dellXPS, processor);
+        ProductFeatureMapping dellRam = createAndSaveMapping(dellXPS, ram);
+        ProductFeatureMapping dellStorage = createAndSaveMapping(dellXPS, storage);
+        
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(dellProcessor, "Intel i9-13900H"));
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(dellRam, "32GB"));
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(dellStorage, "1TB"));
 
-        productFeatureValueRepository.save(processorValue);
-        productFeatureValueRepository.save(ramValue);
-        productFeatureValueRepository.save(storageValue);
+        // Create features for jewelry
+        ProductFeature goldPurity = productFeatureRepository.save(ProductFeatureBuilder.createGoldPurityFeature());
+        ProductFeature goldWeight = productFeatureRepository.save(ProductFeatureBuilder.createGoldWeightFeature(gramUnit));
 
+        // Create feature mappings and values for Gold Necklace
+        ProductFeatureMapping necklacePurity = createAndSaveMapping(goldNecklace, goldPurity);
+        ProductFeatureMapping necklaceWeight = createAndSaveMapping(goldNecklace, goldWeight);
+        
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(necklacePurity, "22K"));
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(necklaceWeight, "50"));
 
-
-
-
+        // Create feature mappings and values for Gold Bangles
+        ProductFeatureMapping banglePurity = createAndSaveMapping(goldBangles, goldPurity);
+        ProductFeatureMapping bangleWeight = createAndSaveMapping(goldBangles, goldWeight);
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(banglePurity, "22K"));
+        productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(bangleWeight, "30"));
     }
+
+    private ProductFeatureMapping createAndSaveMapping(Product product, ProductFeature feature) {
+        ProductFeatureMapping mapping = ProductFeatureMapping.builder()
+                .product(product)
+                .feature(feature)
+                .displayOrder(1)
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .visible(true)
+                .enabled(true)
+                .build();
+        return productFeatureMappingRepository.save(mapping);
+    }
+
 }

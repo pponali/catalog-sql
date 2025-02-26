@@ -122,13 +122,13 @@ class ValidationServiceTest {
 
         // Set up feature values
         ProductFeatureValue organicValue = new ProductFeatureValue();
-        organicValue.setFeature(organicFeature);
+        //organicValue.setFeature(organicFeature);
         ObjectNode organicNode = objectMapper.createObjectNode();
         organicNode.put("value", "FSSAI-ORG");
         organicValue.setAttributeValues(organicNode);
 
         ProductFeatureValue shelfLifeValue = new ProductFeatureValue();
-        shelfLifeValue.setFeature(shelfLifeFeature);
+        //shelfLifeValue.setFeature(shelfLifeFeature);
         ObjectNode shelfLifeNode = objectMapper.createObjectNode();
         shelfLifeNode.put("value", "30");
         shelfLifeValue.setAttributeValues(shelfLifeNode);

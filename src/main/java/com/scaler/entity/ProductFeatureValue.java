@@ -22,13 +22,8 @@ import java.util.UUID;
 public class ProductFeatureValue extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    @JdbcTypeCode(SqlTypes.UUID)
-    private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feature_id", referencedColumnName = "id")
-    private ProductFeature feature;
+    @JoinColumn(name = "feature_mapping_id", nullable = false)
+    private ProductFeatureMapping featureMapping;
 
     @Column(name = "template_id")
     private UUID templateId;

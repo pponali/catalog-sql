@@ -1,8 +1,11 @@
 package com.scaler.entity;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -42,5 +45,6 @@ public class UnitOfMeasure extends BaseEntity {
     private boolean active;
 
     @Column(columnDefinition = "jsonb")
-    private String metadata;
+    @JdbcTypeCode(SqlTypes.JSON)
+    private JsonNode metadata;
 }

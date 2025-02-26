@@ -163,8 +163,8 @@ public class FeatureValueMonitoringService {
 
     public void validateFeatureValue(ProductFeatureValue featureValue) {
         FeatureValueEvent event = FeatureValueEvent.builder()
-                .featureId(featureValue.getFeature().getId())
-                .productId(featureValue.getProduct().getId())
+                .featureId(featureValue.getFeatureMapping().getFeature().getId())
+                .productId(featureValue.getFeatureMapping().getProduct().getId())
                 .oldValue(featureValue.getAttributeValues().asText())
                 .newValue(featureValue.getAttributeValues().asText())
                 .eventType(FeatureValueEvent.EventType.VALIDATION)
@@ -174,8 +174,8 @@ public class FeatureValueMonitoringService {
 
     public void updateFeatureValue(ProductFeatureValue featureValue) {
         FeatureValueEvent event = FeatureValueEvent.builder()
-                .featureId(featureValue.getFeature().getId())
-                .productId(featureValue.getProduct().getId())
+                .featureId(featureValue.getFeatureMapping().getFeature().getId())
+                .productId(featureValue.getFeatureMapping().getProduct().getId())
                 .oldValue(featureValue.getAttributeValues().asText())
                 .newValue(featureValue.getAttributeValues().asText())
                 .eventType(FeatureValueEvent.EventType.VALUE_CHANGE)
@@ -198,8 +198,8 @@ public class FeatureValueMonitoringService {
 
     private void createEvent(ProductFeatureValue value, FeatureValueEvent.EventType eventType) {
         FeatureValueEvent event = FeatureValueEvent.builder()
-                .featureId(value.getFeature().getId())
-                .productId(value.getProduct().getId())
+                .featureId(value.getFeatureMapping().getFeature().getId())
+                .productId(value.getFeatureMapping().getProduct().getId())
                 .oldValue(eventType == FeatureValueEvent.EventType.UPDATED ? value.getAttributeValues().asText() : null)
                 .newValue(value.getAttributeValues().asText())
                 .eventType(eventType)
@@ -212,8 +212,8 @@ public class FeatureValueMonitoringService {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .id(UUID.randomUUID())
                 .timestamp(LocalDateTime.now())
-                .featureId(featureValue.getFeature().getId())
-                .productId(featureValue.getProduct().getId())
+                .featureId(featureValue.getFeatureMapping().getFeature().getId())
+                .productId(featureValue.getFeatureMapping().getProduct().getId())
                 .oldValue(featureValue.getAttributeValues().asText())
                 .newValue(featureValue.getAttributeValues().asText())
                 .eventType(FeatureValueEvent.EventType.VALIDATION)

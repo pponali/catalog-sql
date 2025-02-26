@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class ValidationResultDTO extends BaseDTO {
-    
-    private UUID id;
     
     @NotNull(message = "Entity ID is required")
     private UUID entityId;

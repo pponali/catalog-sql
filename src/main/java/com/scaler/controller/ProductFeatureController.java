@@ -3,12 +3,7 @@ package com.scaler.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.dto.ProductFeatureDTO;
 import com.scaler.dto.ProductFeatureValueDTO;
-import com.scaler.entity.CategoryFeatureTemplate;
-import com.scaler.entity.Product;
-import com.scaler.entity.ProductFeature;
-import com.scaler.entity.ProductFeatureValue;
-import com.scaler.entity.UnitOfMeasure;
-import com.scaler.entity.ValidationResult;
+import com.scaler.entity.*;
 import com.scaler.dto.ValidationResultDTO;
 import com.scaler.exception.ValidationException;
 import com.scaler.service.ProductFeatureService;
@@ -93,7 +88,7 @@ public class ProductFeatureController {
     private ProductFeatureDTO mapToDTO(ProductFeature feature) {
         return ProductFeatureDTO.builder()
                 .id(feature.getId())
-                .productId(feature.getProduct().getId())
+                .productId(feature.getFeatureMapping().getProduct().getId())
                 .templateId(feature.getTemplate().getId())
                 .code(feature.getCode())
                 .name(feature.getName())
@@ -128,14 +123,24 @@ public class ProductFeatureController {
         ProductFeature feature = new ProductFeature();
         feature.setId(dto.getId());
         
-        // Set product and template references - these should be validated to exist
-        Product product = new Product();
-        product.setId(dto.getProductId());
-        feature.setProduct(product);
-
+        // Set template reference - this should be validated to exist
         CategoryFeatureTemplate template = new CategoryFeatureTemplate();
         template.setId(dto.getTemplateId());
         feature.setTemplate(template);
+
+        // Create product mapping if product ID is provided
+        if (dto.getProductId() != null) {
+            Product product = new Product();
+            product.setId(dto.getProductId());
+            ProductFeatureMapping mapping = ProductFeatureMapping.builder()
+                .product(product)
+                .feature(feature)
+                .displayOrder(1)
+                .visible(true)
+                .enabled(true)
+                .build();
+            feature.addProductMapping(mapping);
+        }
 
         // Set feature properties
         feature.setCode(dto.getCode());
@@ -172,7 +177,13 @@ public class ProductFeatureController {
             Set<ProductFeatureValue> values = dto.getFeatureValues().stream()
                 .map(this::mapFeatureValueToEntity)
                 .collect(Collectors.toSet());
-            values.forEach(value -> feature.addFeatureValue(value));
+            ProductFeatureMapping mapping = feature.getFeatureMapping();
+            if (mapping != null) {
+                values.forEach(value -> {
+                    value.setFeatureMapping(mapping);
+                    mapping.getFeatureValues().add(value);
+                });
+            }
         }
 
         return feature;
@@ -181,7 +192,7 @@ public class ProductFeatureController {
     private ProductFeatureValueDTO mapFeatureValueToDTO(ProductFeatureValue value) {
         return ProductFeatureValueDTO.builder()
                 .id(value.getId())
-                .featureId(value.getFeature().getId())
+                .featureId(value.getFeatureMapping().getFeature().getId())
                 .attributeValues(value.getValueAsString())
                 .type(value.getType())
                 .unit(value.getUnit())

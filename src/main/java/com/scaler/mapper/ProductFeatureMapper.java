@@ -10,45 +10,43 @@ import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {ProductFeatureValueMapper.class, CommonMapper.class, MapperUtils.class},
+        uses = {CommonMapper.class, MapperUtils.class},
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@DecoratedWith(ProductFeatureMapperDecorator.class)
 public interface ProductFeatureMapper extends JsonNodeMapper {
 
     ProductFeatureMapper INSTANCE = Mappers.getMapper(ProductFeatureMapper.class);
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "productId", source = "product.id"),
         @Mapping(target = "templateId", source = "template.id"),
         @Mapping(target = "unitOfMeasureId", source = "unitOfMeasure.id"),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
         @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString"),
-        @Mapping(target = "featureValues", source = "featureValues")
+        @Mapping(target = "productMappings", ignore = true)
     })
     ProductFeatureDTO toDTO(ProductFeature entity);
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "product", ignore = true),
+        @Mapping(target = "productMappings", ignore = true),
         @Mapping(target = "template", ignore = true),
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
-        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode"),
-        @Mapping(target = "featureValues", source = "featureValues")
+        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode")
     })
     ProductFeature toEntity(ProductFeatureDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({
-        @Mapping(target = "product", ignore = true),
+        @Mapping(target = "productMappings", ignore = true),
         @Mapping(target = "template", ignore = true),
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
-        @Mapping(target = "metadata", source = "metadata"),
-        @Mapping(target = "featureValues", source = "featureValues")
+        @Mapping(target = "metadata", source = "metadata")
     })
     void updateEntity(@MappingTarget ProductFeature entity, ProductFeatureDTO dto);
 

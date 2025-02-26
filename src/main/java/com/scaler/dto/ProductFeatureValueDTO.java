@@ -14,10 +14,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProductFeatureValueDTO extends BaseDTO {
 
-    @NotNull(message = "Product ID is required")
-    private UUID productId;
+    @NotNull(message = "Feature Mapping ID is required")
+    private UUID featureMappingId;
 
     private UUID featureId;
+    private UUID productId;
 
     @NotNull(message = "Feature Template ID is required")
     private UUID featureTemplateId;
@@ -31,10 +32,7 @@ public class ProductFeatureValueDTO extends BaseDTO {
     private String attributeValues;
 
     @ToString.Exclude
-    private ProductDTO product;
-
-    @ToString.Exclude
-    private ProductFeatureDTO feature;
+    private ProductFeatureMappingDTO featureMapping;
 
     public JsonNode getAttributeValue() {
         return null;

@@ -50,6 +50,9 @@ public class ProductDTO extends BaseDTO {
 
     private Set<UUID> categoryIds = new HashSet<>();
 
-    private List<ProductFeatureDTO> features = new ArrayList<>();
+    @Builder.Default
+    private Set<ProductFeatureWithValuesDTO> features = new HashSet<>();
+
+    @Builder.Default
     private List<ProductAttributeDTO> attributes = new ArrayList<>();
 }

@@ -8,9 +8,9 @@ import lombok.experimental.SuperBuilder;
 import java.util.UUID;
 
 @Data
-@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class BaseDTO {
     private UUID id;
     private String createdDate;
