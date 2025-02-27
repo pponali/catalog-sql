@@ -28,6 +28,7 @@ public class ProductInventoryBuilder {
                 .seller(seller)
                 .quantity(generateRandomQuantity())
                 .reservedQuantity(0)
+                .createdBy("SYSTEM")
                 .build();
     }
 

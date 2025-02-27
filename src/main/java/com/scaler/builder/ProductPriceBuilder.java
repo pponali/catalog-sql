@@ -30,6 +30,7 @@ public class ProductPriceBuilder {
                 .price(generateRandomPrice())
                 .currency("INR")
                 .isActive(true)
+                .createdBy("SYSTEM")
                 .build();
     }
 

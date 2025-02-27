@@ -7,6 +7,7 @@ import com.scaler.entity.*;
 import com.scaler.repository.*;
 import com.scaler.builder.*;
 import com.scaler.service.CategoryFeatureTemplateService;
+import com.scaler.service.impl.ProductFeatureValueServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,8 @@ public class DemoService {
 
     @Autowired
     private ProductInventoryRepository productInventoryRepository;
+    @Autowired
+    private SellerProductRepository sellerProductRepository;
 
 
     @Transactional
@@ -121,12 +124,7 @@ public class DemoService {
             bigBasketStore.addChannel(bigBasketEcom);
             bigBasketStore.addChannel(bigBasketQuick);
 
-            // Create sample product prices and inventory
-            createSamplePricesAndInventory(tataCliq, tataCliqEcom, tataCliqSeller);
-            createSamplePricesAndInventory(croma, cromaEcom, cromaSeller);
-            createSamplePricesAndInventory(bigBasket, bigBasketEcom, bigBasketSeller);
-            createSamplePricesAndInventory(tanishq, tataCliqEcom, tanishqSeller);
-            createSamplePricesAndInventory(tata1mg, tataCliqEcom, tata1mgSeller);
+
 
             // Save the updated stores
             storeRepository.save(tataCliqStore);
@@ -273,6 +271,22 @@ public class DemoService {
             // Create new weight value for bangles
             ProductFeatureValue bangleWeightValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldWeight, "30"));
             productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(bangleWeight, bangleWeightValue, 2, true));
+
+            // Create sample product prices and inventory
+            createSamplePricesAndInventory(tataCliq, tataCliqEcom, tataCliqSeller);
+            createSamplePricesAndInventory(croma, cromaEcom, cromaSeller);
+            createSamplePricesAndInventory(bigBasket, bigBasketEcom, bigBasketSeller);
+            createSamplePricesAndInventory(tanishq, tataCliqEcom, tanishqSeller);
+            createSamplePricesAndInventory(tata1mg, tataCliqEcom, tata1mgSeller);
+
+            SellerProduct macProSeller = SellerProductBuilder.createSellerProduct(tataCliqSeller,macBookPro, tataCliq);
+            SellerProduct banglesSeller = SellerProductBuilder.createSellerProduct(cromaSeller, goldBangles, croma);
+
+
+            sellerProductRepository.save(macProSeller);
+            sellerProductRepository.save(banglesSeller);
+
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize demo data: " + e.getMessage(), e);
         }
