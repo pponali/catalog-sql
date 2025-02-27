@@ -13,9 +13,11 @@ public interface ProductInventoryRepository extends JpaRepository<ProductInvento
     @Query("SELECT pi FROM ProductInventory pi " +
            "WHERE pi.product.id = :productId " +
            "AND (:merchantId IS NULL OR pi.merchant.id = :merchantId) " +
-           "AND (:channelId IS NULL OR pi.channel.id = :channelId)")
+           "AND (:channelId IS NULL OR pi.channel.id = :channelId) " +
+           "AND (:sellerId IS NULL OR pi.seller.id = :sellerId)")
     Optional<ProductInventory> findByProductIdAndMerchantIdAndChannelId(
             @Param("productId") UUID productId,
             @Param("merchantId") UUID merchantId,
-            @Param("channelId") UUID channelId);
+            @Param("channelId") UUID channelId,
+            @Param("sellerId") UUID sellerId);
 }

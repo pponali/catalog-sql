@@ -188,5 +188,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("channelId") UUID channelId,
             @Param("sellerId") UUID sellerId,
             @Param("categoryId") UUID categoryId);
+
+    List<Product> findByMerchantId(UUID id);
 }
 

@@ -18,7 +18,6 @@ public class ProductFeatureMappingBuilder {
         return ProductFeatureMapping.builder()
                 .product(product)
                 .feature(feature)
-
                 .displayOrder(1)
                 .visible(true)
                 .enabled(true)

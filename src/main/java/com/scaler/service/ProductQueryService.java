@@ -77,13 +77,11 @@ public class ProductQueryService {
     }
     
     public List<ProductPrice> getProductPricing(UUID productId, UUID channelId, UUID sellerId) {
-        // Note: sellerId parameter is ignored as ProductPrice no longer has a seller relationship
-        return productPriceRepository.findActiveProductPrices(productId, channelId);
+        return productPriceRepository.findActiveProductPrices(productId, channelId, sellerId);
     }
     
     public Optional<ProductInventory> getProductInventory(UUID productId, UUID merchantId, UUID channelId, UUID sellerId) {
-        // Note: sellerId parameter is ignored as ProductInventory no longer has a seller relationship
-        return productInventoryRepository.findByProductIdAndMerchantIdAndChannelId(productId, merchantId, channelId);
+        return productInventoryRepository.findByProductIdAndMerchantIdAndChannelId(productId, merchantId, channelId, sellerId);
     }
 
 }

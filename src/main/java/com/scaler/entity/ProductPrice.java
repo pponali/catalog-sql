@@ -25,8 +25,12 @@ public class ProductPrice extends BaseEntity {
     private Channel channel;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "merchat_id", nullable = false)
+    @JoinColumn(name = "merchant_id", nullable = false)
     private Merchant merchant;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
     
     @Column(name = "price", nullable = false)
     private BigDecimal price;

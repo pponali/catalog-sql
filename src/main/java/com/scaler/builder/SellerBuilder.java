@@ -1,5 +1,6 @@
 package com.scaler.builder;
 
+import com.scaler.entity.Merchant;
 import com.scaler.entity.Seller;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,6 +50,66 @@ public class SellerBuilder {
                 .type("WHOLESALE")
                 .status("ACTIVE")
                 .description("Wholesale business seller")
+                .build();
+    }
+
+    public static Seller createTataCliqSeller(Merchant tataCliq) {
+        return Seller.builder()
+                .code("TATACLIQ_DIRECT")
+                .name("Tata CLiQ Direct")
+                .type("RETAIL")
+                .status("ACTIVE")
+                .merchantId(tataCliq.getId())
+                .createdBy("SYSTEM")
+                .description("Direct retail seller for Tata CLiQ")
+                .build();
+    }
+
+    public static Seller createCromaSeller(Merchant croma) {
+        return Seller.builder()
+                .code("CROMA_RETAIL")
+                .name("Croma Retail")
+                .type("RETAIL")
+                .status("ACTIVE")
+                .merchantId(croma.getId())
+                .createdBy("SYSTEM")
+                .description("Official Croma retail seller")
+                .build();
+    }
+
+    public static Seller createBigBasketSeller(Merchant bigBasket) {
+        return Seller.builder()
+                .code("BIGBASKET_FRESH")
+                .name("BigBasket Fresh")
+                .type("RETAIL")
+                .status("ACTIVE")
+                .merchantId(bigBasket.getId())
+                .createdBy("SYSTEM")
+                .description("BigBasket fresh produce seller")
+                .build();
+    }
+
+    public static Seller createTanishqSeller(Merchant tanishq) {
+        return Seller.builder()
+                .code("TANISHQ_OFFICIAL")
+                .name("Tanishq Official")
+                .type("RETAIL")
+                .status("ACTIVE")
+                .merchantId(tanishq.getId())
+                .createdBy("SYSTEM")
+                .description("Official Tanishq jewelry seller")
+                .build();
+    }
+
+    public static Seller createTata1mgSeller(Merchant tata1mg) {
+        return Seller.builder()
+                .code("TATA1MG_PHARMACY")
+                .name("Tata 1mg Pharmacy")
+                .type("RETAIL")
+                .status("ACTIVE")
+                .merchantId(tata1mg.getId())
+                .createdBy("SYSTEM")
+                .description("Official Tata 1mg pharmacy seller")
                 .build();
     }
 

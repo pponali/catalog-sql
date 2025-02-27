@@ -140,6 +140,7 @@ public class ProductFeatureController {
                 .displayOrder(1)
                 .visible(true)
                 .enabled(true)
+                    .createdBy("SYSTEM")
                 .build();
             feature.addProductMapping(mapping);
         }
