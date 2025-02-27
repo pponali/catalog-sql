@@ -1,5 +1,8 @@
 package com.scaler.entity;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,14 +25,16 @@ public class ProductFeatureMapping extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference("product-features")
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feature_id", nullable = false)
+    @JsonManagedReference("feature-mapping")
     private ProductFeature feature;
 
     @OneToMany(mappedBy = "featureMapping", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductFeatureValue> featureValues = new HashSet<>();
+    private Set<ProductFeatureValueMapping> featureValueMappings = new HashSet<>();
 
     @Column(name = "display_order")
     private Integer displayOrder;
@@ -44,13 +49,13 @@ public class ProductFeatureMapping extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode metadata;
 
-    public void addFeatureValue(ProductFeatureValue value) {
-        featureValues.add(value);
-        value.setFeatureMapping(this);
+    public void addFeatureValueMapping(ProductFeatureValueMapping mapping) {
+        featureValueMappings.add(mapping);
+        mapping.setFeatureMapping(this);
     }
 
-    public void removeFeatureValue(ProductFeatureValue value) {
-        featureValues.remove(value);
-        value.setFeatureMapping(null);
+    public void removeFeatureValueMapping(ProductFeatureValueMapping mapping) {
+        featureValueMappings.remove(mapping);
+        mapping.setFeatureMapping(null);
     }
 }

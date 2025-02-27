@@ -27,7 +27,7 @@ public class FeatureValueEventService {
     public void publishValueChangeEvent(ProductFeatureValueDTO oldValue, ProductFeatureValueDTO newValue) {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .eventType(FeatureValueEvent.EventType.VALUE_CHANGE)
-                .featureId(newValue.getFeatureMappingId())
+                .featureId(newValue.getFeatureId())
                 .oldValue(oldValue != null ? oldValue.getAttributeValues() : null)
                 .newValue(newValue.getAttributeValues())
                 .timestamp(LocalDateTime.now())
@@ -40,7 +40,7 @@ public class FeatureValueEventService {
             String metadataJson = objectMapper.writeValueAsString(Map.of("violations", violations));
             FeatureValueEvent event = FeatureValueEvent.builder()
                     .eventType(FeatureValueEvent.EventType.VALIDATION)
-                    .featureId(value.getFeatureMappingId())
+                    .featureId(value.getFeatureId())
                     .newValue(value.getAttributeValues())
                     .metadata(metadataJson)
                     .timestamp(LocalDateTime.now())
@@ -54,7 +54,7 @@ public class FeatureValueEventService {
     public void publishTransformationEvent(ProductFeatureValueDTO originalValue, ProductFeatureValueDTO transformedValue) {
         FeatureValueEvent event = FeatureValueEvent.builder()
                 .eventType(FeatureValueEvent.EventType.TRANSFORMATION)
-                .featureId(originalValue.getFeatureMappingId())
+                .featureId(originalValue.getFeatureId())
                 .oldValue(originalValue.getAttributeValues())
                 .newValue(transformedValue.getAttributeValues())
                 .timestamp(LocalDateTime.now())

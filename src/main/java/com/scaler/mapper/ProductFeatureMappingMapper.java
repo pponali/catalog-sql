@@ -24,7 +24,7 @@ public interface ProductFeatureMappingMapper extends JsonNodeMapper {
         @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString"),
         @Mapping(target = "product", ignore = true),
         @Mapping(target = "feature", ignore = true),
-        @Mapping(target = "featureValues", ignore = true)
+        @Mapping(target = "featureValueMappings", ignore = true)
     })
     ProductFeatureMappingDTO toDTO(ProductFeatureMapping entity);
 
@@ -36,7 +36,7 @@ public interface ProductFeatureMappingMapper extends JsonNodeMapper {
         @Mapping(target = "visible", source = "visible"),
         @Mapping(target = "enabled", source = "enabled"),
         @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode"),
-        @Mapping(target = "featureValues", source = "featureValues")
+        @Mapping(target = "featureValueMappings", ignore = true)
     })
     ProductFeatureMapping toEntity(ProductFeatureMappingDTO dto);
 
@@ -48,7 +48,7 @@ public interface ProductFeatureMappingMapper extends JsonNodeMapper {
         @Mapping(target = "visible", source = "visible"),
         @Mapping(target = "enabled", source = "enabled"),
         @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode"),
-        @Mapping(target = "featureValues", source = "featureValues")
+        @Mapping(target = "featureValueMappings", ignore = true)
     })
     void updateEntity(@MappingTarget ProductFeatureMapping entity, ProductFeatureMappingDTO dto);
 

@@ -22,8 +22,8 @@ public abstract class ProductFeatureValueMapperDecorator implements ProductFeatu
             return null;
         }
         ProductFeatureValueDTO dto = delegate.toDTO(entity);
-        if (entity.getFeatureMapping() != null && entity.getFeatureMapping().getFeature() != null) {
-            dto.setFeatureTemplateId(entity.getFeatureMapping().getFeature().getTemplate().getId());
+        if (entity.getFeature() != null && entity.getFeature().getTemplate() != null) {
+            dto.setFeatureTemplateId(entity.getFeature().getTemplate().getId());
         }
         return dto;
     }

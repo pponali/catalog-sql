@@ -20,7 +20,6 @@ public interface MerchantMapper extends JsonNodeMapper {
     MerchantDTO toDTO(Merchant entity);
 
     @Mappings({
-        @Mapping(target = "id", source = "id"),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "code", source = "code"),
         @Mapping(target = "description", source = "description"),

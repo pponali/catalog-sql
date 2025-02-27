@@ -34,6 +34,7 @@ public class ChannelBuilder {
                 .enabled(true)
                 .visibility(true)
                 .displayOrder(1)
+                .createdBy("SYSTEM")
                 .channelConfig(objectMapper.writeValueAsString(createEcommerceConfig()))
                 .build();
     }
@@ -49,6 +50,7 @@ public class ChannelBuilder {
                 .enabled(true)
                 .visibility(true)
                 .displayOrder(2)
+                .createdBy("SYSTEM")
                 .channelConfig(objectMapper.writeValueAsString(createMarketplaceConfig()))
                 .build();
     }
@@ -67,6 +69,7 @@ public class ChannelBuilder {
                 .enabled(true)
                 .visibility(true)
                 .displayOrder(1)
+                .createdBy("SYSTEM")
                 .channelConfig(objectMapper.writeValueAsString(createEcommerceConfig()))
                 .build();
     }
@@ -82,6 +85,7 @@ public class ChannelBuilder {
                 .enabled(true)
                 .visibility(true)
                 .displayOrder(2)
+                .createdBy("SYSTEM")
                 .channelConfig(objectMapper.writeValueAsString(createPhysicalStoreConfig()))
                 .build();
     }
@@ -100,6 +104,7 @@ public class ChannelBuilder {
                 .enabled(true)
                 .visibility(true)
                 .displayOrder(1)
+                .createdBy("SYSTEM")
                 .channelConfig(objectMapper.writeValueAsString(createEcommerceConfig()))
                 .build();
     }
@@ -115,6 +120,7 @@ public class ChannelBuilder {
                 .enabled(true)
                 .visibility(true)
                 .displayOrder(2)
+                .createdBy("SYSTEM")
                 .channelConfig(objectMapper.writeValueAsString(createQuickCommerceConfig()))
                 .build();
     }

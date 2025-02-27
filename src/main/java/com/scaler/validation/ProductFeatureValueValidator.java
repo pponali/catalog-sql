@@ -35,11 +35,11 @@ public @interface ProductFeatureValueValidator {
 
         @Override
         public boolean isValid(ProductFeatureValue value, ConstraintValidatorContext context) {
-            if (value == null || value.getFeatureMapping() == null || value.getFeatureMapping().getFeature() == null || value.getFeatureMapping().getFeature().getTemplate() == null) {
+            if (value == null || value.getFeature() == null || value.getFeature().getTemplate() == null) {
                 return true; // Let other validations handle this
             }
 
-            CategoryFeatureTemplate template = value.getFeatureMapping().getFeature().getTemplate();
+            CategoryFeatureTemplate template = value.getFeature().getTemplate();
             JsonNode validationMetadata;
             try {
                 if (template.getMetadata() != null) {

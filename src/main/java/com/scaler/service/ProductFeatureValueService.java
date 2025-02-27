@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Set;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.Set;
+import org.springframework.cache.annotation.Cacheable;
 
 public interface ProductFeatureValueService {
     ProductFeatureValueDTO save(ProductFeatureValueDTO dto);
@@ -45,7 +51,18 @@ public interface ProductFeatureValueService {
     List<ProductFeatureValueDTO> findByUnitOfMeasureCode(String unitCode);
     List<ProductFeatureValueDTO> findByFeatureAndUnitOfMeasureCode(UUID featureId, String unitCode);
     List<ProductFeatureValueDTO> findByTemplate(UUID templateId);
+    // Optimized product feature value queries
     List<ProductFeatureValueDTO> findByProduct(UUID productId);
+    List<ProductFeatureValueDTO> findByProductWithFeatureValues(UUID productId);
+    List<ProductFeatureValueDTO> findByProductAndFeatureCodes(UUID productId, Set<String> featureCodes);
+    List<ProductFeatureValueDTO> findPrimaryValuesByProduct(UUID productId);
+    
+    // Cached queries for better performance
+    @Cacheable(value = "productFeatureValues", key = "#productId")
+    List<ProductFeatureValueDTO> findByProductCached(UUID productId);
+    
+    @Cacheable(value = "productFeatureValues", key = "#productId + '_' + #featureCodes")
+    List<ProductFeatureValueDTO> findByProductAndFeatureCodesCached(UUID productId, Set<String> featureCodes);
     
     // Analytics and statistics
     Long countByFeatureAndValueType(UUID featureId, String type);

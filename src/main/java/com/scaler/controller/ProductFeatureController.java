@@ -178,16 +178,17 @@ public class ProductFeatureController {
         if (dto.getFeatureValueIds() != null) {
             ProductFeatureMapping mapping = new ProductFeatureMapping();
             mapping.setFeature(feature);
-            mapping.setFeatureValues(
-                dto.getFeatureValueIds().stream()
-                    .map(id -> {
-                        ProductFeatureValue value = new ProductFeatureValue();
-                        value.setId(id);
-                        value.setFeatureMapping(mapping);
-                        return value;
-                    })
-                    .collect(Collectors.toSet())
-            );
+            dto.getFeatureValueIds().forEach(id -> {
+                ProductFeatureValue value = new ProductFeatureValue();
+                value.setId(id);
+                
+                ProductFeatureValueMapping valueMapping = ProductFeatureValueMapping.builder()
+                    .featureMapping(mapping)
+                    .featureValue(value)
+                    .build();
+                    
+                mapping.getFeatureValueMappings().add(valueMapping);
+            });
             feature.getProductMappings().add(mapping);
         }
 
@@ -197,7 +198,7 @@ public class ProductFeatureController {
     private ProductFeatureValueDTO mapFeatureValueToDTO(ProductFeatureValue value) {
         return ProductFeatureValueDTO.builder()
                 .id(value.getId())
-                .featureId(value.getFeatureMapping().getFeature().getId())
+                .featureId(value.getFeature().getId())
                 .attributeValues(value.getValueAsString())
                 .type(value.getType())
                 .unit(value.getUnit())

@@ -15,6 +15,7 @@ import static com.scaler.constants.FeatureConstants.*;
 
 
 @Service
+@Transactional
 public class DemoService {
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -42,6 +43,9 @@ public class DemoService {
     private ProductFeatureRepository productFeatureRepository;
     @Autowired
     private ProductFeatureValueRepository productFeatureValueRepository;
+
+    @Autowired
+    private ProductFeatureValueMappingRepository productFeatureValueMappingRepository;
     @Autowired
     private UnitOfMeasureRepository unitOfMeasureRepository;
     @Autowired
@@ -57,7 +61,12 @@ public class DemoService {
 
 
     @Transactional
-    public void setup() throws JsonProcessingException {
+    public void setup() {
+        try {
+            if (merchantRepository.count() > 0) {
+                // Data already exists, skip initialization
+                return;
+            }
         // Create merchants
         Merchant tataCliq = merchantRepository.save(MerchantBuilder.createTataCliqMerchant());
         Merchant tata1mg = merchantRepository.save(MerchantBuilder.createTata1mgMerchant());
@@ -157,18 +166,26 @@ public class DemoService {
         ProductFeatureMapping macBookRam = createAndSaveMapping(macBookPro, ram);
         ProductFeatureMapping macBookStorage = createAndSaveMapping(macBookPro, storage);
         
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(macBookProcessor, "Apple M2 Pro"));
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(macBookRam, "16GB"));
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(macBookStorage, "512GB"));
+        ProductFeatureValue processorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(processor, "Apple M2 Pro"));
+        ProductFeatureValue ramValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(ram, "16GB"));
+        ProductFeatureValue storageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(storage, "512GB"));
+
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookProcessor, processorValue, 1, true));
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookRam, ramValue, 2, true));
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookStorage, storageValue, 3, true));
 
         // Create feature mappings and values for Dell XPS
         ProductFeatureMapping dellProcessor = createAndSaveMapping(dellXPS, processor);
         ProductFeatureMapping dellRam = createAndSaveMapping(dellXPS, ram);
         ProductFeatureMapping dellStorage = createAndSaveMapping(dellXPS, storage);
         
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(dellProcessor, "Intel i9-13900H"));
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(dellRam, "32GB"));
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(dellStorage, "1TB"));
+        ProductFeatureValue dellProcessorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(processor, "Intel i9-13900H"));
+        ProductFeatureValue dellRamValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(ram, "32GB"));
+        ProductFeatureValue dellStorageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(storage, "1TB"));
+
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellProcessor, dellProcessorValue, 1, true));
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellRam, dellRamValue, 2, true));
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellStorage, dellStorageValue, 3, true));
 
         // Create product-channel relationships
         // MacBook Pro available on Croma (both online and offline)
@@ -213,18 +230,31 @@ public class DemoService {
         ProductFeatureMapping necklacePurity = createAndSaveMapping(goldNecklace, goldPurity);
         ProductFeatureMapping necklaceWeight = createAndSaveMapping(goldNecklace, goldWeight);
         
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(necklacePurity, "22K"));
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(necklaceWeight, "50"));
+        ProductFeatureValue purityValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldPurity, "22K"));
+        ProductFeatureValue weightValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldWeight, "50"));
+
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklacePurity, purityValue, 1, true));
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklaceWeight, weightValue, 2, true));
 
         // Create feature mappings and values for Gold Bangles
         ProductFeatureMapping banglePurity = createAndSaveMapping(goldBangles, goldPurity);
         ProductFeatureMapping bangleWeight = createAndSaveMapping(goldBangles, goldWeight);
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(banglePurity, "22K"));
-        productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(bangleWeight, "30"));
+        
+        // Reuse the same purity value for bangles
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(banglePurity, purityValue, 1, true));
+        
+        // Create new weight value for bangles
+        ProductFeatureValue bangleWeightValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldWeight, "30"));
+        productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(bangleWeight, bangleWeightValue, 2, true));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize demo data: " + e.getMessage(), e);
+        }
     }
 
-    private ProductFeatureMapping
-    createAndSaveMapping(Product product, ProductFeature feature) {
+    private ProductFeatureMapping createAndSaveMapping(Product product, ProductFeature feature) {
+        if (product == null || feature == null) {
+            throw new IllegalArgumentException("Product and Feature must not be null");
+        }
         ProductFeatureMapping mapping = ProductFeatureMapping.builder()
                 .product(product)
                 .feature(feature)

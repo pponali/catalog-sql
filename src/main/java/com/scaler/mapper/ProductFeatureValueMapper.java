@@ -21,19 +21,19 @@ public interface ProductFeatureValueMapper extends JsonNodeMapper {
         @Mapping(target = "lastModifiedDate", expression = "java(entity.getLastModifiedDate() != null ? entity.getLastModifiedDate().toString() : null)"),
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
-        @Mapping(target = "featureMappingId", source = "featureMapping.id"),
+        @Mapping(target = "featureId", source = "feature.id"),
         @Mapping(target = "featureTemplateId", source = "templateId"),
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),
         @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
-        @Mapping(target = "metadata", source = "metadata" , qualifiedByName = "jsonNodeToString"),
+        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString"),
         @Mapping(target = "attributeValues", source = "attributeValues", qualifiedByName = "jsonNodeToString")
     })
     ProductFeatureValueDTO toDTO(ProductFeatureValue entity);
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "featureMapping", ignore = true),
+        @Mapping(target = "feature", ignore = true),
         @Mapping(target = "templateId", source = "featureTemplateId"),
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),
@@ -45,7 +45,7 @@ public interface ProductFeatureValueMapper extends JsonNodeMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({
-        @Mapping(target = "featureMapping", ignore = true),
+        @Mapping(target = "feature", ignore = true),
         @Mapping(target = "templateId", source = "featureTemplateId"),
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),

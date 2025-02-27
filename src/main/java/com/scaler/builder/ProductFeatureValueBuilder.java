@@ -3,8 +3,10 @@ package com.scaler.builder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.scaler.entity.ProductFeature;
 import com.scaler.entity.ProductFeatureMapping;
 import com.scaler.entity.ProductFeatureValue;
+import com.scaler.entity.ProductFeature;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,7 +29,7 @@ public class ProductFeatureValueBuilder {
         }
     }
 
-    public static ProductFeatureValue createProcessorValue(ProductFeatureMapping mapping, String value) {
+    public static ProductFeatureValue createProcessorValue(ProductFeature feature, String value) {
         ObjectNode additionalInfo = objectMapper.createObjectNode();
         if (value.contains("M2")) {
             additionalInfo.put("cores", "12-core")
@@ -40,7 +42,7 @@ public class ProductFeatureValueBuilder {
         }
 
         return ProductFeatureValue.builder()
-                .featureMapping(mapping)
+                .feature(feature)
                 .type("SPECIFICATION")
                 .attributeValues(createAttributeValues(value, value, additionalInfo))
                 .createdBy("system")
@@ -48,13 +50,13 @@ public class ProductFeatureValueBuilder {
                 .build();
     }
 
-    public static ProductFeatureValue createRamValue(ProductFeatureMapping mapping, String value) {
+    public static ProductFeatureValue createRamValue(ProductFeature feature, String value) {
         ObjectNode additionalInfo = objectMapper.createObjectNode()
                 .put("type", value.contains("Unified") ? "Unified Memory" : "DDR5")
                 .put("speed", "6400MHz");
 
         return ProductFeatureValue.builder()
-                .featureMapping(mapping)
+                .feature(feature)
                 .type("SPECIFICATION")
                 .attributeValues(createAttributeValues(value.replace("GB", ""), value, additionalInfo))
                 .createdBy("system")
@@ -62,7 +64,7 @@ public class ProductFeatureValueBuilder {
                 .build();
     }
 
-    public static ProductFeatureValue createStorageValue(ProductFeatureMapping mapping, String value) {
+    public static ProductFeatureValue createStorageValue(ProductFeature feature, String value) {
         ObjectNode additionalInfo = objectMapper.createObjectNode()
                 .put("type", "SSD")
                 .put("technology", "NVMe")
@@ -70,7 +72,7 @@ public class ProductFeatureValueBuilder {
                 .put("writeSpeed", "5000 MB/s");
 
         return ProductFeatureValue.builder()
-                .featureMapping(mapping)
+                .feature(feature)
                 .type("SPECIFICATION")
                 .attributeValues(createAttributeValues(value.replace("TB", ""), value, additionalInfo))
                 .createdBy("system")
@@ -78,16 +80,16 @@ public class ProductFeatureValueBuilder {
                 .build();
     }
 
-    public static ProductFeatureValue createFeatureValue(ProductFeatureMapping mapping, String value) {
+    public static ProductFeatureValue createFeatureValue(ProductFeature feature, String value) {
         ObjectNode additionalInfo = objectMapper.createObjectNode();
-        if (mapping.getFeature().getCode().equals("GOLD-PURITY")) {
+        if (feature.getCode().equals("GOLD-PURITY")) {
             additionalInfo.put("purityPercentage", value.replace("K", "").equals("24") ? "99.9" : "91.6");
-        } else if (mapping.getFeature().getCode().equals("GOLD-WEIGHT")) {
+        } else if (feature.getCode().equals("GOLD-WEIGHT")) {
             additionalInfo.put("unit", "grams");
         }
 
         return ProductFeatureValue.builder()
-                .featureMapping(mapping)
+                .feature(feature)
                 .type("SPECIFICATION")
                 .attributeValues(createAttributeValues(value, value, additionalInfo))
                 .createdBy("system")

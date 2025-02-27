@@ -40,6 +40,7 @@ public class ProductChannelBuilder {
                 .channel(channel)
                 .isEnabled(true)
                 .isVisible(true)
+                .createdBy("SYSTEM")
                 .effectiveFrom(LocalDateTime.now())
                 .channelMetadata(objectMapper.writeValueAsString(metadata))
                 .build();
@@ -63,6 +64,7 @@ public class ProductChannelBuilder {
                 .channel(channel)
                 .isEnabled(true)
                 .isVisible(true)
+                .createdBy("SYSTEM")
                 .effectiveFrom(LocalDateTime.now())
                 .channelMetadata(objectMapper.writeValueAsString(metadata))
                 .build();
@@ -87,6 +89,7 @@ public class ProductChannelBuilder {
                 .channel(channel)
                 .isEnabled(true)
                 .isVisible(true)
+                .createdBy("SYSTEM")
                 .effectiveFrom(LocalDateTime.now())
                 .effectiveTo(LocalDateTime.now().plusHours(12))
                 .channelMetadata(objectMapper.writeValueAsString(metadata))
@@ -111,6 +114,7 @@ public class ProductChannelBuilder {
                 .channel(channel)
                 .isEnabled(true)
                 .isVisible(true)
+                .createdBy("SYSTEM")
                 .effectiveFrom(LocalDateTime.now())
                 .channelMetadata(objectMapper.writeValueAsString(metadata))
                 .build();

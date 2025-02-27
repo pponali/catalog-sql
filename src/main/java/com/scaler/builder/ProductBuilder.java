@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scaler.entity.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 
 public class ProductBuilder {
@@ -23,9 +24,10 @@ public class ProductBuilder {
                 .merchant(merchant)
                 .productType(ProductType.SIMPLE)
                 .metadata(metadata.toString())
-                .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, category, merchant);
@@ -48,9 +50,10 @@ public class ProductBuilder {
                 .description("Dell XPS 15 with Intel i9 processor")
                 .status("ACTIVE")
                 .metadata(metadata.toString())
-                .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, category, merchant);
@@ -73,9 +76,10 @@ public class ProductBuilder {
                 .description("Apple iPhone 15 Pro Max")
                 .status("ACTIVE")
                 .metadata(metadata.toString())
-                .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, category, merchant);
@@ -98,9 +102,10 @@ public class ProductBuilder {
                 .description("22K Gold Traditional Wedding Necklace")
                 .status("ACTIVE")
                 .metadata(metadata.toString())
-                .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, category, merchant);

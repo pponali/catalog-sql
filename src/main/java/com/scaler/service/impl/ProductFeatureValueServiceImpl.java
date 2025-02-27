@@ -19,6 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import com.scaler.repository.ProductFeatureValueMappingRepository;
+import com.scaler.entity.ProductFeatureValueMapping;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -34,7 +38,11 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
     private final ProductFeatureRepository featureRepository;
     private final UnitOfMeasureRepository unitRepository;
     private final ProductFeatureValueMapper mapper;
+    private final ProductFeatureValueMappingRepository valueMapRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    
+    @Value("${app.cache.feature-values.ttl:3600}")
+    private long cacheTimeToLive;
 
     private List<ProductFeatureValueDTO> convertToDTOList(List<ProductFeatureValue> entities) {
         return entities.stream()
@@ -99,8 +107,8 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public void validateFeatureValue(ProductFeatureValueDTO dto) {
-        ProductFeature feature = featureRepository.findById(dto.getFeatureMappingId())
-                .orElseThrow(() -> new ResourceNotFoundException("Feature not found with id: " + dto.getFeatureMappingId()));
+        ProductFeature feature = featureRepository.findById(dto.getFeatureId())
+                .orElseThrow(() -> new ResourceNotFoundException("Feature not found with id: " + dto.getFeatureId()));
 
         // Validate unit if specified
         if (dto.getUnitOfMeasure() != null) {
@@ -259,6 +267,31 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public List<ProductFeatureValueDTO> findByProduct(UUID productId) {
+        return List.of();
+    }
+
+    @Override
+    public List<ProductFeatureValueDTO> findByProductWithFeatureValues(UUID productId) {
+        return List.of();
+    }
+
+    @Override
+    public List<ProductFeatureValueDTO> findByProductAndFeatureCodes(UUID productId, Set<String> featureCodes) {
+        return List.of();
+    }
+
+    @Override
+    public List<ProductFeatureValueDTO> findPrimaryValuesByProduct(UUID productId) {
+        return List.of();
+    }
+
+    @Override
+    public List<ProductFeatureValueDTO> findByProductCached(UUID productId) {
+        return List.of();
+    }
+
+    @Override
+    public List<ProductFeatureValueDTO> findByProductAndFeatureCodesCached(UUID productId, Set<String> featureCodes) {
         return List.of();
     }
 

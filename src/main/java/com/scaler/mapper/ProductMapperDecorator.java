@@ -6,6 +6,8 @@ import com.scaler.dto.ProductFeatureValueDTO;
 import com.scaler.dto.ProductFeatureWithValuesDTO;
 import com.scaler.entity.Product;
 import com.scaler.entity.ProductFeatureMapping;
+import com.scaler.entity.ProductFeatureValueMapping;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,9 +43,9 @@ public abstract class ProductMapperDecorator implements ProductMapper {
                     if (feature == null) return null;
 
                     // Map feature values
-                    Set<ProductFeatureValueDTO> values = mapping.getFeatureValues().stream()
-                        .map(value -> {
-                            return featureValueMapper.toDTO(value);
+                    Set<ProductFeatureValueDTO> values = mapping.getFeatureValueMappings().stream()
+                        .map(valueMapping -> {
+                            return featureValueMapper.toDTO(valueMapping.getFeatureValue());
                         })
                         .filter(v -> v != null)
                         .collect(Collectors.toSet());
@@ -88,7 +90,7 @@ public abstract class ProductMapperDecorator implements ProductMapper {
                         .enabled(true)
                         .createdBy(dto.getCreatedBy())
                         .lastModifiedBy(dto.getLastModifiedBy())
-                        .featureValues(new HashSet<>())
+                        .featureValueMappings(new HashSet<>())
                         .build();
 
                     // Add feature values to the mapping
@@ -96,7 +98,11 @@ public abstract class ProductMapperDecorator implements ProductMapper {
                         featureWithValuesDTO.getValues().forEach(valueDTO -> {
                             var value = featureValueMapper.toEntity(valueDTO);
                             if (value != null) {
-                                mapping.getFeatureValues().add(value);
+                                var valueMapping = ProductFeatureValueMapping.builder()
+                                    .featureMapping(mapping)
+                                    .featureValue(value)
+                                    .build();
+                                mapping.getFeatureValueMappings().add(valueMapping);
                             }
                         });
                     }

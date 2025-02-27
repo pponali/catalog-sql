@@ -17,8 +17,9 @@ public interface CategoryFeatureTemplateMapper extends JsonNodeMapper {
 
 
     @Mappings({
-            @Mapping(target = "id", source = "id"),
             @Mapping(target = "categoryId", source = "category.id"),
+            @Mapping(target = "code", source = "code"),
+            @Mapping(target = "attributeType", source = "attributeType"),
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "featureType", source = "featureType"),
@@ -27,8 +28,9 @@ public interface CategoryFeatureTemplateMapper extends JsonNodeMapper {
     CategoryFeatureTemplateDTO toDTO(CategoryFeatureTemplate entity);
 
     @Mappings({
-            @Mapping(target = "id", source = "id"),
             @Mapping(target = "category", ignore = true),
+            @Mapping(target = "code", source = "code"),
+            @Mapping(target = "attributeType", source = "attributeType"),
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "featureType", source = "featureType"),

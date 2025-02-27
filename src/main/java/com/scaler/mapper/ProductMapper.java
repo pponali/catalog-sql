@@ -24,7 +24,6 @@ public interface ProductMapper  {
     ProductDTO toDTO(Product entity);
 
     @Mappings({
-            @Mapping(target = "id", source = "id"),
             @Mapping(target = "merchant", ignore = true),
             @Mapping(target = "catalog", ignore = true),
             @Mapping(target = "productCategories", ignore = true),

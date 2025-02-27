@@ -2,10 +2,10 @@ package com.scaler.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import lombok.experimental.SuperBuilder;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static lombok.Builder.Default;
+
 @Entity
 @Table(name = "product")
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels",  "sellerProducts"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product extends BaseEntity {
@@ -56,12 +56,16 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
+    @Builder.Default
     private Set<ProductCategory> productCategories = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<ProductAttribute> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("product-features")
+    @Builder.Default
     private Set<ProductFeatureMapping> featureMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -75,11 +79,13 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_of_measure_id")
     private UnitOfMeasure unitOfMeasure;
-    
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<ProductChannel> productChannels = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
     private Set<SellerProduct> sellerProducts = new HashSet<>();
 
     public void addProductCategory(ProductCategory productCategory) {
@@ -99,12 +105,13 @@ public class Product extends BaseEntity {
 
     public void addProductChannel(Channel channel) {
         ProductChannel productChannel = ProductChannel.builder()
-            .product(this)
-            .channel(channel)
-            .isEnabled(true)
-            .isVisible(true)
-            .effectiveFrom(LocalDateTime.now())
-            .build();
+                .product(this)
+                .channel(channel)
+                .isEnabled(true)
+                .isVisible(true)
+                .createdBy("SYSTEM")
+                .effectiveFrom(LocalDateTime.now())
+                .build();
         productChannels.add(productChannel);
     }
 
@@ -114,31 +121,31 @@ public class Product extends BaseEntity {
 
     public void disableProductChannel(Channel channel) {
         productChannels.stream()
-            .filter(pc -> pc.getChannel().equals(channel))
-            .findFirst()
-            .ifPresent(pc -> pc.setIsEnabled(false));
+                .filter(pc -> pc.getChannel().equals(channel))
+                .findFirst()
+                .ifPresent(pc -> pc.setIsEnabled(false));
     }
 
     public void enableProductChannel(Channel channel) {
         productChannels.stream()
-            .filter(pc -> pc.getChannel().equals(channel))
-            .findFirst()
-            .ifPresent(pc -> pc.setIsEnabled(true));
+                .filter(pc -> pc.getChannel().equals(channel))
+                .findFirst()
+                .ifPresent(pc -> pc.setIsEnabled(true));
     }
 
     public boolean isEnabledForChannel(Channel channel) {
         return productChannels.stream()
-            .filter(pc -> pc.getChannel().equals(channel))
-            .findFirst()
-            .map(ProductChannel::getIsEnabled)
-            .orElse(false);
+                .filter(pc -> pc.getChannel().equals(channel))
+                .findFirst()
+                .map(ProductChannel::getIsEnabled)
+                .orElse(false);
     }
 
     public Set<Channel> getEnabledChannels() {
         return productChannels.stream()
-            .filter(ProductChannel::getIsEnabled)
-            .map(ProductChannel::getChannel)
-            .collect(Collectors.toSet());
+                .filter(ProductChannel::getIsEnabled)
+                .map(ProductChannel::getChannel)
+                .collect(Collectors.toSet());
     }
 
     public void removeFeatureMapping(ProductFeatureMapping mapping) {
@@ -151,6 +158,10 @@ public class Product extends BaseEntity {
         sellerProduct.setProduct(this);
     }
 
+    public Product() {
+        super();
+    }
+
     public void removeSellerProduct(SellerProduct sellerProduct) {
         sellerProducts.remove(sellerProduct);
         sellerProduct.setProduct(null);
@@ -159,6 +170,6 @@ public class Product extends BaseEntity {
     public void setCatalog(Catalog catalog) {
         this.catalog = catalog;
     }
-    
+
 
 }

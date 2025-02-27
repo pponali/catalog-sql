@@ -1,8 +1,6 @@
 package com.scaler.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
@@ -84,7 +82,7 @@ public class ProductFeature extends BaseEntity {
     private JsonNode metadata;
 
     @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("feature-mapping")
+    @JsonBackReference("feature-mapping")
     private Set<ProductFeatureMapping> productMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -110,7 +108,7 @@ public class ProductFeature extends BaseEntity {
     public Set<ProductFeatureValue> getFeatureValues() {
         Set<ProductFeatureValue> values = new HashSet<>();
         for (ProductFeatureMapping mapping : productMappings) {
-            values.addAll(mapping.getFeatureValues());
+            values.addAll(mapping.getFeature().getFeatureValues());
         }
         return values;
     }

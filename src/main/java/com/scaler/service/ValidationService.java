@@ -228,8 +228,7 @@ public class ValidationService {
             // Insert each feature for validation
             for (ProductFeatureValue feature : features) {
                 String featureCode = Optional.ofNullable(feature)
-                    .map(ProductFeatureValue::getFeatureMapping)
-                    .map(ProductFeatureMapping::getFeature)
+                    .map(ProductFeatureValue::getFeature)
                     .map(ProductFeature::getTemplate)
                     .map(CategoryFeatureTemplate::getCode)
                     .orElse(null);

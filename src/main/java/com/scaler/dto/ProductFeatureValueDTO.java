@@ -17,9 +17,8 @@ import java.util.UUID;
 public class ProductFeatureValueDTO extends BaseDTO {
 
     @NotNull(message = "Feature Mapping ID is required")
-    private UUID featureMappingId;
-
     private UUID featureId;
+
     private UUID productId;
 
     @NotNull(message = "Feature Template ID is required")

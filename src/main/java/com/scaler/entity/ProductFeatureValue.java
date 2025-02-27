@@ -1,5 +1,9 @@
 package com.scaler.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,6 +13,10 @@ import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.Set;
+import java.util.HashSet;
+
+
 
 @Entity
 @Table(name = "product_feature_value")
@@ -17,13 +25,16 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"featureMapping", "validationResult"})
-@EqualsAndHashCode(callSuper = true, exclude = {"featureMapping", "validationResult"})
+@ToString(callSuper = true, exclude = {"productMappings", "validationResult"})
+@EqualsAndHashCode(callSuper = true, exclude = {"productMappings", "validationResult"})
 public class ProductFeatureValue extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feature_mapping_id", nullable = false)
-    private ProductFeatureMapping featureMapping;
+    @JoinColumn(name = "feature_id", nullable = false)
+    private ProductFeature feature;
+
+    @OneToMany(mappedBy = "featureValue", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductFeatureValueMapping> productMappings = new HashSet<>();
 
     @Column(name = "template_id")
     private UUID templateId;
