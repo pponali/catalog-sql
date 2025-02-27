@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.scaler.entity.CategoryFeatureTemplate;
 import com.scaler.entity.ProductFeature;
 import com.scaler.entity.FeatureType;
 import com.scaler.entity.UnitOfMeasure;
@@ -50,12 +51,13 @@ public class ProductFeatureBuilder {
      * Creates a laptop processor product feature
      * @return ProductFeature for laptop processor
      */
-    public static ProductFeature createLaptopProcessorFeature() {
+    public static ProductFeature createLaptopProcessorFeature(CategoryFeatureTemplate categoryFeatureTemplate) {
         return ProductFeature.builder()
                 .code(LAPTOP_PROCESSOR)
                 .name("Processor")
                 .description("Laptop Processor Specifications")
                 .attributeType(SPECIFICATION)
+                .template(categoryFeatureTemplate)
                 .validationPattern("")
                 .minValue("")
                 .maxValue("")
@@ -78,13 +80,14 @@ public class ProductFeatureBuilder {
      * Creates a laptop RAM product feature
      * @return ProductFeature for laptop RAM
      */
-    public static ProductFeature createLaptopRamFeature(UnitOfMeasure gbUnit) {
+    public static ProductFeature createLaptopRamFeature(CategoryFeatureTemplate categoryFeatureTemplate, UnitOfMeasure gbUnit) {
         return ProductFeature.builder()
                 .code(LAPTOP_RAM)
                 .name("RAM")
                 .description("Laptop Memory (RAM) Specifications")
                 .attributeType(SPECIFICATION)
                 .validationPattern(RAM_PATTERN)
+                .template(categoryFeatureTemplate)
                 .minValue("4")
                 .maxValue("128")
                 .allowedValues(RAM_VALUES)
@@ -106,7 +109,7 @@ public class ProductFeatureBuilder {
      * Creates a laptop storage product feature
      * @return ProductFeature for laptop storage
      */
-    public static ProductFeature createLaptopStorageFeature(UnitOfMeasure tbUnit) {
+    public static ProductFeature createLaptopStorageFeature(CategoryFeatureTemplate categoryFeatureTemplate, UnitOfMeasure tbUnit) {
         return ProductFeature.builder()
                 .code(LAPTOP_STORAGE)
                 .name("Storage")
@@ -118,6 +121,7 @@ public class ProductFeatureBuilder {
                 .allowedValues(STORAGE_VALUES)
                 .defaultValue(DEFAULT_STORAGE)
                 .featureType(FeatureType.ENUM)
+                .template(categoryFeatureTemplate)
                 .visible(true)
                 .comparable(true)
                 .editable(true)
@@ -130,12 +134,13 @@ public class ProductFeatureBuilder {
                 .build();
     }
 
-    public static ProductFeature createGoldPurityFeature() {
+    public static ProductFeature createGoldPurityFeature(CategoryFeatureTemplate categoryFeatureTemplate) {
         return ProductFeature.builder()
                 .code("GOLD-PURITY")
                 .name("Gold Purity")
                 .description("Gold Purity in Karats")
                 .attributeType(SPECIFICATION)
+                .template(categoryFeatureTemplate)
                 .validationPattern("")
                 .minValue("14")
                 .maxValue("24")
@@ -154,12 +159,13 @@ public class ProductFeatureBuilder {
                 .build();
     }
 
-    public static ProductFeature createGoldWeightFeature(UnitOfMeasure gramUnit) {
+    public static ProductFeature createGoldWeightFeature(CategoryFeatureTemplate categoryFeatureTemplate, UnitOfMeasure gramUnit) {
         return ProductFeature.builder()
                 .code("GOLD-WEIGHT")
                 .name("Gold Weight")
                 .description("Weight of Gold")
                 .attributeType(SPECIFICATION)
+                .template(categoryFeatureTemplate)
                 .validationPattern("")
                 .minValue("1")
                 .maxValue("1000")

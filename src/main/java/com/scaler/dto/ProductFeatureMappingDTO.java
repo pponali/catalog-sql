@@ -14,6 +14,8 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class ProductFeatureMappingDTO extends BaseDTO {
 
     @NotNull(message = "Product ID is required")

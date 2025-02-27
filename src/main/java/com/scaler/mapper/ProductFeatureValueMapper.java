@@ -27,8 +27,7 @@ public interface ProductFeatureValueMapper extends JsonNodeMapper {
         @Mapping(target = "unit", source = "unit"),
         @Mapping(target = "unitOfMeasure", source = "unitOfMeasure"),
         @Mapping(target = "metadata", source = "metadata" , qualifiedByName = "jsonNodeToString"),
-        @Mapping(target = "attributeValues", source = "attributeValues", qualifiedByName = "jsonNodeToString"),
-        @Mapping(target = "featureMapping", ignore = true)
+        @Mapping(target = "attributeValues", source = "attributeValues", qualifiedByName = "jsonNodeToString")
     })
     ProductFeatureValueDTO toDTO(ProductFeatureValue entity);
 

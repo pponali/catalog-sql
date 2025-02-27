@@ -5,6 +5,10 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDateTime;
 
@@ -20,15 +24,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"product", "category", "merchant"})
 @EqualsAndHashCode(callSuper = true, exclude = {"product", "category", "merchant"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ProductCategory extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     @JdbcTypeCode(SqlTypes.UUID)
+    @JsonIdentityReference(alwaysAsId = true)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonIdentityReference(alwaysAsId = true)
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)

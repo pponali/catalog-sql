@@ -43,11 +43,7 @@ public abstract class ProductMapperDecorator implements ProductMapper {
                     // Map feature values
                     Set<ProductFeatureValueDTO> values = mapping.getFeatureValues().stream()
                         .map(value -> {
-                            var valueDTO = featureValueMapper.toDTO(value);
-                            if (valueDTO != null) {
-                                valueDTO.setFeatureMapping(null); // Break circular reference
-                            }
-                            return valueDTO;
+                            return featureValueMapper.toDTO(value);
                         })
                         .filter(v -> v != null)
                         .collect(Collectors.toSet());
@@ -100,7 +96,6 @@ public abstract class ProductMapperDecorator implements ProductMapper {
                         featureWithValuesDTO.getValues().forEach(valueDTO -> {
                             var value = featureValueMapper.toEntity(valueDTO);
                             if (value != null) {
-                                value.setFeatureMapping(mapping);
                                 mapping.getFeatureValues().add(value);
                             }
                         });

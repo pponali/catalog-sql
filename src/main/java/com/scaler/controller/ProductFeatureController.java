@@ -113,9 +113,11 @@ public class ProductFeatureController {
                 .lastModifiedDate(feature.getLastModifiedDate().toString())
                 .createdBy(feature.getCreatedBy())
                 .lastModifiedBy(feature.getLastModifiedBy())
-                .featureValues(feature.getFeatureValues().stream()
-                    .map(this::mapFeatureValueToDTO)
-                    .collect(Collectors.toSet()))
+                .featureValueIds(feature.getFeatureValues() != null ?
+                    feature.getFeatureValues().stream()
+                        .map(ProductFeatureValue::getId)
+                        .collect(Collectors.toSet()) :
+                    null)
                 .build();
     }
 
@@ -172,18 +174,21 @@ public class ProductFeatureController {
             feature.setUnitOfMeasure(unitOfMeasure);
         }
 
-        // Map feature values if present
-        if (dto.getFeatureValues() != null) {
-            Set<ProductFeatureValue> values = dto.getFeatureValues().stream()
-                .map(this::mapFeatureValueToEntity)
-                .collect(Collectors.toSet());
-            ProductFeatureMapping mapping = feature.getFeatureMapping();
-            if (mapping != null) {
-                values.forEach(value -> {
-                    value.setFeatureMapping(mapping);
-                    mapping.getFeatureValues().add(value);
-                });
-            }
+        // Map feature value IDs if present
+        if (dto.getFeatureValueIds() != null) {
+            ProductFeatureMapping mapping = new ProductFeatureMapping();
+            mapping.setFeature(feature);
+            mapping.setFeatureValues(
+                dto.getFeatureValueIds().stream()
+                    .map(id -> {
+                        ProductFeatureValue value = new ProductFeatureValue();
+                        value.setId(id);
+                        value.setFeatureMapping(mapping);
+                        return value;
+                    })
+                    .collect(Collectors.toSet())
+            );
+            feature.getProductMappings().add(mapping);
         }
 
         return feature;

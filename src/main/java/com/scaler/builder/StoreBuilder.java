@@ -4,10 +4,12 @@ import com.scaler.entity.Merchant;
 import com.scaler.entity.Store;
 import com.scaler.entity.StoreType;
 
+import java.time.LocalDateTime;
+
 public class StoreBuilder {
     
     public static Store createTataCliqStore(Merchant merchant) {
-        return Store.builder()
+        Store store = Store.builder()
                 .name("Tata CLiQ")
                 .domain("tatacliq.com")
                 .merchant(merchant)
@@ -20,11 +22,14 @@ public class StoreBuilder {
                 .storeType(StoreType.ONLINE)
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
+        return store;
     }
 
     public static Store createTata1mgStore(Merchant merchant) {
-        return Store.builder()
+        Store store = Store.builder()
                 .name("Tata 1mg")
                 .domain("1mg.com")
                 .merchant(merchant)
@@ -37,11 +42,14 @@ public class StoreBuilder {
                 .storeType(StoreType.ONLINE)
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
+        return store;
     }
 
     public static Store createBigBasketStore(Merchant merchant) {
-        return Store.builder()
+        Store store = Store.builder()
                 .name("BigBasket")
                 .domain("bigbasket.com")
                 .merchant(merchant)
@@ -54,11 +62,14 @@ public class StoreBuilder {
                 .storeType(StoreType.ONLINE)
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
+        return store;
     }
 
     public static Store createCromaStore(Merchant merchant) {
-        return Store.builder()
+        Store store = Store.builder()
                 .name("Croma")
                 .domain("croma.com")
                 .merchant(merchant)
@@ -71,11 +82,14 @@ public class StoreBuilder {
                 .storeType(StoreType.ONLINE)
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
+        return store;
     }
 
     public static Store createTanishqStore(Merchant merchant) {
-        return Store.builder()
+        Store store = Store.builder()
                 .name("Tanishq")
                 .domain("tanishq.co.in")
                 .merchant(merchant)
@@ -88,6 +102,9 @@ public class StoreBuilder {
                 .storeType(StoreType.ONLINE)
                 .createdBy("system")
                 .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
                 .build();
+        return store;
     }
 }

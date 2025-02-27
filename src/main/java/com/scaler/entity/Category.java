@@ -3,6 +3,10 @@ package com.scaler.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,6 +26,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"parent", "children", "templates", "productCategories", "business", "catalog"})
 @ToString(callSuper = true, exclude = {"parent", "children", "templates", "productCategories", "business", "catalog"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Category extends BaseEntity {
     @Column(unique = false, nullable = false)
     private String code;
@@ -50,6 +56,7 @@ public class Category extends BaseEntity {
     private Set<CategoryFeatureTemplate> templates = new HashSet<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<ProductCategory> productCategories = new HashSet<>();
 
     public void addTemplate(CategoryFeatureTemplate template) {
@@ -106,5 +113,9 @@ public class Category extends BaseEntity {
 
     public String getCode() {
         return code;
+    }
+
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
     }
 }

@@ -13,5 +13,6 @@ public enum FeatureType {
     DATE,          // For date values
     DATETIME,      // For date-time values
     OBJECT,        // For complex/nested values
-    ARRAY;         // For list/array values
+    ARRAY,        // For list/array values
+    DECIMAL
 }

@@ -42,4 +42,8 @@ public class StoreCatalog extends BaseEntity {
     public void setIsDefault(Boolean isDefault) {
         this.isDefault = isDefault;
     }
+
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
+    }
 }

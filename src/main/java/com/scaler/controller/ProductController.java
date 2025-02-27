@@ -1,6 +1,7 @@
 package com.scaler.controller;
 
 import com.scaler.dto.ProductDTO;
+import com.scaler.dto.ProductResponseDTO;
 import com.scaler.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/products")
@@ -16,18 +18,8 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        List<ProductDTO> products = productService.findAll();
-        return ResponseEntity.ok(products);
-    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
-        return productService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+
 
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO product) {

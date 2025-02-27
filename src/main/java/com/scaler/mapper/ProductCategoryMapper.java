@@ -36,7 +36,11 @@ public interface ProductCategoryMapper {
     void updateEntityFromDTO(ProductCategoryDTO dto, @MappingTarget ProductCategory entity);
 
     default void updateRelationships(ProductCategory entity, ProductCategoryDTO dto) {
-
-
+        if (entity != null && dto != null) {
+            entity.setIsPrimary(dto.getIsPrimary());
+            entity.setDisplayOrder(dto.getDisplayOrder());
+            entity.setEffectiveFrom(dto.getEffectiveFrom());
+            entity.setEffectiveTo(dto.getEffectiveTo());
+        }
     }
 }

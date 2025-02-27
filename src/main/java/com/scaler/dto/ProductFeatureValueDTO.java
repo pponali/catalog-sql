@@ -12,6 +12,8 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class ProductFeatureValueDTO extends BaseDTO {
 
     @NotNull(message = "Feature Mapping ID is required")
@@ -31,8 +33,7 @@ public class ProductFeatureValueDTO extends BaseDTO {
     private String metadata;
     private String attributeValues;
 
-    @ToString.Exclude
-    private ProductFeatureMappingDTO featureMapping;
+
 
     public JsonNode getAttributeValue() {
         return null;

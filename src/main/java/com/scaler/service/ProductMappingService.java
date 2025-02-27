@@ -47,8 +47,8 @@ public class ProductMappingService {
         if (product.getAttributes() == null) {
             product.setAttributes(new ArrayList<>());
         }
-        if (product.getChannels() == null) {
-            product.setChannels(new HashSet<>());
+        if (product.getProductChannels() == null) {
+            product.setProductChannels(new HashSet<>());
         }
         
         return product;

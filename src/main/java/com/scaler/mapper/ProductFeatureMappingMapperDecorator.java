@@ -32,7 +32,7 @@ public abstract class ProductFeatureMappingMapperDecorator implements ProductFea
                 .map(value -> {
                     var valueDTO = featureValueMapper.toDTO(value);
                     if (valueDTO != null) {
-                        valueDTO.setFeatureMapping(null); // Break circular reference
+                        valueDTO.setFeatureMappingId(null); // Break circular reference
                     }
                     return valueDTO;
                 })

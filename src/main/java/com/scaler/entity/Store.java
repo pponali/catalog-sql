@@ -6,18 +6,19 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "store")
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString(callSuper = true, exclude = {"merchant", "storeCatalogs"})
-@EqualsAndHashCode(callSuper = true, exclude = {"merchant", "storeCatalogs"})
+@ToString(callSuper = true, exclude = {"merchant", "storeCatalogs", "channels"})
+@EqualsAndHashCode(callSuper = true, exclude = {"merchant", "storeCatalogs", "channels"})
 public class Store extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
@@ -56,7 +57,14 @@ public class Store extends BaseEntity {
     private Map<String, Object> metadata;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-    private Set<StoreCatalog> storeCatalogs = new HashSet<>();
+    private final Set<StoreCatalog> storeCatalogs = new HashSet<>();
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final Set<Channel> channels = new HashSet<>();
+
+    public Store() {
+        super();
+    }
 
     public void addSiteCatalog(StoreCatalog storeCatalog) {
         storeCatalogs.add(storeCatalog);
@@ -66,5 +74,15 @@ public class Store extends BaseEntity {
     public void removeSiteCatalog(StoreCatalog storeCatalog) {
         storeCatalogs.remove(storeCatalog);
         storeCatalog.setStore(null);
+    }
+
+    public void addChannel(Channel channel) {
+        channels.add(channel);
+        channel.setStore(this);
+    }
+
+    public void removeChannel(Channel channel) {
+        channels.remove(channel);
+        channel.setStore(null);
     }
 }

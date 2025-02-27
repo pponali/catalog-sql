@@ -17,8 +17,8 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"product", "feature"})
-@EqualsAndHashCode(callSuper = true, exclude = {"product", "feature"})
+@ToString(callSuper = true, exclude = {"featureMapping", "validationResult"})
+@EqualsAndHashCode(callSuper = true, exclude = {"featureMapping", "validationResult"})
 public class ProductFeatureValue extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

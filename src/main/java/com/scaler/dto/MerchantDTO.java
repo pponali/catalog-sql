@@ -18,7 +18,7 @@ import java.util.UUID;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class MerchantDTO extends BaseDTO {
-    private UUID id;
+    private String contactEmail;
 
     @NotBlank(message = "Merchant name is required")
     @Size(min = 2, max = 255, message = "Merchant name must be between 2 and 255 characters")

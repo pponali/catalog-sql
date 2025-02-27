@@ -49,6 +49,12 @@ public class DemoService {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
+    @Autowired
+    private ChannelRepository channelRepository;
+
+    @Autowired
+    private ProductChannelRepository productChannelRepository;
+
 
     @Transactional
     public void setup() throws JsonProcessingException {
@@ -65,6 +71,30 @@ public class DemoService {
         Store bigBasketStore = storeRepository.save(StoreBuilder.createBigBasketStore(bigBasket));
         Store cromaStore = storeRepository.save(StoreBuilder.createCromaStore(croma));
         Store tanishqStore = storeRepository.save(StoreBuilder.createTanishqStore(tanishq));
+
+        // Create channels for each store
+        // Tata CLiQ Channels
+        Channel tataCliqEcom = channelRepository.save(ChannelBuilder.createTataCliqEcommerceChannel(tataCliqStore));
+        Channel tataCliqMarketplace = channelRepository.save(ChannelBuilder.createTataCliqMarketplaceChannel(tataCliqStore));
+        tataCliqStore.addChannel(tataCliqEcom);
+        tataCliqStore.addChannel(tataCliqMarketplace);
+
+        // Croma Channels (Hybrid - both online and offline)
+        Channel cromaEcom = channelRepository.save(ChannelBuilder.createCromaEcommerceChannel(cromaStore));
+        Channel cromaPhysical = channelRepository.save(ChannelBuilder.createCromaPhysicalStoreChannel(cromaStore));
+        cromaStore.addChannel(cromaEcom);
+        cromaStore.addChannel(cromaPhysical);
+
+        // BigBasket Channels
+        Channel bigBasketEcom = channelRepository.save(ChannelBuilder.createBigBasketEcommerceChannel(bigBasketStore));
+        Channel bigBasketQuick = channelRepository.save(ChannelBuilder.createBigBasketQuickCommerceChannel(bigBasketStore));
+        bigBasketStore.addChannel(bigBasketEcom);
+        bigBasketStore.addChannel(bigBasketQuick);
+
+        // Save the updated stores
+        storeRepository.save(tataCliqStore);
+        storeRepository.save(cromaStore);
+        storeRepository.save(bigBasketStore);
 
         // Create catalogs
         Catalog fashionCatalog = catalogRepository.save(CatalogBuilder.createFashionCatalog(tataCliq));
@@ -105,9 +135,9 @@ public class DemoService {
         categoryFeatureTemplateRepository.save(laptopStorage);
 
         // Create product features
-        ProductFeature processor = ProductFeatureBuilder.createLaptopProcessorFeature();
-        ProductFeature ram = ProductFeatureBuilder.createLaptopRamFeature(gbUnit);
-        ProductFeature storage = ProductFeatureBuilder.createLaptopStorageFeature(tbUnit);
+        ProductFeature processor = ProductFeatureBuilder.createLaptopProcessorFeature(laptopProcessor);
+        ProductFeature ram = ProductFeatureBuilder.createLaptopRamFeature(laptopRam, gbUnit);
+        ProductFeature storage = ProductFeatureBuilder.createLaptopStorageFeature(laptopStorage, tbUnit);
 
         productFeatureRepository.save(processor);
         productFeatureRepository.save(ram);
@@ -140,9 +170,44 @@ public class DemoService {
         productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(dellRam, "32GB"));
         productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(dellStorage, "1TB"));
 
+        // Create product-channel relationships
+        // MacBook Pro available on Croma (both online and offline)
+        macBookPro.addProductChannel(cromaEcom);
+        macBookPro.addProductChannel(cromaPhysical);
+
+        // Dell XPS available on TataCliQ (both ecommerce and marketplace)
+        dellXPS.addProductChannel(tataCliqEcom);
+        dellXPS.addProductChannel(tataCliqMarketplace);
+
+        // iPhone available on both Croma and TataCliQ
+        iPhone.addProductChannel(cromaEcom);
+        iPhone.addProductChannel(cromaPhysical);
+        iPhone.addProductChannel(tataCliqEcom);
+        iPhone.addProductChannel(tataCliqMarketplace);
+
+        // Jewelry available in physical stores with online visibility
+        goldNecklace.addProductChannel(tataCliqEcom);
+        goldNecklace.addProductChannel(cromaPhysical);
+        goldBangles.addProductChannel(tataCliqEcom);
+        goldBangles.addProductChannel(cromaPhysical);
+
+        // Save all products with their channel relationships
+        productRepository.save(macBookPro);
+        productRepository.save(dellXPS);
+        productRepository.save(iPhone);
+        productRepository.save(goldNecklace);
+        productRepository.save(goldBangles);
+
+        // Create feature templates for Jewellery
+        CategoryFeatureTemplate goldPurityProductFeature = FeatureTemplateBuilder.createGoldPurityTemplate(necklaceCategory);
+        CategoryFeatureTemplate goldWeightProductFeature = FeatureTemplateBuilder.createGoldWeightTemplate(bangleCategory, gbUnit);
+
+        categoryFeatureTemplateRepository.save(goldPurityProductFeature);
+        categoryFeatureTemplateRepository.save(goldWeightProductFeature);
+
         // Create features for jewelry
-        ProductFeature goldPurity = productFeatureRepository.save(ProductFeatureBuilder.createGoldPurityFeature());
-        ProductFeature goldWeight = productFeatureRepository.save(ProductFeatureBuilder.createGoldWeightFeature(gramUnit));
+        ProductFeature goldPurity = productFeatureRepository.save(ProductFeatureBuilder.createGoldPurityFeature(goldPurityProductFeature));
+        ProductFeature goldWeight = productFeatureRepository.save(ProductFeatureBuilder.createGoldWeightFeature(goldWeightProductFeature, gramUnit));
 
         // Create feature mappings and values for Gold Necklace
         ProductFeatureMapping necklacePurity = createAndSaveMapping(goldNecklace, goldPurity);
@@ -158,7 +223,8 @@ public class DemoService {
         productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(bangleWeight, "30"));
     }
 
-    private ProductFeatureMapping createAndSaveMapping(Product product, ProductFeature feature) {
+    private ProductFeatureMapping
+    createAndSaveMapping(Product product, ProductFeature feature) {
         ProductFeatureMapping mapping = ProductFeatureMapping.builder()
                 .product(product)
                 .feature(feature)

@@ -1,6 +1,8 @@
 package com.scaler.builder;
 
 import static com.scaler.constants.FeatureConstants.*;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.scaler.constants.FeatureConstants;
 import com.scaler.entity.Category;
 import com.scaler.entity.CategoryFeatureTemplate;
@@ -30,16 +32,16 @@ public class FeatureTemplateBuilder {
      * @param tooltip Tooltip text
      * @return JSON string containing metadata
      */
-    private static String createMetadata(int displayOrder, String group, String tooltip) {
+    private static JsonNode createMetadata(int displayOrder, String group, String tooltip) {
         try {
             ObjectNode metadata = objectMapper.createObjectNode()
                 .put("displayOrder", displayOrder)
                 .put("group", group)
                 .put("tooltip", tooltip);
-            return metadata.toString();
+            return metadata;
         } catch (Exception e) {
             log.error("Error creating metadata: {}", e.getMessage());
-            return "{}";
+            return null;
         }
     }
 
@@ -209,4 +211,63 @@ public class FeatureTemplateBuilder {
                 .lastModifiedBy(SYSTEM_USER)
                 .build();
     }
+
+    /**
+     * Creates a gold purity category feature template
+     * @return CategoryFeatureTemplate for gold purity
+     */
+    public static CategoryFeatureTemplate createGoldPurityFeatureTemplate() {
+        return CategoryFeatureTemplate.builder()
+                .code("GOLD_PURITY")
+                .name("Gold Purity")
+                .description("Gold Purity in Karats")
+                .attributeType(SPECIFICATION)
+                .validationPattern("^(10|14|18|22|24)K$")
+                .minValue("10")
+                .maxValue("24")
+                .allowedValues("10K,14K,18K,22K,24K")
+                .defaultValue("22K")
+                .featureType(FeatureType.ENUM)
+                .visible(true)
+                .comparable(true)
+                .editable(true)
+                .searchable(true)
+                .required(true)
+                .multiValued(false)
+                .metadata(createMetadata(1, "Jewelry Specifications", "Purity of gold in Karats"))
+                .createdBy(SYSTEM_USER)
+                .lastModifiedBy(SYSTEM_USER)
+                .build();
+    }
+
+    /**
+     * Creates a gold weight category feature template
+     * @return CategoryFeatureTemplate for gold weight
+     */
+    public static CategoryFeatureTemplate createGoldWeightFeatureTemplate() {
+        return CategoryFeatureTemplate.builder()
+                .code("GOLD_WEIGHT")
+                .name("Gold Weight")
+                .description("Gold Weight in Grams")
+                .attributeType(SPECIFICATION)
+                .validationPattern("^\\d+(\\.\\d{1,2})?$")
+                .minValue("0.1")
+                .maxValue("1000")
+                .allowedValues("")
+                .defaultValue("")
+                .featureType(FeatureType.DECIMAL)
+                .visible(true)
+                .comparable(true)
+                .editable(true)
+                .searchable(true)
+                .required(true)
+                .multiValued(false)
+                .metadata(createMetadata(2, "Jewelry Specifications", "Weight of gold in grams"))
+                .createdBy(SYSTEM_USER)
+                .lastModifiedBy(SYSTEM_USER)
+                .build();
+    }
+
+
+
 }

@@ -1,16 +1,17 @@
 package com.scaler.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
 
 @Entity
 @Table(name = "product_feature")
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "featureValues"})
 @ToString(callSuper = true, exclude = {"product", "template", "featureValues"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ProductFeature extends BaseEntity {
     
     public String getValue() {
@@ -82,6 +84,7 @@ public class ProductFeature extends BaseEntity {
     private JsonNode metadata;
 
     @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("feature-mapping")
     private Set<ProductFeatureMapping> productMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

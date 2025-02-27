@@ -1,20 +1,26 @@
 package com.scaler.entity;
 
+import com.scaler.entity.enums.ChannelType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "channel")
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"products", "catalogs"})
-@EqualsAndHashCode(callSuper = true, exclude = {"products", "catalogs"})
+@ToString(callSuper = true, exclude = {"catalogs", "store"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalogs", "store"})
 public class Channel extends BaseEntity {
     
     @Column(name = "code", nullable = false, unique = true)
@@ -29,12 +35,42 @@ public class Channel extends BaseEntity {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "type")
-    private String type;
-    
-    @ManyToMany(mappedBy = "channels")
-    private Set<Product> products = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private ChannelType type;
+
+    @Column(name = "metadata", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private String metadata;
+
+    @Column(name = "enabled")
+    private Boolean enabled;
+
+    @Column(name = "display_order")
+    private Integer displayOrder;
+
+    @Column(name = "visibility")
+    private Boolean visibility;
     
     @ManyToMany(mappedBy = "channels")
     private Set<Catalog> catalogs = new HashSet<>();
+
+    public Set<Catalog> getCatalogs() {
+        return catalogs;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
+
+    @Column(name = "channel_config", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private String channelConfig;
+
+    @PrePersist
+    protected void onCreate() {
+        if (enabled == null) enabled = true;
+        if (visibility == null) visibility = true;
+        if (displayOrder == null) displayOrder = 0;
+    }
 }

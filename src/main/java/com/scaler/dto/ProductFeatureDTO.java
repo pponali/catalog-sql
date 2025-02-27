@@ -2,28 +2,25 @@ package com.scaler.dto;
 
 import com.scaler.entity.FeatureType;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Getter
-@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class ProductFeatureDTO extends BaseDTO {
 
-    private Set<ProductFeatureMappingDTO> productMappings = new HashSet<>();
-
+    private Set<UUID> featureValueIds = new HashSet<>();
     private UUID productId;
-    private Set<ProductFeatureValueDTO> featureValues = new HashSet<>();
 
     private UUID templateId;
 
@@ -83,9 +80,4 @@ public class ProductFeatureDTO extends BaseDTO {
     private boolean multiValued = false;
 
     private String metadata;
-
-    private String createdDate;
-    private String lastModifiedDate;
-    private String createdBy;
-    private String lastModifiedBy;
 }

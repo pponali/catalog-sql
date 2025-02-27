@@ -99,8 +99,8 @@ public class ProductFeatureValueServiceImpl implements ProductFeatureValueServic
 
     @Override
     public void validateFeatureValue(ProductFeatureValueDTO dto) {
-        ProductFeature feature = featureRepository.findById(dto.getFeatureMapping().getFeature().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Feature not found with id: " + dto.getFeatureMapping().getFeature().getId()));
+        ProductFeature feature = featureRepository.findById(dto.getFeatureMappingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Feature not found with id: " + dto.getFeatureMappingId()));
 
         // Validate unit if specified
         if (dto.getUnitOfMeasure() != null) {

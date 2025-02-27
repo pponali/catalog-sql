@@ -23,8 +23,22 @@ public interface ProductFeatureMapper extends JsonNodeMapper {
         @Mapping(target = "unitOfMeasureId", source = "unitOfMeasure.id"),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
+        @Mapping(target = "code", source = "code"),
+        @Mapping(target = "attributeType", source = "attributeType"),
+        @Mapping(target = "validationPattern", source = "validationPattern"),
+        @Mapping(target = "minValue", source = "minValue"),
+        @Mapping(target = "maxValue", source = "maxValue"),
+        @Mapping(target = "allowedValues", source = "allowedValues"),
+        @Mapping(target = "defaultValue", source = "defaultValue"),
+        @Mapping(target = "featureType", source = "featureType"),
+        @Mapping(target = "visible", source = "visible"),
+        @Mapping(target = "editable", source = "editable"),
+        @Mapping(target = "searchable", source = "searchable"),
+        @Mapping(target = "comparable", source = "comparable"),
+        @Mapping(target = "required", source = "required"),
+        @Mapping(target = "multiValued", source = "multiValued"),
         @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString"),
-        @Mapping(target = "productMappings", ignore = true)
+        @Mapping(target = "featureValueIds", expression = "java(entity.getFeatureValues().stream().map(fv -> fv.getId()).collect(java.util.stream.Collectors.toSet()))")
     })
     ProductFeatureDTO toDTO(ProductFeature entity);
 
@@ -35,6 +49,20 @@ public interface ProductFeatureMapper extends JsonNodeMapper {
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
+        @Mapping(target = "code", source = "code"),
+        @Mapping(target = "attributeType", source = "attributeType"),
+        @Mapping(target = "validationPattern", source = "validationPattern"),
+        @Mapping(target = "minValue", source = "minValue"),
+        @Mapping(target = "maxValue", source = "maxValue"),
+        @Mapping(target = "allowedValues", source = "allowedValues"),
+        @Mapping(target = "defaultValue", source = "defaultValue"),
+        @Mapping(target = "featureType", source = "featureType"),
+        @Mapping(target = "visible", source = "visible"),
+        @Mapping(target = "editable", source = "editable"),
+        @Mapping(target = "searchable", source = "searchable"),
+        @Mapping(target = "comparable", source = "comparable"),
+        @Mapping(target = "required", source = "required"),
+        @Mapping(target = "multiValued", source = "multiValued"),
         @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode")
     })
     ProductFeature toEntity(ProductFeatureDTO dto);
@@ -46,7 +74,21 @@ public interface ProductFeatureMapper extends JsonNodeMapper {
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "name", source = "name"),
         @Mapping(target = "description", source = "description"),
-        @Mapping(target = "metadata", source = "metadata")
+        @Mapping(target = "code", source = "code"),
+        @Mapping(target = "attributeType", source = "attributeType"),
+        @Mapping(target = "validationPattern", source = "validationPattern"),
+        @Mapping(target = "minValue", source = "minValue"),
+        @Mapping(target = "maxValue", source = "maxValue"),
+        @Mapping(target = "allowedValues", source = "allowedValues"),
+        @Mapping(target = "defaultValue", source = "defaultValue"),
+        @Mapping(target = "featureType", source = "featureType"),
+        @Mapping(target = "visible", source = "visible"),
+        @Mapping(target = "editable", source = "editable"),
+        @Mapping(target = "searchable", source = "searchable"),
+        @Mapping(target = "comparable", source = "comparable"),
+        @Mapping(target = "required", source = "required"),
+        @Mapping(target = "multiValued", source = "multiValued"),
+        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode")
     })
     void updateEntity(@MappingTarget ProductFeature entity, ProductFeatureDTO dto);
 

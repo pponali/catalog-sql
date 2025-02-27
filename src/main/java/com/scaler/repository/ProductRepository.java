@@ -25,7 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("merchantId") UUID merchantId);
     
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.channels ch " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
            "WHERE p.id = :productId " +
            "AND ch.id = :channelId")
     Optional<Product> findByIdAndChannelId(
@@ -74,7 +74,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
 
     // Store and Channel based queries
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.channels ch " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
            "WHERE p.id = :productId " +
            "AND p.merchant.id = :merchantId " +
            "AND ch.id = :channelId")
@@ -108,8 +108,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     
     // Channel and Category based queries
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.channels ch " +
-           "JOIN p.productCategories pc JOIN pc.category c " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
+           "JOIN p.productCategories pcat JOIN pcat.category c " +
            "WHERE p.id = :productId " +
            "AND ch.id = :channelId " +
            "AND c.id = :categoryId")
@@ -120,7 +120,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
 
     // Three-way combinations
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.channels ch " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
            "JOIN p.sellerProducts sp JOIN sp.seller s " +
            "WHERE p.id = :productId " +
            "AND p.merchant.id = :merchantId " +
@@ -133,8 +133,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("sellerId") UUID sellerId);
 
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.channels ch " +
-           "JOIN p.productCategories pc JOIN pc.category c " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
+           "JOIN p.productCategories pcat JOIN pcat.category c " +
            "WHERE p.id = :productId " +
            "AND p.merchant.id = :merchantId " +
            "AND ch.id = :channelId " +
@@ -159,9 +159,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("categoryId") UUID categoryId);
 
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.channels ch " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
            "JOIN p.sellerProducts sp JOIN sp.seller s " +
-           "JOIN p.productCategories pc JOIN pc.category c " +
+           "JOIN p.productCategories pcat JOIN pcat.category c " +
            "WHERE p.id = :productId " +
            "AND ch.id = :channelId " +
            "AND s.id = :sellerId " +
@@ -174,9 +174,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
 
     // Four-way combination
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.channels ch " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
            "JOIN p.sellerProducts sp JOIN sp.seller s " +
-           "JOIN p.productCategories pc JOIN pc.category c " +
+           "JOIN p.productCategories pcat JOIN pcat.category c " +
            "WHERE p.id = :productId " +
            "AND p.merchant.id = :merchantId " +
            "AND ch.id = :channelId " +

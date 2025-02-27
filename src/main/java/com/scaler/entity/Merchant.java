@@ -34,4 +34,8 @@ public class Merchant extends BaseEntity {
     
     @ManyToMany(mappedBy = "merchants")
     private Set<Catalog> catalogs = new HashSet<>();
+
+    public Set<Catalog> getCatalogs() {
+        return catalogs;
+    }
 }
