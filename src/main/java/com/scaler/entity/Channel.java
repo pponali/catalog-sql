@@ -19,8 +19,8 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"catalogs", "store", "platforms"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalogs", "store", "platforms"})
+@ToString(callSuper = true, exclude = {"store", "platforms"})
+@EqualsAndHashCode(callSuper = true, exclude = {"store", "platforms"})
 public class Channel extends BaseEntity {
     
     @Column(name = "code", nullable = false, unique = true)
@@ -52,15 +52,11 @@ public class Channel extends BaseEntity {
     @Column(name = "visibility")
     private Boolean visibility;
     
-    @ManyToMany(mappedBy = "channels")
-    private Set<Catalog> catalogs = new HashSet<>();
+
 
     @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Platform> platforms = new HashSet<>();
 
-    public Set<Catalog> getCatalogs() {
-        return catalogs;
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)

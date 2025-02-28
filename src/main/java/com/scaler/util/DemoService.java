@@ -1,9 +1,9 @@
 package com.scaler.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scaler.builder.*;
 import com.scaler.entity.*;
 import com.scaler.repository.*;
-import com.scaler.builder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +69,13 @@ public class DemoService {
 
     @Autowired
     private PlatformRepository platformRepository;
+
+    @Autowired
+    private ValidationRuleRepository validationRuleRepository;
+
+    @Autowired
+    private ValidationRulesRepository validationRulesRepository;
+
 
 
     @Transactional
@@ -146,6 +153,8 @@ public class DemoService {
             platformRepository.save(PlatformBuilder.createDesktopWeb(tataCliqEcom, "BIGBASKET_DESKTOP"));
             platformRepository.save(PlatformBuilder.createMobileWeb(tataCliqEcom,"BIGBASKET_MWEB"));
             platformRepository.save(PlatformBuilder.createKiosk(tataCliqEcom,"BIGBASKET_KIOSK"));
+
+
 
             // Create catalogs
             Catalog fashionCatalog = catalogRepository.save(CatalogBuilder.createFashionCatalog(tataCliq));
@@ -354,23 +363,12 @@ public class DemoService {
             SellerProduct banglesTanishq = SellerProductBuilder.createSellerProduct(tanishqSeller, goldBangles, tanishq);
             sellerProductRepository.save(banglesTanishq);
 
+            //validationRules();
+
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize demo data: " + e.getMessage(), e);
         }
-    }
-
-    private ProductFeatureMapping createAndSaveMapping(Product product, ProductFeature feature) {
-        if (product == null || feature == null) {
-            throw new IllegalArgumentException("Product and feature must not be null");
-        }
-        return productFeatureMappingRepository.save(
-                ProductFeatureMapping.builder()
-                        .product(product)
-                        .feature(feature)
-                        .createdBy("SYSTEM")
-                        .build()
-        );
     }
 
     private void createSamplePricesAndInventory(Merchant merchant, Channel channel, Seller seller) {
@@ -387,6 +385,21 @@ public class DemoService {
             productInventoryRepository.save(inventory);
         }
     }
+
+    private ProductFeatureMapping createAndSaveMapping(Product product, ProductFeature feature) {
+        if (product == null || feature == null) {
+            throw new IllegalArgumentException("Product and feature must not be null");
+        }
+        return productFeatureMappingRepository.save(
+                ProductFeatureMapping.builder()
+                        .product(product)
+                        .feature(feature)
+                        .createdBy("SYSTEM")
+                        .build()
+        );
+    }
+
+
 
 
 }

@@ -34,15 +34,13 @@ public interface ChannelMapper {
     ChannelDTO toDTO(Channel entity);
 
     @Mappings({
-        @Mapping(target = "store", ignore = true),
-        @Mapping(target = "catalogs", ignore = true)
+        @Mapping(target = "store", ignore = true)
     })
     Channel toEntity(ChannelDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({
-        @Mapping(target = "store", ignore = true),
-        @Mapping(target = "catalogs", ignore = true)
+        @Mapping(target = "store", ignore = true)
     })
     void updateEntity(@MappingTarget Channel entity, ChannelDTO dto);
 

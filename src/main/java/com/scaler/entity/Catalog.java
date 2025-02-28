@@ -15,8 +15,8 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"products", "merchants", "channels", "business", "categories", "siteCatalogs"})
-@EqualsAndHashCode(callSuper = true, exclude = {"products", "merchants", "channels",  "business", "categories", "siteCatalogs"})
+@ToString(callSuper = true, exclude = {"products", "merchants", "business", "categories", "siteCatalogs"})
+@EqualsAndHashCode(callSuper = true, exclude = {"products", "merchants", "business", "categories", "siteCatalogs"})
 public class Catalog extends BaseEntity {
     
     @Column(name = "code", nullable = false, unique = true)
@@ -55,13 +55,6 @@ public class Catalog extends BaseEntity {
     )
     private Set<Merchant> merchants = new HashSet<>();
     
-    @ManyToMany
-    @JoinTable(
-        name = "catalog_channels",
-        joinColumns = @JoinColumn(name = "catalog_id"),
-        inverseJoinColumns = @JoinColumn(name = "channel_id")
-    )
-    private Set<Channel> channels = new HashSet<>();
     
 
     public void addProduct(Product product) {
@@ -102,16 +95,6 @@ public class Catalog extends BaseEntity {
     public void removeMerchant(Merchant merchant) {
         merchants.remove(merchant);
         merchant.getCatalogs().remove(this);
-    }
-    
-    public void addChannel(Channel channel) {
-        channels.add(channel);
-        channel.getCatalogs().add(this);
-    }
-    
-    public void removeChannel(Channel channel) {
-        channels.remove(channel);
-        channel.getCatalogs().remove(this);
     }
     
 

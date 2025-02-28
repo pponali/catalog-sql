@@ -17,9 +17,9 @@ public interface CatalogRepository extends JpaRepository<Catalog, UUID> {
 
     @Query("SELECT DISTINCT c FROM Catalog c " +
            "JOIN c.merchants m " +
-           "LEFT JOIN c.channels ch " +
+           "LEFT JOIN ChannelCatalog cc ON cc.catalog = c " +
            "WHERE m.id = :merchantId " +
-           "AND (:channelId IS NULL OR ch.id = :channelId)")
+           "AND (:channelId IS NULL OR cc.channel.id = :channelId)")
     Optional<Catalog> findByMerchantIdAndChannelId(
             @Param("merchantId") UUID merchantId,
             @Param("channelId") UUID channelId);
