@@ -66,7 +66,7 @@ public class ProductQueryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Get single product by ID, Merchant and Channel
+    /*// Get single product by ID, Merchant and Channel
     @GetMapping("/{productId}/merchant/{merchantId}/channel/{channelId}")
     public ResponseEntity<Product> getProductByIdMerchantAndChannel(
             @PathVariable UUID productId,
@@ -86,7 +86,7 @@ public class ProductQueryController {
         return productQueryService.getProductByIdMerchantAndCategory(productId, merchantId, categoryId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
+    }*/
 
     // Get single product by ID, Seller and Category
     @GetMapping("/{productId}/seller/{sellerId}/category/{categoryId}")
@@ -110,7 +110,7 @@ public class ProductQueryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Get single product by ID, Merchant, Channel and Seller
+    /*// Get single product by ID, Merchant, Channel and Seller
     @GetMapping("/{productId}/merchant/{merchantId}/channel/{channelId}/seller/{sellerId}")
     public ResponseEntity<Product> getProductByIdMerchantChannelAndSeller(
             @PathVariable UUID productId,
@@ -144,7 +144,7 @@ public class ProductQueryController {
         return productQueryService.getProductByIdMerchantSellerAndCategory(productId, merchantId, sellerId, categoryId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
+    }*/
 
     // Get single product by ID, Channel, Seller and Category
     @GetMapping("/{productId}/channel/{channelId}/seller/{sellerId}/category/{categoryId}")
@@ -192,5 +192,48 @@ public class ProductQueryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Get single product by ID, Channel, Seller and Category (without merchant)
+    @GetMapping("/{productId}/channel/{channelId}/seller/{sellerId}/category/{categoryId}/no-merchant")
+    public ResponseEntity<Product> getProductByIdChannelSellerAndCategoryNoMerchant(
+            @PathVariable UUID productId,
+            @PathVariable UUID channelId,
+            @PathVariable UUID sellerId,
+            @PathVariable UUID categoryId) {
+        return productQueryService.getProductByIdChannelSellerAndCategory(productId, channelId, sellerId, categoryId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
+    // Get single product by ID, Seller and Category (without merchant)
+    @GetMapping("/{productId}/seller/{sellerId}/category/{categoryId}/no-merchant")
+    public ResponseEntity<Product> getProductByIdSellerAndCategoryNoMerchant(
+            @PathVariable UUID productId,
+            @PathVariable UUID sellerId,
+            @PathVariable UUID categoryId) {
+        return productQueryService.getProductByIdSellerAndCategory(productId, sellerId, categoryId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Get single product by ID, Channel and Category (without merchant)
+    @GetMapping("/{productId}/channel/{channelId}/category/{categoryId}/no-merchant")
+    public ResponseEntity<Product> getProductByIdChannelAndCategoryNoMerchant(
+            @PathVariable UUID productId,
+            @PathVariable UUID channelId,
+            @PathVariable UUID categoryId) {
+        return productQueryService.getProductByIdChannelAndCategory(productId, channelId, categoryId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Get single product by ID, Channel and Seller (without merchant)
+    @GetMapping("/{productId}/channel/{channelId}/seller/{sellerId}/no-merchant")
+    public ResponseEntity<Product> getProductByIdChannelAndSellerNoMerchant(
+            @PathVariable UUID productId,
+            @PathVariable UUID channelId,
+            @PathVariable UUID sellerId) {
+        return productQueryService.getProductByIdChannelAndSeller(productId, channelId, sellerId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

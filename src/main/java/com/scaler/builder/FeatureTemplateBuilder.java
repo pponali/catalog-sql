@@ -94,6 +94,7 @@ public class FeatureTemplateBuilder {
                 .attributeType(SPECIFICATION)
                 .validationPattern(RAM_PATTERN)
                 .minValue("4")
+                .unit(gbUnit)
                 .maxValue("128")
                 .allowedValues(RAM_VALUES)
                 .defaultValue(DEFAULT_RAM)
@@ -131,6 +132,117 @@ public class FeatureTemplateBuilder {
                 .validationPattern(STORAGE_PATTERN)
                 .minValue("128")
                 .maxValue("4096")
+                .unit(tbUnit)
+                .allowedValues(STORAGE_VALUES)
+                .defaultValue(DEFAULT_STORAGE)
+                .featureType(FeatureType.ENUM)  // Required in parent
+                .dataType(STRING)  // Required in parent
+                .inputType(DROPDOWN)  // Required in parent
+                .visible(true)
+                .filterable(true)
+                .inherited(false)
+                .hidden(false)
+                .editable(true)
+                .searchable(true)
+                .comparable(true)
+                .mandatory(true)
+                .multiValued(false)
+                .createdBy(FeatureConstants.SYSTEM_USER)
+                .lastModifiedBy(FeatureConstants.SYSTEM_USER)
+                .category(category)
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+    }
+
+    /**
+     * Creates a laptop processor feature template
+     * @param category Parent category
+     * @return CategoryFeatureTemplate for laptop processor
+     */
+    public static CategoryFeatureTemplate createIPhoneProcessorTemplate(Category category) {
+        return CategoryFeatureTemplate.builder()
+                .code(LAPTOP_PROCESSOR)
+                .name("Processor")  // Required in parent
+                .description("Iphone Processor Specifications")
+                .attributeType(SPECIFICATION)
+                .validationPattern("")
+                .minValue("")
+                .maxValue("")
+                .allowedValues(PROCESSOR_VALUES)
+                .defaultValue("")
+                .featureType(FeatureType.ENUM)  // Required in parent
+                .dataType(STRING)  // Required in parent
+                .inputType(DROPDOWN)  // Required in parent
+                .visible(true)
+                .filterable(true)
+                .inherited(false)
+                .hidden(false)
+                .editable(true)
+                .searchable(true)
+                .comparable(true)
+                .mandatory(true)
+                .multiValued(false)
+                .createdBy(FeatureConstants.SYSTEM_USER)
+                .lastModifiedBy(FeatureConstants.SYSTEM_USER)
+                .category(category)
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+    }
+
+    /**
+     * Creates a laptop RAM feature template
+     * @param category Parent category
+     * @return CategoryFeatureTemplate for laptop RAM
+     */
+    public static CategoryFeatureTemplate createIPhoneRamTemplate(Category category, UnitOfMeasure gbUnit) {
+        return CategoryFeatureTemplate.builder()
+                .code(LAPTOP_RAM)
+                .name("RAM")  // Required in parent
+                .description("IPhone Memory (RAM) Specifications")
+                .attributeType(SPECIFICATION)
+                .validationPattern(RAM_PATTERN)
+                .minValue("4")
+                .unit(gbUnit)
+                .maxValue("128")
+                .allowedValues(RAM_VALUES)
+                .defaultValue(DEFAULT_RAM)
+                .featureType(FeatureType.ENUM)  // Required in parent
+                .dataType(STRING)  // Required in parent
+                .inputType(DROPDOWN)  // Required in parent
+                .visible(true)
+                .filterable(true)
+                .inherited(false)
+                .hidden(false)
+                .editable(true)
+                .searchable(true)
+                .comparable(true)
+                .mandatory(true)
+                .multiValued(false)
+                .createdBy(FeatureConstants.SYSTEM_USER)
+                .lastModifiedBy(FeatureConstants.SYSTEM_USER)
+                .category(category)
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+    }
+
+    /**
+     * Creates a laptop storage feature template
+     * @param category Parent category
+     * @return CategoryFeatureTemplate for laptop storage
+     */
+    public static CategoryFeatureTemplate createIPhoneStorageTemplate(Category category, UnitOfMeasure tbUnit) {
+        return CategoryFeatureTemplate.builder()
+                .code(LAPTOP_STORAGE)
+                .name("Storage")  // Required in parent
+                .description("Iphone Storage Specifications")
+                .attributeType(SPECIFICATION)
+                .validationPattern(STORAGE_PATTERN)
+                .minValue("128")
+                .maxValue("4096")
+                .unit(tbUnit)
                 .allowedValues(STORAGE_VALUES)
                 .defaultValue(DEFAULT_STORAGE)
                 .featureType(FeatureType.ENUM)  // Required in parent

@@ -158,19 +158,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("sellerId") UUID sellerId,
             @Param("categoryId") UUID categoryId);
 
-    @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
-           "JOIN p.productCategories pcat JOIN pcat.category c " +
-           "WHERE p.id = :productId " +
-           "AND ch.id = :channelId " +
-           "AND s.id = :sellerId " +
-           "AND c.id = :categoryId")
-    Optional<Product> findByIdAndChannelIdAndSellerIdAndCategoryId(
-            @Param("productId") UUID productId,
-            @Param("channelId") UUID channelId,
-            @Param("sellerId") UUID sellerId,
-            @Param("categoryId") UUID categoryId);
 
     // Four-way combination
     @Query("SELECT DISTINCT p FROM Product p " +
@@ -190,5 +177,34 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("categoryId") UUID categoryId);
 
     List<Product> findByMerchantId(UUID id);
+
+    // Non-merchant queries
+    @Query("SELECT DISTINCT p FROM Product p " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
+           "JOIN p.sellerProducts sp JOIN sp.seller s " +
+           "JOIN p.productCategories pcat JOIN pcat.category c " +
+           "WHERE p.id = :productId " +
+           "AND ch.id = :channelId " +
+           "AND s.id = :sellerId " +
+           "AND c.id = :categoryId")
+    Optional<Product> findByIdAndChannelIdAndSellerIdAndCategoryId(
+            @Param("productId") UUID productId,
+            @Param("channelId") UUID channelId,
+            @Param("sellerId") UUID sellerId,
+            @Param("categoryId") UUID categoryId);
+
+
+    @Query("SELECT DISTINCT p FROM Product p " +
+           "JOIN p.productChannels pc JOIN pc.channel ch " +
+           "JOIN p.sellerProducts sp JOIN sp.seller s " +
+           "WHERE p.id = :productId " +
+           "AND ch.id = :channelId " +
+           "AND s.id = :sellerId")
+    Optional<Product> findByIdAndChannelIdAndSellerId(
+            @Param("productId") UUID productId,
+            @Param("channelId") UUID channelId,
+            @Param("sellerId") UUID sellerId);
+
+
 }
 

@@ -84,6 +84,7 @@ public class ProductFeatureBuilder {
         return ProductFeature.builder()
                 .code(LAPTOP_RAM)
                 .name("RAM")
+                .unitOfMeasure(gbUnit)
                 .description("Laptop Memory (RAM) Specifications")
                 .attributeType(SPECIFICATION)
                 .validationPattern(RAM_PATTERN)
@@ -183,85 +184,92 @@ public class ProductFeatureBuilder {
                 .build();
     }
 
-    ProductFeature processor = ProductFeature.builder()
-            .code(LAPTOP_PROCESSOR)
-            .name("Processor")
-            .description("Laptop Processor Specifications")
-            .attributeType(SPECIFICATION)
-            .validationPattern("")
-            .minValue("")
-            .maxValue("")
-            .allowedValues(PROCESSOR_VALUES)
-            .defaultValue("")
-            .featureType(FeatureType.ENUM)
-            .visible(true)
-            .comparable(true)
-            .editable(true)
-            .searchable(true)
-            .required(true)
-            .multiValued(false)
-            .metadata(readTree("{"
-                    + "\"displayOrder\": 1,"
-                    + "\"group\": \"Technical Specifications\","
-                    + "\"tooltip\": \"Processor model that powers the laptop\""
-                    + "}"))
-            .createdBy("system")
-            .lastModifiedBy("system")
-            .build();
+    public static ProductFeature createProcessorFeature(CategoryFeatureTemplate categoryFeatureTemplate){
+        return  ProductFeature.builder()
+                .code(LAPTOP_PROCESSOR)
+                .name("Processor")
+                .description("Laptop Processor Specifications")
+                .attributeType(SPECIFICATION)
+                .validationPattern("")
+                .minValue("")
+                .maxValue("")
+                .allowedValues(PROCESSOR_VALUES)
+                .defaultValue("")
+                .featureType(FeatureType.ENUM)
+                .visible(true)
+                .comparable(true)
+                .editable(true)
+                .searchable(true)
+                .required(true)
+                .multiValued(false)
+                .metadata(readTree("{"
+                        + "\"displayOrder\": 1,"
+                        + "\"group\": \"Technical Specifications\","
+                        + "\"tooltip\": \"Processor model that powers the laptop\""
+                        + "}"))
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
 
-    ProductFeature ram = ProductFeature.builder()
-            .code(LAPTOP_RAM)
-            .name("RAM")
-            .description("Laptop Memory (RAM) Specifications")
-            .attributeType(SPECIFICATION)
-            .validationPattern(RAM_PATTERN)
-            .minValue("4")
-            .maxValue("128")
-            .allowedValues(RAM_VALUES)
-            .defaultValue(DEFAULT_RAM)
-            .featureType(FeatureType.ENUM)
-            .visible(true)
-            .comparable(true)
-            .editable(true)
-            .searchable(true)
-            .required(true)
-            .multiValued(false)
-            .metadata(readTree("{"
-                    + "\"displayOrder\": 2,"
-                    + "\"group\": \"Technical Specifications\","
-                    + "\"tooltip\": \"Amount of RAM installed in the laptop\""
-                    + "}"))
-            .createdBy("system")
-            .lastModifiedBy("system")
-            .build();
+    public static ProductFeature createRamFeature(CategoryFeatureTemplate categoryFeatureTemplate, UnitOfMeasure unitOfMeasure){
+        return ProductFeature.builder()
+                .code(LAPTOP_RAM)
+                .name("RAM")
+                .description("Laptop Memory (RAM) Specifications")
+                .attributeType(SPECIFICATION)
+                .validationPattern(RAM_PATTERN)
+                .minValue("4")
+                .maxValue("128")
+                .allowedValues(RAM_VALUES)
+                .defaultValue(DEFAULT_RAM)
+                .featureType(FeatureType.ENUM)
+                .visible(true)
+                .comparable(true)
+                .editable(true)
+                .searchable(true)
+                .required(true)
+                .multiValued(false)
+                .metadata(readTree("{"
+                        + "\"displayOrder\": 2,"
+                        + "\"group\": \"Technical Specifications\","
+                        + "\"tooltip\": \"Amount of RAM installed in the laptop\""
+                        + "}"))
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
 
-    ProductFeature storage = ProductFeature.builder()
-            .code(LAPTOP_STORAGE)
-            .name("Storage")
-            .description("Laptop Storage Specifications")
-            .attributeType(SPECIFICATION)
-            .validationPattern(STORAGE_PATTERN)
-            .minValue("128")
-            .maxValue("4096")
-            .allowedValues(STORAGE_VALUES)
-            .defaultValue(DEFAULT_STORAGE)
-            .featureType(FeatureType.ENUM)
-            .visible(true)
-            .comparable(true)
-            .editable(true)
-            .searchable(true)
-            .required(true)
-            .multiValued(false)
-            .metadata(readTree("{"
-                    + "\"displayOrder\": 3,"
-                    + "\"group\": \"Technical Specifications\","
-                    + "\"tooltip\": \"Storage capacity of the laptop\""
-                    + "}"))
-            .createdBy("system")
-            .lastModifiedBy("system")
-            .build();
+    public static ProductFeature createStorageFeature(CategoryFeatureTemplate categoryFeatureTemplate, UnitOfMeasure unitOfMeasure){
+        return ProductFeature.builder()
+                .code(LAPTOP_STORAGE)
+                .name("Storage")
+                .description("Laptop Storage Specifications")
+                .attributeType(SPECIFICATION)
+                .validationPattern(STORAGE_PATTERN)
+                .minValue("128")
+                .maxValue("4096")
+                .unitOfMeasure(unitOfMeasure)
+                .allowedValues(STORAGE_VALUES)
+                .defaultValue(DEFAULT_STORAGE)
+                .featureType(FeatureType.ENUM)
+                .visible(true)
+                .comparable(true)
+                .editable(true)
+                .searchable(true)
+                .required(true)
+                .multiValued(false)
+                .metadata(readTree("{"
+                        + "\"displayOrder\": 3,"
+                        + "\"group\": \"Technical Specifications\","
+                        + "\"tooltip\": \"Storage capacity of the laptop\""
+                        + "}"))
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
 
-    public JsonNode readTree(String value) {
+    public static JsonNode readTree(String value) {
         if (value == null || value.isEmpty() || value.equals("\"\"")) return null;
         try {
             return objectMapper.readTree(value);

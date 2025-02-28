@@ -19,8 +19,8 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"catalogs", "store"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalogs", "store"})
+@ToString(callSuper = true, exclude = {"catalogs", "store", "platforms"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalogs", "store", "platforms"})
 public class Channel extends BaseEntity {
     
     @Column(name = "code", nullable = false, unique = true)
@@ -54,6 +54,9 @@ public class Channel extends BaseEntity {
     
     @ManyToMany(mappedBy = "channels")
     private Set<Catalog> catalogs = new HashSet<>();
+
+    @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Platform> platforms = new HashSet<>();
 
     public Set<Catalog> getCatalogs() {
         return catalogs;
