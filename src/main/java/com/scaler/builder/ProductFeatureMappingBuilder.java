@@ -10,7 +10,7 @@ public class ProductFeatureMappingBuilder {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final String SYSTEM_USER = "system";
 
-    public static ProductFeatureMapping createFeatureMapping(Product product, ProductFeature feature, String value) {
+    public static ProductFeatureMapping createFeatureMapping(Product product, ProductFeature feature) {
         ObjectNode metadata = objectMapper.createObjectNode()
                 .put("mappedAt", System.currentTimeMillis())
                 .put("mappedBy", SYSTEM_USER);

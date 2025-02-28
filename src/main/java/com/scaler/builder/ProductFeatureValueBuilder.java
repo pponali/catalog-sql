@@ -50,6 +50,20 @@ public class ProductFeatureValueBuilder {
                 .build();
     }
 
+    public static ProductFeatureValue createIphoneFeature(ProductFeature feature, String value){
+        ObjectNode additionalInfo = objectMapper.createObjectNode()
+                .put("type", value.contains("Unified") ? "Unified Memory" : "DDR5")
+                .put("speed", "6400MHz");
+
+        return ProductFeatureValue.builder()
+                .feature(feature)
+                .type("SPECIFICATION")
+                .attributeValues(createAttributeValues(value.replace("GB", ""), value, additionalInfo))
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
+
     public static ProductFeatureValue createRamValue(ProductFeature feature, String value) {
         ObjectNode additionalInfo = objectMapper.createObjectNode()
                 .put("type", value.contains("Unified") ? "Unified Memory" : "DDR5")

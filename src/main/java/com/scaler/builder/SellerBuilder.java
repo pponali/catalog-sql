@@ -56,7 +56,7 @@ public class SellerBuilder {
     public static Seller createTataCliqSeller(Merchant tataCliq) {
         return Seller.builder()
                 .code("TATACLIQ_DIRECT")
-                .name("Tata CLiQ Direct")
+                .name("Nike Seller")
                 .type("RETAIL")
                 .status("ACTIVE")
                 .merchantId(tataCliq.getId())
@@ -68,7 +68,7 @@ public class SellerBuilder {
     public static Seller createCromaSeller(Merchant croma) {
         return Seller.builder()
                 .code("CROMA_RETAIL")
-                .name("Croma Retail")
+                .name("Croma Retail Seller")
                 .type("RETAIL")
                 .status("ACTIVE")
                 .merchantId(croma.getId())
@@ -80,7 +80,7 @@ public class SellerBuilder {
     public static Seller createBigBasketSeller(Merchant bigBasket) {
         return Seller.builder()
                 .code("BIGBASKET_FRESH")
-                .name("BigBasket Fresh")
+                .name("BigBasket Fresh Seller")
                 .type("RETAIL")
                 .status("ACTIVE")
                 .merchantId(bigBasket.getId())
@@ -92,7 +92,7 @@ public class SellerBuilder {
     public static Seller createTanishqSeller(Merchant tanishq) {
         return Seller.builder()
                 .code("TANISHQ_OFFICIAL")
-                .name("Tanishq Official")
+                .name("Tanishq Official Seller")
                 .type("RETAIL")
                 .status("ACTIVE")
                 .merchantId(tanishq.getId())
@@ -104,7 +104,7 @@ public class SellerBuilder {
     public static Seller createTata1mgSeller(Merchant tata1mg) {
         return Seller.builder()
                 .code("TATA1MG_PHARMACY")
-                .name("Tata 1mg Pharmacy")
+                .name("Tata 1mg Pharmacy Seller")
                 .type("RETAIL")
                 .status("ACTIVE")
                 .merchantId(tata1mg.getId())

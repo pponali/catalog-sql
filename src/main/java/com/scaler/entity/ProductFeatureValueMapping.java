@@ -11,8 +11,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"featureMapping", "featureValue"})
-@EqualsAndHashCode(callSuper = true, exclude = {"featureMapping", "featureValue"})
+@ToString(callSuper = true, exclude = {"featureMapping", "featureValue", "product", "category"})
+@EqualsAndHashCode(callSuper = true, exclude = {"featureMapping", "featureValue", "product", "category"})
 public class ProductFeatureValueMapping extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,4 +31,12 @@ public class ProductFeatureValueMapping extends BaseEntity {
 
     @Column(name = "is_active")
     private Boolean isActive = true;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 }

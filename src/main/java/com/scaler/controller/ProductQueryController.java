@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/query/products")
+@RequestMapping("/product/query")
 @RequiredArgsConstructor
 public class ProductQueryController {
     

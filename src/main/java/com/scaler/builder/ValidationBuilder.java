@@ -29,11 +29,12 @@ public class ValidationBuilder {
 
     @Autowired
     private CategoryFeatureTemplateRepository categoryFeatureTemplateRepository;
-    public void validationRules() {
+    public  void validationRules() {
         // Create product-level validation rules
         ProductFeature sizeFeature = ProductFeature.builder()
                 .code("SIZE")
                 .name("Size")
+                .createdBy("SYSTEM")
                 .description("Product size")
                 .build();
 
@@ -45,6 +46,7 @@ public class ValidationBuilder {
                 .ruleType(ValidationRule.RuleType.REQUIRED.toString())
                 .feature(sizeFeature)
                 .priority(1)
+                .createdBy("SYSTEM")
                 .active(true)
                 .build();
 
@@ -57,6 +59,7 @@ public class ValidationBuilder {
                 .ruleExpression("0,100")
                 .feature(sizeFeature)
                 .priority(2)
+                .createdBy("SYSTEM")
                 .active(true)
                 .build();
 
@@ -69,6 +72,7 @@ public class ValidationBuilder {
                 .description("Product price")
                 .attributeType("DECIMAL")
                 .minValue("0")
+                .createdBy("SYSTEM")
                 .maxValue("1000000")
                 .build();
         categoryFeatureTemplateRepository.save(priceTemplate);
@@ -91,6 +95,7 @@ public class ValidationBuilder {
                 .description("Product color")
                 .attributeType("STRING")
                 .allowedValues("RED,BLUE,GREEN,BLACK,WHITE")
+                .createdBy("SYSTEM")
                 .build();
         categoryFeatureTemplateRepository.save(colorTemplate);
 
@@ -107,6 +112,7 @@ public class ValidationBuilder {
                 .code("COLOR")
                 .name("Color")
                 .description("Product color")
+                .createdBy("SYSTEM")
                 .build();
 
         // Required validation rule
@@ -118,6 +124,7 @@ public class ValidationBuilder {
                 .feature(colorFeature)
                 .priority(1)
                 .active(true)
+                .createdBy("SYSTEM")
                 .build();
 
         // Allowed values validation rule
@@ -130,6 +137,7 @@ public class ValidationBuilder {
                 .feature(colorFeature)
                 .priority(2)
                 .active(true)
+                .createdBy("SYSTEM")
                 .build();
 
         validationRuleRepository.saveAll(List.of(colorRequired, colorAllowedValue));

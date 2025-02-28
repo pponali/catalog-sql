@@ -1,5 +1,6 @@
 package com.scaler.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.builder.*;
 import com.scaler.entity.*;
@@ -75,6 +76,9 @@ public class DemoService {
 
     @Autowired
     private ValidationRulesRepository validationRulesRepository;
+
+    @Autowired
+    ValidationBuilder validationBuilder;
 
 
 
@@ -254,9 +258,7 @@ public class DemoService {
             ProductFeatureValue ramValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(ram, "16GB"));
             ProductFeatureValue storageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(iPhonestorage, "512GB"));
 
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookProcessor, processorValue, 1, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookRam, ramValue, 2, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookStorage, storageValue, 3, true));
+
 
             // Create feature mappings and values for Dell XPS
             ProductFeatureMapping dellProcessor = createAndSaveMapping(dellXPS, processor);
@@ -267,9 +269,8 @@ public class DemoService {
             ProductFeatureValue dellRamValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(ram, "32GB"));
             ProductFeatureValue dellStorageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(iPhonestorage, "1TB"));
 
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellProcessor, dellProcessorValue, 1, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellRam, dellRamValue, 2, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellStorage, dellStorageValue, 3, true));
+
+
 
             // Create product-channel relationships
             // MacBook Pro available on Croma (both online and offline)
@@ -304,19 +305,25 @@ public class DemoService {
             ProductFeatureValue purityValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldPurity, "22K"));
             ProductFeatureValue weightValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldWeight, "50"));
 
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklacePurity, purityValue, 1, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklaceWeight, weightValue, 2, true));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookProcessor, processorValue, laptopCategory,1, true));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookRam, ramValue, laptopCategory,2, true));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookStorage, storageValue, laptopCategory,3, true));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellProcessor, dellProcessorValue, laptopCategory,1, true));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellRam, dellRamValue, laptopCategory,2, true));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellStorage, dellStorageValue, laptopCategory,3, true));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklacePurity, purityValue, necklaceCategory,1, true));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklaceWeight, weightValue, necklaceCategory,2, true));
 
             // Create feature mappings and values for Gold Bangles
             ProductFeatureMapping banglePurity = createAndSaveMapping(goldBangles, goldPurity);
             ProductFeatureMapping bangleWeight = createAndSaveMapping(goldBangles, goldWeight);
 
             // Reuse the same purity value for bangles
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(banglePurity, purityValue, 1, true));
+            //productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(banglePurity, purityValue, bangleCategory,1, true));
 
             // Create new weight value for bangles
             ProductFeatureValue bangleWeightValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldWeight, "30"));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(bangleWeight, bangleWeightValue, 2, true));
+            //productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(bangleWeight, bangleWeightValue, bangleCategory,2, true));
 
             // Save all products with their channel relationships
             productRepository.save(macBookPro);
@@ -353,17 +360,9 @@ public class DemoService {
             sellerProductRepository.save(iPhoneTataCliq);
             sellerProductRepository.save(iPhoneCroma);
 
-            // 4. Channel-Category combination (multiple sellers)
-            // Gold Necklace: Available through Tanishq seller in Necklace category
-            SellerProduct necklaceTanishq = SellerProductBuilder.createSellerProduct(tanishqSeller, goldNecklace, tanishq);
-            sellerProductRepository.save(necklaceTanishq);
+            //useCases(macBookPro, laptopCategory, croma, bigBasketEcom, ram, tataCliqSeller, tanishq, tataCliqMarketplace, iPhone, smartphoneCategory, bigBasket, iPhoneram, cromaSeller, iPhoneTataCliq, tanishqSeller, goldNecklace, tataCliq, goldBangles);
 
-            // 5. Channel-Seller combination
-            // Gold Bangles: Available through Tanishq seller on TataCliq channel
-            SellerProduct banglesTanishq = SellerProductBuilder.createSellerProduct(tanishqSeller, goldBangles, tanishq);
-            sellerProductRepository.save(banglesTanishq);
-
-            //validationRules();
+            //validationBuilder.validationRules();
 
 
         } catch (Exception e) {
@@ -371,6 +370,111 @@ public class DemoService {
         }
     }
 
+    /**
+     *
+     * @param macBookPro
+     * @param laptopCategory
+     * @param croma
+     * @param bigBasketEcom
+     * @param ram
+     * @param tataCliqSeller
+     * @param tanishq
+     * @param tataCliqMarketplace
+     * @param iPhone
+     * @param smartphoneCategory
+     * @param bigBasket
+     * @param iPhoneram
+     * @param cromaSeller
+     * @param iPhoneTataCliq
+     * @param tanishqSeller
+     * @param goldNecklace
+     * @param tataCliq
+     * @param goldBangles
+     * @throws JsonProcessingException
+     */
+    private void useCases(Product macBookPro, Category laptopCategory, Merchant croma, Channel bigBasketEcom, ProductFeature ram, Seller tataCliqSeller, Merchant tanishq, Channel tataCliqMarketplace, Product iPhone, Category smartphoneCategory, Merchant bigBasket, ProductFeature iPhoneram, Seller cromaSeller, SellerProduct iPhoneTataCliq, Seller tanishqSeller, Product goldNecklace, Merchant tataCliq, Product goldBangles) throws JsonProcessingException {
+        // Create comprehensive combinations of relationships
+
+        // 1. Channel-Catalog-Product Combinations
+        // Assign MacBook Pro to TataCliq Fashion Catalog
+        //ChannelCatalog macBookChannelCatalog = ChannelCatalogBuilder.createChannelCatalog(tataCliqEcom, fashionCatalog, false);
+        //channelCatalogRepository.save(macBookChannelCatalog);
+
+        // 2. Product-Category-Channel Combinations
+        // Assign MacBook Pro to Laptop category in TataCliq channel
+        //ProductCategory macBookCategory = ProductCategoryBuilder.createProductCategory(macBookPro, laptopCategory, croma);
+        //productCategoryRepository.save(macBookCategory);
+        //ProductChannel macBookChannel = ProductChannelBuilder.createEcommerceProductChannel(macBookPro, bigBasketEcom);
+        //productChannelRepository.save(macBookChannel);
+
+        // 3. Product Feature Combinations
+        // Create feature mapping for MacBook Pro RAM
+        //ProductFeatureMapping macBookRamFeature = ProductFeatureMappingBuilder.createFeatureMapping(macBookPro, ram);
+        //productFeatureMappingRepository.save(macBookRamFeature);
+
+        // Create feature value for 32GB RAM
+        //ProductFeatureValue ram32GB = ProductFeatureValueBuilder.createRamValue(ram, "32GB");
+        //productFeatureValueRepository.save(ram32GB);
+
+        // Map the 32GB RAM value to MacBook Pro
+        //ProductFeatureValueMapping ramMapping = ProductFeatureValueMappingBuilder.createMapping(macBookRamFeature, ram32GB, laptopCategory, 2, false);
+        //productFeatureValueMappingRepository.save(ramMapping);
+
+        // 4. Seller-Product-Channel Combinations
+        // Create seller product for MacBook Pro
+        //SellerProduct macBookSellerProduct = SellerProductBuilder.createSellerProduct(tataCliqSeller, macBookPro, tanishq);
+        //sellerProductRepository.save(macBookSellerProduct);
+
+        // 5. Cross-Channel Product Availability
+        // Make MacBook Pro available on Croma channel as well
+        //ProductChannel macBookCromaChannel = ProductChannelBuilder.createMarketplaceProductChannel(macBookPro, tataCliqMarketplace);
+        //productChannelRepository.save(macBookCromaChannel);
+
+        // 6. Multiple Feature Values for a Product
+        // Add another RAM option for MacBook Pro
+        //ProductFeatureValue ram64GB = ProductFeatureValueBuilder.createRamValue(ram, "64GB");
+        //productFeatureValueRepository.save(ram64GB);
+
+        //ProductFeatureValueMapping ram64GBMapping = ProductFeatureValueMappingBuilder.createMapping(macBookRamFeature, ram64GB, laptopCategory, 2, false);
+        //productFeatureValueMappingRepository.save(ram64GBMapping);
+
+        // 7. Cross-Category Product
+        // Add iPhone to both Smartphone and Electronics categories
+        //ProductCategory iPhoneSmartphoneCategory = ProductCategoryBuilder.createProductCategory(iPhone, smartphoneCategory, bigBasket);
+        //productCategoryRepository.save(iPhoneSmartphoneCategory);
+
+        // 8. Channel-Specific Product Features
+        // Create channel-specific RAM feature for TataCliq
+        //ProductFeatureMapping iPhoneRamFeature = ProductFeatureMappingBuilder.createFeatureMapping(iPhone,iPhoneram);
+        //productFeatureMappingRepository.save(iPhoneRamFeature);
+
+        //ProductFeatureValue iPhoneRam8GB = ProductFeatureValueBuilder.createIphoneFeature(iPhoneram, "8GB");
+        //productFeatureValueRepository.save(iPhoneRam8GB);
+
+        //ProductFeatureValueMapping iPhoneRamMapping = ProductFeatureValueMappingBuilder.createMapping(iPhoneRamFeature, iPhoneRam8GB, smartphoneCategory, 1, true);
+        //productFeatureValueMappingRepository.save(iPhoneRamMapping);
+
+        //SellerProduct iPhoneCromaSellerProduct = SellerProductBuilder.createSellerProduct(cromaSeller, iPhone, bigBasket);
+        //sellerProductRepository.save(iPhoneTataCliq);
+        //sellerProductRepository.save(iPhoneCromaSellerProduct);
+
+        // 4. Channel-Category combination (multiple sellers)
+        // Gold Necklace: Available through Tanishq seller in Necklace category
+        //SellerProduct necklaceTanishq = SellerProductBuilder.createSellerProduct(tanishqSeller, goldNecklace, tataCliq);
+        //sellerProductRepository.save(necklaceTanishq);
+
+        // 5. Channel-Seller combination
+        // Gold Bangles: Available through Tanishq seller on TataCliq channel
+        //SellerProduct banglesTanishq = SellerProductBuilder.createSellerProduct(tanishqSeller, goldBangles, tataCliq);
+        //sellerProductRepository.save(banglesTanishq);
+    }
+
+    /**
+     *
+     * @param merchant
+     * @param channel
+     * @param seller
+     */
     private void createSamplePricesAndInventory(Merchant merchant, Channel channel, Seller seller) {
         // Get all products for the merchant
         List<Product> products = productRepository.findByMerchantId(merchant.getId());
