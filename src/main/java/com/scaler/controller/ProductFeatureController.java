@@ -88,7 +88,6 @@ public class ProductFeatureController {
     private ProductFeatureDTO mapToDTO(ProductFeature feature) {
         return ProductFeatureDTO.builder()
                 .id(feature.getId())
-                .productId(feature.getFeatureMapping().getProduct().getId())
                 .templateId(feature.getTemplate().getId())
                 .code(feature.getCode())
                 .name(feature.getName())
@@ -113,11 +112,6 @@ public class ProductFeatureController {
                 .lastModifiedDate(feature.getLastModifiedDate().toString())
                 .createdBy(feature.getCreatedBy())
                 .lastModifiedBy(feature.getLastModifiedBy())
-                .featureValueIds(feature.getFeatureValues() != null ?
-                    feature.getFeatureValues().stream()
-                        .map(ProductFeatureValue::getId)
-                        .collect(Collectors.toSet()) :
-                    null)
                 .build();
     }
 
@@ -130,20 +124,8 @@ public class ProductFeatureController {
         template.setId(dto.getTemplateId());
         feature.setTemplate(template);
 
-        // Create product mapping if product ID is provided
-        if (dto.getProductId() != null) {
-            Product product = new Product();
-            product.setId(dto.getProductId());
-            ProductFeatureMapping mapping = ProductFeatureMapping.builder()
-                .product(product)
-                .feature(feature)
-                .displayOrder(1)
-                .visible(true)
-                .enabled(true)
-                    .createdBy("SYSTEM")
-                .build();
-            feature.addProductMapping(mapping);
-        }
+
+
 
         // Set feature properties
         feature.setCode(dto.getCode());
@@ -176,22 +158,7 @@ public class ProductFeatureController {
         }
 
         // Map feature value IDs if present
-        if (dto.getFeatureValueIds() != null) {
-            ProductFeatureMapping mapping = new ProductFeatureMapping();
-            mapping.setFeature(feature);
-            dto.getFeatureValueIds().forEach(id -> {
-                ProductFeatureValue value = new ProductFeatureValue();
-                value.setId(id);
-                
-                ProductFeatureValueMapping valueMapping = ProductFeatureValueMapping.builder()
-                    .featureMapping(mapping)
-                    .featureValue(value)
-                    .build();
-                    
-                mapping.getFeatureValueMappings().add(valueMapping);
-            });
-            feature.getProductMappings().add(mapping);
-        }
+
 
         return feature;
     }

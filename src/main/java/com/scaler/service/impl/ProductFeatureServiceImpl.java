@@ -59,10 +59,10 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
             operationId, productId, templateId);
         
         try {
-            return featureRepository.findByProductMappingsProductIdAndTemplateId(productId, templateId)
-                .orElseThrow(() -> new ResourceNotFoundException(
+            return null;//featureRepository.findByProductValueMappingsProductIdAndTemplateId(productId, templateId)
+               /* .orElseThrow(() -> new ResourceNotFoundException(
                     String.format("Feature not found for product %s and template %s", 
-                        productId, templateId)));
+                        productId, templateId)));*/
         } catch (ResourceNotFoundException e) {
             log.error("Operation ID: {} - {}", operationId, e.getMessage());
             throw e;
@@ -138,7 +138,7 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
                 throw new ValidationException("Product ID cannot be null");
             }
             
-            featureRepository.deleteByProductMappingsProductId(productId);
+            //featureRepository.deleteByProductValueMappingsProductId(productId);
             log.info("Operation ID: {} - Successfully deleted ProductFeatures for Product", operationId);
             
         } catch (ValidationException e) {
@@ -160,7 +160,7 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
                 throw new ValidationException("Product ID cannot be null");
             }
             
-            return featureRepository.findByProductMappingsProductId(productId);
+            return null;//featureRepository.findByProductValueMappingsProductId(productId);
             
         } catch (ValidationException e) {
             log.error("Operation ID: {} - Validation error: {}", operationId, e.getMessage());
@@ -173,7 +173,7 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
 
     private void validateFeature(ProductFeature feature) {
         CategoryFeatureTemplate template = feature.getTemplate();
-        Set<ProductFeatureValue> values = feature.getFeatureValues();
+        Set<ProductFeatureValue> values = null;
 
         if (template == null) {
             throw new ValidationException("Feature template cannot be null");

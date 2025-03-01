@@ -22,6 +22,7 @@ public interface ProductFeatureValueMapper extends JsonNodeMapper {
         @Mapping(target = "createdBy", source = "createdBy"),
         @Mapping(target = "lastModifiedBy", source = "lastModifiedBy"),
         @Mapping(target = "featureId", source = "feature.id"),
+        @Mapping(target = "productId", source = "product.id"),
         @Mapping(target = "featureTemplateId", source = "templateId"),
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),
@@ -34,6 +35,7 @@ public interface ProductFeatureValueMapper extends JsonNodeMapper {
     @Mappings({
         @Mapping(target = "id", source = "id"),
         @Mapping(target = "feature", ignore = true),
+        @Mapping(target = "product", ignore = true),
         @Mapping(target = "templateId", source = "featureTemplateId"),
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),
@@ -46,6 +48,7 @@ public interface ProductFeatureValueMapper extends JsonNodeMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({
         @Mapping(target = "feature", ignore = true),
+        @Mapping(target = "product", ignore = true),
         @Mapping(target = "templateId", source = "featureTemplateId"),
         @Mapping(target = "type", source = "type"),
         @Mapping(target = "unit", source = "unit"),

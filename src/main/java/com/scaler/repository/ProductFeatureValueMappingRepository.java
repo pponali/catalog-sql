@@ -14,28 +14,27 @@ import java.util.UUID;
 public interface ProductFeatureValueMappingRepository extends JpaRepository<ProductFeatureValueMapping, UUID> {
     
     @Query("SELECT pfvm FROM ProductFeatureValueMapping pfvm " +
-           "JOIN FETCH pfvm.featureMapping fm " +
+           "JOIN FETCH pfvm.feature f " +
            "JOIN FETCH pfvm.featureValue fv " +
-           "WHERE fm.product.id = :productId " +
-           "ORDER BY fm.displayOrder, pfvm.displayOrder")
+           "WHERE pfvm.product.id = :productId " +
+           "ORDER BY pfvm.displayOrder")
     List<ProductFeatureValueMapping> findByProductIdWithFeatureValues(@Param("productId") UUID productId);
 
     @Query("SELECT DISTINCT pfvm FROM ProductFeatureValueMapping pfvm " +
-           "JOIN FETCH pfvm.featureMapping fm " +
+           "JOIN FETCH pfvm.feature f " +
            "JOIN FETCH pfvm.featureValue fv " +
-           "JOIN FETCH fm.feature f " +
-           "WHERE fm.product.id = :productId " +
+           "WHERE pfvm.product.id = :productId " +
            "AND f.code IN :featureCodes " +
-           "ORDER BY fm.displayOrder, pfvm.displayOrder")
+           "ORDER BY pfvm.displayOrder")
     List<ProductFeatureValueMapping> findByProductIdAndFeatureCodes(
             @Param("productId") UUID productId,
             @Param("featureCodes") Set<String> featureCodes);
 
     @Query("SELECT pfvm FROM ProductFeatureValueMapping pfvm " +
-           "JOIN FETCH pfvm.featureMapping fm " +
+           "JOIN FETCH pfvm.feature f " +
            "JOIN FETCH pfvm.featureValue fv " +
-           "WHERE fm.product.id = :productId " +
+           "WHERE pfvm.product.id = :productId " +
            "AND pfvm.isPrimary = true " +
-           "ORDER BY fm.displayOrder")
+           "ORDER BY pfvm.displayOrder")
     List<ProductFeatureValueMapping> findPrimaryValuesByProductId(@Param("productId") UUID productId);
 }

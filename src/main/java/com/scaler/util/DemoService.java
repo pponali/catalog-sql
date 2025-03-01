@@ -48,8 +48,6 @@ public class DemoService {
     @Autowired
     private UnitOfMeasureRepository unitOfMeasureRepository;
     @Autowired
-    private ProductFeatureMappingRepository productFeatureMappingRepository;
-    @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
     @Autowired
@@ -200,86 +198,77 @@ public class DemoService {
             UnitOfMeasure gramUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createGramUnit());
 
             // Create feature templates for laptops
-            CategoryFeatureTemplate laptopProcessor = FeatureTemplateBuilder.createLaptopProcessorTemplate(laptopCategory);
-            CategoryFeatureTemplate laptopRam = FeatureTemplateBuilder.createLaptopRamTemplate(laptopCategory, gbUnit);
-            CategoryFeatureTemplate laptopStorage = FeatureTemplateBuilder.createLaptopStorageTemplate(laptopCategory, tbUnit);
+            CategoryFeatureTemplate laptopProcessorTemplate = FeatureTemplateBuilder.createLaptopProcessorTemplate(laptopCategory);
+            CategoryFeatureTemplate laptopRamTemplate = FeatureTemplateBuilder.createLaptopRamTemplate(laptopCategory, gbUnit);
+            CategoryFeatureTemplate laptopStorageTemplate = FeatureTemplateBuilder.createLaptopStorageTemplate(laptopCategory, tbUnit);
 
             // Create feature templates for iPhone
-            CategoryFeatureTemplate iPhoneProcessor = FeatureTemplateBuilder.createIPhoneProcessorTemplate(laptopCategory);
-            CategoryFeatureTemplate iPhoneRam = FeatureTemplateBuilder.createIPhoneRamTemplate(laptopCategory, gbUnit);
-            CategoryFeatureTemplate iPhoneStorage = FeatureTemplateBuilder.createIPhoneStorageTemplate(laptopCategory, tbUnit);
+            CategoryFeatureTemplate iPhoneProcessorTemplate = FeatureTemplateBuilder.createIPhoneProcessorTemplate(laptopCategory);
+            CategoryFeatureTemplate iPhoneRamCategoryFeatureTemplate = FeatureTemplateBuilder.createIPhoneRamTemplate(laptopCategory, gbUnit);
+            CategoryFeatureTemplate iPhoneStorageTemplate = FeatureTemplateBuilder.createIPhoneStorageTemplate(laptopCategory, tbUnit);
 
             // Create feature templates for Jewellery
-            CategoryFeatureTemplate goldPurityProductFeature = FeatureTemplateBuilder.createGoldPurityTemplate(necklaceCategory);
-            CategoryFeatureTemplate goldWeightProductFeature = FeatureTemplateBuilder.createGoldWeightTemplate(bangleCategory, gbUnit);
+            CategoryFeatureTemplate goldPurityTemplate = FeatureTemplateBuilder.createGoldPurityTemplate(necklaceCategory);
+            CategoryFeatureTemplate goldWeightTemplate = FeatureTemplateBuilder.createGoldWeightTemplate(bangleCategory, gbUnit);
 
 
-            categoryFeatureTemplateRepository.save(laptopProcessor);
-            categoryFeatureTemplateRepository.save(laptopRam);
-            categoryFeatureTemplateRepository.save(laptopStorage);
+            categoryFeatureTemplateRepository.save(laptopProcessorTemplate);
+            categoryFeatureTemplateRepository.save(laptopRamTemplate);
+            categoryFeatureTemplateRepository.save(laptopStorageTemplate);
 
-            categoryFeatureTemplateRepository.save(iPhoneProcessor);
-            categoryFeatureTemplateRepository.save(iPhoneRam);
-            categoryFeatureTemplateRepository.save(iPhoneStorage);
+            categoryFeatureTemplateRepository.save(iPhoneProcessorTemplate);
+            categoryFeatureTemplateRepository.save(iPhoneRamCategoryFeatureTemplate);
+            categoryFeatureTemplateRepository.save(iPhoneStorageTemplate);
 
 
-            categoryFeatureTemplateRepository.save(goldPurityProductFeature);
-            categoryFeatureTemplateRepository.save(goldWeightProductFeature);
-
-            // Create product features
-            ProductFeature processor = ProductFeatureBuilder.createLaptopProcessorFeature(laptopProcessor);
-            ProductFeature ram = ProductFeatureBuilder.createLaptopRamFeature(laptopRam, gbUnit);
-            ProductFeature storage = ProductFeatureBuilder.createLaptopStorageFeature(laptopStorage, tbUnit);
+            categoryFeatureTemplateRepository.save(goldPurityTemplate);
+            categoryFeatureTemplateRepository.save(goldWeightTemplate);
 
             // Create product features
-            ProductFeature iPhoneprocessor = ProductFeatureBuilder.createProcessorFeature(iPhoneProcessor);
-            ProductFeature iPhoneram = ProductFeatureBuilder.createLaptopRamFeature(laptopRam, gbUnit);
-            ProductFeature iPhonestorage = ProductFeatureBuilder.createLaptopStorageFeature(laptopStorage, tbUnit);
+            ProductFeature laptopProcessorFeature = ProductFeatureBuilder.createLaptopProcessorFeature(laptopProcessorTemplate);
+            ProductFeature laptopRamFeature = ProductFeatureBuilder.createLaptopRamFeature(laptopRamTemplate, gbUnit);
+            ProductFeature laptopStorageFeature = ProductFeatureBuilder.createLaptopStorageFeature(laptopStorageTemplate, tbUnit);
+
+            // Create product features
+            ProductFeature iphoneprocessor = ProductFeatureBuilder.createProcessorFeature(iPhoneProcessorTemplate);
+            ProductFeature iPhoneram = ProductFeatureBuilder.createLaptopRamFeature(laptopRamTemplate, gbUnit);
+            ProductFeature iPhonestorage = ProductFeatureBuilder.createLaptopStorageFeature(laptopStorageTemplate, tbUnit);
 
 
-            productFeatureRepository.save(processor);
-            productFeatureRepository.save(ram);
-            productFeatureRepository.save(storage);
+            productFeatureRepository.save(laptopProcessorFeature);
+            productFeatureRepository.save(laptopRamFeature);
+            productFeatureRepository.save(laptopStorageFeature);
 
-            productFeatureRepository.save(iPhoneprocessor);
+            productFeatureRepository.save(iphoneprocessor);
             productFeatureRepository.save(iPhoneram);
             productFeatureRepository.save(iPhonestorage);
 
 
                // Create products
-            Product macBookPro = productRepository.save(ProductBuilder.createMacBookPro(laptopCategory, tataCliq));
+            Product macBookProProduct = productRepository.save(ProductBuilder.createMacBookPro(laptopCategory, tataCliq));
             Product dellXPS = productRepository.save(ProductBuilder.createDellXPS(laptopCategory, tataCliq));
             Product iPhone = productRepository.save(ProductBuilder.createIPhone(smartphoneCategory, tataCliq));
             Product goldNecklace = productRepository.save(ProductBuilder.createGoldNecklace(necklaceCategory, tanishq));
             Product goldBangles = productRepository.save(ProductBuilder.createGoldBangles(bangleCategory, tanishq));
 
-            // Create feature mappings and values for MacBook Pro
-            ProductFeatureMapping macBookProcessor = createAndSaveMapping(macBookPro, processor);
-            ProductFeatureMapping macBookRam = createAndSaveMapping(macBookPro, ram);
-            ProductFeatureMapping macBookStorage = createAndSaveMapping(macBookPro, iPhonestorage);
 
-            ProductFeatureValue processorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(processor, "Apple M2 Pro"));
-            ProductFeatureValue ramValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(ram, "16GB"));
-            ProductFeatureValue storageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(iPhonestorage, "512GB"));
+            ProductFeatureValue processorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(macBookProProduct,laptopProcessorFeature, "Apple M2 Pro"));
+            ProductFeatureValue ramValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(macBookProProduct, laptopRamFeature, "16GB"));
+            ProductFeatureValue storageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(macBookProProduct, iPhonestorage, "512GB"));
 
+            ProductFeatureValue iPhoneprocessorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(iPhone,iphoneprocessor, "M2"));
 
-
-            // Create feature mappings and values for Dell XPS
-            ProductFeatureMapping dellProcessor = createAndSaveMapping(dellXPS, processor);
-            ProductFeatureMapping dellRam = createAndSaveMapping(dellXPS, ram);
-            ProductFeatureMapping dellStorage = createAndSaveMapping(dellXPS, iPhonestorage);
-
-            ProductFeatureValue dellProcessorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(processor, "Intel i9-13900H"));
-            ProductFeatureValue dellRamValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(ram, "32GB"));
-            ProductFeatureValue dellStorageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(iPhonestorage, "1TB"));
+            ProductFeatureValue dellProcessorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(dellXPS, laptopProcessorFeature, "Intel i9-13900H"));
+            ProductFeatureValue dellRamValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(dellXPS, laptopRamFeature, "32GB"));
+            ProductFeatureValue dellStorageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(dellXPS, iPhonestorage, "1TB"));
 
 
 
 
             // Create product-channel relationships
             // MacBook Pro available on Croma (both online and offline)
-            macBookPro.addProductChannel(cromaEcom);
-            macBookPro.addProductChannel(cromaPhysical);
+            macBookProProduct.addProductChannel(cromaEcom);
+            macBookProProduct.addProductChannel(cromaPhysical);
 
             // Dell XPS available on TataCliQ (both ecommerce and marketplace)
             dellXPS.addProductChannel(tataCliqEcom);
@@ -299,38 +288,31 @@ public class DemoService {
 
 
             // Create features for jewelry
-            ProductFeature goldPurity = productFeatureRepository.save(ProductFeatureBuilder.createGoldPurityFeature(goldPurityProductFeature));
-            ProductFeature goldWeight = productFeatureRepository.save(ProductFeatureBuilder.createGoldWeightFeature(goldWeightProductFeature, gramUnit));
+            ProductFeature goldPurity = productFeatureRepository.save(ProductFeatureBuilder.createGoldPurityFeature(goldPurityTemplate));
+            ProductFeature goldWeight = productFeatureRepository.save(ProductFeatureBuilder.createGoldWeightFeature(goldWeightTemplate, gramUnit));
 
-            // Create feature mappings and values for Gold Necklace
-            ProductFeatureMapping necklacePurity = createAndSaveMapping(goldNecklace, goldPurity);
-            ProductFeatureMapping necklaceWeight = createAndSaveMapping(goldNecklace, goldWeight);
 
-            ProductFeatureValue purityValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldPurity, "22K"));
-            ProductFeatureValue weightValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldWeight, "50"));
 
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookProcessor, processorValue, laptopCategory,1, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookRam, ramValue, laptopCategory,2, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookStorage, storageValue, laptopCategory,3, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellProcessor, dellProcessorValue, laptopCategory,1, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellRam, dellRamValue, laptopCategory,2, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellStorage, dellStorageValue, laptopCategory,3, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklacePurity, purityValue, necklaceCategory,1, true));
-            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklaceWeight, weightValue, necklaceCategory,2, true));
+            ProductFeatureValue purityValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldNecklace, goldPurity, "22K"));
+            ProductFeatureValue weightValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldNecklace, goldWeight, "50"));
 
-            // Create feature mappings and values for Gold Bangles
-            ProductFeatureMapping banglePurity = createAndSaveMapping(goldBangles, goldPurity);
-            ProductFeatureMapping bangleWeight = createAndSaveMapping(goldBangles, goldWeight);
+            // Create feature value mappings for MacBook Pro
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookProProduct, laptopProcessorFeature, processorValue, laptopProcessorTemplate, 1));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookProProduct, laptopRamFeature, ramValue, laptopRamTemplate, 2));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(macBookProProduct, laptopStorageFeature, storageValue, laptopStorageTemplate, 3));
 
-            // Reuse the same purity value for bangles
-            //productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(banglePurity, purityValue, bangleCategory,1, true));
+            // Create feature value mappings for Dell XPS
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellXPS, laptopProcessorFeature, dellProcessorValue, laptopProcessorTemplate, 1));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellXPS, laptopRamFeature, dellRamValue, laptopRamTemplate, 2));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(dellXPS, laptopStorageFeature, dellStorageValue, laptopStorageTemplate, 3));
 
-            // Create new weight value for bangles
-            ProductFeatureValue bangleWeightValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createFeatureValue(goldWeight, "30"));
-            //productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(bangleWeight, bangleWeightValue, bangleCategory,2, true));
+            // Create feature value mappings for jewelry
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(goldNecklace, goldPurity, purityValue, goldPurityTemplate, 1));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(goldNecklace, goldWeight, weightValue, goldWeightTemplate, 2));
+
 
             // Save all products with their channel relationships
-            productRepository.save(macBookPro);
+            productRepository.save(macBookProProduct);
             productRepository.save(dellXPS);
             productRepository.save(iPhone);
             productRepository.save(goldNecklace);
@@ -349,7 +331,7 @@ public class DemoService {
 
             // 1. Channel-Seller-Category combination
             // MacBook Pro: Available through TataCliq seller on TataCliq channels in Laptop category
-            SellerProduct macProTataCliq = SellerProductBuilder.createSellerProduct(tataCliqSeller, macBookPro, tataCliq);
+            SellerProduct macProTataCliq = SellerProductBuilder.createSellerProduct(tataCliqSeller, macBookProProduct, tataCliq);
             sellerProductRepository.save(macProTataCliq);
 
             // 2. Channel-Seller-Category combination
@@ -364,7 +346,7 @@ public class DemoService {
             sellerProductRepository.save(iPhoneTataCliq);
             sellerProductRepository.save(iPhoneCroma);
 
-            //useCases(macBookPro, laptopCategory, croma, bigBasketEcom, ram, tataCliqSeller, tanishq, tataCliqMarketplace, iPhone, smartphoneCategory, bigBasket, iPhoneram, cromaSeller, iPhoneTataCliq, tanishqSeller, goldNecklace, tataCliq, goldBangles);
+            useCases(macBookProProduct, laptopCategory, croma, bigBasketEcom, laptopRamFeature, tataCliqSeller, tanishq, tataCliqMarketplace, iPhone, smartphoneCategory, bigBasket, iPhoneram, cromaSeller, iPhoneTataCliq, tanishqSeller, goldNecklace, tataCliq, goldBangles);
 
             // Create platforms
             Platform webPlatform = Platform.builder()
@@ -399,10 +381,10 @@ public class DemoService {
 
             // Create product-platform mappings
             // MacBook Pro available on Web and Tablet
-            ProductPlatform macBookWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(macBookPro, webPlatform);
+            ProductPlatform macBookWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(macBookProProduct, webPlatform);
             productPlatformRepository.save(macBookWebPlatform);
 
-            ProductPlatform macBookTabletPlatform = ProductPlatformBuilder.createActiveProductPlatform(macBookPro, tabletPlatform);
+            ProductPlatform macBookTabletPlatform = ProductPlatformBuilder.createActiveProductPlatform(macBookProProduct, tabletPlatform);
             productPlatformRepository.save(macBookTabletPlatform);
 
             // iPhone available on all platforms
@@ -423,6 +405,80 @@ public class DemoService {
             productPlatformRepository.save(necklaceMobilePlatform);
 
             //validationBuilder.validationRules();
+
+            // Create comprehensive combinations of relationships
+
+            // 1. Channel-Catalog-Product Combinations
+            // Assign MacBook Pro to TataCliq Fashion Catalog
+            ChannelCatalog macBookChannelCatalog = ChannelCatalogBuilder.createChannelCatalog(bigBasketEcom, fashionCatalog, false);
+            channelCatalogRepository.save(macBookChannelCatalog);
+
+            // 2. Product-Category-Channel Combinations
+            // Assign MacBook Pro to Laptop category in TataCliq channel
+            ProductCategory macBookCategory = ProductCategoryBuilder.createProductCategory(macBookProProduct, laptopCategory, croma);
+            productCategoryRepository.save(macBookCategory);
+            ProductChannel macBookChannel = ProductChannelBuilder.createEcommerceProductChannel(macBookProProduct, bigBasketEcom);
+            productChannelRepository.save(macBookChannel);
+
+            // 3. Product Feature Combinations
+            // Create feature mapping for MacBook Pro RAM
+
+
+            // Create feature value for 32GB RAM
+            ProductFeatureValue ram32GB = ProductFeatureValueBuilder.createRamValue(iPhone, laptopRamFeature, "32GB");
+            productFeatureValueRepository.save(ram32GB);
+
+            // Map the 32GB RAM value to MacBook Pro
+            ProductFeatureValueMapping ramMapping = ProductFeatureValueMappingBuilder.createMapping(iPhone, iphoneprocessor, iPhoneprocessorValue, iPhoneProcessorTemplate, 2);
+            productFeatureValueMappingRepository.save(ramMapping);
+
+            // 4. Seller-Product-Channel Combinations
+            // Create seller product for MacBook Pro
+            //SellerProduct macBookSellerProduct = SellerProductBuilder.createSellerProduct(tataCliqSeller, macBookPro, tanishq);
+            //sellerProductRepository.save(macBookSellerProduct);
+
+            // 5. Cross-Channel Product Availability
+            // Make MacBook Pro available on Croma channel as well
+            //ProductChannel macBookCromaChannel = ProductChannelBuilder.createMarketplaceProductChannel(macBookPro, tataCliqMarketplace);
+            //productChannelRepository.save(macBookCromaChannel);
+
+            // 6. Multiple Feature Values for a Product
+            // Add another RAM option for MacBook Pro
+            //ProductFeatureValue ram64GB = ProductFeatureValueBuilder.createRamValue(ram, "64GB");
+            //productFeatureValueRepository.save(ram64GB);
+
+            //ProductFeatureValueMapping ram64GBMapping = ProductFeatureValueMappingBuilder.createMapping(macBookRamFeature, ram64GB, laptopCategory, 2, false);
+            //productFeatureValueMappingRepository.save(ram64GBMapping);
+
+            // 7. Cross-Category Product
+            // Add iPhone to both Smartphone and Electronics categories
+            //ProductCategory iPhoneSmartphoneCategory = ProductCategoryBuilder.createProductCategory(iPhone, smartphoneCategory, bigBasket);
+            //productCategoryRepository.save(iPhoneSmartphoneCategory);
+
+            // 8. Channel-Specific Product Features
+            // Create channel-specific RAM feature for TataCliq
+            //ProductFeatureMapping iPhoneRamFeature = ProductFeatureMappingBuilder.createFeatureMapping(iPhone,iPhoneram);
+            //productFeatureMappingRepository.save(iPhoneRamFeature);
+
+            //ProductFeatureValue iPhoneRam8GB = ProductFeatureValueBuilder.createIphoneFeature(iPhoneram, "8GB");
+            //productFeatureValueRepository.save(iPhoneRam8GB);
+
+            //ProductFeatureValueMapping iPhoneRamMapping = ProductFeatureValueMappingBuilder.createMapping(iPhoneRamFeature, iPhoneRam8GB, smartphoneCategory, 1, true);
+            //productFeatureValueMappingRepository.save(iPhoneRamMapping);
+
+            //SellerProduct iPhoneCromaSellerProduct = SellerProductBuilder.createSellerProduct(cromaSeller, iPhone, bigBasket);
+            //sellerProductRepository.save(iPhoneTataCliq);
+            //sellerProductRepository.save(iPhoneCromaSellerProduct);
+
+            // 4. Channel-Category combination (multiple sellers)
+            // Gold Necklace: Available through Tanishq seller in Necklace category
+            //SellerProduct necklaceTanishq = SellerProductBuilder.createSellerProduct(tanishqSeller, goldNecklace, tataCliq);
+            //sellerProductRepository.save(necklaceTanishq);
+
+            // 5. Channel-Seller combination
+            // Gold Bangles: Available through Tanishq seller on TataCliq channel
+            //SellerProduct banglesTanishq = SellerProductBuilder.createSellerProduct(tanishqSeller, goldBangles, tataCliq);
+            //sellerProductRepository.save(banglesTanishq);
 
 
         } catch (Exception e) {
@@ -550,18 +606,7 @@ public class DemoService {
         }
     }
 
-    private ProductFeatureMapping createAndSaveMapping(Product product, ProductFeature feature) {
-        if (product == null || feature == null) {
-            throw new IllegalArgumentException("Product and feature must not be null");
-        }
-        return productFeatureMappingRepository.save(
-                ProductFeatureMapping.builder()
-                        .product(product)
-                        .feature(feature)
-                        .createdBy("SYSTEM")
-                        .build()
-        );
-    }
+
 
 
 

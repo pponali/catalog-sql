@@ -1,22 +1,47 @@
 package com.scaler.builder;
 
-import com.scaler.entity.Category;
-import com.scaler.entity.ProductFeatureMapping;
-import com.scaler.entity.ProductFeatureValue;
-import com.scaler.entity.ProductFeatureValueMapping;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scaler.entity.*;
 
 public class ProductFeatureValueMappingBuilder {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     
-    public static ProductFeatureValueMapping createMapping(ProductFeatureMapping featureMapping, ProductFeatureValue featureValue, Category category, Integer displayOrder, Boolean isPrimary) {
+    public static ProductFeatureValueMapping createMapping(Product product, ProductFeature feature, 
+            ProductFeatureValue featureValue, CategoryFeatureTemplate template, Integer displayOrder) {
         return ProductFeatureValueMapping.builder()
-                .featureMapping(featureMapping)
+                .product(product)
+                .feature(feature)
                 .featureValue(featureValue)
-                .category(category)
-                .product(featureMapping.getProduct())
-                .createdBy("SYSTEM")
+                .template(template)
                 .displayOrder(displayOrder)
-                .isPrimary(isPrimary)
+                .visible(true)
+                .enabled(true)
+                .isPrimary(false)
                 .isActive(true)
+                .metadata(objectMapper.createObjectNode())
+                .createdBy("SYSTEM")
                 .build();
     }
+
+    public static ProductFeatureValueMapping createMappingSomeOther(Product product, ProductFeature feature,
+            ProductFeatureValue featureValue, CategoryFeatureTemplate template, Integer displayOrder,
+            Boolean visible, Boolean enabled, Boolean isPrimary, JsonNode metadata) {
+        return ProductFeatureValueMapping.builder()
+                .product(product)
+                .feature(feature)
+                .featureValue(featureValue)
+                .template(template)
+                .displayOrder(displayOrder)
+                .visible(visible)
+                .enabled(enabled)
+                .isPrimary(isPrimary)
+                .isActive(true)
+                .metadata(metadata)
+                .createdBy("SYSTEM")
+                .build();
+    }
+
+
 }

@@ -27,7 +27,7 @@ public class TestUseCases {
     @Autowired private ChannelCatalogRepository channelCatalogRepository;
     @Autowired private ProductCategoryRepository productCategoryRepository;
     @Autowired private ProductChannelRepository productChannelRepository;
-    @Autowired private ProductFeatureMappingRepository productFeatureMappingRepository;
+
     @Autowired private ProductFeatureValueMappingRepository productFeatureValueMappingRepository;
     @Autowired private SellerProductRepository sellerProductRepository;
     @Autowired private ProductRepository productRepository;
@@ -87,13 +87,18 @@ public class TestUseCases {
 
         // Assign features to product
         for (ProductFeature feature : features) {
-            ProductFeatureMapping mapping = ProductFeatureMapping.builder()
+            ProductFeatureValueMapping mapping = ProductFeatureValueMapping.builder()
                     .product(product)
                     .feature(feature)
+                    .displayOrder(1)
+                    .visible(true)
+                    .enabled(true)
+                    .isPrimary(true)
+                    .isActive(true)
                     .createdBy("SYSTEM")
                     .build();
 
-            productFeatureMappingRepository.save(mapping);
+            productFeatureValueMappingRepository.save(mapping);
         }
 
         log.info("Product {} assigned to category {} with {} features", 
@@ -197,11 +202,24 @@ public class TestUseCases {
         // Assign feature values
         for (ProductFeatureValue value : values) {
             value.setCreatedBy("SYSTEM");
-            productFeatureValueRepository.save(value);
+            value = productFeatureValueRepository.save(value);
 
             ProductFeatureValueMapping mapping = ProductFeatureValueMapping.builder()
                     .product(product)
-                    .category(category)
+                    .feature(value.getFeature())
+                    .featureValue(value)
+                    .displayOrder(1)
+                    .visible(true)
+                    .enabled(true)
+                    .isPrimary(true)
+                    .isActive(true)
+                    .createdBy("SYSTEM")
+                    .build();
+
+            productFeatureValueMappingRepository.save(mapping);
+
+            ProductFeatureValueMapping mapping1 = ProductFeatureValueMapping.builder()
+                    .product(product)
                     .featureValue(value)
                     .createdBy("SYSTEM")
                     .isActive(true)
@@ -209,7 +227,7 @@ public class TestUseCases {
                     .displayOrder(1)
                     .build();
 
-            productFeatureValueMappingRepository.save(mapping);
+            productFeatureValueMappingRepository.save(mapping1);
         }
 
         log.info("Product {} inherited {} feature values from category {}", 

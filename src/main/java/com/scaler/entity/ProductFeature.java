@@ -13,13 +13,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product_feature")
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "featureValues"})
-@ToString(callSuper = true, exclude = {"product", "template", "featureValues"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@EqualsAndHashCode(callSuper = true, exclude = {"template", "productValueMappings"})
+@ToString(callSuper = true, exclude = {"template", "productValueMappings"})
+@JsonIgnoreProperties({"productValueMappings"})
 public class ProductFeature extends BaseEntity {
     
     public String getValue() {
@@ -81,37 +82,37 @@ public class ProductFeature extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode metadata;
 
-    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference("feature-mapping")
-    private Set<ProductFeatureMapping> productMappings = new HashSet<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "template_id")
     private CategoryFeatureTemplate template;
+/*
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<ProductFeatureValueMapping> productValueMappings = new HashSet<>();
 
 
 
-    public void addProductMapping(ProductFeatureMapping mapping) {
-        productMappings.add(mapping);
+    public Set<ProductFeatureValue> getFeatureValues() {
+        return productValueMappings.stream()
+            .map(ProductFeatureValueMapping::getFeatureValue)
+            .collect(java.util.stream.Collectors.toSet());
+    }
+
+    public void addProductValueMapping(ProductFeatureValueMapping mapping) {
+        productValueMappings.add(mapping);
         mapping.setFeature(this);
     }
 
-    public void removeProductMapping(ProductFeatureMapping mapping) {
-        productMappings.remove(mapping);
+    public void removeProductValueMapping(ProductFeatureValueMapping mapping) {
+        productValueMappings.remove(mapping);
         mapping.setFeature(null);
     }
 
-    public ProductFeatureMapping getFeatureMapping() {
-        return productMappings.isEmpty() ? null : productMappings.iterator().next();
+    public Set<ProductFeatureValueMapping> getProductValueMappings() {
+        return productValueMappings;
     }
+    */
 
-    public Set<ProductFeatureValue> getFeatureValues() {
-        Set<ProductFeatureValue> values = new HashSet<>();
-        for (ProductFeatureMapping mapping : productMappings) {
-            values.addAll(mapping.getFeature().getFeatureValues());
-        }
-        return values;
-    }
 
 
 }

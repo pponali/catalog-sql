@@ -14,6 +14,17 @@ public class ProductPriceBuilder {
 
     private static final Random random = new Random();
 
+    public static ProductPrice createDesignServicePrice(Product product, Seller seller) {
+        return ProductPrice.builder()
+                .product(product)
+                .seller(seller)
+                .price(BigDecimal.valueOf(50000.00))
+                .currency("USD")
+                .isActive(true)
+                .createdBy("SYSTEM")
+                .build();
+    }
+
     private ProductPriceBuilder() {
         // Private constructor to prevent instantiation
     }

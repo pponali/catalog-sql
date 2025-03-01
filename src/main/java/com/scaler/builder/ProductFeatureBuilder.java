@@ -26,7 +26,6 @@ public class ProductFeatureBuilder {
         // Private constructor to prevent instantiation
     }
 
-
     /**
      * Creates metadata for a product feature
      * @param displayOrder Display order of the feature
@@ -184,6 +183,25 @@ public class ProductFeatureBuilder {
                 .build();
     }
 
+    public static ProductFeature createNutritionFeature(CategoryFeatureTemplate categoryFeatureTemplate) throws JsonProcessingException {
+        return ProductFeature.builder()
+                .code("NUTRITION")
+                .name("Nutritional Information")
+                .description("Detailed nutritional information")
+                .attributeType("COMPLEX_JSON")
+                .template(categoryFeatureTemplate)
+                .featureType(FeatureType.OBJECT)
+                .visible(true)
+                .comparable(true)
+                .editable(true)
+                .searchable(true)
+                .required(true)
+                .multiValued(false)
+                .createdBy(SYSTEM_USER)
+                .lastModifiedBy(SYSTEM_USER)
+                .build();
+    }
+
     public static ProductFeature createProcessorFeature(CategoryFeatureTemplate categoryFeatureTemplate){
         return  ProductFeature.builder()
                 .code(LAPTOP_PROCESSOR)
@@ -202,11 +220,6 @@ public class ProductFeatureBuilder {
                 .searchable(true)
                 .required(true)
                 .multiValued(false)
-                .metadata(readTree("{"
-                        + "\"displayOrder\": 1,"
-                        + "\"group\": \"Technical Specifications\","
-                        + "\"tooltip\": \"Processor model that powers the laptop\""
-                        + "}"))
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .build();
@@ -259,11 +272,6 @@ public class ProductFeatureBuilder {
                 .searchable(true)
                 .required(true)
                 .multiValued(false)
-                .metadata(readTree("{"
-                        + "\"displayOrder\": 3,"
-                        + "\"group\": \"Technical Specifications\","
-                        + "\"tooltip\": \"Storage capacity of the laptop\""
-                        + "}"))
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .build();
@@ -277,11 +285,5 @@ public class ProductFeatureBuilder {
             throw new RuntimeException("Error converting String to JsonNode: " + value, e);
         }
     }
-
-
-
-
-
-
 
 }

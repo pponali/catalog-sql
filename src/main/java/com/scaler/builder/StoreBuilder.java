@@ -1,5 +1,7 @@
 package com.scaler.builder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.entity.Merchant;
 import com.scaler.entity.Store;
 import com.scaler.entity.StoreType;
@@ -7,8 +9,10 @@ import com.scaler.entity.StoreType;
 import java.time.LocalDateTime;
 
 public class StoreBuilder {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String SYSTEM_USER = "system";
     
-    public static Store createTataCliqStore(Merchant merchant) {
+    public static Store createTataCliqStore(Merchant merchant) throws JsonProcessingException {
         Store store = Store.builder()
                 .name("Tata CLiQ")
                 .domain("tatacliq.com")
@@ -20,8 +24,29 @@ public class StoreBuilder {
                 .timezone("Asia/Kolkata")
                 .status("ACTIVE")
                 .storeType(StoreType.ONLINE)
-                .createdBy("system")
-                .lastModifiedBy("system")
+                .createdBy(SYSTEM_USER)
+                .lastModifiedBy(SYSTEM_USER)
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+        return store;
+    }
+
+    public static Store createTataElxsiStore(Merchant merchant) throws JsonProcessingException {
+        Store store = Store.builder()
+                .name("Tata Elxsi Design Services")
+                .domain("tataelxsi.com")
+                .merchant(merchant)
+                .locale("en-IN")
+                .currency("INR")
+                .description("Tata Elxsi Design and Technology Services Store")
+                .active(true)
+                .timezone("Asia/Kolkata")
+                .status("ACTIVE")
+                .storeType(StoreType.ONLINE)
+
+                .createdBy(SYSTEM_USER)
+                .lastModifiedBy(SYSTEM_USER)
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .build();

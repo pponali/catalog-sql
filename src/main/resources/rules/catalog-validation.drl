@@ -1,26 +1,32 @@
-package com.scaler.rules.validation;
+package rules;
 
 import com.scaler.entity.Catalog;
+import com.scaler.validation.fact.CatalogValidationFact;
+import java.util.List;
+import java.util.ArrayList;
 
-global java.util.List errors;
+dialect "java"
 
 rule "Validate Catalog Name"
+    salience 100
 when
-    $catalog: Catalog(name == null || name.trim().isEmpty())
+    $fact: CatalogValidationFact(catalog != null && (catalog.getName() == null || catalog.getName().trim().isEmpty()))
 then
-    errors.add("Catalog name cannot be empty");
+    $fact.addError("Catalog name cannot be empty");
 end
 
 rule "Validate Catalog Description"
+    salience 100
 when
-    $catalog: Catalog(description == null || description.trim().isEmpty())
+    $fact: CatalogValidationFact(catalog != null && (catalog.getDescription() == null || catalog.getDescription().trim().isEmpty()))
 then
-    errors.add("Catalog description cannot be empty");
+    $fact.addError("Catalog description cannot be empty");
 end
 
 rule "Validate Catalog Status"
+    salience 100
 when
-    $catalog: Catalog(status == null)
+    $fact: CatalogValidationFact(catalog != null && catalog.getStatus() == null)
 then
-    errors.add("Catalog status cannot be null");
+    $fact.addError("Catalog status cannot be null");
 end

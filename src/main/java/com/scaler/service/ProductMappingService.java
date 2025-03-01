@@ -41,8 +41,8 @@ public class ProductMappingService {
         if (product.getProductCategories() == null) {
             product.setProductCategories(new HashSet<>());
         }
-        if (product.getFeatureMappings() == null) {
-            product.setFeatureMappings(new HashSet<>());
+        if (product.getFeatureValueMappings() == null) {
+            product.setFeatureValueMappings(new HashSet<>());
         }
         if (product.getAttributes() == null) {
             product.setAttributes(new ArrayList<>());

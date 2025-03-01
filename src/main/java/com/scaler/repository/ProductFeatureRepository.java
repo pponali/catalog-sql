@@ -13,9 +13,9 @@ import java.util.UUID;
 @Repository
 public interface ProductFeatureRepository extends JpaRepository<ProductFeature, UUID> {
     
-    Optional<ProductFeature> findByProductMappingsProductIdAndTemplateId(UUID productId, UUID templateId);
+    /*Optional<ProductFeature> findByProductValueMappingsProductIdAndTemplateId(UUID productId, UUID templateId);
     
-    List<ProductFeature> findByProductMappingsProductId(UUID productId);
+    List<ProductFeature> findByProductValueMappingsProductId(UUID productId);
     
-    void deleteByProductMappingsProductId(UUID productId);
+    void deleteByProductValueMappingsProductId(UUID productId);*/
 }

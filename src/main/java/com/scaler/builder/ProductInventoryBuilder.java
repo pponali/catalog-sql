@@ -13,6 +13,16 @@ public class ProductInventoryBuilder {
 
     private static final Random random = new Random();
 
+    public static ProductInventory createDesignServiceInventory(Product product, Seller seller) {
+        return ProductInventory.builder()
+                .product(product)
+                .seller(seller)
+                .quantity(10)
+                .reservedQuantity(2)
+                .createdBy("SYSTEM")
+                .build();
+    }
+
     private ProductInventoryBuilder() {
         // Private constructor to prevent instantiation
     }

@@ -23,6 +23,38 @@ public class ChannelBuilder {
     /**
      * Creates Tata CLiQ channels
      */
+    public static Channel createTataElxsiServiceChannel(Store store) throws JsonProcessingException {
+        return Channel.builder()
+                .code("ELXSI_SERVICES")
+                .name("Tata Elxsi Services")
+                .description("Design and Technology Services Channel")
+                .status("ACTIVE")
+                .type(ChannelType.ECOMMERCE)
+                .store(store)
+                .enabled(true)
+                .visibility(true)
+                .displayOrder(1)
+                .createdBy("SYSTEM")
+                .channelConfig(objectMapper.writeValueAsString(createServiceChannelConfig()))
+                .build();
+    }
+
+    public static Channel createTataElxsiConsultingChannel(Store store) throws JsonProcessingException {
+        return Channel.builder()
+                .code("ELXSI_CONSULTING")
+                .name("Tata Elxsi Consulting")
+                .description("Professional Consulting Services Channel")
+                .status("ACTIVE")
+                .type(ChannelType.MARKETPLACE)
+                .store(store)
+                .enabled(true)
+                .visibility(true)
+                .displayOrder(2)
+                .createdBy("SYSTEM")
+                .channelConfig(objectMapper.writeValueAsString(createConsultingChannelConfig()))
+                .build();
+    }
+
     public static Channel createTataCliqEcommerceChannel(Store store) throws JsonProcessingException {
         return Channel.builder()
                 .code("TATACLIQ_ECOM")
@@ -161,6 +193,26 @@ public class ChannelBuilder {
             public final double maxDeliveryRadius = 5.0;
             public final String[] prioritySlots = {"morning", "evening"};
             public final boolean darkStoreEnabled = true;
+        };
+    }
+
+    private static Object createServiceChannelConfig() {
+        return new Object() {
+            public final String[] serviceTypes = {"Design", "Engineering", "Digital Solutions"};
+            public final String[] deliveryModes = {"Remote", "Onsite", "Hybrid"};
+            public final int standardProjectDuration = 90;
+            public final String[] projectPhases = {"Discovery", "Design", "Development", "Delivery"};
+            public final boolean customizationEnabled = true;
+        };
+    }
+
+    private static Object createConsultingChannelConfig() {
+        return new Object() {
+            public final String[] expertiseAreas = {"Product Design", "Digital Transformation", "Technology Consulting"};
+            public final String[] engagementModels = {"Time & Material", "Fixed Price", "Retainer"};
+            public final int minEngagementDuration = 30;
+            public final String[] deliverables = {"Strategy Document", "Design Specs", "Technical Architecture"};
+            public final boolean remoteConsultingEnabled = true;
         };
     }
     public static Channel createCustomChannel(String code, String name, String description, ChannelType type, String status) {

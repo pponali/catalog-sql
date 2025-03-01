@@ -47,4 +47,5 @@ public abstract class BaseEntity {
     @LastModifiedBy
     @Column(name = "last_modified_by")
     private String lastModifiedBy;
+
 }

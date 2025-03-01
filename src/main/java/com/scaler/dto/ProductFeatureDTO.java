@@ -19,7 +19,6 @@ import java.util.UUID;
 @Setter
 public class ProductFeatureDTO extends BaseDTO {
 
-    private Set<UUID> featureValueIds = new HashSet<>();
     private UUID productId;
 
     private UUID templateId;

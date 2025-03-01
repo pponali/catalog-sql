@@ -1,33 +1,40 @@
-package com.scaler.rules.validation;
+package rules;
 
 import com.scaler.entity.Channel;
+import com.scaler.validation.fact.ChannelValidationFact;
+import java.util.List;
+import java.util.ArrayList;
 
-global java.util.List errors;
+dialect "java"
 
 rule "Validate Channel Name"
+    salience 100
 when
-    $channel: Channel(name == null || name.trim().isEmpty())
+    $fact: ChannelValidationFact(channel != null && (channel.getName() == null || channel.getName().trim().isEmpty()))
 then
-    errors.add("Channel name cannot be empty");
+    $fact.addError("Channel name cannot be empty");
 end
 
 rule "Validate Channel Code"
+    salience 100
 when
-    $channel: Channel(code == null || code.trim().isEmpty())
+    $fact: ChannelValidationFact(channel != null && (channel.getCode() == null || channel.getCode().trim().isEmpty()))
 then
-    errors.add("Channel code cannot be empty");
+    $fact.addError("Channel code cannot be empty");
 end
 
 rule "Validate Channel Type"
+    salience 100
 when
-    $channel: Channel(type == null)
+    $fact: ChannelValidationFact(channel != null && channel.getType() == null)
 then
-    errors.add("Channel type cannot be null");
+    $fact.addError("Channel type cannot be null");
 end
 
 rule "Validate Channel Status"
+    salience 100
 when
-    $channel: Channel(status == null)
+    $fact: ChannelValidationFact(channel != null && channel.getStatus() == null)
 then
-    errors.add("Channel status cannot be null");
+    $fact.addError("Channel status cannot be null");
 end

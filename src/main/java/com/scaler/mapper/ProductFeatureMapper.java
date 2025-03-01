@@ -37,14 +37,13 @@ public interface ProductFeatureMapper extends JsonNodeMapper {
         @Mapping(target = "comparable", source = "comparable"),
         @Mapping(target = "required", source = "required"),
         @Mapping(target = "multiValued", source = "multiValued"),
-        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString"),
-        @Mapping(target = "featureValueIds", expression = "java(entity.getFeatureValues().stream().map(fv -> fv.getId()).collect(java.util.stream.Collectors.toSet()))")
+        @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString")
     })
     ProductFeatureDTO toDTO(ProductFeature entity);
 
     @Mappings({
         @Mapping(target = "id", source = "id"),
-        @Mapping(target = "productMappings", ignore = true),
+
         @Mapping(target = "template", ignore = true),
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "name", source = "name"),
@@ -69,7 +68,7 @@ public interface ProductFeatureMapper extends JsonNodeMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({
-        @Mapping(target = "productMappings", ignore = true),
+
         @Mapping(target = "template", ignore = true),
         @Mapping(target = "unitOfMeasure", ignore = true),
         @Mapping(target = "name", source = "name"),

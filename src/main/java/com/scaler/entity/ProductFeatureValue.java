@@ -1,9 +1,6 @@
 package com.scaler.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,16 +22,14 @@ import java.util.HashSet;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"productMappings", "validationResult"})
-@EqualsAndHashCode(callSuper = true, exclude = {"productMappings", "validationResult"})
+@ToString(callSuper = true, exclude = {"productValueMappings", "validationResult", "feature"})
+@EqualsAndHashCode(callSuper = true, exclude = {"productValueMappings", "validationResult", "feature"})
+@JsonIgnoreProperties({"productValueMappings"})
 public class ProductFeatureValue extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "feature_id", nullable = false)
     private ProductFeature feature;
-
-    @OneToMany(mappedBy = "featureValue", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductFeatureValueMapping> productMappings = new HashSet<>();
 
     @Column(name = "template_id")
     private UUID templateId;
@@ -59,6 +54,10 @@ public class ProductFeatureValue extends BaseEntity {
     @Column(name = "metadata", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode metadata;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @PrePersist
     protected void onCreate() {

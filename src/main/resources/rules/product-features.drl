@@ -1,11 +1,14 @@
-package com.scaler.rules.product;
+package rules;
 
 import com.scaler.entity.ProductFeature;
 import com.scaler.entity.FeatureTemplate;
+import com.scaler.validation.fact.ProductFeatureValidationFact;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
-global java.util.List errors;
+dialect "java"
 
 // Constants
 declare CategoryIds
@@ -17,67 +20,87 @@ end
 
 // Size validation for fashion products
 rule "Validate Fashion Size"
+    salience 100
 when
-    $feature: ProductFeature(
-        template.code == "SIZE",
-        template.getCategoryId() == CategoryIds.FASHION
+    $fact: ProductFeatureValidationFact(
+        feature != null && 
+        feature.getTemplate() != null && 
+        feature.getTemplate().getCode() == "SIZE" &&
+        feature.getTemplate().getCategoryId() == CategoryIds.FASHION &&
+        feature.getValue() != null &&
+        !Arrays.asList("XS", "S", "M", "L", "XL", "XXL").contains(feature.getValue())
     )
-    eval(!Arrays.asList("XS", "S", "M", "L", "XL", "XXL").contains($feature.getValue()))
 then
-    errors.add("Invalid size value for feature " + $feature.getCode());
+    $fact.addError("Invalid size value for feature " + $fact.getFeature().getCode());
 end
 
 // Dosage validation for medicines
 rule "Validate Medicine Dosage"
+    salience 100
 when
-    $feature: ProductFeature(
-        template.code == "DOSAGE",
-        template.getCategoryId() == CategoryIds.MEDICINE
-    )
-    eval(
-        !$feature.getValue().matches("^\\d+(\\.\\d+)?$") || 
-        new BigDecimal($feature.getValue()).compareTo(new BigDecimal("0.1")) < 0 || 
-        new BigDecimal($feature.getValue()).compareTo(new BigDecimal("1000.0")) > 0
+    $fact: ProductFeatureValidationFact(
+        feature != null && 
+        feature.getTemplate() != null && 
+        feature.getTemplate().getCode() == "DOSAGE" &&
+        feature.getTemplate().getCategoryId() == CategoryIds.MEDICINE &&
+        feature.getValue() != null &&
+        (
+            !feature.getValue().matches("^\\d+(\\.\\d+)?$") || 
+            new BigDecimal(feature.getValue()).compareTo(new BigDecimal("0.1")) < 0 || 
+            new BigDecimal(feature.getValue()).compareTo(new BigDecimal("1000.0")) > 0
+        )
     )
 then
-    errors.add("Dosage must be between 0.1 and 1000.0 mg");
+    $fact.addError("Dosage must be between 0.1 and 1000.0 mg");
 end
 
 // Weight validation for grocery products
 rule "Validate Grocery Weight"
+    salience 100
 when
-    $feature: ProductFeature(
-        template.code == "WEIGHT",
-        template.getCategoryId() == CategoryIds.GROCERY
-    )
-    eval(
-        !$feature.getValue().matches("^\\d+(\\.\\d+)?$") || 
-        new BigDecimal($feature.getValue()).compareTo(new BigDecimal("0.001")) < 0 || 
-        new BigDecimal($feature.getValue()).compareTo(new BigDecimal("1000.0")) > 0
+    $fact: ProductFeatureValidationFact(
+        feature != null && 
+        feature.getTemplate() != null && 
+        feature.getTemplate().getCode() == "WEIGHT" &&
+        feature.getTemplate().getCategoryId() == CategoryIds.GROCERY &&
+        feature.getValue() != null &&
+        (
+            !feature.getValue().matches("^\\d+(\\.\\d+)?$") || 
+            new BigDecimal(feature.getValue()).compareTo(new BigDecimal("0.001")) < 0 || 
+            new BigDecimal(feature.getValue()).compareTo(new BigDecimal("1000.0")) > 0
+        )
     )
 then
-    errors.add("Weight must be between 0.001 and 1000.0 kg");
+    $fact.addError("Weight must be between 0.001 and 1000.0 kg");
 end
 
 // Storage validation for electronics
 rule "Validate Electronics Storage"
+    salience 100
 when
-    $feature: ProductFeature(
-        template.code == "STORAGE",
-        template.getCategoryId() == CategoryIds.ELECTRONICS
+    $fact: ProductFeatureValidationFact(
+        feature != null && 
+        feature.getTemplate() != null && 
+        feature.getTemplate().getCode() == "STORAGE" &&
+        feature.getTemplate().getCategoryId() == CategoryIds.ELECTRONICS &&
+        feature.getValue() != null &&
+        !Arrays.asList("64", "128", "256", "512", "1024").contains(feature.getValue())
     )
-    eval(!Arrays.asList("64", "128", "256", "512", "1024").contains($feature.getValue()))
 then
-    errors.add("Invalid storage capacity for feature " + $feature.getCode());
+    $fact.addError("Invalid storage capacity for feature " + $fact.getFeature().getCode());
 end
 
 // Color validation for all products
 rule "Validate Product Color"
+    salience 100
 when
-    $feature: ProductFeature(
-        template.code == "COLOR"
+    $fact: ProductFeatureValidationFact(
+        feature != null && 
+        feature.getTemplate() != null && 
+        feature.getTemplate().getCode() == "COLOR" &&
+        feature.getValue() != null &&
+        !feature.getValue().matches("^[A-Za-z\\s-]{2,50}$")
     )
-    eval(!$feature.getValue().matches("^[A-Za-z\\s-]{2,50}$"))
 then
-    errors.add("Color must be 2-50 characters long and contain only letters, spaces, and hyphens for feature " + $feature.getCode());
+    $fact.addError("Color must be 2-50 characters long and contain only letters, spaces, and hyphens for feature " + $fact.getFeature().getCode());
 end

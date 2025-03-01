@@ -5,29 +5,39 @@ import com.scaler.entity.Category;
 import java.util.regex.Pattern;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
-dialect "mvel"
+dialect "java"
 
 // Helper functions
 function boolean isValidMedicineComposition(String value) {
+    if (value == null || value.trim().isEmpty()) return false;
     try {
         ObjectMapper mapper = new ObjectMapper();
-        Map composition = mapper.readValue(value, Map.class);
+        Map<String, Object> composition = mapper.readValue(value, Map.class);
         return composition != null && !composition.isEmpty() && 
-               composition.values().stream().allMatch(v -> v.toString().matches("^\\d+(\\.\\d+)?\\s*(mg|ml|g)$"));
+               composition.values().stream()
+                   .map(Object::toString)
+                   .allMatch(v -> v.matches("^\\d+(\\.\\d+)?\\s*(mg|ml|g)$"));
     } catch (Exception e) {
         return false;
     }
 }
 
 function boolean isValidStorageTemp(String value) {
+    if (value == null || value.trim().isEmpty()) return false;
     try {
-        if (value == null) return false;
         String[] parts = value.split("-");
         if (parts.length != 2) return false;
         
-        double min = Double.parseDouble(parts[0].replaceAll("[^\\d.-]", ""));
-        double max = Double.parseDouble(parts[1].replaceAll("[^\\d.-]", ""));
+        String minStr = parts[0].replaceAll("[^\\d.-]", "").trim();
+        String maxStr = parts[1].replaceAll("[^\\d.-]", "").trim();
+        
+        if (minStr.isEmpty() || maxStr.isEmpty()) return false;
+        
+        double min = Double.parseDouble(minStr);
+        double max = Double.parseDouble(maxStr);
         
         return min >= 0 && max <= 30 && min <= max;
     } catch (Exception e) {

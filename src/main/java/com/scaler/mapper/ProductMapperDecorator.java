@@ -5,7 +5,7 @@ import com.scaler.dto.ProductFeatureDTO;
 import com.scaler.dto.ProductFeatureValueDTO;
 import com.scaler.dto.ProductFeatureWithValuesDTO;
 import com.scaler.entity.Product;
-import com.scaler.entity.ProductFeatureMapping;
+
 import com.scaler.entity.ProductFeatureValueMapping;
 
 import org.springframework.beans.BeanUtils;
@@ -36,17 +36,19 @@ public abstract class ProductMapperDecorator implements ProductMapper {
         }
 
         // Map features with their values
-        if (entity.getFeatureMappings() != null) {
-            Set<ProductFeatureWithValuesDTO> featuresWithValues = entity.getFeatureMappings().stream()
-                .map(mapping -> {
-                    var feature = mapping.getFeature();
+        if (entity.getFeatureValueMappings() != null) {
+            // Group mappings by feature
+            var featureGroups = entity.getFeatureValueMappings().stream()
+                .collect(Collectors.groupingBy(ProductFeatureValueMapping::getFeature));
+
+            Set<ProductFeatureWithValuesDTO> featuresWithValues = featureGroups.entrySet().stream()
+                .map(entry -> {
+                    var feature = entry.getKey();
                     if (feature == null) return null;
 
-                    // Map feature values
-                    Set<ProductFeatureValueDTO> values = mapping.getFeatureValueMappings().stream()
-                        .map(valueMapping -> {
-                            return featureValueMapper.toDTO(valueMapping.getFeatureValue());
-                        })
+                    // Map feature values from the mappings
+                    Set<ProductFeatureValueDTO> values = entry.getValue().stream()
+                        .map(mapping -> featureValueMapper.toDTO(mapping.getFeatureValue()))
                         .filter(v -> v != null)
                         .collect(Collectors.toSet());
 
@@ -70,10 +72,10 @@ public abstract class ProductMapperDecorator implements ProductMapper {
             return entity;
         }
 
-        // Initialize feature mappings set
-        entity.setFeatureMappings(new HashSet<>());
+        // Initialize feature value mappings set
+        entity.setFeatureValueMappings(new HashSet<>());
 
-        // Create feature mappings with values from features
+        // Create feature value mappings from features
         if (dto.getFeatures() != null) {
             dto.getFeatures().forEach(featureWithValuesDTO -> {
                 // Convert DTO back to regular ProductFeatureDTO for mapping
@@ -82,32 +84,27 @@ public abstract class ProductMapperDecorator implements ProductMapper {
                 
                 var feature = featureMapper.toEntity(featureDTO);
                 if (feature != null) {
-                    var mapping = ProductFeatureMapping.builder()
-                        .product(entity)
-                        .feature(feature)
-                        .displayOrder(1)
-                        .visible(true)
-                        .enabled(true)
-                        .createdBy(dto.getCreatedBy())
-                        .lastModifiedBy(dto.getLastModifiedBy())
-                        .featureValueMappings(new HashSet<>())
-                        .build();
-
-                    // Add feature values to the mapping
+                    // Add feature values
                     if (featureWithValuesDTO.getValues() != null) {
                         featureWithValuesDTO.getValues().forEach(valueDTO -> {
                             var value = featureValueMapper.toEntity(valueDTO);
                             if (value != null) {
                                 var valueMapping = ProductFeatureValueMapping.builder()
-                                    .featureMapping(mapping)
+                                    .product(entity)
+                                    .feature(feature)
                                     .featureValue(value)
+                                    .displayOrder(1)
+                                    .visible(true)
+                                    .enabled(true)
+                                    .isPrimary(false)
+                                    .isActive(true)
+                                    .createdBy(dto.getCreatedBy())
+                                    .lastModifiedBy(dto.getLastModifiedBy())
                                     .build();
-                                mapping.getFeatureValueMappings().add(valueMapping);
+                                entity.getFeatureValueMappings().add(valueMapping);
                             }
                         });
                     }
-
-                    entity.getFeatureMappings().add(mapping);
                 }
             });
         }

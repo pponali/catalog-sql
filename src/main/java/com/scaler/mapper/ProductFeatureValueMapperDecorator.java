@@ -2,6 +2,8 @@ package com.scaler.mapper;
 
 import com.scaler.dto.ProductFeatureValueDTO;
 import com.scaler.entity.ProductFeatureValue;
+import com.scaler.repository.ProductFeatureRepository;
+import com.scaler.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -15,6 +17,12 @@ public abstract class ProductFeatureValueMapperDecorator implements ProductFeatu
     @Autowired
     @Qualifier("delegate")
     private ProductFeatureValueMapper delegate;
+
+    @Autowired
+    private ProductFeatureRepository productFeatureRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     public ProductFeatureValueDTO toDTO(ProductFeatureValue entity) {
@@ -34,6 +42,17 @@ public abstract class ProductFeatureValueMapperDecorator implements ProductFeatu
         if (entity == null) {
             return null;
         }
+
+        if (dto.getFeatureId() != null) {
+            entity.setFeature(productFeatureRepository.findById(dto.getFeatureId())
+                    .orElseThrow(() -> new RuntimeException("Feature not found: " + dto.getFeatureId())));
+        }
+
+        if (dto.getProductId() != null) {
+            entity.setProduct(productRepository.findById(dto.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + dto.getProductId())));
+        }
+
         return entity;
     }
 

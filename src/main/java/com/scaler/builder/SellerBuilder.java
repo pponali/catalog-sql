@@ -101,6 +101,20 @@ public class SellerBuilder {
                 .build();
     }
 
+    public static Seller createTataElxsiSeller(Merchant tataElxsi) {
+        return Seller.builder()
+                .code("ELXSI_SELLER")
+                .name("Tata Elxsi Design Services")
+                .type("DESIGN_SERVICES")
+                .status("ACTIVE")
+                .merchantId(tataElxsi.getId())
+                .createdBy("SYSTEM")
+                .description("Official seller of Tata Elxsi design and engineering services")
+                .contactEmail("support@tataelxsi.com")
+                .contactPhone("+91-80-2297-9166")
+                .build();
+    }
+
     public static Seller createTata1mgSeller(Merchant tata1mg) {
         return Seller.builder()
                 .code("TATA1MG_PHARMACY")

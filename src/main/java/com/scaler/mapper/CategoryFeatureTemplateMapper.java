@@ -4,7 +4,6 @@ import com.scaler.dto.CategoryFeatureTemplateDTO;
 import com.scaler.entity.CategoryFeatureTemplate;
 import com.scaler.mapper.util.MapperUtils;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.Set;
@@ -20,9 +19,6 @@ public interface CategoryFeatureTemplateMapper extends JsonNodeMapper {
             @Mapping(target = "categoryId", source = "category.id"),
             @Mapping(target = "code", source = "code"),
             @Mapping(target = "attributeType", source = "attributeType"),
-            @Mapping(target = "name", source = "name"),
-            @Mapping(target = "description", source = "description"),
-            @Mapping(target = "featureType", source = "featureType"),
             @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString")
     })
     CategoryFeatureTemplateDTO toDTO(CategoryFeatureTemplate entity);
@@ -31,9 +27,6 @@ public interface CategoryFeatureTemplateMapper extends JsonNodeMapper {
             @Mapping(target = "category", ignore = true),
             @Mapping(target = "code", source = "code"),
             @Mapping(target = "attributeType", source = "attributeType"),
-            @Mapping(target = "name", source = "name"),
-            @Mapping(target = "description", source = "description"),
-            @Mapping(target = "featureType", source = "featureType"),
             @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode")
     })
     CategoryFeatureTemplate toEntity(CategoryFeatureTemplateDTO dto);

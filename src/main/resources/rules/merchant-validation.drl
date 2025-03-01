@@ -1,33 +1,40 @@
-package com.scaler.rules.validation;
+package rules;
 
 import com.scaler.entity.Merchant;
+import com.scaler.validation.fact.MerchantValidationFact;
+import java.util.List;
+import java.util.ArrayList;
 
-global java.util.List errors;
+dialect "java"
 
 rule "Validate Merchant Name"
+    salience 100
 when
-    $merchant: Merchant(name == null || name.trim().isEmpty())
+    $fact: MerchantValidationFact(merchant != null && (merchant.getName() == null || merchant.getName().trim().isEmpty()))
 then
-    errors.add("Merchant name cannot be empty");
+    $fact.addError("Merchant name cannot be empty");
 end
 
 rule "Validate Merchant Code"
+    salience 100
 when
-    $merchant: Merchant(code == null || code.trim().isEmpty())
+    $fact: MerchantValidationFact(merchant != null && (merchant.getCode() == null || merchant.getCode().trim().isEmpty()))
 then
-    errors.add("Merchant code cannot be empty");
+    $fact.addError("Merchant code cannot be empty");
 end
 
 rule "Validate Merchant Status"
+    salience 100
 when
-    $merchant: Merchant(status == null)
+    $fact: MerchantValidationFact(merchant != null && merchant.getStatus() == null)
 then
-    errors.add("Merchant status cannot be null");
+    $fact.addError("Merchant status cannot be null");
 end
 
 rule "Validate Merchant Contact"
+    salience 100
 when
-    $merchant: Merchant(contactEmail == null || contactEmail.trim().isEmpty())
+    $fact: MerchantValidationFact(merchant != null && (merchant.getContactEmail() == null || merchant.getContactEmail().trim().isEmpty()))
 then
-    errors.add("Merchant contact email cannot be empty");
+    $fact.addError("Merchant contact email cannot be empty");
 end

@@ -24,8 +24,8 @@ import static lombok.Builder.Default;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-@ToString(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts", "productPlatforms"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts", "productPlatforms"})
+@ToString(callSuper = true, exclude = {"catalog", "productCategories", "merchant", "channels", "sellerProducts", "productPlatforms", "featureValueMappings"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "merchant", "channels", "sellerProducts", "productPlatforms", "featureValueMappings"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product extends BaseEntity {
@@ -63,10 +63,11 @@ public class Product extends BaseEntity {
     @Builder.Default
     private List<ProductAttribute> attributes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference("product-features")
+    @JsonIgnoreProperties({"product"})
     @Builder.Default
-    private Set<ProductFeatureMapping> featureMappings = new HashSet<>();
+    private Set<ProductFeatureValueMapping> featureValueMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchant_id", nullable = false)
@@ -102,8 +103,8 @@ public class Product extends BaseEntity {
         productCategory.setProduct(null);
     }
 
-    public void addFeatureMapping(ProductFeatureMapping mapping) {
-        featureMappings.add(mapping);
+    public void addFeatureValueMapping(ProductFeatureValueMapping mapping) {
+        featureValueMappings.add(mapping);
         mapping.setProduct(this);
     }
 
@@ -152,8 +153,8 @@ public class Product extends BaseEntity {
                 .collect(Collectors.toSet());
     }*/
 
-    public void removeFeatureMapping(ProductFeatureMapping mapping) {
-        featureMappings.remove(mapping);
+    public void removeFeatureValueMapping(ProductFeatureValueMapping mapping) {
+        featureValueMappings.remove(mapping);
         mapping.setProduct(null);
     }
 

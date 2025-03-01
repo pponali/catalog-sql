@@ -19,7 +19,8 @@ public interface ProductMapper  {
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "code", source = "code"),
-            @Mapping(target = "status", source = "status")
+            @Mapping(target = "status", source = "status"),
+            @Mapping(target = "features", ignore = true)
     })
     ProductDTO toDTO(Product entity);
 

@@ -7,7 +7,16 @@ import com.scaler.entity.SellerProduct;
 
 public class SellerProductBuilder {
 
-    public static SellerProduct createSellerProduct(Seller seller, Product product, Merchant merchant){
+    public static SellerProduct createDesignServiceProduct(Seller seller, Product product) {
+        return SellerProduct.builder()
+                .product(product)
+                .seller(seller)
+                .status("ACTIVE")
+                .createdBy("SYSTEM")
+                .build();
+    }
+
+    public static SellerProduct createSellerProduct(Seller seller, Product product, Merchant merchant) {
         return SellerProduct.builder()
                 .product(product)
                 .merchant(merchant)
