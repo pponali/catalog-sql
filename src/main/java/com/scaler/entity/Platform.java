@@ -7,6 +7,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "platform")
 @Getter
@@ -14,8 +17,8 @@ import org.hibernate.annotations.Type;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true, exclude = {"productPlatforms", "channel"})
+@EqualsAndHashCode(callSuper = true, exclude = {"productPlatforms", "channel"})
 public class Platform extends BaseEntity {
 
     @Column(name = "code", nullable = false, unique = true)
@@ -46,4 +49,43 @@ public class Platform extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_id", nullable = false)
     private Channel channel;
+
+    @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<ProductPlatform> productPlatforms = new HashSet<>();
+
+    public void addProduct(Product product) {
+        ProductPlatform productPlatform = ProductPlatform.builder()
+                .product(product)
+                .platform(this)
+                .isActive(true)
+                .displayOrder(productPlatforms.size() + 1)
+                .status("ACTIVE")
+                .build();
+        productPlatforms.add(productPlatform);
+    }
+
+    public void removeProduct(Product product) {
+        productPlatforms.removeIf(pp -> pp.getProduct().equals(product));
+    }
+
+    public void deactivateProduct(Product product) {
+        productPlatforms.stream()
+                .filter(pp -> pp.getProduct().equals(product))
+                .findFirst()
+                .ifPresent(pp -> {
+                    pp.setIsActive(false);
+                    pp.setStatus("INACTIVE");
+                });
+    }
+
+    public void activateProduct(Product product) {
+        productPlatforms.stream()
+                .filter(pp -> pp.getProduct().equals(product))
+                .findFirst()
+                .ifPresent(pp -> {
+                    pp.setIsActive(true);
+                    pp.setStatus("ACTIVE");
+                });
+    }
 }

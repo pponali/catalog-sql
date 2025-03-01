@@ -24,8 +24,8 @@ import static lombok.Builder.Default;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-@ToString(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts"})
+@ToString(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts", "productPlatforms"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts", "productPlatforms"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product extends BaseEntity {
@@ -88,6 +88,10 @@ public class Product extends BaseEntity {
     @Builder.Default
     private Set<SellerProduct> sellerProducts = new HashSet<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<ProductPlatform> productPlatforms = new HashSet<>();
+
     public void addProductCategory(ProductCategory productCategory) {
         productCategories.add(productCategory);
         productCategory.setProduct(this);
@@ -141,12 +145,12 @@ public class Product extends BaseEntity {
                 .orElse(false);
     }
 
-    public Set<Channel> getEnabledChannels() {
+    /*public Set<Channel> getEnabledChannels() {
         return productChannels.stream()
                 .filter(ProductChannel::getIsEnabled)
                 .map(ProductChannel::getChannel)
                 .collect(Collectors.toSet());
-    }
+    }*/
 
     public void removeFeatureMapping(ProductFeatureMapping mapping) {
         featureMappings.remove(mapping);
@@ -169,6 +173,41 @@ public class Product extends BaseEntity {
 
     public void setCatalog(Catalog catalog) {
         this.catalog = catalog;
+    }
+
+    public void addProductPlatform(Platform platform) {
+        ProductPlatform productPlatform = ProductPlatform.builder()
+                .product(this)
+                .platform(platform)
+                .isActive(true)
+                .displayOrder(productPlatforms.size() + 1)
+                .status("ACTIVE")
+                .build();
+        productPlatforms.add(productPlatform);
+    }
+
+    public void removeProductPlatform(Platform platform) {
+        productPlatforms.removeIf(pp -> pp.getPlatform().equals(platform));
+    }
+
+    public void deactivateProductPlatform(Platform platform) {
+        productPlatforms.stream()
+                .filter(pp -> pp.getPlatform().equals(platform))
+                .findFirst()
+                .ifPresent(pp -> {
+                    pp.setIsActive(false);
+                    pp.setStatus("INACTIVE");
+                });
+    }
+
+    public void activateProductPlatform(Platform platform) {
+        productPlatforms.stream()
+                .filter(pp -> pp.getPlatform().equals(platform))
+                .findFirst()
+                .ifPresent(pp -> {
+                    pp.setIsActive(true);
+                    pp.setStatus("ACTIVE");
+                });
     }
 
 

@@ -6,7 +6,8 @@ public enum PlatformType {
     DESKTOP_WEB("Desktop Web"),
     MOBILE_WEB("Mobile Web"),
     KIOSK("Kiosk"),
-    POS("Point of Sale");
+    POS("Point of Sale"),
+    TABLET("Tablet");
 
     private final String displayName;
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.builder.*;
 import com.scaler.entity.*;
+import com.scaler.entity.enums.PlatformType;
 import com.scaler.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,6 +80,9 @@ public class DemoService {
 
     @Autowired
     ValidationBuilder validationBuilder;
+
+    @Autowired
+    private ProductPlatformRepository productPlatformRepository;
 
 
 
@@ -361,6 +365,62 @@ public class DemoService {
             sellerProductRepository.save(iPhoneCroma);
 
             //useCases(macBookPro, laptopCategory, croma, bigBasketEcom, ram, tataCliqSeller, tanishq, tataCliqMarketplace, iPhone, smartphoneCategory, bigBasket, iPhoneram, cromaSeller, iPhoneTataCliq, tanishqSeller, goldNecklace, tataCliq, goldBangles);
+
+            // Create platforms
+            Platform webPlatform = Platform.builder()
+                    .name("Web")
+                    .code("WEB")
+                    .channel(bigBasketEcom)
+                    .type(PlatformType.DESKTOP_WEB)
+                    .description("Web Platform")
+                    .createdBy("SYSTEM")
+                    .build();
+            platformRepository.save(webPlatform);
+
+            Platform mobilePlatform = Platform.builder()
+                    .name("Mobile")
+                    .code("MOBILE")
+                    .type(PlatformType.MOBILE_APP_IOS)
+                    .channel(bigBasketEcom)
+                    .description("Mobile Platform")
+                    .createdBy("SYSTEM")
+                    .build();
+            platformRepository.save(mobilePlatform);
+
+            Platform tabletPlatform = Platform.builder()
+                    .name("Tablet")
+                    .code("TABLET")
+                    .type(PlatformType.MOBILE_APP_ANDROID)
+                    .channel(bigBasketEcom)
+                    .description("Tablet Platform")
+                    .createdBy("SYSTEM")
+                    .build();
+            platformRepository.save(tabletPlatform);
+
+            // Create product-platform mappings
+            // MacBook Pro available on Web and Tablet
+            ProductPlatform macBookWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(macBookPro, webPlatform);
+            productPlatformRepository.save(macBookWebPlatform);
+
+            ProductPlatform macBookTabletPlatform = ProductPlatformBuilder.createActiveProductPlatform(macBookPro, tabletPlatform);
+            productPlatformRepository.save(macBookTabletPlatform);
+
+            // iPhone available on all platforms
+            ProductPlatform iPhoneWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(iPhone, webPlatform);
+            productPlatformRepository.save(iPhoneWebPlatform);
+
+            ProductPlatform iPhoneMobilePlatform = ProductPlatformBuilder.createActiveProductPlatform(iPhone, mobilePlatform);
+            productPlatformRepository.save(iPhoneMobilePlatform);
+
+            ProductPlatform iPhoneTabletPlatform = ProductPlatformBuilder.createActiveProductPlatform(iPhone, tabletPlatform);
+            productPlatformRepository.save(iPhoneTabletPlatform);
+
+            // Gold necklace available on Web and Mobile
+            ProductPlatform necklaceWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(goldNecklace, webPlatform);
+            productPlatformRepository.save(necklaceWebPlatform);
+
+            ProductPlatform necklaceMobilePlatform = ProductPlatformBuilder.createActiveProductPlatform(goldNecklace, mobilePlatform);
+            productPlatformRepository.save(necklaceMobilePlatform);
 
             //validationBuilder.validationRules();
 

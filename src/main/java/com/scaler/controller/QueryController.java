@@ -76,4 +76,19 @@ public class QueryController {
     public ResponseEntity<List<Merchant>> getMerchantsByChannel(@PathVariable UUID channelId) {
         return ResponseEntity.ok(queryService.getMerchantsByChannel(channelId));
     }
+
+    @GetMapping("/products/platform/{platformId}")
+    public ResponseEntity<List<Product>> getProductsByPlatform(@PathVariable UUID platformId) {
+        return ResponseEntity.ok(queryService.getProductsByPlatform(platformId));
+    }
+
+    @GetMapping("/products/platform/code/{platformCode}")
+    public ResponseEntity<List<Product>> getProductsByPlatformCode(@PathVariable String platformCode) {
+        return ResponseEntity.ok(queryService.getProductsByPlatformCode(platformCode));
+    }
+
+    @GetMapping("/platforms/product/{productId}")
+    public ResponseEntity<List<Platform>> getPlatformsByProduct(@PathVariable UUID productId) {
+        return ResponseEntity.ok(queryService.getPlatformsByProduct(productId));
+    }
 }

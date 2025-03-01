@@ -32,4 +32,7 @@ public interface QueryRepository extends JpaRepository<Product, String> {
 
     @Query("SELECT DISTINCT m FROM Merchant m JOIN Seller s JOIN s.sellerProducts sp JOIN sp.product p JOIN p.productChannels pc JOIN pc.channel c WHERE c.id = :channelId")
     List<Merchant> findMerchantsByChannel(@Param("channelId") UUID channelId);
+
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.productPlatforms pp WHERE pp.platform.id = :platformId AND pp.isActive = true")
+    List<Product> findProductsByPlatform(@Param("platformId") UUID platformId);
 }

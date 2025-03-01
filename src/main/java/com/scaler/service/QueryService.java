@@ -1,6 +1,5 @@
 package com.scaler.service;
 
-import com.scaler.dto.*;
 import com.scaler.entity.*;
 import com.scaler.mapper.*;
 import com.scaler.repository.*;
@@ -49,6 +48,9 @@ public class QueryService {
     @Autowired
     private SellerMapper sellerMapper;
 
+    @Autowired
+    private ProductPlatformRepository productPlatformRepository;
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -95,5 +97,25 @@ public class QueryService {
 
     public List<Merchant> getMerchantsByChannel(UUID channelId) {
         return queryRepository.findMerchantsByChannel(channelId);
+    }
+
+    public List<Product> getProductsByPlatform(UUID platformId) {
+        return queryRepository.findProductsByPlatform(platformId);
+    }
+
+    public List<Product> getProductsByPlatformCode(String platformCode) {
+        return productPlatformRepository.findActiveProductsByPlatformCode(platformCode).stream()
+                .map(ProductPlatform::getProduct)
+                .collect(Collectors.toList());
+    }
+
+    public List<Platform> getPlatformsByProduct(UUID productId) {
+        return productPlatformRepository.findActivePlatformsByProductId(productId).stream()
+                .map(ProductPlatform::getPlatform)
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> getProductsByPlatformId(UUID platformId) {
+        return queryRepository.findProductsByPlatform(platformId);
     }
 }
