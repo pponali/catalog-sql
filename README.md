@@ -1,4 +1,7 @@
-# Catalog SQL DB POC
+# Universal Commerce Platform - Catalog Service
+
+A unified catalog service designed for the various business formats of an e-commerce, marketplace, or physical platform. 
+This service provides a flexible and scalable solution for managing products across different channels and platforms.
 
 A Spring Boot application with PostgreSQL database integration, featuring Spring DevTools, Actuator, OpenAPI documentation, and JPA.
 
@@ -17,6 +20,7 @@ A Spring Boot application with PostgreSQL database integration, featuring Spring
 
 ## Core Features
 
+### Technical Stack
 - Spring Boot 3.2.1
 - Spring Data JPA
 - PostgreSQL Integration
@@ -24,6 +28,42 @@ A Spring Boot application with PostgreSQL database integration, featuring Spring
 - Spring Actuator for monitoring
 - OpenAPI/Swagger Documentation
 - Lombok for reducing boilerplate code
+
+### Business Features
+
+1. **Product-Platform Mapping**
+   - Bidirectional relationships between Products and Platforms
+   - Platform-specific product visibility control
+   - Support for multiple platform types (Mobile, Web, Kiosk)
+   - Display order customization
+   - Active/Inactive status management
+
+2. **Multi-Channel Support**
+   - E-commerce channel integration
+   - Marketplace support
+   - Physical store integration
+   - Quick commerce capabilities
+   - Channel-specific catalogs
+
+3. **Product Management**
+   - Comprehensive product information
+   - Unit of measure support (pieces, weight, volume)
+   - SKU management
+   - Price management
+   - Inventory tracking
+
+4. **Merchant & Store Management**
+   - Multi-merchant support
+   - Store management
+   - Seller integration
+   - Channel-store relationships
+
+5. **Platform Support**
+   - Mobile Apps (Android/iOS)
+   - Desktop Web
+   - Mobile Web
+   - Kiosk Integration
+   - Platform-specific configurations
 
 ## Flexible Feature System
 
@@ -397,7 +437,7 @@ The application uses Spring DevTools for automatic restart during development. A
 
 ## Sample Data
 
-The application includes sample data in `src/main/resources/data.sql` that demonstrates the flexible feature system across Tata Group's diverse product categories:
+The application includes sample data in `src/main/resources/data.sql` that demonstrates the flexible feature system across Business Domains and diverse product categories:
 
 ### BigBasket (Grocery)
 - Categories:
@@ -472,7 +512,7 @@ The application includes sample data in `src/main/resources/data.sql` that demon
   }
   ```
 
-### Tata CLiQ (Fashion)
+### Fashion
 - Categories:
   - Mens Fashion
   - Womens Fashion
@@ -507,10 +547,10 @@ The application includes sample data in `src/main/resources/data.sql` that demon
    - Type validation
 
 2. **Category-Specific Validation**
-   - BigBasket: FSSAI compliance, expiry tracking
-   - 1mg: Prescription validation, drug interactions
-   - Tanishq: Purity certification, stone grading
-   - Tata CLiQ: Size validation, brand authenticity
+   - Grocery: FSSAI compliance, expiry tracking
+   - Medicines: Prescription validation, drug interactions
+   - Jewelry: Purity certification, stone grading
+   - Fashion: Size validation, brand authenticity
 
 3. **Search Capabilities**
    - Full-text search across attributes
