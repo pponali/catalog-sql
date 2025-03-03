@@ -227,4 +227,66 @@ public class ChannelBuilder {
                 .displayOrder(0)
                 .build();
     }
+
+    public static Channel createTata1mgEcommerceChannel(Store tata1mgStore) throws JsonProcessingException {
+        return Channel.builder()
+                .code("TATA1MG_ECOM")
+                .name("Tata 1mg E-commerce")
+                .description("Online pharmacy")
+                .status("ACTIVE")
+                .type(ChannelType.ECOMMERCE)
+                .store(tata1mgStore)
+                .enabled(true)
+                .visibility(true)
+                .displayOrder(1)
+                .createdBy("SYSTEM")
+                .channelConfig(objectMapper.writeValueAsString(createEcommerceConfig()))
+                .build();
+    }
+
+    public static Channel createTata1mgPhysicalStoreChannel(Store tata1mgStore) throws JsonProcessingException {
+        return Channel.builder()
+                .code("TATA1MG_STORE")
+                .name("Tata 1mg Store")
+                .description("Physical pharmacy")
+                .status("ACTIVE")
+                .type(ChannelType.PHYSICAL_STORE)
+                .store(tata1mgStore)
+                .enabled(true)
+                .visibility(true)
+                .displayOrder(2)
+                .createdBy("SYSTEM")
+                .channelConfig(objectMapper.writeValueAsString(createPhysicalStoreConfig()))
+                .build();
+    }
+
+    public static Channel createTanishqEcommerceChannel(Store tanishqStore) {
+        return Channel.builder()
+                .code("TANISHQ_ECOM")
+                .name("Tanishq E-commerce")
+                .description("Online pharmacy")
+                .status("ACTIVE")
+                .type(ChannelType.ECOMMERCE)
+                .store(tanishqStore)
+                .enabled(true)
+                .visibility(true)
+                .displayOrder(1)
+                .createdBy("SYSTEM")
+                .build();
+    }
+
+    public static Channel createTanishqPhysicalStoreChannel(Store tanishqStore) {
+        return Channel.builder()
+                .code("TANISHQ_STORE")
+                .name("Tanishq Store")
+                .description("Physical pharmacy")
+                .status("ACTIVE")
+                .type(ChannelType.PHYSICAL_STORE)
+                .store(tanishqStore)
+                .enabled(true)
+                .visibility(true)
+                .displayOrder(2)
+                .createdBy("SYSTEM")
+                .build();
+    }
 }

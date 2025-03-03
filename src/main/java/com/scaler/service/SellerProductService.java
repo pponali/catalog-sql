@@ -115,12 +115,7 @@ public class SellerProductService {
         sellerProductRepository.deleteById(id);
     }
     
-    @Transactional(readOnly = true)
-    public SellerProductDTO findManufacturer(UUID productId) {
-        return sellerProductRepository.findManufacturerForProduct(productId)
-            .map(sellerProductMapper::toDTO)
-            .orElseThrow(() -> new ResourceNotFoundException("Manufacturer not found for product"));
-    }
+
     
     @Transactional
     public void updateStock(UUID id, Integer quantity) {

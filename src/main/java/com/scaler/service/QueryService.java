@@ -103,15 +103,16 @@ public class QueryService {
         return queryRepository.findProductsByPlatform(platformId);
     }
 
-    public List<Product> getProductsByPlatformCode(String platformCode) {
+    public List<Product> getProductsByPlatformCode(UUID platformCode) {
         return productPlatformRepository.findActiveProductsByPlatformCode(platformCode).stream()
-                .map(ProductPlatform::getProduct)
+                .distinct()
                 .collect(Collectors.toList());
     }
 
     public List<Platform> getPlatformsByProduct(UUID productId) {
         return productPlatformRepository.findActivePlatformsByProductId(productId).stream()
-                .map(ProductPlatform::getPlatform)
+                .distinct()
+                .sorted()
                 .collect(Collectors.toList());
     }
 

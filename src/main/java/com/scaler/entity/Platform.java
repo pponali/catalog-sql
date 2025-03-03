@@ -5,6 +5,7 @@ import com.scaler.entity.enums.PlatformType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.Builder;
 import org.hibernate.annotations.Type;
 
 import java.util.HashSet;
@@ -51,7 +52,6 @@ public class Platform extends BaseEntity {
     private Channel channel;
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<ProductPlatform> productPlatforms = new HashSet<>();
 
     public void addProduct(Product product) {

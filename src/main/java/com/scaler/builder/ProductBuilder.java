@@ -24,6 +24,7 @@ public class ProductBuilder {
                 .merchant(merchant)
                 .productType(ProductType.SIMPLE)
                 .metadata(metadata.toString())
+                .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())
@@ -50,6 +51,7 @@ public class ProductBuilder {
                 .description("Dell XPS 15 with Intel i9 processor")
                 .status("ACTIVE")
                 .metadata(metadata.toString())
+                .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())
@@ -76,6 +78,7 @@ public class ProductBuilder {
                 .description("Apple iPhone 15 Pro Max")
                 .status("ACTIVE")
                 .metadata(metadata.toString())
+                .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())
@@ -102,6 +105,7 @@ public class ProductBuilder {
                 .description("22K Gold Traditional Wedding Necklace")
                 .status("ACTIVE")
                 .metadata(metadata.toString())
+                .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())
@@ -140,7 +144,107 @@ public class ProductBuilder {
     }
 
 
+    public static Product createSamsungGalaxy(Category smartphoneCategory, Merchant tataCliq) {
+        return Product.builder()
+                .code("SAMSUNG-GALAXY-15")
+                .productType(ProductType.SIMPLE)
+                .merchant(tataCliq)
+                .status("ACTIVE")
+                .productCategories(new HashSet<>())
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .metadata("{}")
+                .name("Samsung Galaxy 15")
+                .description("Samsung Galaxy 15 with Snapdragon 8 Gen 2 processor")
+                .build();
+    }
+
+    public static Product createAppleWatch(Category smartphoneCategory, Merchant tataCliq) {
+        return Product.builder()
+                .code("APPLE-WATCH-15")
+                .productType(ProductType.SIMPLE)
+                .merchant(tataCliq)
+                .status("ACTIVE")
+                .productCategories(new HashSet<>())
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .metadata("{}")
+                .name("Apple Watch 15")
+                .description("Apple Watch 15 with M2 chip")
+                .build();
+    }
+
+    public static Product createHPSpectre(Category laptopCategory, Merchant croma) {
+        return Product.builder()
+                .code("HP-SPECTRE-15")
+                .productType(ProductType.SIMPLE)
+                .merchant(croma)
+                .status("ACTIVE")
+                .productCategories(new HashSet<>())
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .metadata("{}")
+                .name("HP Spectre 15")
+                .description("HP Spectre 15 with 12th Gen Intel Core i7 processor")
+                .build();
+    }
+
+    public static Product createDiamondRing(Category necklaceCategory, Merchant tanishq) {
+        return Product.builder()
+                .code("TNSHQ-RNG-001")
+                .productType(ProductType.SIMPLE)
+                .merchant(tanishq)
+                .status("ACTIVE")
+                .productCategories(new HashSet<>())
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .metadata("{}")
+                .name("Divyam Diamond Ring")
+                .description("22K Diamond Traditional Wedding Ring")
+                .build();
 
 
+    }
 
+    public static Product createParacetamol(Category medicinesCategory, Merchant tata1mg) {
+        return Product.builder()
+                .code("TATA-1MG-001")
+                .productType(ProductType.SIMPLE)
+                .merchant(tata1mg)
+                .status("ACTIVE")
+                .productCategories(new HashSet<>())
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .metadata("{}")
+                .name("Paracetamol")
+                .description("Paracetamol for fever")
+                .build();
+    }
+
+    public static Product createFreshApples(Category freshProduceCategory, Merchant bigBasket) {
+        return Product.builder()
+                .code("BIG-BASKET-001")
+                .productType(ProductType.SIMPLE)
+                .merchant(bigBasket)
+                .status("ACTIVE")
+                .productCategories(new HashSet<>())
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .metadata("{}")
+                .name("Fresh Apples")
+                .description("Fresh Apples")
+                .build();
+    }
 }

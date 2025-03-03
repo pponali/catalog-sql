@@ -3,6 +3,7 @@ package com.scaler.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.Builder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import com.fasterxml.jackson.annotation.*;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static lombok.Builder.Default;
+import lombok.Builder;
 
 @Entity
 @Table(name = "product")
@@ -56,17 +57,14 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
-    @Builder.Default
     private Set<ProductCategory> productCategories = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private List<ProductAttribute> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference("product-features")
     @JsonIgnoreProperties({"product"})
-    @Builder.Default
     private Set<ProductFeatureValueMapping> featureValueMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -82,28 +80,33 @@ public class Product extends BaseEntity {
     private UnitOfMeasure unitOfMeasure;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<ProductChannel> productChannels = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Builder.Default
     private Set<SellerProduct> sellerProducts = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<ProductPlatform> productPlatforms = new HashSet<>();
 
     public void addProductCategory(ProductCategory productCategory) {
+        if (productCategories == null) {
+            productCategories = new HashSet<>();
+        }
         productCategories.add(productCategory);
         productCategory.setProduct(this);
     }
 
     public void removeProductCategory(ProductCategory productCategory) {
-        productCategories.remove(productCategory);
-        productCategory.setProduct(null);
+        if (productCategories != null) {
+            productCategories.remove(productCategory);
+            productCategory.setProduct(null);
+        }
     }
 
     public void addFeatureValueMapping(ProductFeatureValueMapping mapping) {
+        if (featureValueMappings == null) {
+            featureValueMappings = new HashSet<>();
+        }
         featureValueMappings.add(mapping);
         mapping.setProduct(this);
     }
@@ -117,28 +120,40 @@ public class Product extends BaseEntity {
                 .createdBy("SYSTEM")
                 .effectiveFrom(LocalDateTime.now())
                 .build();
+        if (productChannels == null) {
+            productChannels = new HashSet<>();
+        }
         productChannels.add(productChannel);
     }
 
     public void removeProductChannel(Channel channel) {
-        productChannels.removeIf(pc -> pc.getChannel().equals(channel));
+        if (productChannels != null) {
+            productChannels.removeIf(pc -> pc.getChannel().equals(channel));
+        }
     }
 
     public void disableProductChannel(Channel channel) {
-        productChannels.stream()
-                .filter(pc -> pc.getChannel().equals(channel))
-                .findFirst()
-                .ifPresent(pc -> pc.setIsEnabled(false));
+        if (productChannels != null) {
+            productChannels.stream()
+                    .filter(pc -> pc.getChannel().equals(channel))
+                    .findFirst()
+                    .ifPresent(pc -> pc.setIsEnabled(false));
+        }
     }
 
     public void enableProductChannel(Channel channel) {
-        productChannels.stream()
-                .filter(pc -> pc.getChannel().equals(channel))
-                .findFirst()
-                .ifPresent(pc -> pc.setIsEnabled(true));
+        if (productChannels != null) {
+            productChannels.stream()
+                    .filter(pc -> pc.getChannel().equals(channel))
+                    .findFirst()
+                    .ifPresent(pc -> pc.setIsEnabled(true));
+        }
     }
 
     public boolean isEnabledForChannel(Channel channel) {
+        if (productChannels == null) {
+            return false;
+        }
         return productChannels.stream()
                 .filter(pc -> pc.getChannel().equals(channel))
                 .findFirst()
@@ -154,11 +169,16 @@ public class Product extends BaseEntity {
     }*/
 
     public void removeFeatureValueMapping(ProductFeatureValueMapping mapping) {
-        featureValueMappings.remove(mapping);
-        mapping.setProduct(null);
+        if (featureValueMappings != null) {
+            featureValueMappings.remove(mapping);
+            mapping.setProduct(null);
+        }
     }
 
     public void addSellerProduct(SellerProduct sellerProduct) {
+        if (sellerProducts == null) {
+            sellerProducts = new HashSet<>();
+        }
         sellerProducts.add(sellerProduct);
         sellerProduct.setProduct(this);
     }
@@ -168,8 +188,10 @@ public class Product extends BaseEntity {
     }
 
     public void removeSellerProduct(SellerProduct sellerProduct) {
-        sellerProducts.remove(sellerProduct);
-        sellerProduct.setProduct(null);
+        if (sellerProducts != null) {
+            sellerProducts.remove(sellerProduct);
+            sellerProduct.setProduct(null);
+        }
     }
 
     public void setCatalog(Catalog catalog) {
@@ -177,6 +199,9 @@ public class Product extends BaseEntity {
     }
 
     public void addProductPlatform(Platform platform) {
+        if (productPlatforms == null) {
+            productPlatforms = new HashSet<>();
+        }
         ProductPlatform productPlatform = ProductPlatform.builder()
                 .product(this)
                 .platform(platform)
@@ -188,27 +213,33 @@ public class Product extends BaseEntity {
     }
 
     public void removeProductPlatform(Platform platform) {
-        productPlatforms.removeIf(pp -> pp.getPlatform().equals(platform));
+        if (productPlatforms != null) {
+            productPlatforms.removeIf(pp -> pp.getPlatform().equals(platform));
+        }
     }
 
     public void deactivateProductPlatform(Platform platform) {
-        productPlatforms.stream()
-                .filter(pp -> pp.getPlatform().equals(platform))
-                .findFirst()
-                .ifPresent(pp -> {
-                    pp.setIsActive(false);
-                    pp.setStatus("INACTIVE");
-                });
+        if (productPlatforms != null) {
+            productPlatforms.stream()
+                    .filter(pp -> pp.getPlatform().equals(platform))
+                    .findFirst()
+                    .ifPresent(pp -> {
+                        pp.setIsActive(false);
+                        pp.setStatus("INACTIVE");
+                    });
+        }
     }
 
     public void activateProductPlatform(Platform platform) {
-        productPlatforms.stream()
-                .filter(pp -> pp.getPlatform().equals(platform))
-                .findFirst()
-                .ifPresent(pp -> {
-                    pp.setIsActive(true);
-                    pp.setStatus("ACTIVE");
-                });
+        if (productPlatforms != null) {
+            productPlatforms.stream()
+                    .filter(pp -> pp.getPlatform().equals(platform))
+                    .findFirst()
+                    .ifPresent(pp -> {
+                        pp.setIsActive(true);
+                        pp.setStatus("ACTIVE");
+                    });
+        }
     }
 
 

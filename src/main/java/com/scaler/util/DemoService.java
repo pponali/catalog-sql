@@ -133,33 +133,57 @@ public class DemoService {
             bigBasketStore.addChannel(bigBasketEcom);
             bigBasketStore.addChannel(bigBasketQuick);
 
+            // 1mg Channels
+            Channel tata1mgEcom = channelRepository.save(ChannelBuilder.createTata1mgEcommerceChannel(tata1mgStore));
+            Channel tata1mgPhysical = channelRepository.save(ChannelBuilder.createTata1mgPhysicalStoreChannel(tata1mgStore));
+            tata1mgStore.addChannel(tata1mgEcom);
+            tata1mgStore.addChannel(tata1mgPhysical);
+
+            // Tanishq Channels
+            Channel tanishqEcom = channelRepository.save(ChannelBuilder.createTanishqEcommerceChannel(tanishqStore));
+            Channel tanishqPhysical = channelRepository.save(ChannelBuilder.createTanishqPhysicalStoreChannel(tanishqStore));
+            tanishqStore.addChannel(tanishqEcom);
+            tanishqStore.addChannel(tanishqPhysical);
 
             // Save the updated stores
             storeRepository.save(tataCliqStore);
             storeRepository.save(cromaStore);
             storeRepository.save(bigBasketStore);
+            storeRepository.save(tata1mgStore);
+            storeRepository.save(tanishqStore);
 
             // Create platforms for TataCliq ecommerce channel
-            platformRepository.save(PlatformBuilder.createMobileAppAndroid(tataCliqEcom, "CLIQ_ANDROID"));
-            platformRepository.save(PlatformBuilder.createMobileAppIOS(tataCliqEcom,"CLIQ_IOS"));
-            platformRepository.save(PlatformBuilder.createDesktopWeb(tataCliqEcom, "CLIQ_DESKTOP"));
-            platformRepository.save(PlatformBuilder.createMobileWeb(tataCliqEcom,"CLIQ_MWEB"));
-            platformRepository.save(PlatformBuilder.createKiosk(tataCliqEcom,"CLIQ_KIOSK"));
+            Platform cliqAndroid = platformRepository.save(PlatformBuilder.createMobileAppAndroid(tataCliqEcom, "CLIQ_ANDROID"));
+            Platform cliqIOS = platformRepository.save(PlatformBuilder.createMobileAppIOS(tataCliqEcom,"CLIQ_IOS"));
+            Platform cliqDesktop = platformRepository.save(PlatformBuilder.createDesktopWeb(tataCliqEcom, "CLIQ_DESKTOP"));
+            Platform cliqMweb = platformRepository.save(PlatformBuilder.createMobileWeb(tataCliqEcom,"CLIQ_MWEB"));
+            Platform cliqKiosk = platformRepository.save(PlatformBuilder.createKiosk(tataCliqEcom,"CLIQ_KIOSK"));
 
             // Create platforms for Croma ecommerce channel
-            platformRepository.save(PlatformBuilder.createMobileAppAndroid(tataCliqEcom, "CROMA_ANDROID"));
-            platformRepository.save(PlatformBuilder.createMobileAppIOS(tataCliqEcom,"CROMA_IOS"));
-            platformRepository.save(PlatformBuilder.createDesktopWeb(tataCliqEcom, "CROMA_DESKTOP"));
-            platformRepository.save(PlatformBuilder.createMobileWeb(tataCliqEcom,"CROMA_MWEB"));
-            platformRepository.save(PlatformBuilder.createKiosk(tataCliqEcom,"CROMA_KIOSK"));
+            Platform cromaAndroid = platformRepository.save(PlatformBuilder.createMobileAppAndroid(cromaEcom, "CROMA_ANDROID"));
+            Platform cromaIOS = platformRepository.save(PlatformBuilder.createMobileAppIOS(cromaEcom,"CROMA_IOS"));
+            Platform cromaDesktop = platformRepository.save(PlatformBuilder.createDesktopWeb(cromaEcom, "CROMA_DESKTOP"));
+            Platform cromaMweb = platformRepository.save(PlatformBuilder.createMobileWeb(cromaEcom,"CROMA_MWEB"));
+            Platform cromaKiosk = platformRepository.save(PlatformBuilder.createKiosk(cromaEcom,"CROMA_KIOSK"));
 
             // Create platforms for BigBasket ecommerce channel
-            platformRepository.save(PlatformBuilder.createMobileAppAndroid(tataCliqEcom, "BIGBASKET_ANDROID"));
-            platformRepository.save(PlatformBuilder.createMobileAppIOS(tataCliqEcom,"BIGBASKET_IOS"));
-            platformRepository.save(PlatformBuilder.createDesktopWeb(tataCliqEcom, "BIGBASKET_DESKTOP"));
-            platformRepository.save(PlatformBuilder.createMobileWeb(tataCliqEcom,"BIGBASKET_MWEB"));
-            platformRepository.save(PlatformBuilder.createKiosk(tataCliqEcom,"BIGBASKET_KIOSK"));
+            Platform bbAndroid = platformRepository.save(PlatformBuilder.createMobileAppAndroid(bigBasketEcom, "BIGBASKET_ANDROID"));
+            Platform bbIOS = platformRepository.save(PlatformBuilder.createMobileAppIOS(bigBasketEcom,"BIGBASKET_IOS"));
+            Platform bbDesktop = platformRepository.save(PlatformBuilder.createDesktopWeb(bigBasketEcom, "BIGBASKET_DESKTOP"));
+            Platform bbMweb = platformRepository.save(PlatformBuilder.createMobileWeb(bigBasketEcom,"BIGBASKET_MWEB"));
+            Platform bbKiosk = platformRepository.save(PlatformBuilder.createKiosk(bigBasketEcom,"BIGBASKET_KIOSK"));
 
+            // Create platforms for 1mg ecommerce channel
+            Platform mgAndroid = platformRepository.save(PlatformBuilder.createMobileAppAndroid(tata1mgEcom, "1MG_ANDROID"));
+            Platform mgIOS = platformRepository.save(PlatformBuilder.createMobileAppIOS(tata1mgEcom,"1MG_IOS"));
+            Platform mgDesktop = platformRepository.save(PlatformBuilder.createDesktopWeb(tata1mgEcom, "1MG_DESKTOP"));
+            Platform mgMweb = platformRepository.save(PlatformBuilder.createMobileWeb(tata1mgEcom,"1MG_MWEB"));
+
+            // Create platforms for Tanishq ecommerce channel
+            Platform tanishqAndroid = platformRepository.save(PlatformBuilder.createMobileAppAndroid(tanishqEcom, "TANISHQ_ANDROID"));
+            Platform tanishqIOS = platformRepository.save(PlatformBuilder.createMobileAppIOS(tanishqEcom,"TANISHQ_IOS"));
+            Platform tanishqDesktop = platformRepository.save(PlatformBuilder.createDesktopWeb(tanishqEcom, "TANISHQ_DESKTOP"));
+            Platform tanishqMweb = platformRepository.save(PlatformBuilder.createMobileWeb(tanishqEcom,"TANISHQ_MWEB"));
 
 
             // Create catalogs
@@ -181,6 +205,19 @@ public class DemoService {
             // BigBasket channels
             channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(bigBasketEcom, groceryCatalog, true));
             channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(bigBasketQuick, groceryCatalog, true));
+
+            // 1mg channels
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tata1mgEcom, pharmaCatalog, true));
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tata1mgPhysical, pharmaCatalog, true));
+
+            // Tanishq channels
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tanishqEcom, jewelryCatalog, true));
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tanishqPhysical, jewelryCatalog, true));
+
+            // Cross-catalog relationships for testing
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tataCliqEcom, cromaCatalog, false));
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tataCliqEcom, jewelryCatalog, false));
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(cromaEcom, fashionCatalog, false));
 
             // Create categories
             Category laptopCategory = categoryRepository.save(CategoryBuilder.createLaptopCategory(fashionCatalog, tataCliq));
@@ -250,6 +287,14 @@ public class DemoService {
             Product iPhone = productRepository.save(ProductBuilder.createIPhone(smartphoneCategory, tataCliq));
             Product goldNecklace = productRepository.save(ProductBuilder.createGoldNecklace(necklaceCategory, tanishq));
             Product goldBangles = productRepository.save(ProductBuilder.createGoldBangles(bangleCategory, tanishq));
+            
+            // Additional products for testing
+            Product samsungGalaxy = productRepository.save(ProductBuilder.createSamsungGalaxy(smartphoneCategory, tataCliq));
+            Product appleWatch = productRepository.save(ProductBuilder.createAppleWatch(smartphoneCategory, tataCliq));
+            Product hpSpectre = productRepository.save(ProductBuilder.createHPSpectre(laptopCategory, croma));
+            Product diamondRing = productRepository.save(ProductBuilder.createDiamondRing(necklaceCategory, tanishq));
+            Product paracetamol = productRepository.save(ProductBuilder.createParacetamol(medicinesCategory, tata1mg));
+            Product freshApples = productRepository.save(ProductBuilder.createFreshApples(freshProduceCategory, bigBasket));
 
 
             ProductFeatureValue processorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(macBookProProduct,laptopProcessorFeature, "Apple M2 Pro"));
@@ -262,17 +307,26 @@ public class DemoService {
             ProductFeatureValue dellRamValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(dellXPS, laptopRamFeature, "32GB"));
             ProductFeatureValue dellStorageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(dellXPS, iPhonestorage, "1TB"));
 
+            // Additional feature values for testing
+            ProductFeatureValue samsungProcessorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(samsungGalaxy, iphoneprocessor, "Snapdragon 8 Gen 2"));
+            ProductFeatureValue samsungRamValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(samsungGalaxy, iPhoneram, "12GB"));
+            ProductFeatureValue samsungStorageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(samsungGalaxy, iPhonestorage, "256GB"));
 
+            ProductFeatureValue hpProcessorValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createProcessorValue(hpSpectre, laptopProcessorFeature, "Intel i7-1165G7"));
+            ProductFeatureValue hpRamValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createRamValue(hpSpectre, laptopRamFeature, "16GB"));
+            ProductFeatureValue hpStorageValue = productFeatureValueRepository.save(ProductFeatureValueBuilder.createStorageValue(hpSpectre, laptopStorageFeature, "512GB"));
 
 
             // Create product-channel relationships
             // MacBook Pro available on Croma (both online and offline)
             macBookProProduct.addProductChannel(cromaEcom);
             macBookProProduct.addProductChannel(cromaPhysical);
+            macBookProProduct.addProductChannel(tataCliqEcom); // Also available on TataCliq
 
             // Dell XPS available on TataCliQ (both ecommerce and marketplace)
             dellXPS.addProductChannel(tataCliqEcom);
             dellXPS.addProductChannel(tataCliqMarketplace);
+            dellXPS.addProductChannel(cromaEcom); // Also available on Croma
 
             // iPhone available on both Croma and TataCliQ
             iPhone.addProductChannel(cromaEcom);
@@ -281,10 +335,31 @@ public class DemoService {
             iPhone.addProductChannel(tataCliqMarketplace);
 
             // Jewelry available in physical stores with online visibility
-            goldNecklace.addProductChannel(tataCliqEcom);
-            goldNecklace.addProductChannel(cromaPhysical);
-            goldBangles.addProductChannel(tataCliqEcom);
-            goldBangles.addProductChannel(cromaPhysical);
+            goldNecklace.addProductChannel(tanishqEcom);
+            goldNecklace.addProductChannel(tanishqPhysical);
+            goldNecklace.addProductChannel(tataCliqEcom); // Also available on TataCliq
+            
+            goldBangles.addProductChannel(tanishqEcom);
+            goldBangles.addProductChannel(tanishqPhysical);
+            
+            // Additional product-channel relationships for testing
+            samsungGalaxy.addProductChannel(tataCliqEcom);
+            samsungGalaxy.addProductChannel(cromaEcom);
+            
+            appleWatch.addProductChannel(tataCliqEcom);
+            appleWatch.addProductChannel(cromaEcom);
+            
+            hpSpectre.addProductChannel(cromaEcom);
+            hpSpectre.addProductChannel(cromaPhysical);
+            
+            diamondRing.addProductChannel(tanishqEcom);
+            diamondRing.addProductChannel(tanishqPhysical);
+            
+            paracetamol.addProductChannel(tata1mgEcom);
+            paracetamol.addProductChannel(tata1mgPhysical);
+            
+            freshApples.addProductChannel(bigBasketEcom);
+            freshApples.addProductChannel(bigBasketQuick);
 
 
             // Create features for jewelry
@@ -310,6 +385,15 @@ public class DemoService {
             productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(goldNecklace, goldPurity, purityValue, goldPurityTemplate, 1));
             productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(goldNecklace, goldWeight, weightValue, goldWeightTemplate, 2));
 
+            // Additional feature value mappings for testing
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(samsungGalaxy, iphoneprocessor, samsungProcessorValue, iPhoneProcessorTemplate, 1));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(samsungGalaxy, iPhoneram, samsungRamValue, iPhoneRamCategoryFeatureTemplate, 2));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(samsungGalaxy, iPhonestorage, samsungStorageValue, iPhoneStorageTemplate, 3));
+
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(hpSpectre, laptopProcessorFeature, hpProcessorValue, laptopProcessorTemplate, 1));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(hpSpectre, laptopRamFeature, hpRamValue, laptopRamTemplate, 2));
+            productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(hpSpectre, laptopStorageFeature, hpStorageValue, laptopStorageTemplate, 3));
+
 
             // Save all products with their channel relationships
             productRepository.save(macBookProProduct);
@@ -317,15 +401,20 @@ public class DemoService {
             productRepository.save(iPhone);
             productRepository.save(goldNecklace);
             productRepository.save(goldBangles);
-
+            productRepository.save(samsungGalaxy);
+            productRepository.save(appleWatch);
+            productRepository.save(hpSpectre);
+            productRepository.save(diamondRing);
+            productRepository.save(paracetamol);
+            productRepository.save(freshApples);
 
 
             // Create sample product prices and inventory
             createSamplePricesAndInventory(tataCliq, tataCliqEcom, tataCliqSeller);
             createSamplePricesAndInventory(croma, cromaEcom, cromaSeller);
             createSamplePricesAndInventory(bigBasket, bigBasketEcom, bigBasketSeller);
-            createSamplePricesAndInventory(tanishq, tataCliqEcom, tanishqSeller);
-            createSamplePricesAndInventory(tata1mg, tataCliqEcom, tata1mgSeller);
+            createSamplePricesAndInventory(tanishq, tanishqEcom, tanishqSeller);
+            createSamplePricesAndInventory(tata1mg, tata1mgEcom, tata1mgSeller);
 
             // Create seller-product associations for various combinations
 
@@ -345,6 +434,27 @@ public class DemoService {
             SellerProduct iPhoneCroma = SellerProductBuilder.createSellerProduct(cromaSeller, iPhone, croma);
             sellerProductRepository.save(iPhoneTataCliq);
             sellerProductRepository.save(iPhoneCroma);
+            
+            // Additional seller-product associations for testing
+            SellerProduct samsungTataCliq = SellerProductBuilder.createSellerProduct(tataCliqSeller, samsungGalaxy, tataCliq);
+            SellerProduct samsungCroma = SellerProductBuilder.createSellerProduct(cromaSeller, samsungGalaxy, croma);
+            sellerProductRepository.save(samsungTataCliq);
+            sellerProductRepository.save(samsungCroma);
+            
+            SellerProduct appleWatchTataCliq = SellerProductBuilder.createSellerProduct(tataCliqSeller, appleWatch, tataCliq);
+            sellerProductRepository.save(appleWatchTataCliq);
+            
+            SellerProduct hpSpectreCroma = SellerProductBuilder.createSellerProduct(cromaSeller, hpSpectre, croma);
+            sellerProductRepository.save(hpSpectreCroma);
+            
+            SellerProduct diamondRingTanishq = SellerProductBuilder.createSellerProduct(tanishqSeller, diamondRing, tanishq);
+            sellerProductRepository.save(diamondRingTanishq);
+            
+            SellerProduct paracetamol1mg = SellerProductBuilder.createSellerProduct(tata1mgSeller, paracetamol, tata1mg);
+            sellerProductRepository.save(paracetamol1mg);
+            
+            SellerProduct freshApplesBB = SellerProductBuilder.createSellerProduct(bigBasketSeller, freshApples, bigBasket);
+            sellerProductRepository.save(freshApplesBB);
 
             useCases(macBookProProduct, laptopCategory, croma, bigBasketEcom, laptopRamFeature, tataCliqSeller, tanishq, tataCliqMarketplace, iPhone, smartphoneCategory, bigBasket, iPhoneram, cromaSeller, iPhoneTataCliq, tanishqSeller, goldNecklace, tataCliq, goldBangles);
 
@@ -403,6 +513,40 @@ public class DemoService {
 
             ProductPlatform necklaceMobilePlatform = ProductPlatformBuilder.createActiveProductPlatform(goldNecklace, mobilePlatform);
             productPlatformRepository.save(necklaceMobilePlatform);
+            
+            // Additional product-platform mappings for testing
+            ProductPlatform dellXPSWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(dellXPS, webPlatform);
+            productPlatformRepository.save(dellXPSWebPlatform);
+            
+            ProductPlatform dellXPSMobilePlatform = ProductPlatformBuilder.createActiveProductPlatform(dellXPS, mobilePlatform);
+            productPlatformRepository.save(dellXPSMobilePlatform);
+            
+            ProductPlatform samsungWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(samsungGalaxy, webPlatform);
+            productPlatformRepository.save(samsungWebPlatform);
+            
+            ProductPlatform samsungMobilePlatform = ProductPlatformBuilder.createActiveProductPlatform(samsungGalaxy, mobilePlatform);
+            productPlatformRepository.save(samsungMobilePlatform);
+            
+            ProductPlatform samsungTabletPlatform = ProductPlatformBuilder.createActiveProductPlatform(samsungGalaxy, tabletPlatform);
+            productPlatformRepository.save(samsungTabletPlatform);
+            
+            ProductPlatform appleWatchMobilePlatform = ProductPlatformBuilder.createActiveProductPlatform(appleWatch, mobilePlatform);
+            productPlatformRepository.save(appleWatchMobilePlatform);
+            
+            ProductPlatform hpSpectreWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(hpSpectre, webPlatform);
+            productPlatformRepository.save(hpSpectreWebPlatform);
+            
+            ProductPlatform diamondRingWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(diamondRing, webPlatform);
+            productPlatformRepository.save(diamondRingWebPlatform);
+            
+            ProductPlatform paracetamolWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(paracetamol, webPlatform);
+            productPlatformRepository.save(paracetamolWebPlatform);
+            
+            ProductPlatform freshApplesWebPlatform = ProductPlatformBuilder.createActiveProductPlatform(freshApples, webPlatform);
+            productPlatformRepository.save(freshApplesWebPlatform);
+            
+            ProductPlatform freshApplesMobilePlatform = ProductPlatformBuilder.createActiveProductPlatform(freshApples, mobilePlatform);
+            productPlatformRepository.save(freshApplesMobilePlatform);
 
             //validationBuilder.validationRules();
 
@@ -413,12 +557,13 @@ public class DemoService {
             ChannelCatalog macBookChannelCatalog = ChannelCatalogBuilder.createChannelCatalog(bigBasketEcom, fashionCatalog, false);
             channelCatalogRepository.save(macBookChannelCatalog);
 
-            // 2. Product-Category-Channel Combinations
-            // Assign MacBook Pro to Laptop category in TataCliq channel
-            ProductCategory macBookCategory = ProductCategoryBuilder.createProductCategory(macBookProProduct, laptopCategory, croma);
-            productCategoryRepository.save(macBookCategory);
+            // 2. Product-Channel Combinations
+            // Create product-channel for MacBook Pro
             ProductChannel macBookChannel = ProductChannelBuilder.createEcommerceProductChannel(macBookProProduct, bigBasketEcom);
             productChannelRepository.save(macBookChannel);
+            
+            // Note: We don't need to create additional ProductCategory entries here
+            // because they were already created in the ProductBuilder methods
 
             // 3. Product Feature Combinations
             // Create feature mapping for MacBook Pro RAM
