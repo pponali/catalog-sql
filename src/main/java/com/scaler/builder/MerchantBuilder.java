@@ -79,4 +79,14 @@ public class MerchantBuilder {
                 .lastModifiedBy(SYSTEM_USER)
                 .build();
     }
+
+    public static Merchant createTata11Merchant() {
+        return Merchant.builder()
+                .code("TATA11")
+                .name("Tata 11")
+                .description("Tata 11 - Mobile Devices and Accessories")
+                .status("ACTIVE")
+                .createdBy("SYSTEM")
+                .build();
+    }
 }

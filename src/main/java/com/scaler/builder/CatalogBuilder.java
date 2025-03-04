@@ -64,4 +64,16 @@ public class CatalogBuilder {
                 .lastModifiedBy("system")
                 .build();
     }
+    
+    public static Catalog createMobileCatalog(Merchant merchant) {
+        return Catalog.builder()
+                .code("MOBILE-001")
+                .name("Mobile Catalog")
+                .description("Mobile Devices and Accessories")
+                .business(merchant)
+                .status("ACTIVE")
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
 }

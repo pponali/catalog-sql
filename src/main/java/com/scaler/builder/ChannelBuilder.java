@@ -289,4 +289,40 @@ public class ChannelBuilder {
                 .createdBy("SYSTEM")
                 .build();
     }
+    
+    /**
+     * Creates Tata 11 channels
+     */
+    public static Channel createTata11EcommerceChannel(Store store) throws JsonProcessingException {
+        return Channel.builder()
+                .code("TATA11_ECOM")
+                .name("Tata 11 E-commerce")
+                .description("Online mobile store")
+                .status("ACTIVE")
+                .type(ChannelType.ECOMMERCE)
+                .store(store)
+                .enabled(true)
+                .visibility(true)
+                .displayOrder(1)
+                .createdBy("SYSTEM")
+                .channelConfig(objectMapper.writeValueAsString(createEcommerceConfig()))
+                .build();
+    }
+    
+    public static Channel createTata11MarketplaceChannel(Store store) throws JsonProcessingException {
+        return Channel.builder()
+                .code("TATA11_MARKETPLACE")
+                .name("Tata 11 Marketplace")
+                .description("Marketplace for mobile devices and accessories")
+                .status("ACTIVE")
+                .type(ChannelType.MARKETPLACE)
+                .store(store)
+                .enabled(true)
+                .visibility(true)
+                .displayOrder(2)
+                .createdBy("SYSTEM")
+                .channelConfig(objectMapper.writeValueAsString(createMarketplaceConfig()))
+                .build();
+    }
+    
 }

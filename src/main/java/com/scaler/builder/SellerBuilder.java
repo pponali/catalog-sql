@@ -196,4 +196,16 @@ public class SellerBuilder {
                 .address(address)
                 .build();
     }
+
+    public static Seller createTata11Seller(Merchant merchant) {
+        return Seller.builder()
+                .code("TATA11_SELLER")
+                .name("Tata 11 Seller")
+                .description("Official seller for Tata 11 mobile products")
+                .merchantId(merchant.getId())
+                .type("RETAIL")
+                .status("ACTIVE")
+                .createdBy("SYSTEM")
+                .build();
+    }
 }

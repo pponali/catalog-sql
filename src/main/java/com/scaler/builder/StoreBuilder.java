@@ -132,4 +132,24 @@ public class StoreBuilder {
                 .build();
         return store;
     }
+    
+    public static Store createTata11Store(Merchant merchant) {
+        Store store = Store.builder()
+                .name("Tata 11")
+                .domain("tata11.com")
+                .merchant(merchant)
+                .locale("en-IN")
+                .currency("INR")
+                .description("Tata 11 Mobile Store")
+                .active(true)
+                .timezone("Asia/Kolkata")
+                .status("ACTIVE")
+                .storeType(StoreType.ONLINE)
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+        return store;
+    }
 }

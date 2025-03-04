@@ -89,6 +89,7 @@ public class QueryController {
     @GetMapping("/sellers/channel/{channelId}")
     public ResponseEntity<List<Seller>> getSellersByChannel(@PathVariable UUID channelId) {
         return ResponseEntity.ok(queryService.getSellersByChannel(channelId));
+
     }
 
     @GetMapping("/merchants/channel/{channelId}")

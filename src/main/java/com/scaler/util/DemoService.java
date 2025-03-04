@@ -96,6 +96,7 @@ public class DemoService {
             // Create merchants
             Merchant tataCliq = merchantRepository.save(MerchantBuilder.createTataCliqMerchant());
             Merchant tata1mg = merchantRepository.save(MerchantBuilder.createTata1mgMerchant());
+            Merchant tata11 = merchantRepository.save(MerchantBuilder.createTata11Merchant());
             Merchant bigBasket = merchantRepository.save(MerchantBuilder.createBigBasketMerchant());
             Merchant croma = merchantRepository.save(MerchantBuilder.createCromaMerchant());
             Merchant tanishq = merchantRepository.save(MerchantBuilder.createTanishqMerchant());
@@ -103,6 +104,7 @@ public class DemoService {
             // Create sellers first
             Seller tataCliqSeller = sellerRepository.save(SellerBuilder.createTataCliqSeller(tataCliq));
             Seller cromaSeller = sellerRepository.save(SellerBuilder.createCromaSeller(croma));
+            Seller tata11Seller = sellerRepository.save(SellerBuilder.createTata11Seller(tata11));
             Seller bigBasketSeller = sellerRepository.save(SellerBuilder.createBigBasketSeller(bigBasket));
             Seller tanishqSeller = sellerRepository.save(SellerBuilder.createTanishqSeller(tanishq));
             Seller tata1mgSeller = sellerRepository.save(SellerBuilder.createTata1mgSeller(tata1mg));
@@ -110,6 +112,7 @@ public class DemoService {
             // Create stores
             Store tataCliqStore = storeRepository.save(StoreBuilder.createTataCliqStore(tataCliq));
             Store tata1mgStore = storeRepository.save(StoreBuilder.createTata1mgStore(tata1mg));
+            Store tata11Store = storeRepository.save(StoreBuilder.createTata11Store(tata11));
             Store bigBasketStore = storeRepository.save(StoreBuilder.createBigBasketStore(bigBasket));
             Store cromaStore = storeRepository.save(StoreBuilder.createCromaStore(croma));
             Store tanishqStore = storeRepository.save(StoreBuilder.createTanishqStore(tanishq));
@@ -138,6 +141,12 @@ public class DemoService {
             Channel tata1mgPhysical = channelRepository.save(ChannelBuilder.createTata1mgPhysicalStoreChannel(tata1mgStore));
             tata1mgStore.addChannel(tata1mgEcom);
             tata1mgStore.addChannel(tata1mgPhysical);
+            
+            // Tata11 Channels
+            Channel tata11Ecom = channelRepository.save(ChannelBuilder.createTata11EcommerceChannel(tata11Store));
+            Channel tata11Marketplace = channelRepository.save(ChannelBuilder.createTata11MarketplaceChannel(tata11Store));
+            tata11Store.addChannel(tata11Ecom);
+            tata11Store.addChannel(tata11Marketplace);
 
             // Tanishq Channels
             Channel tanishqEcom = channelRepository.save(ChannelBuilder.createTanishqEcommerceChannel(tanishqStore));
@@ -150,6 +159,7 @@ public class DemoService {
             storeRepository.save(cromaStore);
             storeRepository.save(bigBasketStore);
             storeRepository.save(tata1mgStore);
+            storeRepository.save(tata11Store);
             storeRepository.save(tanishqStore);
 
             // Create platforms for TataCliq ecommerce channel
@@ -184,6 +194,12 @@ public class DemoService {
             Platform tanishqIOS = platformRepository.save(PlatformBuilder.createMobileAppIOS(tanishqEcom,"TANISHQ_IOS"));
             Platform tanishqDesktop = platformRepository.save(PlatformBuilder.createDesktopWeb(tanishqEcom, "TANISHQ_DESKTOP"));
             Platform tanishqMweb = platformRepository.save(PlatformBuilder.createMobileWeb(tanishqEcom,"TANISHQ_MWEB"));
+            
+            // Create platforms for Tata11 ecommerce channel
+            Platform tata11Android = platformRepository.save(PlatformBuilder.createMobileAppAndroid(tata11Ecom, "TATA11_ANDROID"));
+            Platform tata11IOS = platformRepository.save(PlatformBuilder.createMobileAppIOS(tata11Ecom,"TATA11_IOS"));
+            Platform tata11Desktop = platformRepository.save(PlatformBuilder.createDesktopWeb(tata11Ecom, "TATA11_DESKTOP"));
+            Platform tata11Mweb = platformRepository.save(PlatformBuilder.createMobileWeb(tata11Ecom,"TATA11_MWEB"));
 
 
             // Create catalogs
@@ -192,6 +208,7 @@ public class DemoService {
             Catalog pharmaCatalog = catalogRepository.save(CatalogBuilder.createPharmaCatalog(tata1mg));
             Catalog cromaCatalog = catalogRepository.save(CatalogBuilder.createElectronicsCatalog(croma));
             Catalog jewelryCatalog = catalogRepository.save(CatalogBuilder.createJewelryCatalog(tanishq));
+            Catalog mobileCatalog = catalogRepository.save(CatalogBuilder.createMobileCatalog(tata11));
 
             // Create channel-catalog relationships
             // TataCliq channels
@@ -212,6 +229,10 @@ public class DemoService {
 
             // Tanishq channels
             channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tanishqEcom, jewelryCatalog, true));
+            
+            // Tata11 channels
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tata11Ecom, mobileCatalog, true));
+            channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tata11Marketplace, mobileCatalog, true));
             channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tanishqPhysical, jewelryCatalog, true));
 
             // Cross-catalog relationships for testing
@@ -219,13 +240,20 @@ public class DemoService {
             channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(tataCliqEcom, jewelryCatalog, false));
             channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(cromaEcom, fashionCatalog, false));
 
-            // Create categories
+            // Create basic categories
             Category laptopCategory = categoryRepository.save(CategoryBuilder.createLaptopCategory(fashionCatalog, tataCliq));
             Category smartphoneCategory = categoryRepository.save(CategoryBuilder.createSmartphoneCategory(fashionCatalog, tataCliq));
             Category necklaceCategory = categoryRepository.save(CategoryBuilder.createGoldNecklaceCategory(jewelryCatalog, tanishq));
             Category bangleCategory = categoryRepository.save(CategoryBuilder.createGoldBangleCategory(jewelryCatalog, tanishq));
             Category freshProduceCategory = categoryRepository.save(CategoryBuilder.createFreshProduceCategory(groceryCatalog, bigBasket));
             Category medicinesCategory = categoryRepository.save(CategoryBuilder.createMedicinesCategory(pharmaCatalog, tata1mg));
+            Category mobileCategory = categoryRepository.save(CategoryBuilder.createMobileCategory(mobileCatalog, tata11));
+            
+            // Create apparel categories
+            createApparelCategories(fashionCatalog, tataCliq);
+            
+            // Create mobile categories
+            createMobileCategories(mobileCatalog, tata11);
 
             // Create units of measure
             UnitOfMeasure gbUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createGBUnit());
@@ -631,6 +659,235 @@ public class DemoService {
         }
     }
 
+    /**
+     * Creates a comprehensive hierarchy of apparel categories
+     * @param fashionCatalog The fashion catalog to associate categories with
+     * @param merchant The merchant to associate categories with
+     * @return The root apparel category
+     */
+    private Category createApparelCategories(Catalog fashionCatalog, Merchant merchant) {
+        // Create root apparel category
+        Category apparelCategory = Category.builder()
+                .code("APPAREL")
+                .name("Apparel")
+                .description("All clothing and apparel products")
+                .merchant(merchant)
+                .catalog(fashionCatalog)
+                .createdBy("SYSTEM")
+                .build();
+        apparelCategory = categoryRepository.save(apparelCategory);
+        
+        // Create men's apparel category
+        Category mensCategory = Category.builder()
+                .code("MENS")
+                .name("Men's Apparel")
+                .description("Men's clothing and apparel")
+                .merchant(merchant)
+                .catalog(fashionCatalog)
+                .parent(apparelCategory)
+                .createdBy("SYSTEM")
+                .build();
+        mensCategory = categoryRepository.save(mensCategory);
+        
+        // Create women's apparel category
+        Category womensCategory = Category.builder()
+                .code("WOMENS")
+                .name("Women's Apparel")
+                .description("Women's clothing and apparel")
+                .merchant(merchant)
+                .catalog(fashionCatalog)
+                .parent(apparelCategory)
+                .createdBy("SYSTEM")
+                .build();
+        womensCategory = categoryRepository.save(womensCategory);
+        
+        // Create kids' apparel category
+        Category kidsCategory = Category.builder()
+                .code("KIDS")
+                .name("Kids' Apparel")
+                .description("Kids' clothing and apparel")
+                .merchant(merchant)
+                .catalog(fashionCatalog)
+                .parent(apparelCategory)
+                .createdBy("SYSTEM")
+                .build();
+        kidsCategory = categoryRepository.save(kidsCategory);
+        
+        // Create subcategories for men's apparel
+        createApparelSubcategories(mensCategory, merchant, fashionCatalog, "MENS");
+        
+        // Create subcategories for women's apparel
+        createApparelSubcategories(womensCategory, merchant, fashionCatalog, "WOMENS");
+        
+        // Create subcategories for kids' apparel
+        createApparelSubcategories(kidsCategory, merchant, fashionCatalog, "KIDS");
+        
+        return apparelCategory;
+    }
+    
+    /**
+     * Creates subcategories for apparel
+     * @param parentCategory The parent category
+     * @param merchant The merchant to associate categories with
+     * @param catalog The catalog to associate categories with
+     * @param prefix The prefix for category codes
+     */
+    private void createApparelSubcategories(Category parentCategory, Merchant merchant, Catalog catalog, String prefix) {
+        // Create subcategories
+        String[][] subcategories = {
+            {"TSHIRTS", "T-Shirts", "T-shirts and casual tops"},
+            {"SHIRTS", "Shirts", "Formal and casual shirts"},
+            {"PANTS", "Pants", "Formal and casual pants"},
+            {"JEANS", "Jeans", "Denim jeans"},
+            {"ACTIVEWEAR", "Activewear", "Sports and fitness clothing"},
+            {"INNERWEAR", "Innerwear", "Undergarments and innerwear"},
+            {"OUTERWEAR", "Outerwear", "Jackets, coats, and outerwear"},
+            {"ETHNIC", "Ethnic Wear", "Traditional and ethnic clothing"},
+            {"FORMAL", "Formal Wear", "Formal and business attire"},
+            {"ACCESSORIES", "Accessories", "Fashion accessories"}
+        };
+        
+        for (String[] subcategory : subcategories) {
+            Category category = Category.builder()
+                    .code(prefix + "_" + subcategory[0])
+                    .name(subcategory[1])
+                    .description(subcategory[2])
+                    .merchant(merchant)
+                    .catalog(catalog)
+                    .parent(parentCategory)
+                    .createdBy("SYSTEM")
+                    .build();
+            categoryRepository.save(category);
+        }
+    }
+    
+    /**
+     * Creates a comprehensive hierarchy of mobile categories
+     * @param mobileCatalog The mobile catalog to associate categories with
+     * @param merchant The merchant to associate categories with
+     * @return The root mobile category
+     */
+    private Category createMobileCategories(Catalog mobileCatalog, Merchant merchant) {
+        // Create root mobile category
+        Category mobileCategory = Category.builder()
+                .code("MOBILE")
+                .name("Mobile Devices")
+                .description("All mobile devices and accessories")
+                .merchant(merchant)
+                .catalog(mobileCatalog)
+                .createdBy("SYSTEM")
+                .build();
+        mobileCategory = categoryRepository.save(mobileCategory);
+        
+        // Create smartphones category
+        Category smartphonesCategory = Category.builder()
+                .code("SMARTPHONES")
+                .name("Smartphones")
+                .description("All smartphones")
+                .merchant(merchant)
+                .catalog(mobileCatalog)
+                .parent(mobileCategory)
+                .createdBy("SYSTEM")
+                .build();
+        smartphonesCategory = categoryRepository.save(smartphonesCategory);
+        
+        // Create tablets category
+        Category tabletsCategory = Category.builder()
+                .code("TABLETS")
+                .name("Tablets")
+                .description("All tablets")
+                .merchant(merchant)
+                .catalog(mobileCatalog)
+                .parent(mobileCategory)
+                .createdBy("SYSTEM")
+                .build();
+        tabletsCategory = categoryRepository.save(tabletsCategory);
+        
+        // Create accessories category
+        Category accessoriesCategory = Category.builder()
+                .code("MOBILE_ACCESSORIES")
+                .name("Mobile Accessories")
+                .description("All mobile accessories")
+                .merchant(merchant)
+                .catalog(mobileCatalog)
+                .parent(mobileCategory)
+                .createdBy("SYSTEM")
+                .build();
+        accessoriesCategory = categoryRepository.save(accessoriesCategory);
+        
+        // Create subcategories for smartphones
+        createMobileSubcategories(smartphonesCategory, merchant, mobileCatalog, "SMARTPHONES");
+        
+        // Create subcategories for tablets
+        createMobileSubcategories(tabletsCategory, merchant, mobileCatalog, "TABLETS");
+        
+        // Create subcategories for accessories
+        createAccessoriesSubcategories(accessoriesCategory, merchant, mobileCatalog);
+        
+        return mobileCategory;
+    }
+    
+    /**
+     * Creates subcategories for mobile devices
+     * @param parentCategory The parent category
+     * @param merchant The merchant to associate categories with
+     * @param catalog The catalog to associate categories with
+     * @param prefix The prefix for category codes
+     */
+    private void createMobileSubcategories(Category parentCategory, Merchant merchant, Catalog catalog, String prefix) {
+        String[][] subcategories = {
+            {"ANDROID", "Android Devices", "All Android-based devices"},
+            {"IOS", "iOS Devices", "All iOS-based devices"},
+            {"FEATURE", "Feature Phones", "Basic and feature phones"},
+            {"FOLDABLE", "Foldable Devices", "Foldable smartphones and tablets"},
+            {"GAMING", "Gaming Devices", "Gaming-focused mobile devices"}
+        };
+        
+        for (String[] subcategory : subcategories) {
+            Category category = Category.builder()
+                    .code(prefix + "_" + subcategory[0])
+                    .name(subcategory[1])
+                    .description(subcategory[2])
+                    .merchant(merchant)
+                    .catalog(catalog)
+                    .parent(parentCategory)
+                    .createdBy("SYSTEM")
+                    .build();
+            categoryRepository.save(category);
+        }
+    }
+    
+    /**
+     * Creates subcategories for mobile accessories
+     * @param parentCategory The parent category
+     * @param merchant The merchant to associate categories with
+     * @param catalog The catalog to associate categories with
+     */
+    private void createAccessoriesSubcategories(Category parentCategory, Merchant merchant, Catalog catalog) {
+        String[][] subcategories = {
+            {"CASES", "Cases & Covers", "Protective cases and covers"},
+            {"CHARGERS", "Chargers & Cables", "Charging accessories"},
+            {"HEADPHONES", "Headphones & Earbuds", "Audio accessories"},
+            {"POWERBANKS", "Power Banks", "Portable charging solutions"},
+            {"SCREENGUARDS", "Screen Protectors", "Screen protection accessories"},
+            {"STANDS", "Stands & Holders", "Device stands and holders"},
+            {"STORAGE", "Storage Devices", "Memory cards and storage accessories"},
+            {"WEARABLES", "Wearables", "Smartwatches and fitness trackers"}
+        };
+        
+        for (String[] subcategory : subcategories) {
+            Category category = Category.builder()
+                    .code("ACCESSORIES_" + subcategory[0])
+                    .name(subcategory[1])
+                    .description(subcategory[2])
+                    .merchant(merchant)
+                    .catalog(catalog)
+                    .parent(parentCategory)
+                    .createdBy("SYSTEM")
+                    .build();
+            categoryRepository.save(category);
+        }
+    }
     /**
      *
      * @param macBookPro

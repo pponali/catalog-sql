@@ -77,4 +77,16 @@ public class CategoryBuilder {
                 .lastModifiedBy("system")
                 .build();
     }
+    
+    public static Category createMobileCategory(Catalog catalog, Merchant merchant) {
+        return Category.builder()
+                .code("MOBILE")
+                .name("Mobile Devices")
+                .description("Mobile phones and accessories")
+                .catalog(catalog)
+                .merchant(merchant)
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
 }
