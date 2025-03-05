@@ -23,6 +23,14 @@ public class ProductFeatureValueMapping extends BaseEntity {
     @JoinColumn(name = "product_id", nullable = false)
     @JsonBackReference("product-features")
     private Product product;
+    
+    public Product getProduct() {
+        return product;
+    }
+    
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "feature_id", nullable = false)

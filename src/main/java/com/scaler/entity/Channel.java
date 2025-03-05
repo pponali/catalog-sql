@@ -61,6 +61,14 @@ public class Channel extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
+    
+    public Store getStore() {
+        return store;
+    }
+    
+    public void setStore(Store store) {
+        this.store = store;
+    }
 
     @Column(name = "channel_config", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)

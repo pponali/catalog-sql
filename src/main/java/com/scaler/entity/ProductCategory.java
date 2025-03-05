@@ -33,11 +33,27 @@ public class ProductCategory extends BaseEntity {
     @JdbcTypeCode(SqlTypes.UUID)
     @JsonIdentityReference(alwaysAsId = true)
     private Product product;
+    
+    public Product getProduct() {
+        return product;
+    }
+    
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private Category category;
+    
+    public Category getCategory() {
+        return category;
+    }
+    
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchant_id", nullable = false)

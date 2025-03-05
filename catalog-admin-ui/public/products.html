@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Tata Commerce Catalog Admin UI</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+            font-weight: bold;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex: 1;
+            max-width: 500px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #1565c0;
+        }
+        .button.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .button.secondary:hover {
+            background-color: #e0e0e0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: 500;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        .status.active {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status.draft {
+            background-color: #fff8e1;
+            color: #f57f17;
+        }
+        .status.inactive {
+            background-color: #f5f5f5;
+            color: #757575;
+        }
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .actions a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .pagination button {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+        }
+        .pagination button.active {
+            background-color: #1976d2;
+            color: white;
+            border-color: #1976d2;
+        }
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .filter select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tata Commerce Catalog Admin UI</h1>
+        <nav>
+            <a href="test.html">Dashboard</a>
+            <a href="products.html" class="active">Products</a>
+            <a href="categories.html">Categories</a>
+            <a href="attributes.html">Attributes</a>
+            <a href="channels.html">Channels</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h2>Product Management</h2>
+        
+        <div class="card">
+            <div class="toolbar">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                    <button class="button" id="searchButton">Search</button>
+                </div>
+                <button class="button" id="addProductButton">+ Add Product</button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter">
+                    <label>Category:</label>
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="grocery">Grocery</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="jewelry">Jewelry</option>
+                    </select>
+                </div>
+                <div class="filter">
+                    <label>Status:</label>
+                    <select id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="draft">Draft</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="filter">
+                    <label>Channel:</label>
+                    <select id="channelFilter">
+                        <option value="">All Channels</option>
+                        <option value="tatacliq">Tata Cliq</option>
+                        <option value="1mg">Tata 1mg</option>
+                        <option value="bigbasket">BigBasket</option>
+                        <option value="croma">Tata Croma</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="errorContainer" class="error-message" style="display: none;"></div>
+            
+            <div id="productsTableContainer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>SKU</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Channels</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <!-- Product data will be loaded here dynamically -->
+                        <tr>
+                            <td colspan="8" class="loading">Loading products...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <button id="prevPageButton">Previous</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button id="nextPageButton">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include API Service -->
+    <script src="js/api.js"></script>
+    
+    <!-- Products Page Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // State
+            let currentPage = 1;
+            const pageSize = 10;
+            let products = [];
+            let filteredProducts = [];
+            let categories = [];
+            let channels = [];
+            
+            // DOM Elements
+            const productsTableBody = document.getElementById('productsTableBody');
+            const errorContainer = document.getElementById('errorContainer');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const channelFilter = document.getElementById('channelFilter');
+            const prevPageButton = document.getElementById('prevPageButton');
+            const nextPageButton = document.getElementById('nextPageButton');
+            
+            // Initialize
+            loadData();
+            
+            // Event Listeners
+            searchButton.addEventListener('click', applyFilters);
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    applyFilters();
+                }
+            });
+            categoryFilter.addEventListener('change', applyFilters);
+            statusFilter.addEventListener('change', applyFilters);
+            channelFilter.addEventListener('change', applyFilters);
+            prevPageButton.addEventListener('click', goToPreviousPage);
+            nextPageButton.addEventListener('click', goToNextPage);
+            
+            // Functions
+            async function loadData() {
+                showLoading();
+                try {
+                    // Load products directly using the product API
+                    products = await window.api.product.getAllProducts();
+                    
+                    // If we have products, process them
+                    if (products && products.length > 0) {
+                        console.log("Loaded products:", products);
+                        filteredProducts = [...products];
+                        renderProducts();
+                    } else {
+                        showError('No products found. The API may be unavailable or returned empty data.');
+                    }
+                } catch (error) {
+                    showError('Failed to load products. Please try again later.');
+                    console.error('Error loading data:', error);
+                }
+            }
+            
+            function renderProducts() {
+                if (filteredProducts.length === 0) {
+                    productsTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 2rem;">
+                                No products found matching your criteria.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                // Calculate pagination
+                const startIndex = (currentPage - 1) * pageSize;
+                const endIndex = Math.min(startIndex + pageSize, filteredProducts.length);
+                const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+                
+                // Generate table rows
+                const rows = paginatedProducts.map(product => {
+                    // Format price with currency symbol
+                    const formattedPrice = typeof product.price === 'number' 
+                        ? `₹${product.price.toLocaleString()}`
+                        : product.price;
+                    
+                    // Get category display name
+                    const categoryDisplay = Array.isArray(product.categories) 
+                        ? product.categories.join(' > ')
+                        : 'Uncategorized';
+                    
+                    // Get channels display
+                    const channelsDisplay = Array.isArray(product.channels) 
+                        ? product.channels.join(', ')
+                        : '';
+                    
+                    // Create short ID for display
+                    const shortId = product.id.substring(0, 6);
+                    
+                    return `
+                        <tr>
+                            <td>${shortId}</td>
+                            <td>${product.name}</td>
+                            <td>${categoryDisplay}</td>
+                            <td>${product.sku || ''}</td>
+                            <td>${formattedPrice}</td>
+                            <td><span class="status ${product.status}">${product.status.charAt(0).toUpperCase() + product.status.slice(1)}</span></td>
+                            <td>${channelsDisplay}</td>
+                            <td class="actions">
+                                <a href="#" data-id="${product.id}" class="edit-product">Edit</a>
+                                <a href="#" data-id="${product.id}" class="view-product">View</a>
+                                <a href="#" data-id="${product.id}" class="delete-product">Delete</a>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                productsTableBody.innerHTML = rows;
+                
+                // Add event listeners to action buttons
+                document.querySelectorAll('.edit-product').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const productId = this.getAttribute('data-id');
+                        editProduct(productId);
+                    });
+                });
+                
+                document.querySelectorAll('.view-product').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const productId = this.getAttribute('data-id');
+                        viewProduct(productId);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-product').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const productId = this.getAttribute('data-id');
+                        deleteProduct(productId);
+                    });
+                });
+                
+                // Update pagination buttons
+                updatePaginationButtons();
+            }
+            
+            function applyFilters() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const categoryValue = categoryFilter.value.toLowerCase();
+                const statusValue = statusFilter.value.toLowerCase();
+                const channelValue = channelFilter.value.toLowerCase();
+                
+                filteredProducts = products.filter(product => {
+                    // Search term filter
+                    const matchesSearch = searchTerm === '' || 
+                        product.name.toLowerCase().includes(searchTerm) || 
+                        (product.sku && product.sku.toLowerCase().includes(searchTerm)) ||
+                        product.id.toLowerCase().includes(searchTerm);
+                    
+                    // Category filter
+                    const matchesCategory = categoryValue === '' || 
+                        (Array.isArray(product.categories) && 
+                         product.categories.some(cat => cat.toLowerCase().includes(categoryValue)));
+                    
+                    // Status filter
+                    const matchesStatus = statusValue === '' || 
+                        product.status.toLowerCase() === statusValue;
+                    
+                    // Channel filter
+                    const matchesChannel = channelValue === '' || 
+                        (Array.isArray(product.channels) && 
+                         product.channels.some(channel => channel.toLowerCase().includes(channelValue)));
+                    
+                    return matchesSearch && matchesCategory && matchesStatus && matchesChannel;
+                });
+                
+                // Reset to first page when filters change
+                currentPage = 1;
+                renderProducts();
+            }
+            
+            function goToPreviousPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderProducts();
+                }
+            }
+            
+            function goToNextPage() {
+                const totalPages = Math.ceil(filteredProducts.length / pageSize);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderProducts();
+                }
+            }
+            
+            function updatePaginationButtons() {
+                const totalPages = Math.ceil(filteredProducts.length / pageSize);
+                
+                // Update Previous button
+                prevPageButton.disabled = currentPage === 1;
+                prevPageButton.style.opacity = currentPage === 1 ? '0.5' : '1';
+                
+                // Update Next button
+                nextPageButton.disabled = currentPage === totalPages;
+                nextPageButton.style.opacity = currentPage === totalPages ? '0.5' : '1';
+                
+                // Update page numbers
+                const paginationContainer = document.querySelector('.pagination');
+                const pageButtons = Array.from(paginationContainer.querySelectorAll('button')).filter(btn => 
+                    btn !== prevPageButton && btn !== nextPageButton
+                );
+                
+                // Remove existing page buttons
+                pageButtons.forEach(btn => btn.remove());
+                
+                // Add new page buttons
+                for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.textContent = i;
+                    if (i === currentPage) {
+                        pageButton.classList.add('active');
+                    }
+                    pageButton.addEventListener('click', () => {
+                        currentPage = i;
+                        renderProducts();
+                    });
+                    
+                    // Insert before the Next button
+                    paginationContainer.insertBefore(pageButton, nextPageButton);
+                }
+            }
+            
+            function showLoading() {
+                productsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="loading">Loading products...</td>
+                    </tr>
+                `;
+                errorContainer.style.display = 'none';
+            }
+            
+            function showError(message) {
+                errorContainer.textContent = message;
+                errorContainer.style.display = 'block';
+            }
+            
+            // Product actions (placeholders)
+            function editProduct(productId) {
+                alert(`Edit product with ID: ${productId}`);
+            }
+            
+            function viewProduct(productId) {
+                alert(`View product with ID: ${productId}`);
+            }
+            
+            function deleteProduct(productId) {
+                if (confirm('Are you sure you want to delete this product?')) {
+                    alert(`Delete product with ID: ${productId}`);
+                    // In a real implementation, you would call an API to delete the product
+                    // and then refresh the product list
+                }
+            }
+        });
+    </script>
+</body>
+</html>

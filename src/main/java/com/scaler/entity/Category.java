@@ -48,6 +48,14 @@ public class Category extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
+    
+    public Category getParent() {
+        return parent;
+    }
+    
+    public void setParent(Category parent) {
+        this.parent = parent;
+    }
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> children = new ArrayList<>();

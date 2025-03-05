@@ -25,13 +25,37 @@ public class ProductChannel extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+    
+    public Product getProduct() {
+        return product;
+    }
+    
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_id", nullable = false)
     private Channel channel;
+    
+    public Channel getChannel() {
+        return channel;
+    }
+    
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
 
     @Column(name = "is_enabled")
     private Boolean isEnabled;
+    
+    public Boolean getIsEnabled() {
+        return isEnabled;
+    }
+    
+    public void setIsEnabled(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
 
     @Column(name = "is_visible")
     private Boolean isVisible;

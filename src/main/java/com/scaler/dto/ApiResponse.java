@@ -26,36 +26,36 @@ public class ApiResponse<T> {
     private String path;
 
     public static <T> ApiResponse<T> success(T data) {
-        return ApiResponse.<T>builder()
-                .status("SUCCESS")
-                .data(data)
-                .timestamp(LocalDateTime.now())
-                .build();
+        ApiResponse<T> response = new ApiResponse<T>();
+        response.status = "SUCCESS";
+        response.data = data;
+        response.timestamp = LocalDateTime.now();
+        return response;
     }
 
     public static <T> ApiResponse<T> success(T data, String message) {
-        return ApiResponse.<T>builder()
-                .status("SUCCESS")
-                .message(message)
-                .data(data)
-                .timestamp(LocalDateTime.now())
-                .build();
+        ApiResponse<T> response = new ApiResponse<T>();
+        response.status = "SUCCESS";
+        response.message = message;
+        response.data = data;
+        response.timestamp = LocalDateTime.now();
+        return response;
     }
 
     public static <T> ApiResponse<T> error(String message) {
-        return ApiResponse.<T>builder()
-                .status("ERROR")
-                .message(message)
-                .timestamp(LocalDateTime.now())
-                .build();
+        ApiResponse<T> response = new ApiResponse<T>();
+        response.status = "ERROR";
+        response.message = message;
+        response.timestamp = LocalDateTime.now();
+        return response;
     }
 
     public static <T> ApiResponse<T> error(String message, List<String> errors) {
-        return ApiResponse.<T>builder()
-                .status("ERROR")
-                .message(message)
-                .errors(errors)
-                .timestamp(LocalDateTime.now())
-                .build();
+        ApiResponse<T> response = new ApiResponse<T>();
+        response.status = "ERROR";
+        response.message = message;
+        response.errors = errors;
+        response.timestamp = LocalDateTime.now();
+        return response;
     }
 }

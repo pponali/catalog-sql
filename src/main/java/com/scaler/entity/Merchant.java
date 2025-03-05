@@ -7,16 +7,19 @@ import lombok.experimental.SuperBuilder;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.scaler.builder.MerchantBuilder;
+
 @Entity
 @Table(name = "merchant")
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"catalogs"})
 @EqualsAndHashCode(callSuper = true, exclude = {"catalogs"})
 public class Merchant extends BaseEntity {
-    
+
     @Column(name = "code", nullable = false, unique = true)
     private String code;
     

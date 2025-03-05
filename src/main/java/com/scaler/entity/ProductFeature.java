@@ -85,6 +85,14 @@ public class ProductFeature extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "template_id")
     private CategoryFeatureTemplate template;
+    
+    public CategoryFeatureTemplate getTemplate() {
+        return template;
+    }
+    
+    public void setTemplate(CategoryFeatureTemplate template) {
+        this.template = template;
+    }
 /*
     @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

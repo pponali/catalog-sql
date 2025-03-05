@@ -10,7 +10,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "category_feature_template")
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,6 +35,14 @@ public class CategoryFeatureTemplate extends FeatureTemplate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+    
+    public Category getCategory() {
+        return category;
+    }
+    
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public UUID getCategoryId() {
         return category != null ? category.getId() : null;
@@ -50,6 +59,54 @@ public class CategoryFeatureTemplate extends FeatureTemplate {
     public void removeFeature(ProductFeature feature) {
         features.remove(feature);
         feature.setTemplate(null);
+    }
+    
+    public Boolean getMultiValued() {
+        return super.getMultiValued();
+    }
+    
+    public Boolean getVisible() {
+        return super.getVisible();
+    }
+    
+    public Boolean getEditable() {
+        return super.getEditable();
+    }
+    
+    public Boolean getSearchable() {
+        return super.getSearchable();
+    }
+    
+    public Boolean getComparable() {
+        return super.getComparable();
+    }
+    
+    public String getName() {
+        return super.getName();
+    }
+    
+    public String getCode() {
+        return code;
+    }
+    
+    public String getAttributeType() {
+        return attributeType;
+    }
+    
+    public String getMinValue() {
+        return super.getMinValue();
+    }
+    
+    public String getMaxValue() {
+        return super.getMaxValue();
+    }
+    
+    public String getValidationPattern() {
+        return super.getValidationPattern();
+    }
+    
+    public String getAllowedValues() {
+        return super.getAllowedValues();
     }
 
     public boolean isMultiValued() {

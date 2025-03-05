@@ -1,8 +1,6 @@
 package com.scaler.entity;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.scaler.constants.FeatureConstants;
-import com.scaler.mapper.JsonNodeMapper;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

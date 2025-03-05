@@ -9,12 +9,11 @@ import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 public class SellerProductDTO extends BaseDTO {
     @NotNull(message = "Product ID is required")
     private UUID productId;

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channels - Tata Commerce Catalog Admin UI</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+            font-weight: bold;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex: 1;
+            max-width: 500px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #1565c0;
+        }
+        .button.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .button.secondary:hover {
+            background-color: #e0e0e0;
+        }
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .channel-card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .channel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .channel-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .channel-info h3 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        .channel-info p {
+            margin: 0.25rem 0 0;
+            color: #666;
+            font-size: 0.875rem;
+        }
+        .channel-body {
+            padding: 1.5rem;
+        }
+        .channel-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .stat-label {
+            font-size: 0.875rem;
+            color: #666;
+        }
+        .channel-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .status-badge.active {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status-badge.inactive {
+            background-color: #f5f5f5;
+            color: #757575;
+        }
+        .status-badge.maintenance {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tata Commerce Catalog Admin UI</h1>
+        <nav>
+            <a href="test.html">Dashboard</a>
+            <a href="products.html">Products</a>
+            <a href="categories.html">Categories</a>
+            <a href="attributes.html">Attributes</a>
+            <a href="channels.html" class="active">Channels</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h2>Channel Management</h2>
+        
+        <div class="card">
+            <div class="toolbar">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search channels...">
+                    <button class="button">Search</button>
+                </div>
+                <button class="button">+ Add Channel</button>
+            </div>
+            
+            <div class="channel-grid">
+                <!-- Tata Cliq Channel -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-logo">TC</div>
+                        <div class="channel-info">
+                            <h3>Tata Cliq</h3>
+                            <p>E-commerce Platform</p>
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+                    <div class="channel-body">
+                        <div class="channel-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">12,458</div>
+                                <div class="stat-label">Products</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">245</div>
+                                <div class="stat-label">Categories</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Catalogs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">18</div>
+                                <div class="stat-label">Sellers</div>
+                            </div>
+                        </div>
+                        <div class="channel-actions">
+                            <button class="button secondary">Configure</button>
+                            <button class="button secondary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tata 1mg Channel -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-logo">1MG</div>
+                        <div class="channel-info">
+                            <h3>Tata 1mg</h3>
+                            <p>Healthcare Platform</p>
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+                    <div class="channel-body">
+                        <div class="channel-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">8,756</div>
+                                <div class="stat-label">Products</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">156</div>
+                                <div class="stat-label">Categories</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">2</div>
+                                <div class="stat-label">Catalogs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Sellers</div>
+                            </div>
+                        </div>
+                        <div class="channel-actions">
+                            <button class="button secondary">Configure</button>
+                            <button class="button secondary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- BigBasket Channel -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-logo">BB</div>
+                        <div class="channel-info">
+                            <h3>BigBasket</h3>
+                            <p>Grocery Platform</p>
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+                    <div class="channel-body">
+                        <div class="channel-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">15,234</div>
+                                <div class="stat-label">Products</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">178</div>
+                                <div class="stat-label">Categories</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">1</div>
+                                <div class="stat-label">Catalogs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Sellers</div>
+                            </div>
+                        </div>
+                        <div class="channel-actions">
+                            <button class="button secondary">Configure</button>
+                            <button class="button secondary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tata Croma Channel -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-logo">CR</div>
+                        <div class="channel-info">
+                            <h3>Tata Croma</h3>
+                            <p>Electronics Platform</p>
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+                    <div class="channel-body">
+                        <div class="channel-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">7,845</div>
+                                <div class="stat-label">Products</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">98</div>
+                                <div class="stat-label">Categories</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">2</div>
+                                <div class="stat-label">Catalogs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">15</div>
+                                <div class="stat-label">Sellers</div>
+                            </div>
+                        </div>
+                        <div class="channel-actions">
+                            <button class="button secondary">Configure</button>
+                            <button class="button secondary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tata Jewelry Channel -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-logo">TJ</div>
+                        <div class="channel-info">
+                            <h3>Tata Jewelry</h3>
+                            <p>Jewelry Platform</p>
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+                    <div class="channel-body">
+                        <div class="channel-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">3,456</div>
+                                <div class="stat-label">Products</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">45</div>
+                                <div class="stat-label">Categories</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">1</div>
+                                <div class="stat-label">Catalogs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">Sellers</div>
+                            </div>
+                        </div>
+                        <div class="channel-actions">
+                            <button class="button secondary">Configure</button>
+                            <button class="button secondary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tata 11 Channel -->
+                <div class="channel-card">
+                    <div class="channel-header">
+                        <div class="channel-logo">T11</div>
+                        <div class="channel-info">
+                            <h3>Tata 11</h3>
+                            <p>Mobile Platform</p>
+                            <span class="status-badge maintenance">Maintenance</span>
+                        </div>
+                    </div>
+                    <div class="channel-body">
+                        <div class="channel-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">2,345</div>
+                                <div class="stat-label">Products</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">32</div>
+                                <div class="stat-label">Categories</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">1</div>
+                                <div class="stat-label">Catalogs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Sellers</div>
+                            </div>
+                        </div>
+                        <div class="channel-actions">
+                            <button class="button secondary">Configure</button>
+                            <button class="button secondary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

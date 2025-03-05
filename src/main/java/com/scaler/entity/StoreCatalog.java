@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "store_catalog")
-@Data
+@Getter
+@Setter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +19,14 @@ public class StoreCatalog extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
+    
+    public Store getStore() {
+        return store;
+    }
+    
+    public void setStore(Store store) {
+        this.store = store;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "catalog_id", nullable = false)
@@ -43,6 +52,10 @@ public class StoreCatalog extends BaseEntity {
         this.isDefault = isDefault;
     }
 
+    public Catalog getCatalog() {
+        return catalog;
+    }
+    
     public void setCatalog(Catalog catalog) {
         this.catalog = catalog;
     }

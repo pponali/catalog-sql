@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attributes - Tata Commerce Catalog Admin UI</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+            font-weight: bold;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex: 1;
+            max-width: 500px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #1565c0;
+        }
+        .button.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .button.secondary:hover {
+            background-color: #e0e0e0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: 500;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .actions a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .pagination button {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+        }
+        .pagination button.active {
+            background-color: #1976d2;
+            color: white;
+            border-color: #1976d2;
+        }
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .filter select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .badge.string {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+        .badge.number {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+        }
+        .badge.boolean {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+        .badge.enum {
+            background-color: #f3e5f5;
+            color: #4a148c;
+        }
+        .badge.date {
+            background-color: #e8eaf6;
+            color: #1a237e;
+        }
+        .badge.object {
+            background-color: #fce4ec;
+            color: #880e4f;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tata Commerce Catalog Admin UI</h1>
+        <nav>
+            <a href="test.html">Dashboard</a>
+            <a href="products.html">Products</a>
+            <a href="categories.html">Categories</a>
+            <a href="attributes.html" class="active">Attributes</a>
+            <a href="channels.html">Channels</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h2>Attribute Management</h2>
+        
+        <div class="card">
+            <div class="toolbar">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search attributes...">
+                    <button class="button">Search</button>
+                </div>
+                <button class="button">+ Add Attribute</button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter">
+                    <label>Category:</label>
+                    <select>
+                        <option value="">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="grocery">Grocery</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="jewelry">Jewelry</option>
+                    </select>
+                </div>
+                <div class="filter">
+                    <label>Type:</label>
+                    <select>
+                        <option value="">All Types</option>
+                        <option value="string">String</option>
+                        <option value="number">Number</option>
+                        <option value="boolean">Boolean</option>
+                        <option value="enum">Enum</option>
+                        <option value="date">Date</option>
+                        <option value="object">Object</option>
+                    </select>
+                </div>
+                <div class="filter">
+                    <label>Required:</label>
+                    <select>
+                        <option value="">All</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Category</th>
+                        <th>Required</th>
+                        <th>Searchable</th>
+                        <th>Filterable</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Electronics Attributes -->
+                    <tr>
+                        <td>BRAND</td>
+                        <td>Brand</td>
+                        <td><span class="badge string">String</span></td>
+                        <td>All</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MODEL</td>
+                        <td>Model Number</td>
+                        <td><span class="badge string">String</span></td>
+                        <td>Electronics</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SCREEN_SIZE</td>
+                        <td>Screen Size</td>
+                        <td><span class="badge number">Number</span></td>
+                        <td>Electronics > Smartphones, Televisions</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PROCESSOR</td>
+                        <td>Processor</td>
+                        <td><span class="badge string">String</span></td>
+                        <td>Electronics > Smartphones, Laptops</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>RAM</td>
+                        <td>RAM</td>
+                        <td><span class="badge number">Number</span></td>
+                        <td>Electronics > Smartphones, Laptops</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    
+                    <!-- Fashion Attributes -->
+                    <tr>
+                        <td>SIZE</td>
+                        <td>Size</td>
+                        <td><span class="badge enum">Enum</span></td>
+                        <td>Fashion</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>COLOR</td>
+                        <td>Color</td>
+                        <td><span class="badge enum">Enum</span></td>
+                        <td>Fashion, Electronics</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MATERIAL</td>
+                        <td>Material</td>
+                        <td><span class="badge string">String</span></td>
+                        <td>Fashion, Jewelry</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    
+                    <!-- Grocery Attributes -->
+                    <tr>
+                        <td>WEIGHT</td>
+                        <td>Weight</td>
+                        <td><span class="badge number">Number</span></td>
+                        <td>Grocery</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>EXPIRY_DATE</td>
+                        <td>Expiry Date</td>
+                        <td><span class="badge date">Date</span></td>
+                        <td>Grocery, Health & Wellness</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>No</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    
+                    <!-- Health & Wellness Attributes -->
+                    <tr>
+                        <td>DOSAGE</td>
+                        <td>Dosage</td>
+                        <td><span class="badge string">String</span></td>
+                        <td>Health & Wellness > Medicines</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>No</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PRESCRIPTION_REQUIRED</td>
+                        <td>Prescription Required</td>
+                        <td><span class="badge boolean">Boolean</span></td>
+                        <td>Health & Wellness > Medicines</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    
+                    <!-- Jewelry Attributes -->
+                    <tr>
+                        <td>METAL_TYPE</td>
+                        <td>Metal Type</td>
+                        <td><span class="badge enum">Enum</span></td>
+                        <td>Jewelry</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PURITY</td>
+                        <td>Purity</td>
+                        <td><span class="badge string">String</span></td>
+                        <td>Jewelry > Gold</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>CARAT</td>
+                        <td>Carat</td>
+                        <td><span class="badge number">Number</span></td>
+                        <td>Jewelry > Diamond</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td class="actions">
+                            <a href="#">Edit</a>
+                            <a href="#">View</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="pagination">
+                <button>Previous</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>Next</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class ValidationRules {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Tata Commerce Catalog Admin UI</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        nav a.active {
+            background-color: rgba(255,255,255,0.2);
+            font-weight: bold;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex: 1;
+            max-width: 500px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #1565c0;
+        }
+        .button.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .button.secondary:hover {
+            background-color: #e0e0e0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: 500;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .actions a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .pagination button {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+        }
+        .pagination button.active {
+            background-color: #1976d2;
+            color: white;
+            border-color: #1976d2;
+        }
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .filter select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .tree-view {
+            margin-top: 1rem;
+        }
+        .tree-item {
+            margin-bottom: 0.5rem;
+        }
+        .tree-item-header {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .tree-item-header:hover {
+            background-color: #f0f0f0;
+        }
+        .tree-item-header.active {
+            background-color: #e3f2fd;
+        }
+        .tree-item-content {
+            margin-left: 1.5rem;
+            padding-left: 1rem;
+            border-left: 1px solid #ddd;
+        }
+        .tree-toggle {
+            margin-right: 0.5rem;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+        }
+        .category-count {
+            margin-left: auto;
+            background-color: #e0e0e0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tata Commerce Catalog Admin UI</h1>
+        <nav>
+            <a href="test.html">Dashboard</a>
+            <a href="products.html">Products</a>
+            <a href="categories.html" class="active">Categories</a>
+            <a href="attributes.html">Attributes</a>
+            <a href="channels.html">Channels</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h2>Category Management</h2>
+        
+        <div class="card">
+            <div class="toolbar">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search categories...">
+                    <button class="button" id="searchButton">Search</button>
+                </div>
+                <button class="button" id="addCategoryButton">+ Add Category</button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter">
+                    <label>Channel:</label>
+                    <select id="channelFilter">
+                        <option value="">All Channels</option>
+                        <option value="tatacliq">Tata Cliq</option>
+                        <option value="1mg">Tata 1mg</option>
+                        <option value="bigbasket">BigBasket</option>
+                        <option value="croma">Tata Croma</option>
+                    </select>
+                </div>
+                <div class="filter">
+                    <label>Status:</label>
+                    <select id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="errorContainer" class="error-message" style="display: none;"></div>
+            
+            <div id="categoriesContainer" class="tree-view">
+                <div class="loading">Loading categories...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include API Service -->
+    <script src="js/api.js"></script>
+    
+    <!-- Categories Page Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const categoriesContainer = document.getElementById('categoriesContainer');
+            const errorContainer = document.getElementById('errorContainer');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const channelFilter = document.getElementById('channelFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const addCategoryButton = document.getElementById('addCategoryButton');
+            
+            // State
+            let categories = [];
+            let filteredCategories = [];
+            
+            // Initialize
+            loadCategories();
+            
+            // Event Listeners
+            searchButton.addEventListener('click', applyFilters);
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    applyFilters();
+                }
+            });
+            channelFilter.addEventListener('change', applyFilters);
+            statusFilter.addEventListener('change', applyFilters);
+            addCategoryButton.addEventListener('click', addCategory);
+            
+            // Functions
+            async function loadCategories() {
+                showLoading();
+                try {
+                    // Since we don't have direct category data from the API,
+                    // we'll extract unique category IDs from product-category relationships
+                    const productCategories = await window.api.productCategory.getAllProductCategories();
+                    
+                    // Extract unique category IDs
+                    const categoryIds = [...new Set(productCategories.map(pc => pc.category.id))];
+                    
+                    // Create mock categories since we don't have direct category data
+                    categories = [
+                        {
+                            id: 'electronics',
+                            name: 'Electronics',
+                            count: 245,
+                            status: 'active',
+                            channels: ['Tata Cliq', 'Croma'],
+                            children: [
+                                {
+                                    id: 'smartphones',
+                                    name: 'Smartphones',
+                                    count: 87,
+                                    status: 'active',
+                                    channels: ['Tata Cliq', 'Croma']
+                                },
+                                {
+                                    id: 'laptops',
+                                    name: 'Laptops',
+                                    count: 56,
+                                    status: 'active',
+                                    channels: ['Tata Cliq', 'Croma']
+                                },
+                                {
+                                    id: 'televisions',
+                                    name: 'Televisions',
+                                    count: 42,
+                                    status: 'active',
+                                    channels: ['Tata Cliq', 'Croma']
+                                },
+                                {
+                                    id: 'audio',
+                                    name: 'Audio',
+                                    count: 38,
+                                    status: 'active',
+                                    channels: ['Tata Cliq', 'Croma']
+                                },
+                                {
+                                    id: 'cameras',
+                                    name: 'Cameras',
+                                    count: 22,
+                                    status: 'active',
+                                    channels: ['Tata Cliq', 'Croma']
+                                }
+                            ]
+                        },
+                        {
+                            id: 'fashion',
+                            name: 'Fashion',
+                            count: 312,
+                            status: 'active',
+                            channels: ['Tata Cliq'],
+                            children: [
+                                {
+                                    id: 'mens-clothing',
+                                    name: 'Men\'s Clothing',
+                                    count: 124,
+                                    status: 'active',
+                                    channels: ['Tata Cliq']
+                                },
+                                {
+                                    id: 'womens-clothing',
+                                    name: 'Women\'s Clothing',
+                                    count: 156,
+                                    status: 'active',
+                                    channels: ['Tata Cliq']
+                                },
+                                {
+                                    id: 'footwear',
+                                    name: 'Footwear',
+                                    count: 78,
+                                    status: 'active',
+                                    channels: ['Tata Cliq']
+                                },
+                                {
+                                    id: 'accessories',
+                                    name: 'Accessories',
+                                    count: 54,
+                                    status: 'active',
+                                    channels: ['Tata Cliq']
+                                }
+                            ]
+                        },
+                        {
+                            id: 'grocery',
+                            name: 'Grocery',
+                            count: 178,
+                            status: 'active',
+                            channels: ['BigBasket'],
+                            children: [
+                                {
+                                    id: 'fresh-produce',
+                                    name: 'Fresh Produce',
+                                    count: 45,
+                                    status: 'active',
+                                    channels: ['BigBasket']
+                                },
+                                {
+                                    id: 'dairy-eggs',
+                                    name: 'Dairy & Eggs',
+                                    count: 32,
+                                    status: 'active',
+                                    channels: ['BigBasket']
+                                },
+                                {
+                                    id: 'pantry-staples',
+                                    name: 'Pantry Staples',
+                                    count: 56,
+                                    status: 'active',
+                                    channels: ['BigBasket']
+                                },
+                                {
+                                    id: 'beverages',
+                                    name: 'Beverages',
+                                    count: 45,
+                                    status: 'active',
+                                    channels: ['BigBasket']
+                                }
+                            ]
+                        },
+                        {
+                            id: 'health',
+                            name: 'Health & Wellness',
+                            count: 156,
+                            status: 'active',
+                            channels: ['Tata 1mg'],
+                            children: [
+                                {
+                                    id: 'medicines',
+                                    name: 'Medicines',
+                                    count: 87,
+                                    status: 'active',
+                                    channels: ['Tata 1mg']
+                                },
+                                {
+                                    id: 'supplements',
+                                    name: 'Supplements',
+                                    count: 34,
+                                    status: 'active',
+                                    channels: ['Tata 1mg']
+                                },
+                                {
+                                    id: 'personal-care',
+                                    name: 'Personal Care',
+                                    count: 35,
+                                    status: 'active',
+                                    channels: ['Tata 1mg']
+                                }
+                            ]
+                        },
+                        {
+                            id: 'jewelry',
+                            name: 'Jewelry',
+                            count: 98,
+                            status: 'active',
+                            channels: ['Tata Cliq'],
+                            children: [
+                                {
+                                    id: 'gold',
+                                    name: 'Gold',
+                                    count: 42,
+                                    status: 'active',
+                                    channels: ['Tata Cliq']
+                                },
+                                {
+                                    id: 'diamond',
+                                    name: 'Diamond',
+                                    count: 28,
+                                    status: 'active',
+                                    channels: ['Tata Cliq']
+                                },
+                                {
+                                    id: 'silver',
+                                    name: 'Silver',
+                                    count: 18,
+                                    status: 'active',
+                                    channels: ['Tata Cliq']
+                                },
+                                {
+                                    id: 'gemstones',
+                                    name: 'Gemstones',
+                                    count: 10,
+                                    status: 'active',
+                                    channels: ['Tata Cliq']
+                                }
+                            ]
+                        }
+                    ];
+                    
+                    filteredCategories = [...categories];
+                    renderCategories();
+                } catch (error) {
+                    showError('Failed to load categories. Please try again later.');
+                    console.error('Error loading categories:', error);
+                }
+            }
+            
+            function renderCategories() {
+                if (filteredCategories.length === 0) {
+                    categoriesContainer.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            No categories found matching your criteria.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const categoryElements = filteredCategories.map(category => createCategoryElement(category));
+                categoriesContainer.innerHTML = '';
+                categoryElements.forEach(element => {
+                    categoriesContainer.appendChild(element);
+                });
+                
+                // Add event listeners to toggle buttons
+                document.querySelectorAll('.tree-toggle').forEach(toggle => {
+                    toggle.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const header = this.parentElement;
+                        const content = header.nextElementSibling;
+                        if (content && content.classList.contains('tree-item-content')) {
+                            const isHidden = content.style.display === 'none';
+                            content.style.display = isHidden ? 'block' : 'none';
+                            this.textContent = isHidden ? '-' : '+';
+                        }
+                    });
+                });
+                
+                // Add event listeners to category headers
+                document.querySelectorAll('.tree-item-header').forEach(header => {
+                    header.addEventListener('click', function() {
+                        // Remove active class from all headers
+                        document.querySelectorAll('.tree-item-header').forEach(h => {
+                            h.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked header
+                        this.classList.add('active');
+                        
+                        // Toggle the content
+                        const toggle = this.querySelector('.tree-toggle');
+                        if (toggle) {
+                            toggle.click();
+                        }
+                    });
+                });
+            }
+            
+            function createCategoryElement(category) {
+                const treeItem = document.createElement('div');
+                treeItem.className = 'tree-item';
+                treeItem.dataset.id = category.id;
+                
+                const header = document.createElement('div');
+                header.className = 'tree-item-header';
+                header.innerHTML = `
+                    <div class="tree-toggle">${category.children && category.children.length > 0 ? '+' : '•'}</div>
+                    <span>${category.name}</span>
+                    <span class="category-count">${category.count}</span>
+                `;
+                treeItem.appendChild(header);
+                
+                if (category.children && category.children.length > 0) {
+                    const content = document.createElement('div');
+                    content.className = 'tree-item-content';
+                    content.style.display = 'none';
+                    
+                    category.children.forEach(child => {
+                        const childElement = createCategoryElement(child);
+                        content.appendChild(childElement);
+                    });
+                    
+                    treeItem.appendChild(content);
+                }
+                
+                return treeItem;
+            }
+            
+            function applyFilters() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const channelValue = channelFilter.value.toLowerCase();
+                const statusValue = statusFilter.value.toLowerCase();
+                
+                // Helper function to check if a category or any of its children match the filters
+                function categoryMatches(category) {
+                    // Check if the category itself matches
+                    const matchesSearch = searchTerm === '' || 
+                        category.name.toLowerCase().includes(searchTerm);
+                    
+                    const matchesChannel = channelValue === '' || 
+                        category.channels.some(channel => channel.toLowerCase().includes(channelValue));
+                    
+                    const matchesStatus = statusValue === '' || 
+                        category.status.toLowerCase() === statusValue;
+                    
+                    // If the category matches all filters, return true
+                    if (matchesSearch && matchesChannel && matchesStatus) {
+                        return true;
+                    }
+                    
+                    // If the category has children, check if any of them match
+                    if (category.children && category.children.length > 0) {
+                        const matchingChildren = category.children.filter(child => 
+                            categoryMatches(child)
+                        );
+                        
+                        // If any children match, create a new category object with only the matching children
+                        if (matchingChildren.length > 0) {
+                            return true;
+                        }
+                    }
+                    
+                    // If neither the category nor its children match, return false
+                    return false;
+                }
+                
+                // Filter the categories
+                filteredCategories = categories.filter(category => categoryMatches(category));
+                
+                // Render the filtered categories
+                renderCategories();
+            }
+            
+            function showLoading() {
+                categoriesContainer.innerHTML = `<div class="loading">Loading categories...</div>`;
+                errorContainer.style.display = 'none';
+            }
+            
+            function showError(message) {
+                errorContainer.textContent = message;
+                errorContainer.style.display = 'block';
+            }
+            
+            function addCategory() {
+                alert('Add Category functionality will be implemented in a future update.');
+            }
+        });
+    </script>
+</body>
+</html>
