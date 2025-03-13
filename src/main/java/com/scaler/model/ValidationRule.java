@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "validation_rule")
@@ -25,6 +26,7 @@ public class ValidationRule extends BaseEntity {
     private String ruleType;
     private String ruleExpression;
     private int priority;
+    private UUID categoryId;
 
     @ManyToOne
     @JoinColumn(name = "feature_id")

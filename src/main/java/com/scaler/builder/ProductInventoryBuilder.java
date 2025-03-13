@@ -51,4 +51,14 @@ public class ProductInventoryBuilder {
         // Generate random quantity between 50 and 150
         return random.nextInt(101) + 50;
     }
+
+
+    public static ProductInventory createProductInventory(Product product, int i) {
+        return ProductInventory.builder()
+                .product(product)
+                .quantity(i)
+                .reservedQuantity(0)
+                .createdBy("SYSTEM")
+                .build();
+    }
 }

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static lombok.Builder.Default;
 
 @Entity
 @Table(name = "product")
@@ -56,16 +55,16 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<ProductCategory> productCategories = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
+    @lombok.Builder.Default
     private List<ProductAttribute> attributes = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("product-features")
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<ProductFeatureMapping> featureMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -81,15 +80,15 @@ public class Product extends BaseEntity {
     private UnitOfMeasure unitOfMeasure;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<ProductChannel> productChannels = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<SellerProduct> sellerProducts = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<ProductPlatform> productPlatforms = new HashSet<>();
 
     public void addProductCategory(ProductCategory productCategory) {

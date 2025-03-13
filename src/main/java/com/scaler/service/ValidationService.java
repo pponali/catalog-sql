@@ -1,300 +1,135 @@
 package com.scaler.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scaler.entity.*;
-import com.scaler.enums.FeatureValueType;
-import com.scaler.exception.ValidationException;
-import com.scaler.repository.ValidationResultRepository;
-import com.scaler.validation.fact.CategoryValidationFact;
-import com.scaler.validation.fact.FeatureValidationFact;
+import com.scaler.entity.ProductFeatureValue;
+import com.scaler.model.ValidationRule;
 import com.scaler.validation.rule.ValidationRules;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.kie.api.runtime.KieContainer;
+import org.kie.api.KieServices;
+import org.kie.api.builder.KieBuilder;
+import org.kie.api.builder.KieFileSystem;
+import org.kie.api.builder.KieModule;
+import org.kie.api.builder.KieRepository;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.io.ResourceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
- * Service responsible for validating product features and categories using Drools rules engine.
- * Implements validation logic for both individual and bulk feature validations.
+ * Service for validation operations using Drools rules engine
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ValidationService {
 
-    private final ValidationResultRepository validationResultRepository;
-    private final KieContainer kieContainer;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Transactional
-    public ValidationResult validateProductFeature(ProductFeature feature) {
-        // Clear previous validation results
-        validationResultRepository.deleteByEntityIdAndEntityType(feature.getId(), "PRODUCT_FEATURE");
-        
-        // Create new validation result
-        ValidationResult result = ValidationResult.builder()
-            .entityId(feature.getId())
-            .entityType("PRODUCT_FEATURE")
-            .fieldName(feature.getCode())
-            .status(ValidationStatus.PENDING)
-            .build();
-        
-        // Get KieSession and execute rules
-        KieSession kieSession = kieContainer.newKieSession();
-        List<String> errors = new ArrayList<>();
-        kieSession.setGlobal("errors", errors);
-        
-        try {
-            kieSession.insert(feature);
-            kieSession.fireAllRules();
-            
-            // Update validation result
-            if (!errors.isEmpty()) {
-                errors.forEach(result::addError);
-            } else {
-                result.setStatus(ValidationStatus.PASSED);
-            }
-            
-            return validationResultRepository.save(result);
-        } finally {
-            kieSession.dispose();
-        }
-    }
+    private static final Logger logger = LoggerFactory.getLogger(ValidationService.class);
 
     /**
-     * Validates a single product feature value against provided validation rules.
-     * @param featureValue The feature value to validate
-     * @param rules List of validation rules to apply
-     * @return List of validation error messages
-     * @throws ValidationException if validation setup fails
+     * Validates a product feature value using Drools rules engine
+     *
+     * @param productFeatureValue The product feature value to validate
+     * @param rules               The validation rules to apply
+     * @return List of validation error messages, empty if validation passes
      */
-    public List<String> validate(ProductFeatureValue featureValue, List<ValidationRules> rules) {
-        if (featureValue == null) {
-            throw new ValidationException("Feature value cannot be null");
-        }
-        if (rules == null || rules.isEmpty()) {
-            log.warn("No validation rules provided for feature validation");
-            return new ArrayList<>();
-        }
+    public List<String> validateProductFeatureValue(ProductFeatureValue productFeatureValue, List<ValidationRule> rules) {
+        // Create a KieSession to execute the rules
+        KieSession kieSession = createKieSession();
 
-        KieSession kieSession = null;
+        // Create a list to hold validation errors
         List<String> validationErrors = new ArrayList<>();
 
         try {
-            kieSession = kieContainer.newKieSession();
-            String value = getFeatureValue(featureValue);
-            
-            if (value == null) {
-                validationErrors.add("Feature value cannot be null");
-                return validationErrors;
-            }
-
-            log.debug("Validating feature value: {} against {} rules", value, rules.size());
+            // Set the global variable for validation errors
             kieSession.setGlobal("validationErrors", validationErrors);
-            kieSession.insert(featureValue);
-            rules.forEach(kieSession::insert);
+
+            // Insert the validation rules into the session
+            for (ValidationRule rule : rules) {
+                kieSession.insert(rule);
+            }
+
+            // Insert the product feature value to validate
+            kieSession.insert(productFeatureValue);
+
+            // Fire all rules
             kieSession.fireAllRules();
-            
-            if (!validationErrors.isEmpty()) {
-                log.warn("Validation failed with {} errors", validationErrors.size());
+
+            // Log the validation results
+            if (validationErrors.isEmpty()) {
+                logger.info("Validation passed for product feature value: {}", productFeatureValue.getId());
+            } else {
+                logger.warn("Validation failed for product feature value: {}. Errors: {}",
+                        productFeatureValue.getId(), validationErrors);
             }
-        } catch (Exception e) {
-            log.error("Error during feature validation", e);
-            throw new ValidationException("Failed to validate feature: " + e.getMessage(), e);
+
+            return validationErrors;
         } finally {
-            if (kieSession != null) {
-                kieSession.dispose();
-            }
-        }
-
-        return validationErrors;
-    }
-
-    /**
-     * Validates category-specific feature constraints.
-     * @param categoryCode Category identifier
-     * @param featureCode Feature identifier
-     * @param value Feature value to validate
-     * @param metadata Additional validation metadata
-     * @return List of validation error messages
-     * @throws ValidationException if validation setup fails
-     */
-    public List<String> validateCategoryFeature(String categoryCode, String featureCode, String value, Map<String, Object> metadata) {
-        if (StringUtils.isBlank(categoryCode) || StringUtils.isBlank(featureCode)) {
-            throw new ValidationException("Category code and feature code must not be empty");
-        }
-
-        KieSession kieSession = null;
-        List<String> validationErrors = new ArrayList<>();
-
-        try {
-            kieSession = kieContainer.newKieSession();
-            log.debug("Validating category feature - Category: {}, Feature: {}", categoryCode, featureCode);
-            
-            CategoryValidationFact fact = CategoryValidationFact.builder()
-                .categoryCode(categoryCode)
-                .featureCode(featureCode)
-                .value(value)
-                .metadata(metadata)
-                .errors(new ArrayList<>())
-                .build();
-
-            kieSession.insert(fact);
-            kieSession.fireAllRules();
-            validationErrors.addAll(fact.getErrors());
-            
-            if (!validationErrors.isEmpty()) {
-                log.warn("Category feature validation failed with {} errors", validationErrors.size());
-            }
-        } catch (Exception e) {
-            log.error("Error during category feature validation", e);
-            throw new ValidationException("Failed to validate category feature: " + e.getMessage(), e);
-        } finally {
-            if (kieSession != null) {
-                kieSession.dispose();
-            }
-        }
-
-        return validationErrors;
-    }
-
-    /**
-     * Validates a single feature value against its type and constraints.
-     * @param featureCode Feature identifier
-     * @param value Feature value to validate
-     * @param valueTypeStr Feature value type (e.g., STRING, NUMBER, BOOLEAN)
-     * @return List of validation error messages
-     * @throws ValidationException if validation setup fails
-     */
-    public List<String> validateFeature(String featureCode, String value, String valueTypeStr) {
-        KieSession kieSession = kieContainer.newKieSession();
-        List<String> validationErrors = new ArrayList<>();
-
-        try {
-            FeatureValueType valueType = FeatureValueType.valueOf(valueTypeStr);
-            FeatureValidationFact fact = FeatureValidationFact.builder()
-                .featureCode(featureCode)
-                .value(value)
-                .valueType(valueType)
-                .isList(valueType.isList())
-                .valid(true)
-                .validationErrors(new ArrayList<>())
-                .build();
-
-            kieSession.insert(fact);
-            kieSession.fireAllRules();
-            validationErrors.addAll(fact.getValidationErrors());
-        } finally {
+            // Always dispose the session to release resources
             kieSession.dispose();
         }
-
-        return validationErrors;
     }
 
     /**
-     * Validates bulk features for a given category.
-     * @param features List of feature values to validate
-     * @param category Category context for validation
-     * @return List of validation error messages
-     * @throws ValidationException if validation setup fails
+     * Creates a KieSession for executing Drools rules
+     *
+     * @return A new KieSession
      */
-    public List<String> validateBulkFeatures(List<ProductFeatureValue> features, Category category) {
-        if (features == null || features.isEmpty()) {
-            throw new ValidationException("Features list cannot be null or empty");
-        }
-        if (category == null) {
-            throw new ValidationException("Category cannot be null");
-        }
+    private KieSession createKieSession() {
+        KieServices kieServices = KieServices.Factory.get();
+        KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
 
-        KieSession kieSession = null;
-        List<String> validationErrors = new ArrayList<>();
+        // Add the validation.drl file to the KieFileSystem
+        kieFileSystem.write(ResourceFactory.newClassPathResource("rules/validation.drl"));
 
-        try {
-            kieSession = kieContainer.newKieSession();
-            log.debug("Starting bulk validation for {} features in category {}", features.size(), category.getCode());
-            
-            // Insert category context
-            kieSession.insert(category);
-            
-            // Insert each feature for validation
-            for (ProductFeatureValue feature : features) {
-                String featureCode = Optional.ofNullable(feature)
-                    .map(ProductFeatureValue::getFeature)
-                    .map(ProductFeature::getTemplate)
-                    .map(CategoryFeatureTemplate::getCode)
-                    .orElse(null);
+        KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
+        kieBuilder.buildAll();
 
-                if (featureCode == null) {
-                    log.warn("Feature code is null for feature in bulk validation");
-                    continue;
-                }
+        KieRepository kieRepository = kieServices.getRepository();
+        KieModule kieModule = kieRepository.getKieModule(kieBuilder.getKieModule().getReleaseId());
 
-                Map<String, Object> metadata = feature.getAttributeValues() != null ?
-                    objectMapper.convertValue(feature.getAttributeValues(), Map.class) : null;
-
-                String value = getFeatureValue(feature);
-                if (value == null) {
-                    validationErrors.add(String.format("Feature value cannot be null for feature code: %s", featureCode));
-                    continue;
-                }
-
-                CategoryValidationFact fact = CategoryValidationFact.builder()
-                    .categoryCode(category.getCode())
-                    .featureCode(featureCode)
-                    .value(value)
-                    .metadata(metadata)
-                    .errors(new ArrayList<>())
-                    .build();
-                
-                kieSession.insert(fact);
-            }
-            
-            kieSession.fireAllRules();
-            
-            // Collect all validation errors
-            kieSession.getObjects(obj -> obj instanceof CategoryValidationFact)
-                .forEach(obj -> {
-                    CategoryValidationFact fact = (CategoryValidationFact) obj;
-                    if (fact.getErrors() != null) {
-                        validationErrors.addAll(fact.getErrors());
-                    }
-                });
-
-            if (!validationErrors.isEmpty()) {
-                log.warn("Bulk validation failed with {} errors", validationErrors.size());
-            }
-        } catch (Exception e) {
-            log.error("Error during bulk feature validation", e);
-            throw new ValidationException("Failed to validate bulk features: " + e.getMessage(), e);
-        } finally {
-            if (kieSession != null) {
-                kieSession.dispose();
-            }
-        }
-
-        return validationErrors;
+        return kieServices.newKieContainer(kieModule.getReleaseId()).newKieSession();
     }
 
-    private String getFeatureValue(ProductFeatureValue feature) {
-        if (feature == null || feature.getAttributeValues() == null) {
-            return null;
+    /**
+     * Converts ValidationRules entity to ValidationRule model
+     *
+     * @param validationRules The ValidationRules entity from the database
+     * @return A ValidationRule model that can be used with the rules engine
+     */
+    public ValidationRule convertToValidationRule(ValidationRules validationRules) {
+        ValidationRule.RuleType ruleType = ValidationRule.RuleType.valueOf(validationRules.getRuleType());
+
+        ValidationRule rule = ValidationRule.builder()
+                .code(validationRules.getCode())
+                .name(validationRules.getName())
+                .description(validationRules.getDescription())
+                .ruleType(ruleType.toString())
+                .active(true)
+                .priority(0)
+                .build();
+
+        // Set the rule expression based on the rule type
+        switch (ruleType) {
+            case PATTERN:
+                rule.setRuleExpression(validationRules.getPattern());
+                break;
+            case RANGE:
+                rule.setRuleExpression(validationRules.getMinValue() + "," + validationRules.getMaxValue());
+                break;
+            case ALLOWED_VALUES:
+                rule.setRuleExpression(validationRules.getAllowedValues());
+                break;
+            default:
+                rule.setRuleExpression("");
+                break;
         }
-        
-        try {
-            JsonNode valueNode = feature.getAttributeValues().get("value");
-            return valueNode != null ? valueNode.asText() : null;
-        } catch (Exception e) {
-            log.error("Error getting feature value", e);
-            return null;
-        }
+
+        return rule;
     }
 }

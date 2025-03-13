@@ -27,16 +27,32 @@ public interface CategoryFeatureTemplateMapper extends JsonNodeMapper {
     })
     CategoryFeatureTemplateDTO toDTO(CategoryFeatureTemplate entity);
 
-    @Mappings({
-            @Mapping(target = "category", ignore = true),
-            @Mapping(target = "code", source = "code"),
-            @Mapping(target = "attributeType", source = "attributeType"),
-            @Mapping(target = "name", source = "name"),
-            @Mapping(target = "description", source = "description"),
-            @Mapping(target = "featureType", source = "featureType"),
-            @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode")
-    })
-    CategoryFeatureTemplate toEntity(CategoryFeatureTemplateDTO dto);
+    @Named("toEntity")
+    default CategoryFeatureTemplate toEntity(CategoryFeatureTemplateDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        
+        // Convert String featureType to FeatureType enum
+        com.scaler.entity.FeatureType featureTypeEnum = null;
+        if (dto.getFeatureType() != null && !dto.getFeatureType().isEmpty()) {
+            try {
+                featureTypeEnum = com.scaler.entity.FeatureType.valueOf(dto.getFeatureType());
+            } catch (IllegalArgumentException e) {
+                // Default to STRING if invalid
+                featureTypeEnum = com.scaler.entity.FeatureType.STRING;
+            }
+        }
+        
+        return CategoryFeatureTemplate.builder()
+                .code(dto.getCode())
+                .attributeType(dto.getAttributeType())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .featureType(featureTypeEnum)
+                .metadata(MapperUtils.mapStringToJsonNode(dto.getMetadata()))
+                .build();
+    }
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({

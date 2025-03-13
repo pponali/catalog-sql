@@ -23,16 +23,34 @@ public interface ProductMapper  {
     })
     ProductDTO toDTO(Product entity);
 
-    @Mappings({
-            @Mapping(target = "merchant", ignore = true),
-            @Mapping(target = "catalog", ignore = true),
-            @Mapping(target = "productCategories", ignore = true),
-            @Mapping(target = "name", source = "name"),
-            @Mapping(target = "description", source = "description"),
-            @Mapping(target = "code", source = "code"),
-            @Mapping(target = "status", source = "status")
-    })
-    Product toEntity(ProductDTO dto);
+    @Named("toEntity")
+    default Product toEntity(ProductDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        
+        // Convert String productType to ProductType enum
+        com.scaler.entity.ProductType productTypeEnum = null;
+        if (dto.getProductType() != null && !dto.getProductType().isEmpty()) {
+            try {
+                productTypeEnum = com.scaler.entity.ProductType.valueOf(dto.getProductType());
+            } catch (IllegalArgumentException e) {
+                // Default to SIMPLE if invalid
+                productTypeEnum = com.scaler.entity.ProductType.SIMPLE;
+            }
+        }
+        
+        return Product.builder()
+                .id(dto.getId())
+                .code(dto.getCode())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .status(dto.getStatus())
+                .productType(productTypeEnum)
+                .sku(dto.getSku())
+                .price(dto.getPrice())
+                .build();
+    }
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mappings({

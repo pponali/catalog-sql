@@ -24,11 +24,14 @@ public class CacheConfig {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         
         // Configure different caches with their own settings
-        cacheManager.setCacheNames(java.util.Arrays.asList("productFeatureValues"));
+        cacheManager.setCacheNames(java.util.Arrays.asList("productFeatureValues", "testCache"));
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .maximumSize(featureValuesMaxSize)
                 .expireAfterWrite(featureValuesCacheTtl, TimeUnit.SECONDS)
                 .recordStats());
+        
+        // Allow dynamic cache creation
+        cacheManager.setAllowNullValues(true);
 
         return cacheManager;
     }

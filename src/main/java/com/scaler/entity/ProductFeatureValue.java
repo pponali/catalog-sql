@@ -82,4 +82,8 @@ public class ProductFeatureValue extends BaseEntity {
         this.attributeValues = value;
     }
 
+    public ProductFeature getProductFeature() {
+        return feature;
+    }
+
 }

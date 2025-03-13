@@ -14,8 +14,20 @@ public interface UnitOfMeasureMapper {
     @Mapping(target = "baseUnit", source = "baseUnit.code")
     UnitOfMeasureDTO toDTO(UnitOfMeasure unitOfMeasure);
 
-    @Mapping(target = "baseUnit", ignore = true)
-    UnitOfMeasure toEntity(UnitOfMeasureDTO dto);
+    @Named("toEntity")
+    default UnitOfMeasure toEntity(UnitOfMeasureDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        
+        return UnitOfMeasure.builder()
+                .id(dto.getId())
+                .code(dto.getCode())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .conversionFactor(dto.getConversionFactor())
+                .build();
+    }
 
     @Mapping(target = "baseUnit", ignore = true)
     void updateEntityFromDTO(UnitOfMeasureDTO dto, @MappingTarget UnitOfMeasure entity);

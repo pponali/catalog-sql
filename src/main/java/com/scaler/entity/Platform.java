@@ -51,7 +51,7 @@ public class Platform extends BaseEntity {
     private Channel channel;
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<ProductPlatform> productPlatforms = new HashSet<>();
 
     public void addProduct(Product product) {

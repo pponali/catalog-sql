@@ -9,10 +9,24 @@ import com.scaler.entity.ProductFeatureValue;
 import com.scaler.entity.ProductFeature;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 public class ProductFeatureValueBuilder {
     
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    private static JsonNode createSimpleValueJson(String featureCode, String value) {
+        try {
+            ObjectNode node = objectMapper.createObjectNode();
+            node.put("value", value);
+            node.put("featureCode", featureCode);
+            node.put("timestamp", LocalDateTime.now().toString());
+            return node;
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating JSON for feature value: " + value, e);
+        }
+    }
 
     private static JsonNode createAttributeValues(String value, String displayValue, ObjectNode additionalInfo) {
         try {
@@ -106,6 +120,16 @@ public class ProductFeatureValueBuilder {
                 .feature(feature)
                 .type("SPECIFICATION")
                 .attributeValues(createAttributeValues(value, value, additionalInfo))
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
+
+    public static ProductFeatureValue createPurityValue(ProductFeature goldPurity, String invalidPurity) {
+        return ProductFeatureValue.builder()
+                .type("VALUE")
+                .feature(goldPurity)
+                .attributeValues(createSimpleValueJson("value", invalidPurity))
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .build();
