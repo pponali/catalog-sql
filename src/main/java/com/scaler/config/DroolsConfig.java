@@ -8,6 +8,12 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.internal.io.ResourceFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 @Configuration
 public class DroolsConfig {
@@ -15,18 +21,19 @@ public class DroolsConfig {
     private static final String RULES_PATH = "rules/";
     
     @Bean
-    public KieContainer kieContainer() {
+    public KieContainer kieContainer() throws IOException {
         KieServices kieServices = KieServices.Factory.get();
-
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
         
-        // Add all validation rules
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + "category-validation.drl"));
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + "product-features.drl"));
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + "catalog-validation.drl"));
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + "merchant-validation.drl"));
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + "channel-validation.drl"));
-
+        // Load all rule files from the rules directory
+        ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+        Resource[] resources = resourcePatternResolver.getResources("classpath:" + RULES_PATH + "*.drl");
+        
+        for (Resource resource : resources) {
+            String path = RULES_PATH + resource.getFilename();
+            kieFileSystem.write(ResourceFactory.newClassPathResource(path));
+        }
+        
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
         kieBuilder.buildAll();
         

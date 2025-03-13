@@ -28,4 +28,12 @@ public class FeatureValidationFact {
         validationErrors.add(error);
         valid = false;
     }
+    
+    /**
+     * Alias for addValidationError to maintain compatibility with DRL rules
+     * @param error Error message to add
+     */
+    public void addError(String error) {
+        addValidationError(error);
+    }
 }

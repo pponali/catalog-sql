@@ -86,4 +86,28 @@ public class ProductFeatureValue extends BaseEntity {
         return feature;
     }
 
+    public String getStringValue() {
+        if (attributeValues != null && attributeValues.has("stringValue")) {
+            return attributeValues.get("stringValue").asText();
+        }
+        return null;
+    }
+
+    public Double getNumericValue() {
+        if (attributeValues != null && attributeValues.has("numericValue")) {
+            return attributeValues.get("numericValue").asDouble();
+        }
+        return null;
+    }
+
+    public Boolean getBooleanValue() {
+        if (attributeValues != null && attributeValues.has("booleanValue")) {
+            return attributeValues.get("booleanValue").asBoolean();
+        }
+        return null;
+    }
+
+    public JsonNode getAttributeValue() {
+        return attributeValues;
+    }
 }

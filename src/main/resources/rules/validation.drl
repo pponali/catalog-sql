@@ -1,8 +1,8 @@
 package com.scaler.rules.validation;
 
 import com.scaler.entity.ProductFeatureValue;
-import com.scaler.validation.rule.ValidationRule;
-import com.scaler.validation.rule.ValidationRule.RuleType;
+import com.scaler.model.ValidationRule;
+import com.scaler.model.ValidationRule.RuleType;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ global List<String> validationErrors;
 
 rule "Required Value Check"
     when
-        $rule: ValidationRule(required == true)
+        $rule: ValidationRule(ruleType == "REQUIRED")
         $value: ProductFeatureValue(
             stringValue == null && numericValue == null && 
             booleanValue == null && attributeValue == null
@@ -22,7 +22,7 @@ end
 
 rule "Pattern Validation"
     when
-        $rule: ValidationRule(ruleType == RuleType.PATTERN, pattern != null)
+        $rule: ValidationRule(ruleType == "PATTERN", pattern != null)
         $value: ProductFeatureValue(stringValue != null)
         eval(!Pattern.compile($rule.getPattern()).matcher($value.getStringValue()).matches())
     then
@@ -31,7 +31,7 @@ end
 
 rule "Range Validation"
     when
-        $rule: ValidationRule(ruleType == RuleType.RANGE)
+        $rule: ValidationRule(ruleType == "RANGE")
         $value: ProductFeatureValue(numericValue != null)
         eval(
             ($rule.getMinValue() != null && $value.getNumericValue() < $rule.getMinValue()) ||
@@ -44,7 +44,7 @@ end
 
 rule "Enumeration Validation"
     when
-        $rule: ValidationRule(ruleType == RuleType.ENUMERATION, allowedValues != null)
+        $rule: ValidationRule(ruleType == "ALLOWED_VALUES", allowedValues != null)
         $value: ProductFeatureValue(stringValue != null)
         eval(!$rule.getAllowedValues().contains($value.getStringValue()))
     then
@@ -54,13 +54,13 @@ end
 
 rule "Length Validation"
     when
-        $rule: ValidationRule(ruleType == RuleType.LENGTH)
+        $rule: ValidationRule(ruleType == "LENGTH")
         $value: ProductFeatureValue(stringValue != null)
         eval(
-            $value.getStringValue().length() < $rule.getMinLength() ||
-            $value.getStringValue().length() > $rule.getMaxLength()
+            ($rule.getMinValue() != null && $value.getStringValue().length() < $rule.getMinValue().intValue()) ||
+            ($rule.getMaxValue() != null && $value.getStringValue().length() > $rule.getMaxValue().intValue())
         )
     then
         validationErrors.add("Value length must be between " + 
-            $rule.getMinLength() + " and " + $rule.getMaxLength());
+            $rule.getMinValue() + " and " + $rule.getMaxValue() + " characters");
 end

@@ -1,6 +1,12 @@
 package com.scaler.rules.validation;
 
+import com.scaler.entity.ProductFeatureValue;
+import com.scaler.model.ValidationRule;
+import com.scaler.model.ValidationRule.RuleType;
 import com.scaler.entity.Channel;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 global java.util.List errors;
 
