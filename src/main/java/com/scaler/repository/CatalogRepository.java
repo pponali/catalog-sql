@@ -14,6 +14,8 @@ import java.util.UUID;
 public interface CatalogRepository extends JpaRepository<Catalog, UUID> {
     
     List<Catalog> findByBusinessId(UUID businessId);
+    
+    Optional<Catalog> findByCode(String code);
 
     @Query("SELECT DISTINCT c FROM Catalog c " +
            "JOIN c.merchants m " +

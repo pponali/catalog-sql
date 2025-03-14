@@ -1,0 +1,20 @@
+product_id,product_code,category_id,category_code,display_order,primary_category
+1,TCLQ-MTSHIRT-001,MPH1111101100,Men's T-Shirts,1,true
+2,TCLQ-MTSHIRT-002,MPH1111101100,Men's T-Shirts,1,true
+3,TCLQ-WDRESS-001,MPH1110101109,Women's Dresses,1,true
+4,TCLQ-WDRESS-002,MPH1110101109,Women's Dresses,1,true
+5,TCLQ-MJEANS-001,MPH1111101102,Men's Jeans,1,true
+6,TCLQ-MJEANS-002,MPH1111101102,Men's Jeans,1,true
+7,TCLQ-WKURTA-001,MPH1110100101,Women's Kurtas,1,true
+7,TCLQ-WKURTA-001,MPH1110100102,Women's Ethnic Sets,2,false
+8,TCLQ-WKURTA-002,MPH1110100101,Women's Kurtas,1,true
+8,TCLQ-WKURTA-002,MPH1110100102,Women's Ethnic Sets,2,false
+9,TCLQ-MSHIRT-001,MPH1111100103,Men's Formal Shirts,1,true
+10,TCLQ-MSHIRT-002,MPH1111101100,Men's Casual Shirts,1,true
+11,TCLQ-WSKIRT-001,MPH1110101111,Women's Skirts,1,true
+12,TCLQ-WSKIRT-002,MPH1110101111,Women's Skirts,1,true
+13,TCLQ-MBLAZER-001,MPH1111100103,Men's Formal Wear,1,true
+13,TCLQ-MBLAZER-001,MPH1111100102,Men's Suits & Blazers,2,false
+14,TCLQ-MBLAZER-002,MPH1111100103,Men's Formal Wear,1,true
+14,TCLQ-MBLAZER-002,MPH1111100102,Men's Suits & Blazers,2,false
+15,TCLQ-WSAREE-001,MPH1110100100,Women's Sarees,1,true

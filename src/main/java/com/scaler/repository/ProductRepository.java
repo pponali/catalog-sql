@@ -15,6 +15,7 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
     Optional<Product> findBySku(String sku);
+    Optional<Product> findByCode(String code);
     
     // Basic queries
     @Query("SELECT DISTINCT p FROM Product p " +
@@ -207,4 +208,3 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
 
 
 }
-
