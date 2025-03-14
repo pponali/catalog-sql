@@ -1,6 +1,7 @@
 package com.scaler.dto;
 
 import lombok.*;
+import lombok.Builder;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;

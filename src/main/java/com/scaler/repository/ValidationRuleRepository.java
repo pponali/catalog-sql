@@ -78,4 +78,5 @@ public interface ValidationRuleRepository extends JpaRepository<ValidationRule, 
      * @return Whether the validation rule exists
      */
     boolean existsByCode(String code);
+
 }

@@ -1,12 +1,19 @@
 package com.scaler.builder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scaler.entity.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.UUID;
 
+@Slf4j
+@Component
 public class ProductBuilder {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -136,6 +143,139 @@ public class ProductBuilder {
         ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, category, merchant);
         product.getProductCategories().add(productCategory);
 
+        return product;
+    }
+
+    /**
+     * Creates a product with metadata from a map of attributes
+     *
+     * @param attributes Map of product attributes
+     * @return Product entity with metadata
+     * @throws JsonProcessingException If there is an error processing JSON
+     */
+    public Product createProductWithMetadata(Map<String, String> attributes) throws JsonProcessingException {
+        log.info("Creating product with attributes: {}", attributes);
+
+        Product product = new Product();
+
+        // Set basic product properties
+        product.setId(UUID.randomUUID());
+        product.setCode(attributes.getOrDefault("Product_Code", "PROD-" + UUID.randomUUID().toString().substring(0, 8)));
+        product.setName(attributes.getOrDefault("Product_Name", "Product " + UUID.randomUUID().toString().substring(0, 8)));
+        product.setDescription(attributes.getOrDefault("Description", ""));
+        // Always set product type to SIMPLE to avoid null constraint violations
+        product.setProductType(ProductType.SIMPLE);
+
+        // Set system fields
+        product.setCreatedBy("system");
+        product.setCreatedDate(LocalDateTime.now());
+        product.setLastModifiedBy("system");
+        product.setLastModifiedDate(LocalDateTime.now());
+
+        // Initialize collections
+        product.setProductCategories(new HashSet<>());
+        product.setFeatureMappings(new HashSet<>());
+
+        // Create and set metadata as JSON
+        ObjectNode metadataNode = createProductMetadataNode(attributes);
+        product.setMetadata(metadataNode.toString());
+
+        return product;
+    }
+
+    /**
+     * Creates a product feature value with metadata
+     *
+     * @param product Product to associate with the feature value
+     * @param featureCode Feature code
+     * @param value Feature value
+     * @return ProductFeatureValue entity
+     * @throws JsonProcessingException If there is an error processing JSON
+     */
+    public ProductFeatureValue createProductFeatureValueWithMetadata(
+            Product product, String featureCode, String value) throws JsonProcessingException {
+        log.info("Creating product feature value for product: {}, feature: {}, value: {}",
+                product.getName(), featureCode, value);
+
+        ProductFeatureValue featureValue = new ProductFeatureValue();
+        featureValue.setId(UUID.randomUUID());
+
+        // Set system fields
+        featureValue.setCreatedBy("system");
+        featureValue.setCreatedDate(LocalDateTime.now());
+
+        // Create metadata node for the feature value
+        ObjectNode metadataNode = objectMapper.createObjectNode();
+        metadataNode.put("featureCode", featureCode);
+        metadataNode.put("value", value);
+
+        // Set the attribute value as a JSON node
+        featureValue.setAttributeValue(objectMapper.valueToTree(value));
+
+        return featureValue;
+    }
+
+    /**
+     * Creates metadata for a product as a JSON node
+     *
+     * @param attributes Map of product attributes
+     * @return ObjectNode containing product metadata
+     */
+    private ObjectNode createProductMetadataNode(Map<String, String> attributes) {
+        ObjectNode metadataNode = objectMapper.createObjectNode();
+
+        // Add all attributes to the metadata node
+        for (Map.Entry<String, String> entry : attributes.entrySet()) {
+            metadataNode.put(entry.getKey(), entry.getValue());
+        }
+
+        return metadataNode;
+    }
+
+    /**
+     * Adds a category to a product
+     *
+     * @param product Product to add the category to
+     * @param productCategory ProductCategory to add
+     * @return Updated product
+     */
+    public Product addCategoryToProduct(Product product, ProductCategory productCategory) {
+        log.info("Adding category {} to product {}",
+                productCategory.getCategory().getName(), product.getName());
+
+        if (product.getProductCategories() == null) {
+            product.setProductCategories(new HashSet<>());
+        }
+
+        product.getProductCategories().add(productCategory);
+        productCategory.setProduct(product);
+
+        return product;
+    }
+
+    /**
+     * Adds a feature value to a product
+     *
+     * @param product Product to add the feature value to
+     * @param featureValue Feature value to add
+     * @return Updated product
+     */
+    public Product addFeatureValueToProduct(Product product, ProductFeatureValue featureValue) {
+        log.info("Adding feature value {} to product {}",
+                featureValue.getId(), product.getName());
+
+        // Create a ProductFeatureMapping to connect the product and feature value
+        ProductFeatureMapping mapping = ProductFeatureMapping.builder()
+                .product(product)
+                .build();
+        
+        // Add the mapping to the product's feature mappings
+        if (product.getFeatureMappings() == null) {
+            product.setFeatureMappings(new HashSet<>());
+        }
+        
+        product.addFeatureMapping(mapping);
+        
         return product;
     }
 

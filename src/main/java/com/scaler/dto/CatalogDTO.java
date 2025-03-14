@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,12 +40,12 @@ public class CatalogDTO extends BaseDTO {
     @NotNull(message = "Merchant ID is required")
     private UUID businessId;
 
-    @Builder.Default
+    @lombok.Builder.Default
     private List<ProductDTO> products = new ArrayList<>();
 
-    @Builder.Default
+    @lombok.Builder.Default
     private List<CategoryDTO> categories = new ArrayList<>();
 
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<StoreCatalogDTO> siteCatalogs = new HashSet<>();
 }

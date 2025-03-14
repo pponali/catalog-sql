@@ -3,6 +3,7 @@ package com.scaler.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,17 +35,23 @@ public class Catalog extends BaseEntity {
     @Column(name = "type")
     private String type;
     
+    @Column(name = "merchant_id")
+    private java.util.UUID merchantId;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id")
     private Merchant business;
 
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
+    @lombok.Builder.Default
     private List<Product> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
+    @lombok.Builder.Default
     private List<Category> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
+    @lombok.Builder.Default
     private Set<StoreCatalog> siteCatalogs = new HashSet<>();
 
     @ManyToMany
@@ -53,6 +60,7 @@ public class Catalog extends BaseEntity {
         joinColumns = @JoinColumn(name = "catalog_id"),
         inverseJoinColumns = @JoinColumn(name = "merchant_id")
     )
+    @lombok.Builder.Default
     private Set<Merchant> merchants = new HashSet<>();
     
     
@@ -97,5 +105,12 @@ public class Catalog extends BaseEntity {
         merchant.getCatalogs().remove(this);
     }
     
-
+    public void setMerchant(Merchant merchant) {
+        this.addMerchant(merchant);
+        this.merchantId = merchant.getId();
+    }
+    
+    public void setMerchantId(java.util.UUID merchantId) {
+        this.merchantId = merchantId;
+    }
 }

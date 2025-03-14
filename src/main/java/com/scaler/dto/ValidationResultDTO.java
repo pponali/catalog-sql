@@ -3,6 +3,7 @@ package com.scaler.dto;
 import com.scaler.entity.ValidationStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.Builder;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ValidationResultDTO extends BaseDTO {
     
     private ValidationStatus status;
     
-    @Builder.Default
+    @lombok.Builder.Default
     private List<String> errors = new ArrayList<>();
 
     

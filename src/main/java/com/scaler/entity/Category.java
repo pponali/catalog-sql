@@ -3,6 +3,7 @@ package com.scaler.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.Builder;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -36,6 +37,9 @@ public class Category extends BaseEntity {
     private String name;
 
     private String description;
+    
+    @Column(columnDefinition = "TEXT")
+    private String metadata;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id", nullable = false)
@@ -50,13 +54,16 @@ public class Category extends BaseEntity {
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
     private List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<CategoryFeatureTemplate> templates = new HashSet<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
+    @Builder.Default
     private Set<ProductCategory> productCategories = new HashSet<>();
 
     public void addTemplate(CategoryFeatureTemplate template) {
