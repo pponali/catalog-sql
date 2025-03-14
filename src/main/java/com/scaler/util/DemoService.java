@@ -26,6 +26,7 @@ import java.util.*;
 @Service
 @Transactional
 public class DemoService {
+    private final ProductFeatureRepository productFeatureRepository;
 
     // Services
     private final DataSetupService dataSetupService;
@@ -56,7 +57,8 @@ public class DemoService {
             ProductCategoryRepository productCategoryRepository,
             ProductBuilder productBuilder,
             CategoryBuilder categoryBuilder,
-            CsvDataReaderService csvDataReaderService) {
+            CsvDataReaderService csvDataReaderService,
+            ProductFeatureRepository productFeatureRepository) {
         this.dataSetupService = dataSetupService;
         this.testValidationService = testValidationService;
         this.productRepository = productRepository;
@@ -67,6 +69,7 @@ public class DemoService {
         this.productBuilder = productBuilder;
         this.categoryBuilder = categoryBuilder;
         this.csvDataReaderService = csvDataReaderService;
+        this.productFeatureRepository = productFeatureRepository;
     }
     
     /**
@@ -79,6 +82,14 @@ public class DemoService {
         
         // Check if database is empty and needs population
         if (merchantRepository.count() == 0) {
+            try {
+                populateDataFromCsvFiles();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (CsvException e) {
+                throw new RuntimeException(e);
+            }
+            dataSetupService.setup();
             log.info("Database is empty, will populate data from CSV files when setup() is called");
         } else {
             log.info("Database already contains data, no need to populate from CSV files");
@@ -97,11 +108,14 @@ public class DemoService {
             log.info("Populating database from CSV files");
             try {
                 populateDataFromCsvFiles();
-            } catch (Exception e) {
-                log.error("Error populating data from CSV files", e);
-                // Fall back to standard setup if CSV population fails
+            } catch (IOException e) {
                 dataSetupService.setup();
+                throw new RuntimeException(e);
+            } catch (CsvException e) {
+                dataSetupService.setup();
+                throw new RuntimeException(e);
             }
+            dataSetupService.setup();
         } else {
             log.info("Database already contains data, using standard setup");
             dataSetupService.setup();
