@@ -46,14 +46,14 @@ public class ProductDTO extends BaseDTO {
 
     private UUID catalogId;
 
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<SellerProductDTO> sellerProducts = new HashSet<>();
 
     private Set<UUID> categoryIds = new HashSet<>();
 
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<ProductFeatureWithValuesDTO> features = new HashSet<>();
 
-    @Builder.Default
+    @lombok.Builder.Default
     private List<ProductAttributeDTO> attributes = new ArrayList<>();
 }

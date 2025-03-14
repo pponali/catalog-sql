@@ -2,12 +2,14 @@ package com.scaler.controller;
 
 import com.scaler.dto.ProductDTO;
 import com.scaler.dto.ProductResponseDTO;
+import com.scaler.mapper.ProductMapper;
 import com.scaler.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,24 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @GetMapping
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        List<ProductDTO> products = productService.findAll();
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
+        if (!productService.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        Optional<ProductDTO> product = productService.findById(id);
+        if (product.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else{
+            return ResponseEntity.ok(product.get());
+        }
+    }
 
 
 
