@@ -2,6 +2,7 @@ package com.scaler.mapper;
 
 import com.scaler.dto.CategoryDTO;
 import com.scaler.entity.Category;
+import com.scaler.entity.CategoryMapping;
 import com.scaler.entity.Product;
 import com.scaler.repository.CatalogRepository;
 import com.scaler.repository.CategoryRepository;
@@ -11,15 +12,17 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class CategoryMapper {
-
 
     private final MerchantRepository merchantRepository;
     private final CatalogRepository catalogRepository;
@@ -35,7 +38,6 @@ public class CategoryMapper {
         dto.setId(entity.getId());
         dto.setBusinessId(entity.getMerchant() != null ? entity.getMerchant().getId() : null);
         dto.setCatalogId(entity.getCatalog() != null ? entity.getCatalog().getId() : null);
-        dto.setParentId(entity.getParent() != null ? entity.getParent().getId() : null);
         dto.setCode(entity.getCode());
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
@@ -43,13 +45,6 @@ public class CategoryMapper {
         dto.setLastModifiedDate(DateUtil.formatDateTime(entity.getLastModifiedDate()));
         dto.setCreatedBy(entity.getCreatedBy());
         dto.setLastModifiedBy(entity.getLastModifiedBy());
-
-        // Map children
-        if (entity.getChildren() != null) {
-            dto.setChildren(entity.getChildren().stream()
-                    .map(this::toDTO)
-                    .collect(Collectors.toList()));
-        }
 
         // Map templates
         if (entity.getTemplates() != null) {
@@ -64,6 +59,12 @@ public class CategoryMapper {
                     .map(pc -> pc.getProduct().getId())
                     .collect(Collectors.toSet()));
         }
+
+        // Add logic to map CategoryMapping entities
+        // Example mapping logic for CategoryMapping
+        // This is a placeholder and should be replaced with actual mapping logic
+        // List<CategoryMapping> mappings = categoryMappingRepository.findByParent(entity);
+        // dto.setChildren(mappings.stream().map(CategoryMapping::getChild).map(this::toDTO).collect(Collectors.toList()));
 
         return dto;
     }
@@ -96,12 +97,6 @@ public class CategoryMapper {
                     .ifPresent(entity::setCatalog);
         }
 
-        // Set parent if parentId is provided
-        if (dto.getParentId() != null) {
-            categoryRepository.findById(dto.getParentId())
-                    .ifPresent(entity::setParent);
-        }
-
         return entity;
     }
 
@@ -131,12 +126,6 @@ public class CategoryMapper {
             catalogRepository.findById(dto.getCatalogId())
                     .ifPresent(entity::setCatalog);
         }
-
-        // Update parent if parentId is provided
-        if (dto.getParentId() != null) {
-            categoryRepository.findById(dto.getParentId())
-                    .ifPresent(entity::setParent);
-        }
     }
 
     public List<CategoryDTO> toDTOList(List<Category> entities) {
@@ -155,5 +144,19 @@ public class CategoryMapper {
         return products.stream()
                 .map(Product::getId)
                 .collect(Collectors.toSet());
+    }
+
+    public List<CategoryMapping> mapToCategoryMappings(List<String[]> csvData, List<Category> categories) {
+        Map<String, Category> categoryMap = categories.stream()
+                .collect(Collectors.toMap(Category::getCode, Function.identity()));
+        List<CategoryMapping> mappings = new ArrayList<>();
+        for (String[] row : csvData) {
+            Category parent = categoryMap.get(row[0]);
+            Category child = categoryMap.get(row[1]);
+            if (parent != null && child != null) {
+                mappings.add(new CategoryMapping(parent, child));
+            }
+        }
+        return mappings;
     }
 }

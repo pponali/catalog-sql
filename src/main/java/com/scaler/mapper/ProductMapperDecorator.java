@@ -13,7 +13,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,27 +40,27 @@ public abstract class ProductMapperDecorator implements ProductMapper {
 
         // Map features with their values
         if (entity.getFeatureMappings() != null) {
-            Set<ProductFeatureWithValuesDTO> featuresWithValues = entity.getFeatureMappings().stream()
+            List<ProductFeatureWithValuesDTO> featuresWithValues = entity.getFeatureMappings().stream()
                 .map(mapping -> {
                     var feature = mapping.getFeature();
                     if (feature == null) return null;
 
                     // Map feature values
-                    Set<ProductFeatureValueDTO> values = entity.getFeatureValueMappings().stream()
+                    List<ProductFeatureValueDTO> values = mapping.getFeatureValueMappings().stream()
                         .map(valueMapping -> {
                             return featureValueMapper.toDTO(valueMapping.getFeatureValue());
                         })
                         .filter(v -> v != null)
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toList());
 
                     // Create feature with values using the decorator
-                    return ((ProductFeatureMapperDecorator) featureMapper).toDTOWithValues(feature, values);
+                    return ((ProductFeatureMapperDecorator) featureMapper).toDTOWithValues(feature, new HashSet<>(values));
                 })
                 .filter(f -> f != null)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
             dto.setFeatures(featuresWithValues);
         } else {
-            dto.setFeatures(new HashSet<>());
+            dto.setFeatures(new ArrayList<>());
         }
 
         return dto;

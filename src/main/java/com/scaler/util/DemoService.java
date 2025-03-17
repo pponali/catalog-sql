@@ -42,17 +42,9 @@ public class DemoService {
     public DemoService(
             DataSetupService dataSetupService,
             TestValidationService testValidationService,
-            ProductRepository productRepository,
-            CatalogRepository catalogRepository,
-            CategoryRepository categoryRepository,
             MerchantRepository merchantRepository,
-            ProductCategoryRepository productCategoryRepository,
-            ProductBuilder productBuilder,
-            CategoryBuilder categoryBuilder,
-            CsvDataReaderService csvDataReaderService,
-            ResilientCsvDataLoader resilientCsvDataLoader,
             LoadDataFromCsvService loadDataFromCsvService,
-            ProductFeatureRepository productFeatureRepository, ResilientDataSetupService resilientDataSetupService) {
+            ResilientDataSetupService resilientDataSetupService) {
         this.dataSetupService = dataSetupService;
         this.testValidationService = testValidationService;
         this.merchantRepository = merchantRepository;

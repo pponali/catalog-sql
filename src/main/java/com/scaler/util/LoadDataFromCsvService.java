@@ -5,14 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.scaler.builder.*;
-import com.scaler.builder.CategoryBuilder;
 import com.scaler.entity.*;
 import com.scaler.entity.enums.ChannelType;
 import com.scaler.entity.enums.PlatformType;
 import com.scaler.repository.*;
 import com.scaler.service.ProductMappingService;
-import com.scaler.validation.factory.ValidationRuleFactory;
-import com.scaler.validation.service.CategoryValidationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -55,10 +52,10 @@ public class LoadDataFromCsvService {
     private final ProductFeatureMappingRepository productFeatureMappingRepository;
     private final ProductFeatureValueRepository productFeatureValueRepository;
     private final ProductPlatformRepository productPlatformRepository;
-    private final SellerProductRepository sellerProductRepository;
     private final ProductFeatureValueMappingRepository productFeatureValueMappingRepository;
     private final ProductPriceRepository productPriceRepository;
     private final ProductInventoryRepository productInventoryRepository;
+    private final CategoryMappingRepository categoryMappingRepository;
     private final ResilientCsvDataLoader resilientCsvDataLoader;
 
     public LoadDataFromCsvService(MerchantRepository merchantRepository, CategoryRepository categoryRepository,
@@ -76,6 +73,7 @@ public class LoadDataFromCsvService {
                                   ProductFeatureValueMappingRepository productFeatureValueMappingRepository,
                                   ProductPriceRepository productPriceRepository,
                                   ProductInventoryRepository productInventoryRepository,
+                                  CategoryMappingRepository categoryMappingRepository,
                                   ResilientCsvDataLoader resilientCsvDataLoader) {
         this.merchantRepository = merchantRepository;
         this.categoryRepository = categoryRepository;
@@ -93,10 +91,10 @@ public class LoadDataFromCsvService {
         this.productFeatureMappingRepository = productFeatureMappingRepository;
         this.productFeatureValueRepository = productFeatureValueRepository;
         this.productPlatformRepository = productPlatformRepository;
-        this.sellerProductRepository = sellerProductRepository;
         this.productFeatureValueMappingRepository = productFeatureValueMappingRepository;
         this.productPriceRepository = productPriceRepository;
         this.productInventoryRepository = productInventoryRepository;
+        this.categoryMappingRepository = categoryMappingRepository;
         this.resilientCsvDataLoader = resilientCsvDataLoader;
     }
 
@@ -548,8 +546,7 @@ public class LoadDataFromCsvService {
                             if (code.equals(childCode) && StringUtils.hasText(parentId)) {
                                 Category parent = categoryMap.get(parentId);
                                 if (parent != null) {
-                                    child.setParent(parent);
-                                    categoryRepository.save(child);
+                                    categoryMappingRepository.save(new CategoryMapping(parent, child));
                                     break;
                                 }
                             }
@@ -592,7 +589,7 @@ public class LoadDataFromCsvService {
                 Category necklaceCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createGoldNecklaceCategory(jewelryCatalog, tanishq));
                 Category bangleCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createGoldBangleCategory(jewelryCatalog, tanishq));
                 Category mensCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createMensCategory(fashionCatalog, tataCliq));
-                Category womensCategory = categoryRepository.save(CategoryBuilder.createWomensCategory(fashionCatalog, tataCliq));
+                Category womensCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createWomensCategory(fashionCatalog, tataCliq));
 
                 categoryMap.put(laptopCategory.getCode(), laptopCategory);
                 categoryMap.put(smartphoneCategory.getCode(), smartphoneCategory);
@@ -1007,7 +1004,7 @@ public class LoadDataFromCsvService {
                         } catch (Exception e) {
                             log.warn("Error processing metadata for product {}: {}", code, e.getMessage());
                             // Create a default metadata object
-                            ObjectNode metadataNode = objectMapper.createObjectNode();
+                            com.fasterxml.jackson.databind.node.ObjectNode metadataNode = objectMapper.createObjectNode();
                             metadataNode.put("createdAt", System.currentTimeMillis());
                             metadataNode.put("source", "CSV_IMPORT");
                             product.setMetadata(metadataNode);
@@ -1379,7 +1376,7 @@ public class LoadDataFromCsvService {
                             }
                         } else {
                             // Create default metadata
-                            ObjectNode metadataNode = objectMapper.createObjectNode();
+                            com.fasterxml.jackson.databind.node.ObjectNode metadataNode = objectMapper.createObjectNode();
                             metadataNode.put("mappedAt", System.currentTimeMillis());
                             metadataNode.put("mappedBy", "CSV_IMPORT");
                             mapping.setMetadata(metadataNode);
@@ -1843,7 +1840,7 @@ public class LoadDataFromCsvService {
                     onlineChannel.setStore(store);
 
                     // Add metadata
-                    ObjectNode onlineMetadata = objectMapper.createObjectNode();
+                    com.fasterxml.jackson.databind.node.ObjectNode onlineMetadata = objectMapper.createObjectNode();
                     if (merchantCode.contains("TATACLIQ")) {
                         onlineMetadata.put("url", "https://www.tatacliq.com");
                         onlineMetadata.put("appStoreUrl", "https://apps.apple.com/in/app/tata-cliq-online-shopping/id1101619385");
@@ -2487,12 +2484,13 @@ public class LoadDataFromCsvService {
                 // Create sample sellers for each merchant
                 for (Merchant merchant : merchantMap.values()) {
                     String merchantCode = merchant.getCode();
+                    String merchantName = merchant.getName();
 
                     // Create direct seller (owned by merchant)
                     Seller directSeller = new Seller();
                     directSeller.setCode(merchantCode + "_DIRECT");
-                    directSeller.setName(merchant.getName() + " Official");
-                    directSeller.setDescription("Official seller for " + merchant.getName());
+                    directSeller.setName(merchantName + " Official");
+                    directSeller.setDescription("Official seller for " + merchantName);
                     directSeller.setType("DIRECT");
                     directSeller.setStatus("ACTIVE");
                     // Set seller's merchantId instead of merchant object
@@ -2534,8 +2532,8 @@ public class LoadDataFromCsvService {
                     // Create marketplace seller
                     Seller marketplaceSeller = new Seller();
                     marketplaceSeller.setCode(merchantCode + "_MARKETPLACE");
-                    marketplaceSeller.setName(merchant.getName() + " Marketplace");
-                    marketplaceSeller.setDescription("Marketplace seller for " + merchant.getName());
+                    marketplaceSeller.setName(merchantName + " Marketplace");
+                    marketplaceSeller.setDescription("Marketplace seller for " + merchantName);
                     marketplaceSeller.setType("MARKETPLACE");
                     marketplaceSeller.setStatus("ACTIVE");
                     // Set seller's merchantId instead of merchant object
@@ -2577,8 +2575,8 @@ public class LoadDataFromCsvService {
                     // Create partner seller
                     Seller partnerSeller = new Seller();
                     partnerSeller.setCode(merchantCode + "_PARTNER");
-                    partnerSeller.setName(merchant.getName() + " Partner");
-                    partnerSeller.setDescription("Partner seller for " + merchant.getName());
+                    partnerSeller.setName(merchantName + " Partner");
+                    partnerSeller.setDescription("Partner seller for " + merchantName);
                     partnerSeller.setType("PARTNER");
                     partnerSeller.setStatus("ACTIVE");
                     partnerSeller.setMerchantId(merchant.getId());

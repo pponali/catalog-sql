@@ -2,6 +2,7 @@ package com.scaler.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.scaler.builder.ProductBuilder;
+import com.scaler.builder.CategoryBuilder;
 import com.scaler.entity.*;
 import com.scaler.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.UUID;
 
-
+/**
+ * Service for setting up resilient data
+ */
 @Service
 @Slf4j
 public class ResilientDataSetupService {
-
 
     // Repositories
     private final ProductRepository productRepository;
@@ -25,27 +28,34 @@ public class ResilientDataSetupService {
     private final CategoryRepository categoryRepository;
     private final MerchantRepository merchantRepository;
     private final ProductCategoryRepository productCategoryRepository;
+    private final CategoryMappingRepository categoryMappingRepository;
 
     // Builders
     private final ProductBuilder productBuilder;
     private final CategoryBuilder categoryBuilder;
 
     // Utilities
-    private final CsvDataReaderService csvDataReaderService;
     private final ResilientCsvDataLoader resilientCsvDataLoader;
 
-    public ResilientDataSetupService(ProductRepository productRepository, CatalogRepository catalogRepository, CategoryRepository categoryRepository, MerchantRepository merchantRepository, ProductCategoryRepository productCategoryRepository, ProductBuilder productBuilder, CategoryBuilder categoryBuilder, CsvDataReaderService csvDataReaderService, ResilientCsvDataLoader resilientCsvDataLoader) {
+    public ResilientDataSetupService(ProductRepository productRepository,
+                                     CatalogRepository catalogRepository,
+                                     CategoryRepository categoryRepository,
+                                     MerchantRepository merchantRepository,
+                                     ProductCategoryRepository productCategoryRepository,
+                                     CategoryMappingRepository categoryMappingRepository,
+                                     ProductBuilder productBuilder,
+                                     CategoryBuilder categoryBuilder,
+                                     ResilientCsvDataLoader resilientCsvDataLoader) {
         this.productRepository = productRepository;
         this.catalogRepository = catalogRepository;
         this.categoryRepository = categoryRepository;
         this.merchantRepository = merchantRepository;
         this.productCategoryRepository = productCategoryRepository;
+        this.categoryMappingRepository = categoryMappingRepository;
         this.productBuilder = productBuilder;
         this.categoryBuilder = categoryBuilder;
-        this.csvDataReaderService = csvDataReaderService;
         this.resilientCsvDataLoader = resilientCsvDataLoader;
     }
-
 
     /**
      * Populates the database with data from CSV files using resilient loading
@@ -125,20 +135,17 @@ public class ResilientDataSetupService {
 
         for (Map<String, String> data : hierarchyData) {
             try {
-                // Get category codes for each level
                 String level1Code = data.getOrDefault("Category_Level1_Code", "");
                 String level2Code = data.getOrDefault("Category_Level2_Code", "");
                 String level3Code = data.getOrDefault("Category_Level3_Code", "");
                 String level4Code = data.getOrDefault("Category_Level4_Code", "");
 
-                // Establish parent-child relationships
                 if (!level1Code.isEmpty() && !level2Code.isEmpty()) {
                     Category parent = categoryMap.get(level1Code);
                     Category child = categoryMap.get(level2Code);
 
                     if (parent != null && child != null) {
-                        child.setParent(parent);
-                        categoryRepository.save(child);
+                        categoryMappingRepository.save(new CategoryMapping(parent, child));
                         log.debug("Set parent-child relationship: {} -> {}", parent.getName(), child.getName());
                     }
                 }
@@ -148,8 +155,7 @@ public class ResilientDataSetupService {
                     Category child = categoryMap.get(level3Code);
 
                     if (parent != null && child != null) {
-                        child.setParent(parent);
-                        categoryRepository.save(child);
+                        categoryMappingRepository.save(new CategoryMapping(parent, child));
                         log.debug("Set parent-child relationship: {} -> {}", parent.getName(), child.getName());
                     }
                 }
@@ -159,8 +165,7 @@ public class ResilientDataSetupService {
                     Category child = categoryMap.get(level4Code);
 
                     if (parent != null && child != null) {
-                        child.setParent(parent);
-                        categoryRepository.save(child);
+                        categoryMappingRepository.save(new CategoryMapping(parent, child));
                         log.debug("Set parent-child relationship: {} -> {}", parent.getName(), child.getName());
                     }
                 }

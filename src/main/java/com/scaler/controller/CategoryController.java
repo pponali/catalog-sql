@@ -2,6 +2,7 @@ package com.scaler.controller;
 
 import com.scaler.dto.CategoryDTO;
 import com.scaler.entity.Category;
+import com.scaler.entity.CategoryMapping;
 import com.scaler.mapper.CategoryMapper;
 import com.scaler.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,5 +74,24 @@ public class CategoryController {
         dto.setCode(category.getCode());
         dto.setName(category.getName());
         return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/mappings")
+    @Operation(summary = "Create a new category mapping")
+    public ResponseEntity<CategoryMapping> createCategoryMapping(@RequestParam UUID parentId, @RequestParam UUID childId) {
+        Category parent = categoryService.findById(parentId);
+        Category child = categoryService.findById(childId);
+        CategoryMapping mapping = categoryService.createMapping(parent, child);
+        return ResponseEntity.ok(mapping);
+    }
+
+    @DeleteMapping("/mappings")
+    @Operation(summary = "Delete a category mapping")
+    public ResponseEntity<Void> deleteCategoryMapping(@RequestParam UUID parentId, @RequestParam UUID childId) {
+        Category parent = categoryService.findById(parentId);
+        Category child = categoryService.findById(childId);
+        List<CategoryMapping> mappings = categoryService.findMappingsByParent(parent);
+        mappings.stream().filter(m -> m.getChild().equals(child)).findFirst().ifPresent(categoryService::deleteMapping);
+        return ResponseEntity.noContent().build();
     }
 }

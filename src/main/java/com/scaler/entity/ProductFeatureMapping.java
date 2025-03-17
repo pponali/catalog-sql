@@ -53,6 +53,9 @@ public class ProductFeatureMapping extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode metadata;
     
+    @OneToMany(mappedBy = "featureMapping", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductFeatureValueMapping> featureValueMappings = new HashSet<>();
+
     public JsonNode getMetadata() {
         return metadata;
     }
@@ -61,5 +64,7 @@ public class ProductFeatureMapping extends BaseEntity {
         this.metadata = metadata;
     }
 
-
+    public Set<ProductFeatureValueMapping> getFeatureValueMappings() {
+        return featureValueMappings;
+    }
 }

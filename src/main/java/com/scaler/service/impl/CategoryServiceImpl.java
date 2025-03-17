@@ -1,6 +1,8 @@
 package com.scaler.service.impl;
 
 import com.scaler.entity.Category;
+import com.scaler.entity.CategoryMapping;
+import com.scaler.repository.CategoryMappingRepository;
 import com.scaler.repository.CategoryRepository;
 import com.scaler.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Transactional
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMappingRepository categoryMappingRepository;
 
     @Override
     public List<Category> findAll() {
@@ -45,9 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
         existingCategory.setCode(category.getCode());
         existingCategory.setName(category.getName());
         existingCategory.setDescription(category.getDescription());
-        if (category.getParent() != null) {
-            existingCategory.setParent(findById(category.getParent().getId()));
-        }
         validateCategory(existingCategory);
         return categoryRepository.save(existingCategory);
     }
@@ -55,10 +55,33 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(UUID id) {
         Category category = findById(id);
-        if (!category.getChildren().isEmpty()) {
+        List<CategoryMapping> mappings = categoryMappingRepository.findByParent(category);
+        if (!mappings.isEmpty()) {
             throw new IllegalStateException("Cannot delete category with children");
         }
+        categoryMappingRepository.deleteAll(mappings);
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CategoryMapping> findMappingsByParent(Category parent) {
+        return categoryMappingRepository.findByParent(parent);
+    }
+
+    @Override
+    public List<CategoryMapping> findMappingsByChild(Category child) {
+        return categoryMappingRepository.findByChild(child);
+    }
+
+    @Override
+    public CategoryMapping createMapping(Category parent, Category child) {
+        CategoryMapping mapping = new CategoryMapping(parent, child);
+        return categoryMappingRepository.save(mapping);
+    }
+
+    @Override
+    public void deleteMapping(CategoryMapping mapping) {
+        categoryMappingRepository.delete(mapping);
     }
 
     private void validateCategory(Category category) {
@@ -67,9 +90,6 @@ public class CategoryServiceImpl implements CategoryService {
         }
         if (category.getName() == null || category.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Category name is required");
-        }
-        if (category.getParent() != null && category.getParent().getId().equals(category.getId())) {
-            throw new IllegalArgumentException("Category cannot be its own parent");
         }
     }
 }

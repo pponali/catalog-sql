@@ -53,8 +53,11 @@ public class ProductDTO extends BaseDTO {
     private Set<UUID> categoryIds = new HashSet<>();
 
     @lombok.Builder.Default
-    private Set<ProductFeatureWithValuesDTO> features = new HashSet<>();
+    private List<ProductFeatureWithValuesDTO> features = new ArrayList<>();
 
-    @lombok.Builder.Default
+    public void setFeatures(List<ProductFeatureWithValuesDTO> features) {
+        this.features = features;
+    }
+
     private List<ProductAttributeDTO> attributes = new ArrayList<>();
 }

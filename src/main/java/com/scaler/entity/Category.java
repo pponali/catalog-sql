@@ -25,8 +25,8 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"parent", "children", "templates", "productCategories", "business", "catalog"})
-@ToString(callSuper = true, exclude = {"parent", "children", "templates", "productCategories", "business", "catalog"})
+@EqualsAndHashCode(callSuper = true, exclude = {"templates", "productCategories", "business", "catalog", "merchant"})
+@ToString(callSuper = true, exclude = {"templates", "productCategories", "business", "catalog", "merchant"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Category extends BaseEntity {
@@ -50,14 +50,6 @@ public class Category extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "catalog_id", nullable = false)
     private Catalog catalog;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Category parent;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @lombok.Builder.Default
-    private List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @lombok.Builder.Default
@@ -86,45 +78,5 @@ public class Category extends BaseEntity {
     public void removeProductCategory(ProductCategory productCategory) {
         productCategories.remove(productCategory);
         productCategory.setCategory(null);
-    }
-
-    public void addChild(Category child) {
-        children.add(child);
-        child.setParent(this);
-    }
-
-    public void removeChild(Category child) {
-        children.remove(child);
-        child.setParent(null);
-    }
-
-    public boolean isRoot() {
-        return parent == null;
-    }
-
-    public boolean isLeaf() {
-        return children == null || children.isEmpty();
-    }
-
-    public int getLevel() {
-        if (isRoot()) {
-            return 0;
-        }
-        return parent.getLevel() + 1;
-    }
-
-    public String getPath() {
-        if (isRoot()) {
-            return code;
-        }
-        return parent.getPath() + "/" + code;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
     }
 }

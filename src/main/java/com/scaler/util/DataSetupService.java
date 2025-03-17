@@ -582,7 +582,7 @@ public class DataSetupService {
         smartphones.setDescription("Smartphone products");
         smartphones.setCatalog(catalog);
         smartphones.setMerchant(merchant); // Using setMerchant instead of setBusiness
-        smartphones.setParent(electronics);
+
         smartphones.setCreatedBy("system");
         smartphones.setCreatedDate(LocalDateTime.now());
         smartphones = categoryRepository.save(smartphones);
