@@ -1,13 +1,14 @@
-package com.scaler.service;
+package com.scaler.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.builder.*;
+import com.scaler.builder.CategoryBuilder;
 import com.scaler.entity.*;
 import com.scaler.entity.enums.PlatformType;
 import com.scaler.model.ValidationRule;
 import com.scaler.repository.*;
-import com.scaler.util.LoadDataFromCsvService;
-import com.scaler.util.ResilientCsvDataLoader;
+import com.scaler.service.ProductMappingService;
+import com.scaler.service.ValidationService;
 import com.scaler.validation.factory.ValidationRuleFactory;
 import com.scaler.validation.rule.ValidationRules;
 import com.scaler.validation.service.CategoryValidationService;
@@ -250,12 +251,12 @@ public class DataSetupService {
             channelCatalogRepository.save(ChannelCatalogBuilder.createChannelCatalog(bigBasketQuick, groceryCatalog, true));
 
             // Create categories
-            Category laptopCategory = categoryRepository.save(CategoryBuilder.createLaptopCategory(fashionCatalog, tataCliq));
-            Category smartphoneCategory = categoryRepository.save(CategoryBuilder.createSmartphoneCategory(fashionCatalog, tataCliq));
-            Category necklaceCategory = categoryRepository.save(CategoryBuilder.createGoldNecklaceCategory(jewelryCatalog, tanishq));
-            Category bangleCategory = categoryRepository.save(CategoryBuilder.createGoldBangleCategory(jewelryCatalog, tanishq));
+            Category laptopCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createLaptopCategory(fashionCatalog, tataCliq));
+            Category smartphoneCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createSmartphoneCategory(fashionCatalog, tataCliq));
+            Category necklaceCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createGoldNecklaceCategory(jewelryCatalog, tanishq));
+            Category bangleCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createGoldBangleCategory(jewelryCatalog, tanishq));
             @SuppressWarnings("unused")
-            Category freshProduceCategory = categoryRepository.save(CategoryBuilder.createFreshProduceCategory(groceryCatalog, bigBasket));
+            Category freshProduceCategory = categoryRepository.save(com.scaler.builder.CategoryBuilder.createFreshProduceCategory(groceryCatalog, bigBasket));
             @SuppressWarnings("unused")
             Category medicinesCategory = categoryRepository.save(CategoryBuilder.createMedicinesCategory(pharmaCatalog, tata1mg));
 
