@@ -6,6 +6,7 @@ import com.scaler.mapper.ProductMapper;
 import com.scaler.repository.ProductFeatureMappingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.HashMap;
 public class ProductMappingService {
 
     private final ProductFeatureMappingRepository productFeatureMappingRepository;
+    @Autowired
     private final ProductMapper productMapper;
 
     /**

@@ -26,21 +26,6 @@ public abstract class ProductFeatureMappingMapperDecorator implements ProductFea
             return dto;
         }
 
-        // Map feature values separately to avoid circular dependency
-        if (entity.getFeatureValueMappings() != null) {
-            dto.setFeatureValueMappings(entity.getFeatureValueMappings().stream()
-                .map(mapping -> {
-                    var valueDTO = featureValueMapper.toDTO(mapping.getFeatureValue());
-                    if (valueDTO != null) {
-                        valueDTO.setFeatureId(mapping.getFeatureMapping().getFeature().getId());
-                    }
-                    return valueDTO;
-                })
-                .collect(Collectors.toSet()));
-        } else {
-            dto.setFeatureValueMappings(new HashSet<>());
-        }
-
         return dto;
     }
 

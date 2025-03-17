@@ -113,11 +113,6 @@ public class ProductFeatureController {
                 .lastModifiedDate(feature.getLastModifiedDate().toString())
                 .createdBy(feature.getCreatedBy())
                 .lastModifiedBy(feature.getLastModifiedBy())
-                .featureValueIds(feature.getFeatureValues() != null ?
-                    feature.getFeatureValues().stream()
-                        .map(ProductFeatureValue::getId)
-                        .collect(Collectors.toSet()) :
-                    null)
                 .build();
     }
 
@@ -187,8 +182,7 @@ public class ProductFeatureController {
                     .featureMapping(mapping)
                     .featureValue(value)
                     .build();
-                    
-                mapping.getFeatureValueMappings().add(valueMapping);
+
             });
             feature.getProductMappings().add(mapping);
         }

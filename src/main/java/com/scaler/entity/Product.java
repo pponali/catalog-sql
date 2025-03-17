@@ -1,5 +1,6 @@
 package com.scaler.entity;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -47,11 +48,11 @@ public class Product extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private com.fasterxml.jackson.databind.JsonNode metadata;
     
-    public com.fasterxml.jackson.databind.JsonNode getMetadata() {
+    public JsonNode getMetadata() {
         return metadata;
     }
     
-    public void setMetadata(com.fasterxml.jackson.databind.JsonNode metadata) {
+    public void setMetadata(JsonNode metadata) {
         this.metadata = metadata;
     }
 
@@ -74,6 +75,11 @@ public class Product extends BaseEntity {
     @JsonManagedReference("product-features")
     @lombok.Builder.Default
     private Set<ProductFeatureMapping> featureMappings = new HashSet<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference("product-feature-values")
+    @lombok.Builder.Default
+    private Set<ProductFeatureValueMapping> featureValueMappings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchant_id", nullable = false)

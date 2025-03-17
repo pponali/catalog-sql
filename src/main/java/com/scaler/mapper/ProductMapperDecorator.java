@@ -8,6 +8,7 @@ import com.scaler.entity.Product;
 import com.scaler.entity.ProductFeatureMapping;
 import com.scaler.entity.ProductFeatureValueMapping;
 
+import org.apache.poi.ss.formula.functions.DProduct;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,7 +44,7 @@ public abstract class ProductMapperDecorator implements ProductMapper {
                     if (feature == null) return null;
 
                     // Map feature values
-                    Set<ProductFeatureValueDTO> values = mapping.getFeatureValueMappings().stream()
+                    Set<ProductFeatureValueDTO> values = entity.getFeatureValueMappings().stream()
                         .map(valueMapping -> {
                             return featureValueMapper.toDTO(valueMapping.getFeatureValue());
                         })
@@ -90,22 +91,7 @@ public abstract class ProductMapperDecorator implements ProductMapper {
                         .enabled(true)
                         .createdBy(dto.getCreatedBy())
                         .lastModifiedBy(dto.getLastModifiedBy())
-                        .featureValueMappings(new HashSet<>())
                         .build();
-
-                    // Add feature values to the mapping
-                    if (featureWithValuesDTO.getValues() != null) {
-                        featureWithValuesDTO.getValues().forEach(valueDTO -> {
-                            var value = featureValueMapper.toEntity(valueDTO);
-                            if (value != null) {
-                                var valueMapping = ProductFeatureValueMapping.builder()
-                                    .featureMapping(mapping)
-                                    .featureValue(value)
-                                    .build();
-                                mapping.getFeatureValueMappings().add(valueMapping);
-                            }
-                        });
-                    }
 
                     entity.getFeatureMappings().add(mapping);
                 }

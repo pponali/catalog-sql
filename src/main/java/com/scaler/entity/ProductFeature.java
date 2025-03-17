@@ -17,8 +17,8 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"product", "template", "featureValues"})
-@ToString(callSuper = true, exclude = {"product", "template", "featureValues"})
+@EqualsAndHashCode(callSuper = true, exclude = {"product", "template"})
+@ToString(callSuper = true, exclude = {"product", "template"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ProductFeature extends BaseEntity {
     
@@ -103,14 +103,6 @@ public class ProductFeature extends BaseEntity {
 
     public ProductFeatureMapping getFeatureMapping() {
         return productMappings.isEmpty() ? null : productMappings.iterator().next();
-    }
-
-    public Set<ProductFeatureValue> getFeatureValues() {
-        Set<ProductFeatureValue> values = new HashSet<>();
-        for (ProductFeatureMapping mapping : productMappings) {
-            values.addAll(mapping.getFeature().getFeatureValues());
-        }
-        return values;
     }
 
 

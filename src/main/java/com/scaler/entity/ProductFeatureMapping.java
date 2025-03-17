@@ -36,9 +36,6 @@ public class ProductFeatureMapping extends BaseEntity {
     @JsonManagedReference("feature-mapping")
     private ProductFeature feature;
 
-    @OneToMany(mappedBy = "featureMapping", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductFeatureValueMapping> featureValueMappings = new HashSet<>();
-
     @Column(name = "display_order")
     private Integer displayOrder;
 
@@ -64,13 +61,5 @@ public class ProductFeatureMapping extends BaseEntity {
         this.metadata = metadata;
     }
 
-    public void addFeatureValueMapping(ProductFeatureValueMapping mapping) {
-        featureValueMappings.add(mapping);
-        mapping.setFeatureMapping(this);
-    }
 
-    public void removeFeatureValueMapping(ProductFeatureValueMapping mapping) {
-        featureValueMappings.remove(mapping);
-        mapping.setFeatureMapping(null);
-    }
 }

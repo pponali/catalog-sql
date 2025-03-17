@@ -35,6 +35,4 @@ public class ProductFeatureMappingDTO extends BaseDTO {
     @ToString.Exclude
     private ProductFeatureDTO feature;
 
-    @ToString.Exclude
-    private Set<ProductFeatureValueDTO> featureValueMappings = new HashSet<>();
 }

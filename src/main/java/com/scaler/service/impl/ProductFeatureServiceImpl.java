@@ -173,9 +173,9 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
 
     private void validateFeature(ProductFeature feature) {
         CategoryFeatureTemplate template = feature.getTemplate();
-        Set<ProductFeatureValue> values = feature.getFeatureValues();
+        //Set<ProductFeatureValue> values = feature.getgetFeatureValues();
 
-        if (template == null) {
+        /*if (template == null) {
             throw new ValidationException("Feature template cannot be null");
         }
 
@@ -196,6 +196,6 @@ public class ProductFeatureServiceImpl implements ProductFeatureService {
                         String.format("Invalid value for feature: %s", template.getCode()));
                 }
             }
-        }
+        }*/
     }
 }

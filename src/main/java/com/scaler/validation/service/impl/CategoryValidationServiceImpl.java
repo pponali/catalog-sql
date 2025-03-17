@@ -49,7 +49,7 @@ public class CategoryValidationServiceImpl implements CategoryValidationService 
             }
             
             // Validate feature values
-            Set<ProductFeatureValueMapping> valueMappings = mapping.getFeatureValueMappings();
+            Set<ProductFeatureValueMapping> valueMappings = product.getFeatureValueMappings();
             if (valueMappings != null && !valueMappings.isEmpty()) {
                 for (ProductFeatureValueMapping valueMapping : valueMappings) {
                     ProductFeatureValue value = valueMapping.getFeatureValue();
