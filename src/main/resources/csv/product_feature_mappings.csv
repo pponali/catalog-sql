@@ -1,0 +1,11 @@
+productCode,featureCode,displayOrder,visible,enabled,metadata
+TCLQ-MTSHIRT-001,COLOR,1,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-MTSHIRT-001,FABRIC,2,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-MTSHIRT-002,COLOR,1,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-MTSHIRT-002,SIZE,2,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-WDRESS-001,FABRIC,1,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-WDRESS-001,PATTERN,2,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-WDRESS-002,SIZE,1,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-WDRESS-002,FIT,2,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-MJEANS-001,PATTERN,1,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
+TCLQ-MJEANS-001,SLEEVE,2,true,true,{"mappedAt":1625097600000,"mappedBy":"CSV_IMPORT","notes":"Initial mapping"}
