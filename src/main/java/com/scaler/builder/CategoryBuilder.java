@@ -77,4 +77,28 @@ public class CategoryBuilder {
                 .lastModifiedBy("system")
                 .build();
     }
+
+    public static Category createMensCategory(Catalog fashionCatalog, Merchant tataCliq) {
+        return Category.builder()
+                .code("MENS")
+                .name("Men's Fashion")
+                .description("Men's clothing and accessories")
+                .catalog(fashionCatalog)
+                .merchant(tataCliq)
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
+
+    public static Category createWomensCategory(Catalog fashionCatalog, Merchant tataCliq) {
+        return Category.builder()
+                .code("WOMENS")
+                .name("Women's Fashion")
+                .description("Women's clothing and accessories")
+                .catalog(fashionCatalog)
+                .merchant(tataCliq)
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .build();
+    }
 }

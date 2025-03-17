@@ -137,7 +137,7 @@ public class SampleProductImporter {
                 .catalog(catalog)
                 .price(price)
                 .sku(sku)
-                .metadata(metadata.toString())
+                .metadata(metadata)
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())

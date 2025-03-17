@@ -37,6 +37,8 @@ public class Category extends BaseEntity {
     private String name;
 
     private String description;
+
+    private String status;
     
     @Column(columnDefinition = "TEXT")
     private String metadata;
@@ -54,16 +56,16 @@ public class Category extends BaseEntity {
     private Category parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
+    @lombok.Builder.Default
     private List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<CategoryFeatureTemplate> templates = new HashSet<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<ProductCategory> productCategories = new HashSet<>();
 
     public void addTemplate(CategoryFeatureTemplate template) {

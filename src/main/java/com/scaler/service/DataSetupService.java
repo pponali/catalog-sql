@@ -1,30 +1,49 @@
 package com.scaler.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaler.builder.*;
 import com.scaler.entity.*;
 import com.scaler.entity.enums.PlatformType;
 import com.scaler.model.ValidationRule;
 import com.scaler.repository.*;
+import com.scaler.util.LoadDataFromCsvService;
+import com.scaler.util.ResilientCsvDataLoader;
 import com.scaler.validation.factory.ValidationRuleFactory;
 import com.scaler.validation.rule.ValidationRules;
 import com.scaler.validation.service.CategoryValidationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Service for setting up demo data
+ * This service has been refactored to disable automatic product data population
+ * and implement a resilient CSV data loading mechanism
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class DataSetupService {
+    
+    @Value("${app.data.load.from.csv:true}")
+    private boolean loadDataFromCsv;
+    
+    // ObjectMapper for JSON processing
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    
+    // Cache for entity lookups to improve performance - not used directly but kept for future use
+    @SuppressWarnings("unused")
+    private final Map<String, Object> entityCache = new ConcurrentHashMap<>();
 
     private final MerchantRepository merchantRepository;
     private final CategoryRepository categoryRepository;
@@ -40,6 +59,7 @@ public class DataSetupService {
     private final ValidationRulesRepository validationRulesRepository;
     private final ValidationRuleFactory validationRuleFactory;
     private final CategoryValidationService categoryValidationService;
+    @SuppressWarnings("unused")
     private final ProductMappingService productMappingService;
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
@@ -52,6 +72,12 @@ public class DataSetupService {
     private final ProductPriceRepository productPriceRepository;
     private final ProductInventoryRepository productInventoryRepository;
 
+
+    // Store map to cache loaded stores
+    private Map<String, Store> storeMap;
+
+    @Autowired
+    private LoadDataFromCsvService loadDataFromCsvService;
 
     /**
      * Creates validation rules for a category
@@ -90,9 +116,20 @@ public class DataSetupService {
             }
 
             log.info("Setting up demo data...");
-
-            // Create sample merchants
-            Merchant merchant = createSampleMerchant();
+            
+            if (loadDataFromCsv) {
+                // Load data from CSV files
+                log.info("Loading data from CSV files as per configuration");
+                loadDataFromCsvService.populateDataFromCsvFiles();
+                return;
+            }
+            
+            log.info("Creating hardcoded demo data as CSV loading is disabled");
+            
+            // Load merchants
+            Map<String, Merchant> merchantMap = loadDataFromCsvService.loadMerchants();
+            // Use the first merchant for sample data
+            Merchant merchant = merchantMap.values().iterator().next();
 
             // Create sample catalogs
             Catalog catalog = createSampleCatalog(merchant);
@@ -109,12 +146,24 @@ public class DataSetupService {
             // Create sample products with features
             createSampleProducts(categories, merchant, catalog);
 
-            // Create merchants
-            Merchant tataCliq = merchantRepository.save(MerchantBuilder.createTataCliqMerchant());
-            Merchant tata1mg = merchantRepository.save(MerchantBuilder.createTata1mgMerchant());
-            Merchant bigBasket = merchantRepository.save(MerchantBuilder.createBigBasketMerchant());
-            Merchant croma = merchantRepository.save(MerchantBuilder.createCromaMerchant());
-            Merchant tanishq = merchantRepository.save(MerchantBuilder.createTanishqMerchant());
+            // This section is now controlled by the loadDataFromCsv flag
+            // and will only execute when the flag is false
+            
+            // Create merchants with checks for existing ones
+            Merchant tataCliq = merchantRepository.findByCode("TCLQ-001")
+                    .orElseGet(() -> merchantRepository.save(MerchantBuilder.createTataCliqMerchant()));
+            
+            Merchant tata1mg = merchantRepository.findByCode("T1MG-001")
+                    .orElseGet(() -> merchantRepository.save(MerchantBuilder.createTata1mgMerchant()));
+            
+            Merchant bigBasket = merchantRepository.findByCode("BBKT-001")
+                    .orElseGet(() -> merchantRepository.save(MerchantBuilder.createBigBasketMerchant()));
+            
+            Merchant croma = merchantRepository.findByCode("CRMA-001")
+                    .orElseGet(() -> merchantRepository.save(MerchantBuilder.createCromaMerchant()));
+            
+            Merchant tanishq = merchantRepository.findByCode("TNSH-001")
+                    .orElseGet(() -> merchantRepository.save(MerchantBuilder.createTanishqMerchant()));
 
             // Create sellers first
             Seller tataCliqSeller = sellerRepository.save(SellerBuilder.createTataCliqSeller(tataCliq));
@@ -125,9 +174,11 @@ public class DataSetupService {
 
             // Create stores
             Store tataCliqStore = storeRepository.save(StoreBuilder.createTataCliqStore(tataCliq));
+            @SuppressWarnings("unused")
             Store tata1mgStore = storeRepository.save(StoreBuilder.createTata1mgStore(tata1mg));
             Store bigBasketStore = storeRepository.save(StoreBuilder.createBigBasketStore(bigBasket));
             Store cromaStore = storeRepository.save(StoreBuilder.createCromaStore(croma));
+            @SuppressWarnings("unused")
             Store tanishqStore = storeRepository.save(StoreBuilder.createTanishqStore(tanishq));
 
             // Create channels for each store
@@ -203,13 +254,17 @@ public class DataSetupService {
             Category smartphoneCategory = categoryRepository.save(CategoryBuilder.createSmartphoneCategory(fashionCatalog, tataCliq));
             Category necklaceCategory = categoryRepository.save(CategoryBuilder.createGoldNecklaceCategory(jewelryCatalog, tanishq));
             Category bangleCategory = categoryRepository.save(CategoryBuilder.createGoldBangleCategory(jewelryCatalog, tanishq));
+            @SuppressWarnings("unused")
             Category freshProduceCategory = categoryRepository.save(CategoryBuilder.createFreshProduceCategory(groceryCatalog, bigBasket));
+            @SuppressWarnings("unused")
             Category medicinesCategory = categoryRepository.save(CategoryBuilder.createMedicinesCategory(pharmaCatalog, tata1mg));
 
             // Create units of measure
             UnitOfMeasure gbUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createGBUnit());
             UnitOfMeasure tbUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createTBUnit());
+            @SuppressWarnings("unused")
             UnitOfMeasure kgUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createKGUnit());
+            @SuppressWarnings("unused")
             UnitOfMeasure pcsUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createPiecesUnit());
             UnitOfMeasure gramUnit = unitOfMeasureRepository.save(UnitOfMeasureBuilder.createGramUnit());
 
@@ -225,7 +280,7 @@ public class DataSetupService {
 
             // Create feature templates for Jewellery
             CategoryFeatureTemplate goldPurityProductFeature = FeatureTemplateBuilder.createGoldPurityTemplate(necklaceCategory);
-            CategoryFeatureTemplate goldWeightProductFeature = FeatureTemplateBuilder.createGoldWeightTemplate(bangleCategory, gbUnit);
+            CategoryFeatureTemplate goldWeightProductFeature = FeatureTemplateBuilder.createGoldWeightTemplate(bangleCategory, gramUnit);
 
 
             categoryFeatureTemplateRepository.save(laptopProcessor);
@@ -333,6 +388,7 @@ public class DataSetupService {
             productFeatureValueMappingRepository.save(ProductFeatureValueMappingBuilder.createMapping(necklaceWeight, weightValue, necklaceCategory,2, true));
 
             // Create feature mappings and values for Gold Bangles
+            @SuppressWarnings("unused")
             ProductFeatureMapping banglePurity = createAndSaveMapping(goldBangles, goldPurity);
             ProductFeatureMapping bangleWeight = createAndSaveMapping(goldBangles, goldWeight);
 
@@ -733,4 +789,6 @@ public class DataSetupService {
             productInventoryRepository.save(inventory);
         }
     }
+    
+
 }

@@ -119,3 +119,6 @@
 "CAT_additionaldetails2apparelCC","additionaldetails2apparelCC","additionaldetails2apparelClassifyingCategory","additionaldetails2apparelClassifyingCategory category","","1","/additionaldetails2apparelCC","true","{""displayOrder"": 118, ""imageUrl"": ""https://example.com/images/additionaldetails2apparelcc.jpg""}"
 "CAT_additionaldetails3apparelCC","additionaldetails3apparelCC","additionaldetails3apparelClassifyingCategory","additionaldetails3apparelClassifyingCategory category","","1","/additionaldetails3apparelCC","true","{""displayOrder"": 119, ""imageUrl"": ""https://example.com/images/additionaldetails3apparelcc.jpg""}"
 "CAT_featureapparelCC","featureapparelCC","featureapparelClassifyingCategory","featureapparelClassifyingCategory category","","1","/featureapparelCC","true","{""displayOrder"": 120, ""imageUrl"": ""https://example.com/images/featureapparelcc.jpg""}"
+"CAT001","MENS-CAT-001","Men's Clothing","Men's clothing and accessories","","0","MENS-CAT-001","true","{}"
+"CAT002","WOMN-CAT-001","Women's Clothing","Women's clothing and accessories","","0","WOMN-CAT-001","true","{}"
+"CAT003","ELEC-CAT-001","Electronics","Electronic devices and accessories","","0","ELEC-CAT-001","true","{}"

@@ -30,7 +30,7 @@ public class ProductBuilder {
                 .status("ACTIVE")
                 .merchant(merchant)
                 .productType(ProductType.SIMPLE)
-                .metadata(metadata.toString())
+                .metadata(metadata)
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())
@@ -56,7 +56,7 @@ public class ProductBuilder {
                 .merchant(merchant)
                 .description("Dell XPS 15 with Intel i9 processor")
                 .status("ACTIVE")
-                .metadata(metadata.toString())
+                .metadata(metadata)
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())
@@ -82,7 +82,7 @@ public class ProductBuilder {
                 .merchant(merchant)
                 .description("Apple iPhone 15 Pro Max")
                 .status("ACTIVE")
-                .metadata(metadata.toString())
+                .metadata(metadata)
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())
@@ -108,7 +108,7 @@ public class ProductBuilder {
                 .merchant(merchant)
                 .description("22K Gold Traditional Wedding Necklace")
                 .status("ACTIVE")
-                .metadata(metadata.toString())
+                .metadata(metadata)
                 .createdBy("system")
                 .lastModifiedBy("system")
                 .createdDate(LocalDateTime.now())
@@ -134,13 +134,95 @@ public class ProductBuilder {
                 .merchant(merchant)
                 .description("22K Gold Traditional Wedding Bangles")
                 .status("ACTIVE")
-                .metadata(metadata.toString())
+                .metadata(metadata)
                 .productCategories(new HashSet<>())
                 .createdBy("system")
                 .lastModifiedBy("Prakash Ponali")
                 .build();
 
         ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, category, merchant);
+        product.getProductCategories().add(productCategory);
+
+        return product;
+    }
+
+    public static Product createSamsungPhone(Merchant croma, Category smartphoneCategory, Catalog electronicsCatalog) {
+        ObjectNode metadata = objectMapper.createObjectNode();
+        metadata.put("brand", "Samsung");
+        metadata.put("model", "Galaxy S23");
+        metadata.put("year", "2023");
+        metadata.put("color", "Black");
+
+        Product product = Product.builder()
+                .code("SAMSUNG-S23")
+                .name("Samsung Galaxy S23")
+                .productType(ProductType.SIMPLE)
+
+                .merchant(croma)
+                .description("Samsung Galaxy S23 with 5G")
+                .status("ACTIVE")
+                .metadata(metadata)
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+
+        ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, smartphoneCategory, croma);
+        product.getProductCategories().add(productCategory);
+
+        return product;
+    }
+
+    public static Product createDellXps(Merchant croma, Category laptopCategory, Catalog electronicsCatalog) {
+        ObjectNode metadata = objectMapper.createObjectNode();
+        metadata.put("brand", "Dell");
+        metadata.put("model", "XPS");
+        metadata.put("year", "2023");
+        metadata.put("color", "Black");
+
+        Product product = Product.builder()
+                .code("DELL-XPS")
+                .name("Dell XPS")
+                .productType(ProductType.SIMPLE)
+                .merchant(croma)
+                .description("Dell XPS with 5G")
+                .status("ACTIVE")
+                .metadata(metadata)
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+
+        ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, laptopCategory, croma);
+        product.getProductCategories().add(productCategory);
+
+        return product;
+    }
+
+    public static Product createMacbookPro(Merchant croma, Category laptopCategory, Catalog electronicsCatalog) {
+        ObjectNode metadata = objectMapper.createObjectNode();
+        metadata.put("brand", "Apple");
+        metadata.put("model", "Macbook Pro");
+        metadata.put("year", "2023");
+        metadata.put("color", "Black");
+
+        Product product = Product.builder()
+                .code("APPLE-MBP")
+                .name("Apple Macbook Pro")
+                .productType(ProductType.SIMPLE)
+                .merchant(croma)
+                .description("Apple Macbook Pro with 5G")
+                .status("ACTIVE")
+                .metadata(metadata)
+                .createdBy("system")
+                .lastModifiedBy("system")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+
+        ProductCategory productCategory = ProductCategoryBuilder.createProductCategory(product, laptopCategory, croma);
         product.getProductCategories().add(productCategory);
 
         return product;
@@ -178,7 +260,7 @@ public class ProductBuilder {
 
         // Create and set metadata as JSON
         ObjectNode metadataNode = createProductMetadataNode(attributes);
-        product.setMetadata(metadataNode.toString());
+        product.setMetadata(metadataNode);
 
         return product;
     }

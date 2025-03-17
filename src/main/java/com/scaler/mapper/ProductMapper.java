@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {SellerProductMapper.class, CommonMapper.class, MapperUtils.class, ProductFeatureMapper.class, ProductFeatureValueMapper.class})
 @DecoratedWith(ProductMapperDecorator.class)
-public interface ProductMapper  {
+public interface ProductMapper extends JsonNodeMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     @Mappings({
@@ -19,7 +19,8 @@ public interface ProductMapper  {
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "code", source = "code"),
-            @Mapping(target = "status", source = "status")
+            @Mapping(target = "status", source = "status"),
+            @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonNodeToString")
     })
     ProductDTO toDTO(Product entity);
 
@@ -49,6 +50,7 @@ public interface ProductMapper  {
                 .productType(productTypeEnum)
                 .sku(dto.getSku())
                 .price(dto.getPrice())
+                .metadata(dto.getMetadata())
                 .build();
     }
 
@@ -60,7 +62,8 @@ public interface ProductMapper  {
             @Mapping(target = "name", source = "name"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "code", source = "code"),
-            @Mapping(target = "status", source = "status")
+            @Mapping(target = "status", source = "status"),
+            @Mapping(target = "metadata", source = "metadata", qualifiedByName = "jsonStringToJsonNode")
     })
     void updateEntity(@MappingTarget Product entity, ProductDTO dto);
 }

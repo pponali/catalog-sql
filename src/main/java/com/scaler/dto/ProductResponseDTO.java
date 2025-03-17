@@ -1,5 +1,6 @@
 package com.scaler.dto;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.scaler.entity.Product;
 import com.scaler.entity.ProductCategory;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class ProductResponseDTO {
     private String description;
     private String productType;
     private String status;
-    private String metadata;
+    private JsonNode metadata;
     private String sku;
     private Double price;
     private Set<CategoryResponseDTO> categories;

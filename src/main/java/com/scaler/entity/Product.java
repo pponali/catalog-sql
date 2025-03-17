@@ -45,7 +45,15 @@ public class Product extends BaseEntity {
 
     @Column(name = "metadata", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
-    private String metadata;
+    private com.fasterxml.jackson.databind.JsonNode metadata;
+    
+    public com.fasterxml.jackson.databind.JsonNode getMetadata() {
+        return metadata;
+    }
+    
+    public void setMetadata(com.fasterxml.jackson.databind.JsonNode metadata) {
+        this.metadata = metadata;
+    }
 
     @Column(name = "sku")
     private String sku;
@@ -209,5 +217,18 @@ public class Product extends BaseEntity {
                 });
     }
 
-
+    /**
+     * Returns the primary category of the product.
+     * @return The primary category or null if no primary category exists
+     */
+    public Category getPrimaryCategory() {
+        if (productCategories == null) {
+            return null;
+        }
+        return productCategories.stream()
+                .filter(pc -> Boolean.TRUE.equals(pc.getIsPrimary()))
+                .findFirst()
+                .map(ProductCategory::getCategory)
+                .orElse(null);
+    }
 }

@@ -9,7 +9,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: false
+#    show-sql: false
     defer-datasource-initialization: true
     properties:
       hibernate:
@@ -50,6 +50,14 @@ spring:
     enabled: false
 
 server:
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: logs
+      file-date-format: yyyy-MM-dd
+      prefix: access_log
+      suffix: .log
+      pattern: '%t %a "%r" %s %b %D ms'
   port: 8080
   servlet:
     context-path: /api
@@ -73,6 +81,8 @@ springdoc:
     operationsSorter: method
 
 logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   level:
     root: INFO
     org:
@@ -85,3 +95,7 @@ logging:
     org.springframework: INFO
     com:
       scaler: DEBUG
+
+# Application Configuration
+application:
+  loadDataFromCsv: true

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.Builder;
 import lombok.experimental.SuperBuilder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class ProductDTO extends BaseDTO {
     private String productType;
 
     private String status;
-    private String metadata;
+    private JsonNode metadata;
     private String sku;
     private Double price;
 

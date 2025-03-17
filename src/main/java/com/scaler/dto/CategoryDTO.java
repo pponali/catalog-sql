@@ -3,6 +3,7 @@ package com.scaler.dto;
 import lombok.*;
 import lombok.Builder;
 import lombok.experimental.SuperBuilder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,10 +28,11 @@ public class CategoryDTO extends BaseDTO {
     private String type;
     private String name;
     private String description;
-    @Builder.Default
+    private JsonNode metadata;
+    @lombok.Builder.Default
     private List<CategoryDTO> children = new ArrayList<>();
-    @Builder.Default
+    @lombok.Builder.Default
     private List<CategoryFeatureTemplateDTO> templates = new ArrayList<>();
-    @Builder.Default
+    @lombok.Builder.Default
     private Set<UUID> productIds = new HashSet<>();
 }
