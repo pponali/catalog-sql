@@ -5,7 +5,6 @@ import com.scaler.entity.Category;
 import com.scaler.entity.CategoryMapping;
 import com.scaler.entity.Product;
 import com.scaler.repository.CatalogRepository;
-import com.scaler.repository.CategoryRepository;
 import com.scaler.repository.MerchantRepository;
 import com.scaler.util.DateUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ public class CategoryMapper {
 
     private final MerchantRepository merchantRepository;
     private final CatalogRepository catalogRepository;
-    private final CategoryRepository categoryRepository;
     private final CategoryFeatureTemplateMapper categoryFeatureTemplateMapper;
 
     public CategoryDTO toDTO(Category entity) {

@@ -1,6 +1,6 @@
 "code","name","description","type","display_symbol","active","conversion_factor","metadata"
-"PCS","Pieces","Individual units","COUNT","pcs","true","1","{""displayOrder"": 1"
-"KG","Kilogram","Weight in kilograms","WEIGHT","kg","true","1","{""displayOrder"": 1"
+"PCS","Pieces","Individual units","COUNT","pcs","true","1","{""displayOrder"": 1, ""defaultForType"": true}"
+"KG","Kilogram","Weight in kilograms","WEIGHT","kg","true","1","{""displayOrder"": 1, ""defaultForType"": true}"
 "GM","Gram","Weight in grams","WEIGHT","g","true","0.001","{""displayOrder"": 2}"
 "MG","Milligram","Weight in milligrams","WEIGHT","mg","true","0.000001","{""displayOrder"": 3}"
 "TON","Ton","Weight in metric tons","WEIGHT","t","true","1000","{""displayOrder"": 4}"
