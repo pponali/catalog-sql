@@ -1,0 +1,6 @@
+code,name,description,founded,headquarters,type,email,phone,address_line1,address_line2,city,state,country,pincode
+TCLQ-001,Tata CLiQ,Tata Group's e-commerce platform,2016,"Mumbai, India",E-commerce,support@tatacliq.com,1800-123-4567,"Tata CLiQ Office, Tata Group Headquarters",Bombay House,Mumbai,Maharashtra,India,400001
+T1MG-001,Tata 1mg,Tata Group's healthcare platform,2015,"Gurugram, India",Healthcare,care@1mg.com,1800-212-1234,"Plot No.119, Sector 44",,Gurugram,Haryana,India,122001
+BBKT-001,BigBasket,Online grocery delivery service,2011,"Bangalore, India",Grocery,customerservice@bigbasket.com,1860-123-1000,"Innovative Retail Concepts Pvt Ltd",Outer Ring Road,Bangalore,Karnataka,India,560037
+CRMA-001,Croma,Tata Group's electronics retail chain,2006,"Mumbai, India",Electronics,care@croma.com,1800-267-6620,"Infiniti Mall, Link Road",Andheri West,Mumbai,Maharashtra,India,400053
+TNSH-001,Tanishq,Tata Group's jewelry brand,1994,"Bangalore, India",Jewelry,customercare@tanishq.co.in,1800-266-0123,"Titan Company Limited",Electronics City,Bangalore,Karnataka,India,560100

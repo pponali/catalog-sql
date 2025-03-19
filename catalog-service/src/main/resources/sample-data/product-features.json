@@ -1,0 +1,58 @@
+{
+  "productFeatures": [
+    {
+      "id": "2p3q4r5s-6t7u-8v9w-0x1y-2z3a4b5c6d7e",
+      "productId": "5y6z7a8b-9c0d-1e2f-3g4h-5i6j7k8l9m0n",
+      "features": [
+        {
+          "templateId": "7k8l9m0n-1o2p-3q4r-5s6t-7u8v9w0x1y2z",
+          "value": "L",
+          "unit": null
+        },
+        {
+          "templateId": "1o2p3q4r-5s6t-7u8v-9w0x-1y2z3a4b5c6d",
+          "value": "Navy Blue",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "3q4r5s6t-7u8v-9w0x-1y2z-3a4b5c6d7e8f",
+      "productId": "6z7a8b9c-0d1e-2f3g-4h5i-6j7k8l9m0n1o",
+      "features": [
+        {
+          "templateId": "8l9m0n1o-2p3q-4r5s-6t7u-8v9w0x1y2z3a",
+          "value": "500.00",
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "id": "4r5s6t7u-8v9w-0x1y-2z3a-4b5c6d7e8f9g",
+      "productId": "7a8b9c0d-1e2f-3g4h-5i6j-7k8l9m0n1o2p",
+      "features": [
+        {
+          "templateId": "9m0n1o2p-3q4r-5s6t-7u8v-9w0x1y2z3a4b",
+          "value": "1.000",
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "id": "5s6t7u8v-9w0x-1y2z-3a4b-5c6d7e8f9g0h",
+      "productId": "8b9c0d1e-2f3g-4h5i-6j7k-8l9m0n1o2p3q",
+      "features": [
+        {
+          "templateId": "0n1o2p3q-4r5s-6t7u-8v9w-0x1y2z3a4b5c",
+          "value": "256",
+          "unit": "GB"
+        },
+        {
+          "templateId": "1o2p3q4r-5s6t-7u8v-9w0x-1y2z3a4b5c6d",
+          "value": "Natural Titanium",
+          "unit": null
+        }
+      ]
+    }
+  ]
+}

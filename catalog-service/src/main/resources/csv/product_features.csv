@@ -1,0 +1,28 @@
+feature_id,code,name,description,attribute_type,validation_pattern,min_value,max_value,allowed_values,default_value,feature_type,unit_of_measure_code,visible,editable,searchable,comparable,required,multi_valued,metadata,template_id
+PF_0015,COLOR_FAMILY,Color Family,Color family for apparel products,SPECIFICATION,,,,"Black,White,Blue,Red,Green,Yellow,Pink,Purple,Orange,Brown,Grey,Multi",Black,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 1, "facetable": true},CFT001
+PF_0071,FABRIC_FAMILY,Fabric Family,Fabric type for apparel products,SPECIFICATION,,,,"Cotton,Polyester,Silk,Wool,Linen,Denim,Rayon,Nylon,Blend",Cotton,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 2, "facetable": true},CFT002
+PF_0089,SIZE,Size,Product size for apparel,SPECIFICATION,,,,"XS,S,M,L,XL,XXL,3XL,4XL,5XL,6XL,Free Size",M,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 3, "facetable": true},CFT003
+PF_0018,PATTERN,Pattern,Fabric pattern for apparel,SPECIFICATION,,,,"Solid,Striped,Checked,Printed,Floral,Geometric,Abstract,Animal Print",Solid,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 4, "facetable": true},CFT004
+PF_0092,FIT,Fit,Clothing fit style,SPECIFICATION,,,,"Regular,Slim,Relaxed,Skinny,Loose,Athletic,Tailored,Oversized",Regular,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 5, "facetable": true},CFT005
+PF006,SLEEVE,Sleeve,Sleeve type,SPECIFICATION,,,,"Full,Half,Short,Sleeveless,3/4",Full,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 6},CFT006
+PF007,NECK,Neck,Neck type,SPECIFICATION,,,,"Round,V-Neck,Collar,Turtle,Crew",Round,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 7},CFT007
+PF008,OCCASION,Occasion,Suitable occasion,SPECIFICATION,,,,"Casual,Formal,Party,Sports,Beach",Casual,SPECIFICATION,,true,true,true,false,false,true,{"displayOrder": 8},CFT008
+PF009,WASH_CARE,Wash Care,Washing instructions,SPECIFICATION,,,,,,SPECIFICATION,PCS,true,true,true,false,false,false,{"displayOrder": 9},CFT009
+PF010,COLOR,Color,Product color,SPECIFICATION,,,,"Red,Blue,Green,Black,White",Black,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 1},CFT010
+PF011,FABRIC,Fabric,Fabric type,SPECIFICATION,,,,"Cotton,Polyester,Silk,Wool,Linen,Denim",Cotton,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 2},CFT011
+PF012,SIZE,Size,Product size,SPECIFICATION,,,,"XS,S,M,L,XL,XXL",M,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 3},CFT012
+PF013,PATTERN,Pattern,Fabric pattern,SPECIFICATION,,,,"Solid,Striped,Checked,Printed,Floral",Solid,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 4},CFT013
+PF014,FIT,Fit,Clothing fit,SPECIFICATION,,,,"Regular,Slim,Relaxed,Skinny,Loose",Regular,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 5},CFT014
+PF015,SLEEVE,Sleeve,Sleeve type,SPECIFICATION,,,,"Full,Half,Short,Sleeveless,3/4",Full,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 6},CFT015
+PF016,NECK,Neck,Neck type,SPECIFICATION,,,,"Round,V-Neck,Collar,Turtle,Crew",Round,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 7},CFT016
+PF017,OCCASION,Occasion,Suitable occasion,SPECIFICATION,,,,"Casual,Formal,Party,Sports,Beach",Casual,SPECIFICATION,,true,true,true,false,false,true,{"displayOrder": 8},CFT017
+PF018,WASH_CARE,Wash Care,Washing instructions,SPECIFICATION,,,,,,SPECIFICATION,PCS,true,true,true,false,false,false,{"displayOrder": 9},CFT018
+PF019,COLOR,Color,Product color,SPECIFICATION,,,,"Red,Blue,Green,Black,White",Black,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 1},CFT019
+PF020,FABRIC,Fabric,Fabric type,SPECIFICATION,,,,"Cotton,Polyester,Silk,Wool,Linen,Denim",Cotton,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 2},CFT020
+PF021,SIZE,Size,Product size,SPECIFICATION,,,,"XS,S,M,L,XL,XXL",M,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 3},CFT021
+PF022,PATTERN,Pattern,Fabric pattern,SPECIFICATION,,,,"Solid,Striped,Checked,Printed,Floral",Solid,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 4},CFT022
+PF023,FIT,Fit,Clothing fit,SPECIFICATION,,,,"Regular,Slim,Relaxed,Skinny,Loose",Regular,SPECIFICATION,,true,true,true,true,false,false,{"displayOrder": 5},CFT023
+PF024,SLEEVE,Sleeve,Sleeve type,SPECIFICATION,,,,"Full,Half,Short,Sleeveless,3/4",Full,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 6},CFT024
+PF025,NECK,Neck,Neck type,SPECIFICATION,,,,"Round,V-Neck,Collar,Turtle,Crew",Round,SPECIFICATION,,true,true,true,true,true,false,{"displayOrder": 7},CFT025
+PF026,OCCASION,Occasion,Suitable occasion,SPECIFICATION,,,,"Casual,Formal,Party,Sports,Beach",Casual,SPECIFICATION,,true,true,true,false,false,true,{"displayOrder": 8},CFT026
+PF027,WASH_CARE,Wash Care,Washing instructions,SPECIFICATION,,,,,,SPECIFICATION,PCS,true,true,true,false,false,false,{"displayOrder": 9},CFT027 

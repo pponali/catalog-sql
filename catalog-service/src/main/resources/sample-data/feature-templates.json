@@ -1,0 +1,80 @@
+{
+  "featureTemplates": [
+    {
+      "id": "7k8l9m0n-1o2p-3q4r-5s6t-7u8v9w0x1y2z",
+      "code": "SIZE",
+      "name": "Size",
+      "description": "Product size specification",
+      "dataType": "STRING",
+      "validationType": "ENUM",
+      "validationRule": {
+        "allowedValues": ["XS", "S", "M", "L", "XL", "XXL"],
+        "mandatory": true
+      },
+      "applicableCategories": ["0t1u2v3w-4x5y-6z7a-8b9c-0d1e2f3g4h5i"]
+    },
+    {
+      "id": "8l9m0n1o-2p3q-4r5s-6t7u-8v9w0x1y2z3a",
+      "code": "DOSAGE",
+      "name": "Dosage",
+      "description": "Medicine dosage strength",
+      "dataType": "DECIMAL",
+      "validationType": "RANGE",
+      "validationRule": {
+        "min": 0.1,
+        "max": 1000.0,
+        "unit": "mg",
+        "mandatory": true,
+        "decimalPlaces": 2
+      },
+      "applicableCategories": ["2v3w4x5y-6z7a-8b9c-0d1e-2f3g4h5i6j7k"]
+    },
+    {
+      "id": "9m0n1o2p-3q4r-5s6t-7u8v-9w0x1y2z3a4b",
+      "code": "WEIGHT",
+      "name": "Weight",
+      "description": "Product weight",
+      "dataType": "DECIMAL",
+      "validationType": "RANGE",
+      "validationRule": {
+        "min": 0.001,
+        "max": 1000.0,
+        "unit": "kg",
+        "mandatory": true,
+        "decimalPlaces": 3
+      },
+      "applicableCategories": ["3w4x5y6z-7a8b-9c0d-1e2f-3g4h5i6j7k8l"]
+    },
+    {
+      "id": "0n1o2p3q-4r5s-6t7u-8v9w-0x1y2z3a4b5c",
+      "code": "STORAGE",
+      "name": "Storage Capacity",
+      "description": "Device storage capacity",
+      "dataType": "INTEGER",
+      "validationType": "ENUM",
+      "validationRule": {
+        "allowedValues": [64, 128, 256, 512, 1024],
+        "unit": "GB",
+        "mandatory": true
+      },
+      "applicableCategories": ["4x5y6z7a-8b9c-0d1e-2f3g-4h5i6j7k8l9m"]
+    },
+    {
+      "id": "1o2p3q4r-5s6t-7u8v-9w0x-1y2z3a4b5c6d",
+      "code": "COLOR",
+      "name": "Color",
+      "description": "Product color",
+      "dataType": "STRING",
+      "validationType": "REGEX",
+      "validationRule": {
+        "pattern": "^[A-Za-z\\s-]{2,50}$",
+        "mandatory": true,
+        "description": "Color name in 2-50 characters"
+      },
+      "applicableCategories": [
+        "0t1u2v3w-4x5y-6z7a-8b9c-0d1e2f3g4h5i",
+        "4x5y6z7a-8b9c-0d1e-2f3g-4h5i6j7k8l9m"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "categories": [
+    {
+      "code": "PRESCRIPTION_MEDS",
+      "name": "Prescription Medicines",
+      "platform": "TATA_1MG"
+    },
+    {
+      "code": "OTC_MEDS",
+      "name": "Over The Counter Medicines",
+      "platform": "TATA_1MG"
+    }
+  ],
+  "classificationClasses": [
+    {
+      "code": "ANTIBIOTICS",
+      "name": "Antibiotics"
+    },
+    {
+      "code": "PAIN_RELIEF",
+      "name": "Pain Relief"
+    }
+  ],
+  "classificationAttributes": [
+    {
+      "code": "COMPOSITION",
+      "name": "Active Ingredients",
+      "attributeType": "string"
+    },
+    {
+      "code": "DOSAGE",
+      "name": "Dosage Form",
+      "attributeType": "string"
+    },
+    {
+      "code": "STRENGTH",
+      "name": "Medicine Strength",
+      "attributeType": "string"
+    },
+    {
+      "code": "PRESCRIPTION_REQUIRED",
+      "name": "Prescription Required",
+      "attributeType": "boolean"
+    },
+    {
+      "code": "EXPIRY_DATE",
+      "name": "Expiry Date",
+      "attributeType": "string"
+    }
+  ],
+  "products": [
+    {
+      "code": "MED001",
+      "name": "Amoxicillin 500mg Capsules",
+      "categories": ["PRESCRIPTION_MEDS"],
+      "features": [
+        {
+          "attributeCode": "COMPOSITION",
+          "values": ["Amoxicillin Trihydrate"]
+        },
+        {
+          "attributeCode": "DOSAGE",
+          "values": ["Capsule"]
+        },
+        {
+          "attributeCode": "STRENGTH",
+          "values": ["500mg"]
+        },
+        {
+          "attributeCode": "PRESCRIPTION_REQUIRED",
+          "values": ["true"]
+        },
+        {
+          "attributeCode": "EXPIRY_DATE",
+          "values": ["2025-12-31"]
+        }
+      ]
+    },
+    {
+      "code": "MED002",
+      "name": "Paracetamol 650mg Tablets",
+      "categories": ["OTC_MEDS"],
+      "features": [
+        {
+          "attributeCode": "COMPOSITION",
+          "values": ["Paracetamol"]
+        },
+        {
+          "attributeCode": "DOSAGE",
+          "values": ["Tablet"]
+        },
+        {
+          "attributeCode": "STRENGTH",
+          "values": ["650mg"]
+        },
+        {
+          "attributeCode": "PRESCRIPTION_REQUIRED",
+          "values": ["false"]
+        },
+        {
+          "attributeCode": "EXPIRY_DATE",
+          "values": ["2025-06-30"]
+        }
+      ]
+    }
+  ]
+}

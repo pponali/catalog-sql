@@ -1,0 +1,11 @@
+code,name,description,merchant_code,type,status,store_code
+TCLQ_ONLINE,TataCliq Online,Online channel for TataCliq,TCLQ-001,ECOMMERCE,ACTIVE,TCLQ_MAIN
+TCLQ_STORE,TataCliq Store,In-store channel for TataCliq,TCLQ-001,PHYSICAL_STORE,ACTIVE,TCLQ_MAIN
+CROMA_ONLINE,Croma Online,Online channel for Croma,CRMA-001,ECOMMERCE,ACTIVE,CROMA_ONLINE
+CROMA_STORE,Croma Store,In-store channel for Croma,CRMA-001,PHYSICAL_STORE,ACTIVE,CROMA_ONLINE
+BB_ONLINE,BigBasket Online,Online channel for BigBasket,BBKT-001,ECOMMERCE,ACTIVE,BB_ONLINE
+BB_STORE,BigBasket Store,In-store channel for BigBasket,BBKT-001,PHYSICAL_STORE,ACTIVE,BB_ONLINE
+TANISHQ_ONLINE,Tanishq Online,Online channel for Tanishq,TNSH-001,ECOMMERCE,ACTIVE,TANISHQ_ONLINE
+TANISHQ_STORE,Tanishq Store,In-store channel for Tanishq,TNSH-001,PHYSICAL_STORE,ACTIVE,TANISHQ_ONLINE
+MG_ONLINE,1MG Online,Online channel for 1MG,T1MG-001,ECOMMERCE,ACTIVE,MG_ONLINE
+MG_STORE,1MG Store,In-store channel for 1MG,T1MG-001,PHYSICAL_STORE,ACTIVE,MG_ONLINE

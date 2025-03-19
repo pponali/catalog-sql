@@ -1,0 +1,55 @@
+{
+  "products": [
+    {
+      "id": "5y6z7a8b-9c0d-1e2f-3g4h-5i6j7k8l9m0n",
+      "code": "TSHIRT001",
+      "name": "Men's Cotton Round Neck T-Shirt",
+      "description": "Comfortable cotton t-shirt for men",
+      "status": "ACTIVE",
+      "type": "PHYSICAL",
+      "catalogId": "6p7q8r9s-0t1u-2v3w-4x5y-6z7a8b9c0d1e",
+      "categoryId": "1u2v3w4x-5y6z-7a8b-9c0d-1e2f3g4h5i6j",
+      "merchantIds": ["6f7g8h9i-0j1k-2l3m-4n5o-6p7q8r9s0t1u"],
+      "channelIds": [
+        "1k2l3m4n-5o6p-7q8r-9s0t-1u2v3w4x5y6z",
+        "2l3m4n5o-6p7q-8r9s-0t1u-2v3w4x5y6z7a"
+      ]
+    },
+    {
+      "id": "6z7a8b9c-0d1e-2f3g-4h5i-6j7k8l9m0n1o",
+      "code": "MED001",
+      "name": "Paracetamol 500mg",
+      "description": "Fever and pain relief tablet",
+      "status": "ACTIVE",
+      "type": "PHYSICAL",
+      "catalogId": "7q8r9s0t-1u2v-3w4x-5y6z-7a8b9c0d1e2f",
+      "categoryId": "2v3w4x5y-6z7a-8b9c-0d1e-2f3g4h5i6j7k",
+      "merchantIds": ["7g8h9i0j-1k2l-3m4n-5o6p-7q8r9s0t1u2v"],
+      "channelIds": ["3m4n5o6p-7q8r-9s0t-1u2v-3w4x5y6z7a8b"]
+    },
+    {
+      "id": "7a8b9c0d-1e2f-3g4h-5i6j-7k8l9m0n1o2p",
+      "code": "VEG001",
+      "name": "Fresh Tomatoes",
+      "description": "Farm fresh tomatoes",
+      "status": "ACTIVE",
+      "type": "PHYSICAL",
+      "catalogId": "8r9s0t1u-2v3w-4x5y-6z7a-8b9c0d1e2f3g",
+      "categoryId": "3w4x5y6z-7a8b-9c0d-1e2f-3g4h5i6j7k8l",
+      "merchantIds": ["8h9i0j1k-2l3m-4n5o-6p7q-8r9s0t1u2v3w"],
+      "channelIds": ["4n5o6p7q-8r9s-0t1u-2v3w-4x5y6z7a8b9c"]
+    },
+    {
+      "id": "8b9c0d1e-2f3g-4h5i-6j7k-8l9m0n1o2p3q",
+      "code": "PHONE001",
+      "name": "iPhone 15 Pro",
+      "description": "Latest iPhone model",
+      "status": "ACTIVE",
+      "type": "PHYSICAL",
+      "catalogId": "9s0t1u2v-3w4x-5y6z-7a8b-9c0d1e2f3g4h",
+      "categoryId": "4x5y6z7a-8b9c-0d1e-2f3g-4h5i6j7k8l9m",
+      "merchantIds": ["9i0j1k2l-3m4n-5o6p-7q8r-9s0t1u2v3w4x"],
+      "channelIds": ["5o6p7q8r-9s0t-1u2v-3w4x-5y6z7a8b9c0d"]
+    }
+  ]
+}

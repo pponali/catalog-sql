@@ -1,0 +1,39 @@
+package com.scaler.rules.validation;
+
+import com.scaler.entity.ProductFeatureValue;
+import com.scaler.model.ValidationRule;
+import com.scaler.model.ValidationRule.RuleType;
+import com.scaler.entity.Channel;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.ArrayList;
+
+global java.util.List errors;
+
+rule "Validate Channel Name"
+when
+    $channel: Channel(name == null || name.trim().isEmpty())
+then
+    errors.add("Channel name cannot be empty");
+end
+
+rule "Validate Channel Code"
+when
+    $channel: Channel(code == null || code.trim().isEmpty())
+then
+    errors.add("Channel code cannot be empty");
+end
+
+rule "Validate Channel Type"
+when
+    $channel: Channel(type == null)
+then
+    errors.add("Channel type cannot be null");
+end
+
+rule "Validate Channel Status"
+when
+    $channel: Channel(status == null)
+then
+    errors.add("Channel status cannot be null");
+end

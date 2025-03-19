@@ -1,0 +1,49 @@
+{
+  "channels": [
+    {
+      "id": "1k2l3m4n-5o6p-7q8r-9s0t-1u2v3w4x5y6z",
+      "code": "TATACLIQ_WEB",
+      "name": "Tata CLiQ Website",
+      "description": "Tata CLiQ web platform",
+      "status": "ACTIVE",
+      "type": "WEB",
+      "merchantId": "6f7g8h9i-0j1k-2l3m-4n5o-6p7q8r9s0t1u"
+    },
+    {
+      "id": "2l3m4n5o-6p7q-8r9s-0t1u-2v3w4x5y6z7a",
+      "code": "TATACLIQ_MOBILE",
+      "name": "Tata CLiQ Mobile App",
+      "description": "Tata CLiQ mobile application",
+      "status": "ACTIVE",
+      "type": "MOBILE_APP",
+      "merchantId": "6f7g8h9i-0j1k-2l3m-4n5o-6p7q8r9s0t1u"
+    },
+    {
+      "id": "3m4n5o6p-7q8r-9s0t-1u2v-3w4x5y6z7a8b",
+      "code": "1MG_WEB",
+      "name": "1mg Website",
+      "description": "1mg web platform",
+      "status": "ACTIVE",
+      "type": "WEB",
+      "merchantId": "7g8h9i0j-1k2l-3m4n-5o6p-7q8r9s0t1u2v"
+    },
+    {
+      "id": "4n5o6p7q-8r9s-0t1u-2v3w-4x5y6z7a8b9c",
+      "code": "BIGBASKET_WEB",
+      "name": "BigBasket Website",
+      "description": "BigBasket web platform",
+      "status": "ACTIVE",
+      "type": "WEB",
+      "merchantId": "8h9i0j1k-2l3m-4n5o-6p7q-8r9s0t1u2v3w"
+    },
+    {
+      "id": "5o6p7q8r-9s0t-1u2v-3w4x-5y6z7a8b9c0d",
+      "code": "CROMA_STORE",
+      "name": "Croma Physical Store",
+      "description": "Croma retail stores",
+      "status": "ACTIVE",
+      "type": "PHYSICAL_STORE",
+      "merchantId": "9i0j1k2l-3m4n-5o6p-7q8r-9s0t1u2v3w4x"
+    }
+  ]
+}

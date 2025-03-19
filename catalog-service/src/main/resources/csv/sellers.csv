@@ -1,0 +1,16 @@
+code,name,description,type,status,merchant_code
+TCLQ_DIRECT,TataCliq Official,Official seller for TataCliq products,DIRECT,ACTIVE,TCLQ-001
+TCLQ_MARKETPLACE,TataCliq Marketplace,Marketplace seller for TataCliq,MARKETPLACE,ACTIVE,TCLQ-001
+TCLQ_PARTNER,TataCliq Partner,Partner seller for TataCliq,PARTNER,ACTIVE,TCLQ-001
+CROMA_DIRECT,Croma Official,Official seller for Croma products,DIRECT,ACTIVE,CRMA-001
+CROMA_MARKETPLACE,Croma Marketplace,Marketplace seller for Croma,MARKETPLACE,ACTIVE,CRMA-001
+CROMA_PARTNER,Croma Partner,Partner seller for Croma,PARTNER,ACTIVE,CRMA-001
+BB_DIRECT,BigBasket Official,Official seller for BigBasket products,DIRECT,ACTIVE,BBKT-001
+BB_MARKETPLACE,BigBasket Marketplace,Marketplace seller for BigBasket,MARKETPLACE,ACTIVE,BBKT-001
+BB_PARTNER,BigBasket Partner,Partner seller for BigBasket,PARTNER,ACTIVE,BBKT-001
+TANISHQ_DIRECT,Tanishq Official,Official seller for Tanishq products,DIRECT,ACTIVE,TNSH-001
+TANISHQ_MARKETPLACE,Tanishq Marketplace,Marketplace seller for Tanishq,MARKETPLACE,ACTIVE,TNSH-001
+TANISHQ_PARTNER,Tanishq Partner,Partner seller for Tanishq,PARTNER,ACTIVE,TNSH-001
+MG_DIRECT,1MG Official,Official seller for 1MG products,DIRECT,ACTIVE,T1MG-001
+MG_MARKETPLACE,1MG Marketplace,Marketplace seller for 1MG,MARKETPLACE,ACTIVE,T1MG-001
+MG_PARTNER,1MG Partner,Partner seller for 1MG,PARTNER,ACTIVE,T1MG-001

@@ -1,0 +1,12 @@
+code,name,domain,locale,currency,description,active,merchant_code
+TCLQ_MAIN,TataCliq Main Store,tatacliq.com,en_IN,INR,Main online store for TataCliq,true,TCLQ-001
+TCLQ_FASHION,TataCliq Fashion,fashion.tatacliq.com,en_IN,INR,Fashion store for TataCliq,true,TCLQ-001
+TCLQ_LUXURY,TataCliq Luxury,luxury.tatacliq.com,en_IN,INR,Luxury store for TataCliq,true,TCLQ-001
+CROMA_ONLINE,Croma Online,croma.com,en_IN,INR,Online store for Croma electronics,true,CRMA-001
+CROMA_MOBILE,Croma Mobile,mobile.croma.com,en_IN,INR,Mobile store for Croma,true,CRMA-001
+BB_ONLINE,BigBasket Online,bigbasket.com,en_IN,INR,Online grocery store for BigBasket,true,BBKT-001
+BB_EXPRESS,BigBasket Express,express.bigbasket.com,en_IN,INR,Express delivery store for BigBasket,true,BBKT-001
+TANISHQ_ONLINE,Tanishq Online,tanishq.co.in,en_IN,INR,Online jewelry store for Tanishq,true,TNSH-001
+TANISHQ_WEDDING,Tanishq Wedding,wedding.tanishq.co.in,en_IN,INR,Wedding collection store for Tanishq,true,TNSH-001
+MG_ONLINE,1MG Online,1mg.com,en_IN,INR,Online pharmacy for 1MG,true,T1MG-001
+MG_WELLNESS,1MG Wellness,wellness.1mg.com,en_IN,INR,Wellness store for 1MG,true,T1MG-001

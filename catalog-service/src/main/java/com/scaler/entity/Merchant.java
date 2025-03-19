@@ -1,0 +1,44 @@
+package com.scaler.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "merchant")
+@Data
+@SuperBuilder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true, exclude = {"catalogs"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalogs"})
+public class Merchant extends BaseEntity {
+    
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
+    
+    @Column(name = "name", nullable = false)
+    private String name;
+    
+    @Column(name = "description")
+    private String description;
+    
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "contact_email")
+    private String contactEmail;
+    
+    @Column(name = "active")
+    private Boolean active;
+
+    @ManyToMany(mappedBy = "merchants")
+    private Set<Catalog> catalogs = new HashSet<>();
+
+    public Set<Catalog> getCatalogs() {
+        return catalogs;
+    }
+}
