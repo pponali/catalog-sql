@@ -1,9 +1,9 @@
-package com.scaler.validation.factory;
+package com.scaler.validation.validation.factory;
 
-import com.scaler.entity.Category;
-import com.scaler.entity.CategoryFeatureTemplate;
-import com.scaler.entity.ProductFeature;
-import com.scaler.model.ValidationRule;
+import com.nosql.poc.validation.model.Category;
+import com.nosql.poc.validation.model.CategoryFeatureTemplate;
+import com.nosql.poc.validation.model.ProductFeature;
+import com.nosql.poc.validation.model.SimpleValidationRule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,19 +24,12 @@ public class ValidationRuleFactory {
      * @param category The category
      * @return List of validation rules
      */
-    public List<ValidationRule> createRulesForCategory(Category category) {
-        List<ValidationRule> rules = new ArrayList<>();
+    public List<SimpleValidationRule> createRulesForCategory(Category category) {
+        List<SimpleValidationRule> rules = new ArrayList<>();
         
-        // Get all feature templates for the category
-        Set<CategoryFeatureTemplate> templates = category.getTemplates();
-        if (templates == null || templates.isEmpty()) {
-            return rules;
-        }
-        
-        // Create validation rules for each template
-        for (CategoryFeatureTemplate template : templates) {
-            rules.addAll(createRulesForTemplate(template));
-        }
+        // In the MongoDB model, templates are fetched separately
+        // Instead, we would typically get them from a repository
+        // For now, return an empty list as templates aren't directly on Category
         
         return rules;
     }
@@ -47,23 +40,23 @@ public class ValidationRuleFactory {
      * @param template The feature template
      * @return List of validation rules
      */
-    public List<ValidationRule> createRulesForTemplate(CategoryFeatureTemplate template) {
-        List<ValidationRule> rules = new ArrayList<>();
+    public List<SimpleValidationRule> createRulesForTemplate(CategoryFeatureTemplate template) {
+        List<SimpleValidationRule> rules = new ArrayList<>();
         
-        // Create required rule if the feature is mandatory
-        if (template.isMandatory()) {
-            ValidationRule requiredRule = ValidationRule.createRequiredRule(
-                template.getCode() + "_REQUIRED",
-                template.getName() + " Required"
+        // Create required rule if the feature is required
+        if (template.getRequired() != null && template.getRequired()) {
+            SimpleValidationRule requiredRule = SimpleValidationRule.createRequiredRule(
+                template.getFeatureCode() + "_REQUIRED",
+                template.getFeatureName() + " Required"
             );
             rules.add(requiredRule);
         }
         
         // Create pattern rule if validation pattern is specified
         if (template.getValidationPattern() != null && !template.getValidationPattern().isEmpty()) {
-            ValidationRule patternRule = ValidationRule.createPatternRule(
-                template.getCode() + "_PATTERN",
-                template.getName() + " Pattern",
+            SimpleValidationRule patternRule = SimpleValidationRule.createPatternRule(
+                template.getFeatureCode() + "_PATTERN",
+                template.getFeatureName() + " Pattern",
                 template.getValidationPattern()
             );
             rules.add(patternRule);
@@ -71,23 +64,24 @@ public class ValidationRuleFactory {
         
         // Create range rule if min and max values are specified
         if (template.getMinValue() != null && template.getMaxValue() != null) {
-            ValidationRule rangeRule = ValidationRule.createRangeRule(
-                template.getCode() + "_RANGE",
-                template.getName() + " Range",
-                template.getMinValue(),
-                template.getMaxValue()
+            SimpleValidationRule rangeRule = SimpleValidationRule.createRangeRule(
+                template.getFeatureCode() + "_RANGE",
+                template.getFeatureName() + " Range",
+                String.valueOf(template.getMinValue()),
+                String.valueOf(template.getMaxValue())
             );
             rules.add(rangeRule);
         }
         
-        // Create allowed values rule if allowed values are specified
-        if (template.getAllowedValues() != null && !template.getAllowedValues().isEmpty()) {
-            ValidationRule allowedValuesRule = ValidationRule.createAllowedValuesRule(
-                template.getCode() + "_ALLOWED_VALUES",
-                template.getName() + " Allowed Values",
-                template.getAllowedValues()
+        // Create length validation rule if min and max length are specified
+        if (template.getMinLength() != null && template.getMaxLength() != null) {
+            SimpleValidationRule lengthRule = SimpleValidationRule.createLengthRule(
+                template.getFeatureCode() + "_LENGTH",
+                template.getFeatureName() + " Length",
+                template.getMinLength(),
+                template.getMaxLength()
             );
-            rules.add(allowedValuesRule);
+            rules.add(lengthRule);
         }
         
         return rules;
@@ -100,17 +94,32 @@ public class ValidationRuleFactory {
      * @param category The category
      * @return List of validation rules
      */
-    public List<ValidationRule> createRulesForFeature(ProductFeature feature, Category category) {
-        List<ValidationRule> rules = new ArrayList<>();
+    public List<SimpleValidationRule> createRulesForFeature(ProductFeature feature, Category category) {
+        List<SimpleValidationRule> rules = new ArrayList<>();
         
-        // Get the template for the feature
-        CategoryFeatureTemplate template = feature.getTemplate();
-        if (template == null) {
-            return rules;
+        // In NoSQL model, feature templates are separate and not directly linked
+        // We would typically fetch the appropriate template from a repository
+        
+        // For now, create some basic validation rules based on the feature itself
+        
+        // Required validation if feature is marked as required
+        if (feature.isRequired()) {
+            SimpleValidationRule requiredRule = SimpleValidationRule.createRequiredRule(
+                feature.getCode() + "_REQUIRED",
+                feature.getName() + " Required"
+            );
+            rules.add(requiredRule);
         }
         
-        // Create rules based on the template
-        rules.addAll(createRulesForTemplate(template));
+        // Type validation based on the feature's valueType
+        if (feature.getValueType() != null && !feature.getValueType().isEmpty()) {
+            SimpleValidationRule typeRule = SimpleValidationRule.createTypeRule(
+                feature.getCode() + "_TYPE",
+                feature.getName() + " Type",
+                feature.getValueType()
+            );
+            rules.add(typeRule);
+        }
         
         return rules;
     }
