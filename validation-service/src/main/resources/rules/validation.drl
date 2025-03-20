@@ -1,0 +1,66 @@
+package com.scaler.rules.validation;
+
+import com.scaler.entity.ProductFeatureValue;
+import com.scaler.model.ValidationRule;
+import com.scaler.model.ValidationRule.RuleType;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.ArrayList;
+
+global List<String> validationErrors;
+
+rule "Required Value Check"
+    when
+        $rule: ValidationRule(ruleType == "REQUIRED")
+        $value: ProductFeatureValue(
+            stringValue == null && numericValue == null && 
+            booleanValue == null && attributeValue == null
+        )
+    then
+        validationErrors.add("Value is required but not provided");
+end
+
+rule "Pattern Validation"
+    when
+        $rule: ValidationRule(ruleType == "PATTERN", pattern != null)
+        $value: ProductFeatureValue(stringValue != null)
+        eval(!Pattern.compile($rule.getPattern()).matcher($value.getStringValue()).matches())
+    then
+        validationErrors.add("Value does not match required pattern: " + $rule.getPattern());
+end
+
+rule "Range Validation"
+    when
+        $rule: ValidationRule(ruleType == "RANGE")
+        $value: ProductFeatureValue(numericValue != null)
+        eval(
+            ($rule.getMinValue() != null && $value.getNumericValue() < $rule.getMinValue()) ||
+            ($rule.getMaxValue() != null && $value.getNumericValue() > $rule.getMaxValue())
+        )
+    then
+        validationErrors.add("Value is outside allowed range [" + 
+            $rule.getMinValue() + " - " + $rule.getMaxValue() + "]");
+end
+
+rule "Enumeration Validation"
+    when
+        $rule: ValidationRule(ruleType == "ALLOWED_VALUES", allowedValues != null)
+        $value: ProductFeatureValue(stringValue != null)
+        eval(!$rule.getAllowedValues().contains($value.getStringValue()))
+    then
+        validationErrors.add("Value is not in the list of allowed values: " + 
+            String.join(", ", $rule.getAllowedValues()));
+end
+
+rule "Length Validation"
+    when
+        $rule: ValidationRule(ruleType == "LENGTH")
+        $value: ProductFeatureValue(stringValue != null)
+        eval(
+            ($rule.getMinValue() != null && $value.getStringValue().length() < $rule.getMinValue().intValue()) ||
+            ($rule.getMaxValue() != null && $value.getStringValue().length() > $rule.getMaxValue().intValue())
+        )
+    then
+        validationErrors.add("Value length must be between " + 
+            $rule.getMinValue() + " and " + $rule.getMaxValue() + " characters");
+end

@@ -83,10 +83,9 @@ public class CategoryMapper {
                 .lastModifiedBy(dto.getLastModifiedBy())
                 .build();
 
-        // Set merchant if businessId is provided
+        // Set merchantId if businessId is provided
         if (dto.getBusinessId() != null) {
-            merchantRepository.findById(dto.getBusinessId())
-                    .ifPresent(entity::setMerchant);
+            entity.setMerchantId(dto.getBusinessId());
         }
 
         // Set catalog if catalogId is provided
@@ -113,10 +112,9 @@ public class CategoryMapper {
             entity.setDescription(dto.getDescription());
         }
 
-        // Update merchant if businessId is provided
+        // Update merchantId if businessId is provided
         if (dto.getBusinessId() != null) {
-            merchantRepository.findById(dto.getBusinessId())
-                    .ifPresent(entity::setMerchant);
+            entity.setMerchantId(dto.getBusinessId());
         }
 
         // Update catalog if catalogId is provided

@@ -42,13 +42,101 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductCategoryRepository productCategoryRepository;
     // private final ProductMappingService productMappingService; // Removed as part of microservices separation
-    private final com.scaler.grpc.client.ValidationServiceClient validationServiceClient;
+    private final com.scaler.service.ValidationIntegrationService validationService; 
     private final com.scaler.grpc.client.VendorServiceClient vendorServiceClient;
     private final com.scaler.grpc.client.RulesServiceClient rulesServiceClient;
+    // Using ValidationIntegrationService instead of direct ValidationServiceClient 
+    // private final com.scaler.grpc.client.ValidationServiceClient validationServiceClient;
     private final com.scaler.grpc.client.ChannelServiceClient channelServiceClient;
     private final com.scaler.grpc.client.PartnerServiceClient partnerServiceClient;
 
     // New method implementations for gRPC service
+    
+    /**
+     * Validates a product using the validation service via gRPC.
+     *
+     * @param productDTO the product to validate
+     * @return the validation result
+     */
+    @Override
+    public ValidationResultDTO validateProduct(ProductDTO productDTO) {
+        log.info("Validating product with ID: {}", productDTO.getId());
+        
+        Map<String, Object> productData = convertProductDTOToMap(productDTO);
+        
+        try {
+            // Use gRPC for performance-critical validation
+            ValidationResultDTO validationResult = validationService.validateProductGrpc(
+                    productDTO.getId().toString(), productData);
+            
+            log.info("Validation result for product {}: valid={}, errors={}", 
+                    productDTO.getId(), validationResult.isValid(), 
+                    validationResult.getErrors());
+                    
+            return validationResult;
+        } catch (Exception e) {
+            log.error("Error during product validation", e);
+            ValidationResultDTO result = new ValidationResultDTO();
+            result.setEntityId(productDTO.getId());
+            result.setEntityType("PRODUCT");
+            result.setValid(false);
+            result.addError("Validation service error: " + e.getMessage());
+            return result;
+        }
+    }
+    
+    /**
+     * Converts a ProductDTO to a Map representation for validation.
+     *
+     * @param productDTO the product DTO to convert
+     * @return a map representation of the product
+     */
+    private Map<String, Object> convertProductDTOToMap(ProductDTO productDTO) {
+        Map<String, Object> productMap = new HashMap<>();
+        
+        // Basic product attributes
+        productMap.put("id", productDTO.getId().toString());
+        productMap.put("name", productDTO.getName());
+        productMap.put("sku", productDTO.getSku());
+        productMap.put("description", productDTO.getDescription());
+        
+        // Add any product features in a simplified format
+        if (productDTO.getFeatures() != null && !productDTO.getFeatures().isEmpty()) {
+            Map<String, Object> featureValues = new HashMap<>();
+            
+            // Convert the features to a simple map for validation
+            // This avoids the need to reference specific DTO classes
+            for (Object featureObj : productDTO.getFeatures()) {
+                try {
+                    // Extract feature ID and name using reflection
+                    java.lang.reflect.Method getIdMethod = featureObj.getClass().getMethod("getId");
+                    java.lang.reflect.Method getNameMethod = featureObj.getClass().getMethod("getName");
+                    
+                    UUID featureId = (UUID) getIdMethod.invoke(featureObj);
+                    String featureName = (String) getNameMethod.invoke(featureObj);
+                    
+                    if (featureId != null) {
+                        featureValues.put(featureId.toString(), featureName != null ? featureName : "");
+                    }
+                } catch (Exception e) {
+                    log.warn("Error extracting feature information: {}", e.getMessage());
+                }
+            }
+            
+            productMap.put("features", featureValues);
+        }
+        
+        // Add category information
+        if (productDTO.getCategoryIds() != null && !productDTO.getCategoryIds().isEmpty()) {
+            List<String> categoryIds = new ArrayList<>();
+            productDTO.getCategoryIds().forEach(categoryId -> 
+                categoryIds.add(categoryId.toString()));
+                
+            productMap.put("categories", categoryIds);
+        }
+        
+        return productMap;
+    }
     
     @Override
     @Transactional
@@ -76,7 +164,8 @@ public class ProductServiceImpl implements ProductService {
         
         // Validate the product using the validation service
         log.debug("Validating product before creation");
-        ValidationResultDTO validationResult = validationServiceClient.validateProduct(productDTO);
+        ValidationResultDTO validationResult = validationService.validateProductGrpc(
+                productDTO.getId().toString(), convertProductDTOToMap(productDTO));
         
         // If validation fails, throw an exception
         if (!validationResult.isValid()) {
@@ -89,18 +178,17 @@ public class ProductServiceImpl implements ProductService {
         // Evaluate product against business rules
         try {
             log.debug("Evaluating product against business rules");
-            com.scaler.grpc.rules.RuleEvaluationResponse ruleEvaluation = 
+            ValidationResultDTO ruleValidationResult = 
                     rulesServiceClient.evaluateProductRule(productDTO, "PRODUCT_CREATION");
             
-            if (!ruleEvaluation.getResult()) {
+            if (!ruleValidationResult.isValid()) {
                 String errorMessage = "Product rule evaluation failed: " + 
-                        String.join(", ", ruleEvaluation.getMessagesList());
+                        String.join(", ", ruleValidationResult.getErrors());
                 log.warn("Product rule evaluation failed: {}", errorMessage);
                 throw new ValidationException(errorMessage);
             }
             
-            log.info("Product passed rule evaluation: rules applied: {}", 
-                    String.join(", ", ruleEvaluation.getAppliedRulesList()));
+            log.info("Product passed rule evaluation: {}", ruleValidationResult.getRuleName());
         } catch (ServiceException e) {
             // Don't fail if rules service is unavailable, just log a warning
             log.warn("Could not evaluate product rules: {}", e.getMessage());
@@ -148,7 +236,8 @@ public class ProductServiceImpl implements ProductService {
         
         // Validate the product using the validation service
         log.debug("Validating product before update");
-        ValidationResultDTO validationResult = validationServiceClient.validateProduct(productDTO);
+        ValidationResultDTO validationResult = validationService.validateProductGrpc(
+                productDTO.getId().toString(), convertProductDTOToMap(productDTO));
         
         // If validation fails, throw an exception
         if (!validationResult.isValid()) {
@@ -161,18 +250,17 @@ public class ProductServiceImpl implements ProductService {
         // Evaluate product against business rules
         try {
             log.debug("Evaluating product against business rules");
-            com.scaler.grpc.rules.RuleEvaluationResponse ruleEvaluation = 
+            ValidationResultDTO ruleValidationResult = 
                     rulesServiceClient.evaluateProductRule(productDTO, "PRODUCT_UPDATE");
             
-            if (!ruleEvaluation.getResult()) {
+            if (!ruleValidationResult.isValid()) {
                 String errorMessage = "Product rule evaluation failed: " + 
-                        String.join(", ", ruleEvaluation.getMessagesList());
+                        String.join(", ", ruleValidationResult.getErrors());
                 log.warn("Product rule evaluation failed: {}", errorMessage);
                 throw new ValidationException(errorMessage);
             }
             
-            log.info("Product passed rule evaluation: rules applied: {}", 
-                    String.join(", ", ruleEvaluation.getAppliedRulesList()));
+            log.info("Product passed rule evaluation: {}", ruleValidationResult.getRuleName());
         } catch (ServiceException e) {
             // Don't fail if rules service is unavailable, just log a warning
             log.warn("Could not evaluate product rules: {}", e.getMessage());

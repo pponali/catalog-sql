@@ -757,11 +757,11 @@ public class LoadDataFromCsvService {
             product.setProductType(ProductType.SIMPLE);
         }
         
-        // Set merchant if provided
+        // Set merchantId if provided
         String merchantId = rowMap.get("merchant_id");
         if (merchantId != null && !merchantId.isEmpty()) {
-            Optional<Merchant> merchant = merchantRepository.findById(UUID.fromString(merchantId));
-            merchant.ifPresent(product::setMerchant);
+            UUID merchantUuid = UUID.fromString(merchantId);
+            product.setMerchantId(merchantUuid);
         }
         
         product.setCreatedDate(LocalDateTime.now());
