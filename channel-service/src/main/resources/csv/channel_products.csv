@@ -1,0 +1,15 @@
+product_id,channel_id,channel_product_id,status,channel_price,channel_inventory,category_mapping,fulfillment_type,channel_url
+PROD-001,TCLQ_ONLINE,TCLQ-MBP-001,ACTIVE,24999.00,45,Laptops & Computers,DIRECT,https://tatacliq.com/products/macbook-pro-16
+PROD-001,CROMA_ONLINE,CROMA-MBP-001,ACTIVE,24899.00,35,Electronics/Computers,MARKETPLACE,https://croma.com/products/macbook-pro-16
+PROD-002,TCLQ_ONLINE,TCLQ-MBP-002,ACTIVE,18999.00,30,Laptops & Computers,DIRECT,https://tatacliq.com/products/macbook-pro-14
+PROD-002,CROMA_ONLINE,CROMA-MBP-002,ACTIVE,18899.00,25,Electronics/Computers,MARKETPLACE,https://croma.com/products/macbook-pro-14
+PROD-003,TCLQ_ONLINE,TCLQ-IPH-001,ACTIVE,79999.00,20,Mobiles & Tablets,DIRECT,https://tatacliq.com/products/iphone-15-pro-max
+PROD-003,CROMA_ONLINE,CROMA-IPH-001,ACTIVE,78999.00,15,Electronics/Mobiles,MARKETPLACE,https://croma.com/products/iphone-15-pro-max
+PROD-004,TCLQ_ONLINE,TCLQ-IPH-002,ACTIVE,69999.00,25,Mobiles & Tablets,DIRECT,https://tatacliq.com/products/iphone-15-pro
+PROD-004,CROMA_ONLINE,CROMA-IPH-002,ACTIVE,68999.00,20,Electronics/Mobiles,MARKETPLACE,https://croma.com/products/iphone-15-pro
+PROD-005,TANISHQ_ONLINE,TANISHQ-GOLD-001,ACTIVE,45000.00,5,Jewelry/Gold,DIRECT,https://tanishq.com/products/gold-necklace-22k
+PROD-005,TANISHQ_STORE,TANISHQ-STORE-GOLD-001,ACTIVE,45000.00,3,Store/Jewelry,IN_STORE,https://tanishq.com/stores/products/gold-necklace-22k
+PROD-006,MG_ONLINE,1MG-MED-001,ACTIVE,199.00,100,Medicine/Antibiotics,DIRECT,https://1mg.com/products/amoxicillin-500mg
+PROD-006,MG_STORE,1MG-STORE-MED-001,ACTIVE,189.00,50,Store/Medicine,IN_STORE,https://1mg.com/stores/products/amoxicillin-500mg
+PROD-007,BB_ONLINE,BB-FOOD-001,ACTIVE,99.00,200,Groceries/Fruits,DIRECT,https://bigbasket.com/products/apples-premium
+PROD-007,BB_STORE,BB-STORE-FOOD-001,ACTIVE,89.00,100,Store/Groceries,IN_STORE,https://bigbasket.com/stores/products/apples-premium

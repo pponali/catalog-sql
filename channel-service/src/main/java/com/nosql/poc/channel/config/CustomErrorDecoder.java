@@ -14,10 +14,10 @@ public class CustomErrorDecoder implements ErrorDecoder {
     public Exception decode(String methodKey, Response response) {
         try {
             String errorMessage = new String(response.body().asInputStream().readAllBytes());
-            return new ServiceException(response.status(), errorMessage);
+            return new ServiceException(errorMessage, response.status(), "EXTERNAL_SERVICE_ERROR");
         } catch (Exception e) {
             log.error("Error decoding response", e);
-            return new ServiceException(response.status(), "Unknown error occurred");
+            return new ServiceException("Unknown error occurred", e, response.status(), "EXTERNAL_SERVICE_ERROR");
         }
     }
 }

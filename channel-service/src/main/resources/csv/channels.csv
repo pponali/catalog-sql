@@ -1,0 +1,11 @@
+channel_id,name,type,description,integration_endpoint,active,region,api_key,api_secret
+TCLQ_ONLINE,TataCliq Online,WEB,Online channel for TataCliq,https://api.tatacliq.com/v1,true,INDIA,tclq_api_key_123,tclq_api_secret_123
+TCLQ_STORE,TataCliq Store,PHYSICAL_STORE,In-store channel for TataCliq,https://pos.tatacliq.com/v1,true,INDIA,tclq_store_key_123,tclq_store_secret_123
+CROMA_ONLINE,Croma Online,WEB,Online channel for Croma,https://api.croma.com/v1,true,INDIA,croma_api_key_123,croma_api_secret_123
+CROMA_STORE,Croma Store,PHYSICAL_STORE,In-store channel for Croma,https://pos.croma.com/v1,true,INDIA,croma_store_key_123,croma_store_secret_123
+BB_ONLINE,BigBasket Online,WEB,Online channel for BigBasket,https://api.bigbasket.com/v1,true,INDIA,bb_api_key_123,bb_api_secret_123
+BB_STORE,BigBasket Store,PHYSICAL_STORE,In-store channel for BigBasket,https://pos.bigbasket.com/v1,true,INDIA,bb_store_key_123,bb_store_secret_123
+TANISHQ_ONLINE,Tanishq Online,WEB,Online channel for Tanishq,https://api.tanishq.com/v1,true,INDIA,tanishq_api_key_123,tanishq_api_secret_123
+TANISHQ_STORE,Tanishq Store,PHYSICAL_STORE,In-store channel for Tanishq,https://pos.tanishq.com/v1,true,INDIA,tanishq_store_key_123,tanishq_store_secret_123
+MG_ONLINE,1MG Online,WEB,Online channel for 1MG,https://api.1mg.com/v1,true,INDIA,mg_api_key_123,mg_api_secret_123
+MG_STORE,1MG Store,PHYSICAL_STORE,In-store channel for 1MG,https://pos.1mg.com/v1,true,INDIA,mg_store_key_123,mg_store_secret_123

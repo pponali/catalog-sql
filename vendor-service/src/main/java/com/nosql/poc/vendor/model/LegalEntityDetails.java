@@ -30,23 +30,3 @@ public class LegalEntityDetails {
     
     private Map<String, Object> additionalDetails;
 }
-
-@Data
-public class ComplianceDocument {
-    private String documentType;
-    private String documentNumber;
-    private LocalDate validFrom;
-    private LocalDate validTo;
-    private String status;
-    private String documentUrl;
-}
-
-@Data
-public class Director {
-    private String name;
-    private String designation;
-    private String din; // Director Identification Number
-    private String email;
-    private String phone;
-    private LocalDate appointmentDate;
-}

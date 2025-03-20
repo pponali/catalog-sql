@@ -1,80 +1,122 @@
-# Validation Service
+# Enhanced Validation Service
 
-This module provides centralized validation services for the catalog-nosql-poc project. It contains reusable validation components that can be used across different services.
+This is a microservice for validating product data in the e-commerce platform.
 
-## Components
+The Enhanced Validation Service provides a sophisticated rule engine that supports complex validation scenarios like:
 
-### Core Components
+- Cross-field validation
+- Conditional validation
+- Calculated field validation
+- Rule dependencies and precedence
+- JavaScript expression evaluation
 
-1. `ValidationEngine` - Core validation engine that executes validation rules
-2. `ValidationRuleRegistry` - Registry for managing validation rules
+## Current Status
 
-### Models
+✅ The service is now successfully running and ready for testing!
 
-1. `ValidationContext` - Context information for validation execution
-2. `ValidationError` - Represents a validation error
-3. `ValidationResult` - Contains validation results including errors and warnings
-4. `ValidationSeverity` - Enum for validation severity levels
-5. `ValidationWarning` - Represents a validation warning
+## Getting Started
 
-### Services
+### Prerequisites
 
-1. `ProductValidationService` - Product-specific validation service containing validation logic for products, prices, and inventory
+- JDK 17 or later
+- Maven 3.6+
+- MongoDB
 
-### Aspects
+### Running the Service
 
-1. `ValidationAspect` - AOP aspect for declarative validation using annotations
+Use the provided scripts to start and stop the service:
 
-### Annotations
+```bash
+# Start the service
+./start-validation-service.sh
 
-1. `@Validate` - Annotation for declarative validation
-
-## Usage
-
-To use the validation service in your module:
-
-1. Add the validation-service dependency to your module's pom.xml
-2. Autowire the appropriate validation service (e.g., `ProductValidationService`)
-3. Use the validation methods as needed
-
-Example:
-
-```java
-@Service
-@RequiredArgsConstructor
-public class YourService {
-    private final ProductValidationService validationService;
-    
-    public void validateProduct(Product product) {
-        ValidationResult result = validationService.performBasicValidation(product);
-        if (result.hasErrors()) {
-            throw new ValidationException("Validation failed: " + result.getErrors());
-        }
-    }
-}
+# Stop the service
+./stop-validation-service.sh
 ```
 
-## Adding New Validation Rules
+### Testing the Service
 
-To add new validation rules:
+The service includes a Python test script that demonstrates various validation scenarios:
 
-1. Create a new class that implements the `ValidationRule` interface
-2. Implement the validation logic in the `validate` method
-3. Register the rule with the `ValidationRuleRegistry`
+```bash
+# Install required Python package
+pip install requests
 
-Example:
-
-```java
-@Component
-public class YourValidationRule implements ValidationRule {
-    @Override
-    public void validate(Object target, ValidationContext context, ValidationResult result) {
-        // Your validation logic here
-    }
-    
-    @Override
-    public boolean supports(Object target, ValidationContext context) {
-        return target instanceof YourClass;
-    }
-}
+# Run the test script
+python test-validation.py
 ```
+
+This will test the following scenarios:
+1. Getting all enhanced validation rules
+2. Validating a valid product
+3. Validating a product with a name that's too short
+4. Testing cross-field validation with an invalid discount (discount price > regular price)
+5. Testing calculated field validation with an unusually high discount percentage
+
+### Environment Variables
+
+You can configure the service using the following environment variables:
+
+- `SPRING_DATA_MONGODB_HOST`: MongoDB host (default: localhost)
+- `SPRING_DATA_MONGODB_PORT`: MongoDB port (default: 27017)
+- `SPRING_DATA_MONGODB_DATABASE`: MongoDB database name (default: validation_service)
+- `SERVER_PORT`: HTTP port for the service (default: 8085)
+
+## Validation Rules
+
+The service supports two types of validation rules:
+
+1. **Simple Validation Rules**: Basic rules for field validation
+2. **Enhanced Validation Rules**: Complex rules with support for dependencies, conditions, and cross-field validations
+
+### Rule Condition Types
+
+- `NOT_NULL`: Validates that a field is not null
+- `REGEX`: Validates a field against a regular expression
+- `MIN_VALUE` / `MAX_VALUE`: Validates numeric values against min/max thresholds
+- `CONDITIONAL`: Applies validation only if certain conditions are met
+- `CROSS_FIELD`: Validates relationships between multiple fields
+- `CALCULATED`: Uses calculated values for validation
+- `DEPENDENT`: Rules that depend on other rules
+- `COMPOSITE`: Combines multiple rules
+
+## API Documentation
+
+The service provides comprehensive API documentation through Swagger/OpenAPI:
+
+- **Swagger UI**: http://localhost:8085/swagger-ui.html
+- **OpenAPI Spec**: http://localhost:8085/api-docs
+
+### Validation Endpoints
+
+- `POST /api/validation/entity/{entityType}`: Validate entity using simple rules
+- `POST /api/validation/entity/{entityType}/enhanced`: Validate entity using enhanced rules
+- `POST /api/validation/product`: Validate a product
+- `POST /api/validation/category`: Validate a category
+
+### Rule Management Endpoints
+
+- `GET /api/validation/rules`: Get all validation rules
+- `GET /api/validation/rules/enhanced`: Get all enhanced validation rules
+- `GET /api/validation/rules/active`: Get active simple validation rules
+- `GET /api/validation/rules/enhanced/active`: Get active enhanced validation rules
+- `POST /api/validation/rules/sample/create`: Create sample validation rules
+
+## Monitoring and Management
+
+The service exposes Spring Boot Actuator endpoints for monitoring and management:
+
+- **Health**: http://localhost:8085/actuator/health
+- **Info**: http://localhost:8085/actuator/info
+- **Metrics**: http://localhost:8085/actuator/metrics
+- **Beans**: http://localhost:8085/actuator/beans
+- **Environment**: http://localhost:8085/actuator/env
+- **All Actuator Endpoints**: http://localhost:8085/actuator
+
+## Technology Stack
+
+- Spring Boot
+- MongoDB
+- Spring Data MongoDB
+- Spring Expression Language (SpEL)
+- Rhino JavaScript Engine

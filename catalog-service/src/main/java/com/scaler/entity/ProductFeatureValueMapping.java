@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class ProductFeatureValueMapping extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feature_mapping_id", nullable = false)
+    @JoinColumn(name = "feature_mapping_id")
     private ProductFeatureMapping featureMapping;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,4 +39,36 @@ public class ProductFeatureValueMapping extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+    
+    /**
+     * Sets the feature value for this mapping and ensures proper bidirectional relationship
+     *
+     * @param featureValue The feature value to set
+     */
+    public void setFeatureValue(ProductFeatureValue featureValue) {
+        this.featureValue = featureValue;
+        
+        // Add this mapping to the feature value's product mappings if not already present
+        if (featureValue != null && featureValue.getProductMappings() != null) {
+            if (!featureValue.getProductMappings().contains(this)) {
+                featureValue.getProductMappings().add(this);
+            }
+        }
+    }
+    
+    /**
+     * Sets the product for this mapping and ensures proper bidirectional relationship
+     *
+     * @param product The product to set
+     */
+    public void setProduct(Product product) {
+        this.product = product;
+        
+        // Add this mapping to the product's feature value mappings if not already present
+        if (product != null && product.getFeatureValueMappings() != null) {
+            if (!product.getFeatureValueMappings().contains(this)) {
+                product.getFeatureValueMappings().add(this);
+            }
+        }
+    }
 }

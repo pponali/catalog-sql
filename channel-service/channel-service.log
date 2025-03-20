@@ -1,0 +1,115 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Detecting the operating system and CPU architecture
+[INFO] ------------------------------------------------------------------------
+[INFO] os.detected.name: osx
+[INFO] os.detected.arch: aarch_64
+[INFO] os.detected.version: 15.3
+[INFO] os.detected.version.major: 15
+[INFO] os.detected.version.minor: 3
+[INFO] os.detected.classifier: osx-aarch_64
+[INFO] 
+[INFO] ---------------------< com.scaler:channel-service >---------------------
+[INFO] Building channel-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.3.5:run (default-cli) > test-compile @ channel-service >>>
+[INFO] 
+[INFO] --- os:1.6.0:detect (default) @ channel-service ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Detecting the operating system and CPU architecture
+[INFO] ------------------------------------------------------------------------
+[INFO] os.detected.name: osx
+[INFO] os.detected.arch: aarch_64
+[INFO] os.detected.version: 15.3
+[INFO] os.detected.version.major: 15
+[INFO] os.detected.version.minor: 3
+[INFO] os.detected.classifier: osx-aarch_64
+[INFO] 
+[INFO] --- protobuf:0.6.1:compile (default) @ channel-service ---
+[INFO] Compiling 1 proto file(s) to /Users/pponali/Library/CloudStorage/OneDrive-TataCLiQ/practice/catalog-sql/channel-service/target/generated-sources/protobuf/java
+[INFO] 
+[INFO] --- protobuf:0.6.1:compile-custom (default) @ channel-service ---
+[INFO] Compiling 1 proto file(s) to /Users/pponali/Library/CloudStorage/OneDrive-TataCLiQ/practice/catalog-sql/channel-service/target/generated-sources/protobuf/grpc-java
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ channel-service ---
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] Copying 4 resources from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/proto to target/classes
+[INFO] Copying 1 resource from src/main/proto to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ channel-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 115 source files with javac [debug parameters release 23] to target/classes
+[WARNING] The following options were not recognized by any processor: '[mapstruct.verbose, mapstruct.unmappedTargetPolicy, mapstruct.defaultComponentModel]'
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ channel-service ---
+[INFO] skip non existing resourceDirectory /Users/pponali/Library/CloudStorage/OneDrive-TataCLiQ/practice/catalog-sql/channel-service/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ channel-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] <<< spring-boot:3.3.5:run (default-cli) < test-compile @ channel-service <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.3.5:run (default-cli) @ channel-service ---
+[INFO] Attaching agents: []
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.5)
+
+2025-03-19T21:11:47.336+05:30  INFO 83455 --- [channel-service] [           main] c.n.p.channel.ChannelServiceApplication  : Starting ChannelServiceApplication using Java 23.0.2 with PID 83455 (/Users/pponali/Library/CloudStorage/OneDrive-TataCLiQ/practice/catalog-sql/channel-service/target/classes started by pponali in /Users/pponali/Library/CloudStorage/OneDrive-TataCLiQ/practice/catalog-sql/channel-service)
+2025-03-19T21:11:47.337+05:30 DEBUG 83455 --- [channel-service] [           main] c.n.p.channel.ChannelServiceApplication  : Running with Spring Boot v3.3.5, Spring v6.1.14
+2025-03-19T21:11:47.337+05:30  INFO 83455 --- [channel-service] [           main] c.n.p.channel.ChannelServiceApplication  : No active profile set, falling back to 1 default profile: "default"
+2025-03-19T21:11:47.837+05:30  WARN 83455 --- [channel-service] [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Invalid bean definition with name 'com.nosql.poc.channel.client.CatalogServiceClient' defined in null: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+2025-03-19T21:11:47.845+05:30  INFO 83455 --- [channel-service] [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-03-19T21:11:47.853+05:30 ERROR 83455 --- [channel-service] [           main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanDefinitionStoreException: Invalid bean definition with name 'com.nosql.poc.channel.client.CatalogServiceClient' defined in null: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.getTypeForFactoryBean(AbstractAutowireCapableBeanFactory.java:857) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getType(AbstractBeanFactory.java:743) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAnnotationOnBean(DefaultListableBeanFactory.java:735) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAnnotationOnBean(DefaultListableBeanFactory.java:726) ~[spring-beans-6.1.14.jar:6.1.14]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanNamesForAnnotation(DefaultListableBeanFactory.java:696) ~[spring-beans-6.1.14.jar:6.1.14]
+	at net.devh.boot.grpc.server.advice.GrpcAdviceIsPresentCondition.matches(GrpcAdviceIsPresentCondition.java:45) ~[grpc-server-spring-boot-autoconfigure-2.15.0.RELEASE.jar:2.15.0.RELEASE]
+	at org.springframework.context.annotation.ConditionEvaluator.shouldSkip(ConditionEvaluator.java:108) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader$TrackedConditionEvaluator.shouldSkip(ConfigurationClassBeanDefinitionReader.java:470) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:131) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:120) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:429) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:607) ~[spring-context-6.1.14.jar:6.1.14]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363) ~[spring-boot-3.3.5.jar:3.3.5]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352) ~[spring-boot-3.3.5.jar:3.3.5]
+	at com.nosql.poc.channel.ChannelServiceApplication.main(ChannelServiceApplication.java:12) ~[classes/:na]
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  6.396 s
+[INFO] Finished at: 2025-03-19T21:11:47+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.3.5:run (default-cli) on project channel-service: Process terminated with exit code: 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

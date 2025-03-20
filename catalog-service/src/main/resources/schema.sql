@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS Merchant (
 -- Site table
 CREATE TABLE IF NOT EXISTS site (
     id UUID PRIMARY KEY,
-    business_id UUID NOT NULL REFERENCES business(id),
+    business_id UUID NOT NULL REFERENCES merchant(id),
     name VARCHAR(255) NOT NULL,
     domain VARCHAR(255) NOT NULL,
     locale VARCHAR(10) NOT NULL,

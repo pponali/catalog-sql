@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: rules-service
+    
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/rulesdb
+      auto-index-creation: true
+      
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 9085
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    com.nosql.poc.rules: DEBUG
+    org.springframework.data.mongodb: INFO

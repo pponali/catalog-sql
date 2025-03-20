@@ -1,0 +1,71 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Detecting the operating system and CPU architecture
+[INFO] ------------------------------------------------------------------------
+[INFO] os.detected.name: osx
+[INFO] os.detected.arch: aarch_64
+[INFO] os.detected.version: 15.3
+[INFO] os.detected.version.major: 15
+[INFO] os.detected.version.minor: 3
+[INFO] os.detected.classifier: osx-aarch_64
+[INFO] 
+[INFO] ---------------------< com.scaler:vendor-service >----------------------
+[INFO] Building vendor-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.3.5:run (default-cli) > test-compile @ vendor-service >>>
+[INFO] 
+[INFO] --- os:1.6.0:detect (default) @ vendor-service ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Detecting the operating system and CPU architecture
+[INFO] ------------------------------------------------------------------------
+[INFO] os.detected.name: osx
+[INFO] os.detected.arch: aarch_64
+[INFO] os.detected.version: 15.3
+[INFO] os.detected.version.major: 15
+[INFO] os.detected.version.minor: 3
+[INFO] os.detected.classifier: osx-aarch_64
+[INFO] 
+[INFO] --- protobuf:0.6.1:compile (default) @ vendor-service ---
+[INFO] Compiling 1 proto file(s) to /Users/pponali/Library/CloudStorage/OneDrive-TataCLiQ/practice/catalog-sql/vendor-service/target/generated-sources/protobuf/java
+[INFO] 
+[INFO] --- protobuf:0.6.1:compile-custom (default) @ vendor-service ---
+[INFO] Compiling 1 proto file(s) to /Users/pponali/Library/CloudStorage/OneDrive-TataCLiQ/practice/catalog-sql/vendor-service/target/generated-sources/protobuf/grpc-java
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ vendor-service ---
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/proto to target/classes
+[INFO] Copying 1 resource from src/main/proto to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ vendor-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 96 source files with javac [debug parameters release 23] to target/classes
+[WARNING] The following options were not recognized by any processor: '[mapstruct.verbose, mapstruct.unmappedTargetPolicy, mapstruct.defaultComponentModel]'
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ vendor-service ---
+[INFO] skip non existing resourceDirectory /Users/pponali/Library/CloudStorage/OneDrive-TataCLiQ/practice/catalog-sql/vendor-service/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ vendor-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 23] to target/test-classes
+[WARNING] The following options were not recognized by any processor: '[mapstruct.verbose, mapstruct.unmappedTargetPolicy, mapstruct.defaultComponentModel]'
+[INFO] 
+[INFO] <<< spring-boot:3.3.5:run (default-cli) < test-compile @ vendor-service <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.3.5:run (default-cli) @ vendor-service ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  9.488 s
+[INFO] Finished at: 2025-03-19T21:11:20+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.3.5:run (default-cli) on project vendor-service: Execution default-cli of goal org.springframework.boot:spring-boot-maven-plugin:3.3.5:run failed: Unable to find a single main class from the following candidates [com.scaler.vendor.VendorServiceApplication, com.nosql.poc.vendor.VendorServiceApplication] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/PluginExecutionException

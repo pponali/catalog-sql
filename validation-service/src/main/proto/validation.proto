@@ -1,0 +1,49 @@
+syntax = "proto3";
+package com.scaler.validation;
+
+option java_multiple_files = true;
+option java_package = "com.scaler.grpc.validation";
+
+service ValidationService {
+  rpc ValidateProduct (ValidateProductRequest) returns (ValidationResponse);
+  rpc ValidateFeatureValue (ValidateFeatureValueRequest) returns (ValidationResponse);
+}
+
+message ValidateProductRequest {
+  string product_id = 1;
+  map<string, string> product_data = 2;
+  repeated FeatureValuePair feature_values = 3;
+}
+
+message ValidateFeatureValueRequest {
+  string feature_id = 1;
+  string value = 2;
+  string product_id = 3;
+  string category_id = 4;
+}
+
+message FeatureValuePair {
+  string feature_id = 1;
+  string feature_name = 2;
+  string value = 3;
+}
+
+message ValidationResponse {
+  bool valid = 1;
+  repeated ValidationError errors = 2;
+  repeated ValidationWarning warnings = 3;
+}
+
+message ValidationError {
+  string code = 1;
+  string message = 2;
+  string field = 3;
+  string value = 4;
+}
+
+message ValidationWarning {
+  string code = 1;
+  string message = 2;
+  string field = 3;
+  string value = 4;
+}

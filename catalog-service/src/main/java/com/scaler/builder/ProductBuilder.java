@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -271,16 +272,21 @@ public class ProductBuilder {
      * @param product Product to associate with the feature value
      * @param featureCode Feature code
      * @param value Feature value
+     * @param productFeature Product feature associated with this value
+     * @param category Category associated with this feature value
      * @return ProductFeatureValue entity
      * @throws JsonProcessingException If there is an error processing JSON
      */
     public ProductFeatureValue createProductFeatureValueWithMetadata(
-            Product product, String featureCode, String value) throws JsonProcessingException {
+            Product product, String featureCode, String value, ProductFeature productFeature, Category category) throws JsonProcessingException {
         log.info("Creating product feature value for product: {}, feature: {}, value: {}",
                 product.getName(), featureCode, value);
 
         ProductFeatureValue featureValue = new ProductFeatureValue();
         featureValue.setId(UUID.randomUUID());
+        
+        // Set the feature
+        featureValue.setFeature(productFeature);
 
         // Set system fields
         featureValue.setCreatedBy("system");
@@ -290,11 +296,59 @@ public class ProductBuilder {
         ObjectNode metadataNode = objectMapper.createObjectNode();
         metadataNode.put("featureCode", featureCode);
         metadataNode.put("value", value);
+        featureValue.setMetadata(metadataNode);
 
         // Set the attribute value as a JSON node
         featureValue.setAttributeValue(objectMapper.valueToTree(value));
+        
+        // Create product mapping
+        if (product != null) {
+            ProductFeatureValueMapping mapping = new ProductFeatureValueMapping();
+            mapping.setProduct(product);
+            mapping.setFeatureValue(featureValue);
+            mapping.setCategory(category);
+            mapping.setIsActive(true);
+            
+            if (featureValue.getProductMappings() == null) {
+                featureValue.setProductMappings(new HashSet<>());
+            }
+            featureValue.getProductMappings().add(mapping);
+            
+            if (product.getFeatureValueMappings() == null) {
+                product.setFeatureValueMappings(new HashSet<>());
+            }
+            product.getFeatureValueMappings().add(mapping);
+        }
 
         return featureValue;
+    }
+    
+    /**
+     * Simplified version that creates a product feature value with metadata
+     *
+     * @param product Product to associate with the feature value
+     * @param featureCode Feature code
+     * @param value Feature value
+     * @return ProductFeatureValue entity
+     * @throws JsonProcessingException If there is an error processing JSON
+     */
+    public ProductFeatureValue createProductFeatureValueWithMetadata(
+            Product product, String featureCode, String value) throws JsonProcessingException {
+        // Use a default ProductFeature if none is provided
+        ProductFeature feature = new ProductFeature();
+        feature.setId(UUID.randomUUID());
+        feature.setCode(featureCode);
+        feature.setName(featureCode);
+        
+        // Use the product's primary category if available
+        Category category = product.getPrimaryCategory();
+        if (category == null) {
+            category = new Category();
+            category.setId(UUID.randomUUID());
+            category.setName("Default Category");
+        }
+        
+        return createProductFeatureValueWithMetadata(product, featureCode, value, feature, category);
     }
 
     /**
@@ -346,17 +400,20 @@ public class ProductBuilder {
         log.info("Adding feature value {} to product {}",
                 featureValue.getId(), product.getName());
 
-        // Create a ProductFeatureMapping to connect the product and feature value
-        ProductFeatureMapping mapping = ProductFeatureMapping.builder()
-                .product(product)
-                .build();
-        
-        // Add the mapping to the product's feature mappings
-        if (product.getFeatureMappings() == null) {
-            product.setFeatureMappings(new HashSet<>());
+        // Get current feature values
+        Set<ProductFeatureValue> featureValues = product.getFeatureValues();
+        if (featureValues == null) {
+            featureValues = new HashSet<>();
         }
         
-        product.addFeatureMapping(mapping);
+        // Add the new feature value
+        featureValues.add(featureValue);
+        
+        // Set the updated feature values
+        product.setFeatureValues(featureValues);
+        
+        // Ensure bidirectional relationship is set
+        featureValue.setProduct(product);
         
         return product;
     }

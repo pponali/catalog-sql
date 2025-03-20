@@ -46,6 +46,5 @@ public class CatalogDTO extends BaseDTO {
     @lombok.Builder.Default
     private List<CategoryDTO> categories = new ArrayList<>();
 
-    @lombok.Builder.Default
-    private Set<StoreCatalogDTO> siteCatalogs = new HashSet<>();
+    // StoreCatalogDTO relationship removed as part of microservice separation
 }

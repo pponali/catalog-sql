@@ -46,9 +46,30 @@ public class ProductDTO extends BaseDTO {
     private UUID merchantId;
 
     private UUID catalogId;
+    
+    /**
+     * Channel ID for the product
+     */
+    private UUID channelId;
+    
+    /**
+     * Platform ID for the product
+     */
+    private UUID platformId;
+    
+    /**
+     * Brand name of the product
+     */
+    private String brand;
 
     @lombok.Builder.Default
     private Set<SellerProductDTO> sellerProducts = new HashSet<>();
+    
+    /**
+     * List of seller IDs associated with this product
+     */
+    @lombok.Builder.Default
+    private List<UUID> sellerIds = new ArrayList<>();
 
     private Set<UUID> categoryIds = new HashSet<>();
 

@@ -1,0 +1,21 @@
+code,name,description,channel_code,platform_type
+TCLQ_WEB,TataCliq Web,Web platform for TataCliq,TCLQ_ONLINE,DESKTOP_WEB
+TCLQ_MOBILE_WEB,TataCliq Mobile Web,Mobile web platform for TataCliq,TCLQ_ONLINE,MOBILE_WEB
+TCLQ_ANDROID,TataCliq Android App,Android app for TataCliq,TCLQ_ONLINE,MOBILE_APP_ANDROID
+TCLQ_IOS,TataCliq iOS App,iOS app for TataCliq,TCLQ_ONLINE,MOBILE_APP_IOS
+CROMA_WEB,Croma Web,Web platform for Croma,CROMA_ONLINE,DESKTOP_WEB
+CROMA_MOBILE_WEB,Croma Mobile Web,Mobile web platform for Croma,CROMA_ONLINE,MOBILE_WEB
+CROMA_ANDROID,Croma Android App,Android app for Croma,CROMA_ONLINE,MOBILE_APP_ANDROID
+CROMA_IOS,Croma iOS App,iOS app for Croma,CROMA_ONLINE,MOBILE_APP_IOS
+BB_WEB,BigBasket Web,Web platform for BigBasket,BB_ONLINE,DESKTOP_WEB
+BB_MOBILE_WEB,BigBasket Mobile Web,Mobile web platform for BigBasket,BB_ONLINE,MOBILE_WEB
+BB_ANDROID,BigBasket Android App,Android app for BigBasket,BB_ONLINE,MOBILE_APP_ANDROID
+BB_IOS,BigBasket iOS App,iOS app for BigBasket,BB_ONLINE,MOBILE_APP_IOS
+TANISHQ_WEB,Tanishq Web,Web platform for Tanishq,TANISHQ_ONLINE,DESKTOP_WEB
+TANISHQ_MOBILE_WEB,Tanishq Mobile Web,Mobile web platform for Tanishq,TANISHQ_ONLINE,MOBILE_WEB
+TANISHQ_ANDROID,Tanishq Android App,Android app for Tanishq,TANISHQ_ONLINE,MOBILE_APP_ANDROID
+TANISHQ_IOS,Tanishq iOS App,iOS app for Tanishq,TANISHQ_ONLINE,MOBILE_APP_IOS
+MG_WEB,1MG Web,Web platform for 1MG,MG_ONLINE,DESKTOP_WEB
+MG_MOBILE_WEB,1MG Mobile Web,Mobile web platform for 1MG,MG_ONLINE,MOBILE_WEB
+MG_ANDROID,1MG Android App,Android app for 1MG,MG_ONLINE,MOBILE_APP_ANDROID
+MG_IOS,1MG iOS App,iOS app for 1MG,MG_ONLINE,MOBILE_APP_IOS

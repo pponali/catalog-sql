@@ -16,8 +16,8 @@ import java.util.Set;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"products", "merchants", "business", "categories", "siteCatalogs"})
-@EqualsAndHashCode(callSuper = true, exclude = {"products", "merchants", "business", "categories", "siteCatalogs"})
+@ToString(callSuper = true, exclude = {"products", "merchants", "business", "categories"})
+@EqualsAndHashCode(callSuper = true, exclude = {"products", "merchants", "business", "categories"})
 public class Catalog extends BaseEntity {
     
     @Column(name = "code", nullable = false, unique = true)
@@ -50,9 +50,7 @@ public class Catalog extends BaseEntity {
     @lombok.Builder.Default
     private List<Category> categories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-    @lombok.Builder.Default
-    private Set<StoreCatalog> siteCatalogs = new HashSet<>();
+    // StoreCatalog relationship removed as part of microservice separation
 
     @ManyToMany
     @JoinTable(
@@ -85,15 +83,7 @@ public class Catalog extends BaseEntity {
         category.setCatalog(null);
     }
 
-    public void addSiteCatalog(StoreCatalog siteCatalog) {
-        siteCatalogs.add(siteCatalog);
-        siteCatalog.setCatalog(this);
-    }
-
-    public void removeSiteCatalog(StoreCatalog siteCatalog) {
-        siteCatalogs.remove(siteCatalog);
-        siteCatalog.setCatalog(null);
-    }
+    // StoreCatalog methods removed as part of microservice separation
     
     public void addMerchant(Merchant merchant) {
         merchants.add(merchant);

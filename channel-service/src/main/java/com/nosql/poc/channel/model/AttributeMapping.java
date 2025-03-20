@@ -1,10 +1,19 @@
 package com.nosql.poc.channel.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a mapping between source and target attributes in a channel integration.
+ */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AttributeMapping {
     private String sourceAttribute;
     
@@ -25,21 +34,4 @@ public class AttributeMapping {
     private DefaultValue defaultValue;
     
     private Map<String, Object> mappingRules;
-}
-
-@Data
-public class ValueMapping {
-    private String sourceValue;
-    private String targetValue;
-    private String mappingLogic;
-    private Double confidenceScore;
-    private Boolean active;
-}
-
-@Data
-public class DefaultValue {
-    private String value;
-    private String condition;
-    private String applicability;
-    private Map<String, Object> rules;
 }

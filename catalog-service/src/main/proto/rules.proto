@@ -1,0 +1,72 @@
+syntax = "proto3";
+package com.scaler.rules;
+
+option java_multiple_files = true;
+option java_package = "com.scaler.grpc.rules";
+
+service RulesService {
+  rpc EvaluateProductRule (EvaluateProductRuleRequest) returns (RuleEvaluationResponse);
+  rpc GetRulesByCategory (GetRulesByCategoryRequest) returns (RuleListResponse);
+  rpc CreateRule (CreateRuleRequest) returns (RuleResponse);
+  rpc UpdateRule (UpdateRuleRequest) returns (RuleResponse);
+  rpc DeleteRule (DeleteRuleRequest) returns (DeleteRuleResponse);
+}
+
+message EvaluateProductRuleRequest {
+  string product_id = 1;
+  string rule_type = 2;
+  map<string, string> context = 3;
+  string channel_id = 4;
+  string platform_id = 5;
+  string seller_id = 6;
+}
+
+message GetRulesByCategoryRequest {
+  string category_id = 1;
+  string rule_type = 2;
+}
+
+message CreateRuleRequest {
+  RuleMessage rule = 1;
+}
+
+message UpdateRuleRequest {
+  RuleMessage rule = 1;
+}
+
+message DeleteRuleRequest {
+  string id = 1;
+}
+
+message DeleteRuleResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message RuleEvaluationResponse {
+  bool result = 1;
+  repeated string applied_rules = 2;
+  repeated string messages = 3;
+}
+
+message RuleResponse {
+  RuleMessage rule = 1;
+}
+
+message RuleListResponse {
+  repeated RuleMessage rules = 1;
+  int32 total_count = 2;
+}
+
+message RuleMessage {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string rule_type = 4;
+  string rule_content = 5;
+  int32 priority = 6;
+  bool active = 7;
+  repeated string categories = 8;
+  string created_at = 9;
+  string updated_at = 10;
+}

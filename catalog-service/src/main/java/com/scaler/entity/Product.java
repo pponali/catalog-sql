@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-@ToString(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts", "productPlatforms"})
-@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant", "channels", "sellerProducts", "productPlatforms"})
+@ToString(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant"})
+@EqualsAndHashCode(callSuper = true, exclude = {"catalog", "productCategories", "features", "merchant"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product extends BaseEntity {
@@ -93,18 +93,6 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "unit_of_measure_id")
     private UnitOfMeasure unitOfMeasure;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @lombok.Builder.Default
-    private Set<ProductChannel> productChannels = new HashSet<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @lombok.Builder.Default
-    private Set<SellerProduct> sellerProducts = new HashSet<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @lombok.Builder.Default
-    private Set<ProductPlatform> productPlatforms = new HashSet<>();
-
     public void addProductCategory(ProductCategory productCategory) {
         productCategories.add(productCategory);
         productCategory.setProduct(this);
@@ -120,43 +108,6 @@ public class Product extends BaseEntity {
         mapping.setProduct(this);
     }
 
-    public void addProductChannel(Channel channel) {
-        ProductChannel productChannel = ProductChannel.builder()
-                .product(this)
-                .channel(channel)
-                .isEnabled(true)
-                .isVisible(true)
-                .createdBy("SYSTEM")
-                .effectiveFrom(LocalDateTime.now())
-                .build();
-        productChannels.add(productChannel);
-    }
-
-    public void removeProductChannel(Channel channel) {
-        productChannels.removeIf(pc -> pc.getChannel().equals(channel));
-    }
-
-    public void disableProductChannel(Channel channel) {
-        productChannels.stream()
-                .filter(pc -> pc.getChannel().equals(channel))
-                .findFirst()
-                .ifPresent(pc -> pc.setIsEnabled(false));
-    }
-
-    public void enableProductChannel(Channel channel) {
-        productChannels.stream()
-                .filter(pc -> pc.getChannel().equals(channel))
-                .findFirst()
-                .ifPresent(pc -> pc.setIsEnabled(true));
-    }
-
-    public boolean isEnabledForChannel(Channel channel) {
-        return productChannels.stream()
-                .filter(pc -> pc.getChannel().equals(channel))
-                .findFirst()
-                .map(ProductChannel::getIsEnabled)
-                .orElse(false);
-    }
 
     /*public Set<Channel> getEnabledChannels() {
         return productChannels.stream()
@@ -170,58 +121,52 @@ public class Product extends BaseEntity {
         mapping.setProduct(null);
     }
 
-    public void addSellerProduct(SellerProduct sellerProduct) {
-        sellerProducts.add(sellerProduct);
-        sellerProduct.setProduct(this);
-    }
-
     public Product() {
         super();
     }
-
-    public void removeSellerProduct(SellerProduct sellerProduct) {
-        sellerProducts.remove(sellerProduct);
-        sellerProduct.setProduct(null);
+    
+    /**
+     * Gets the feature values for this product via feature value mappings
+     * @return Set of ProductFeatureValue objects
+     */
+    public Set<ProductFeatureValue> getFeatureValues() {
+        if (featureValueMappings == null) {
+            return new HashSet<>();
+        }
+        return featureValueMappings.stream()
+                .map(ProductFeatureValueMapping::getFeatureValue)
+                .collect(java.util.stream.Collectors.toSet());
+    }
+    
+    /**
+     * Sets the feature values for this product
+     * @param featureValues Set of ProductFeatureValue objects
+     */
+    public void setFeatureValues(Set<ProductFeatureValue> featureValues) {
+        // Clear existing mappings
+        if (featureValueMappings != null) {
+            featureValueMappings.clear();
+        } else {
+            featureValueMappings = new HashSet<>();
+        }
+        
+        // Add new mappings
+        if (featureValues != null) {
+            for (ProductFeatureValue value : featureValues) {
+                ProductFeatureValueMapping mapping = new ProductFeatureValueMapping();
+                mapping.setProduct(this);
+                mapping.setFeatureValue(value);
+                mapping.setIsActive(true);
+                featureValueMappings.add(mapping);
+            }
+        }
     }
 
     public void setCatalog(Catalog catalog) {
         this.catalog = catalog;
     }
 
-    public void addProductPlatform(Platform platform) {
-        ProductPlatform productPlatform = ProductPlatform.builder()
-                .product(this)
-                .platform(platform)
-                .isActive(true)
-                .displayOrder(productPlatforms.size() + 1)
-                .status("ACTIVE")
-                .build();
-        productPlatforms.add(productPlatform);
-    }
 
-    public void removeProductPlatform(Platform platform) {
-        productPlatforms.removeIf(pp -> pp.getPlatform().equals(platform));
-    }
-
-    public void deactivateProductPlatform(Platform platform) {
-        productPlatforms.stream()
-                .filter(pp -> pp.getPlatform().equals(platform))
-                .findFirst()
-                .ifPresent(pp -> {
-                    pp.setIsActive(false);
-                    pp.setStatus("INACTIVE");
-                });
-    }
-
-    public void activateProductPlatform(Platform platform) {
-        productPlatforms.stream()
-                .filter(pp -> pp.getPlatform().equals(platform))
-                .findFirst()
-                .ifPresent(pp -> {
-                    pp.setIsActive(true);
-                    pp.setStatus("ACTIVE");
-                });
-    }
 
     /**
      * Returns the primary category of the product.

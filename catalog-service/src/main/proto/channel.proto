@@ -1,0 +1,94 @@
+syntax = "proto3";
+package com.scaler.channel;
+
+option java_multiple_files = true;
+option java_package = "com.scaler.grpc.channel";
+
+service ChannelService {
+  rpc GetChannel (GetChannelRequest) returns (ChannelResponse);
+  rpc GetPlatform (GetPlatformRequest) returns (PlatformResponse);
+  rpc GetStore (GetStoreRequest) returns (StoreResponse);
+  rpc CreateChannel (CreateChannelRequest) returns (ChannelResponse);
+  rpc UpdateChannel (UpdateChannelRequest) returns (ChannelResponse);
+  rpc DeleteChannel (DeleteChannelRequest) returns (DeleteChannelResponse);
+}
+
+message GetChannelRequest {
+  string id = 1;
+}
+
+message GetPlatformRequest {
+  string id = 1;
+}
+
+message GetStoreRequest {
+  string id = 1;
+}
+
+message CreateChannelRequest {
+  ChannelMessage channel = 1;
+}
+
+message UpdateChannelRequest {
+  ChannelMessage channel = 1;
+}
+
+message DeleteChannelRequest {
+  string id = 1;
+}
+
+message DeleteChannelResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ChannelResponse {
+  ChannelMessage channel = 1;
+}
+
+message PlatformResponse {
+  PlatformMessage platform = 1;
+}
+
+message StoreResponse {
+  StoreMessage store = 1;
+}
+
+message ChannelMessage {
+  string id = 1;
+  string name = 2;
+  string code = 3;
+  string description = 4;
+  string channel_type = 5;
+  string status = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message PlatformMessage {
+  string id = 1;
+  string name = 2;
+  string code = 3;
+  string description = 4;
+  string platform_type = 5;
+  string status = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message StoreMessage {
+  string id = 1;
+  string name = 2;
+  string code = 3;
+  string description = 4;
+  string store_type = 5;
+  string channel_id = 6;
+  string address = 7;
+  string city = 8;
+  string state = 9;
+  string country = 10;
+  string pincode = 11;
+  string status = 12;
+  string created_at = 13;
+  string updated_at = 14;
+}

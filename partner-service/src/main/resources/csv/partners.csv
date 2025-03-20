@@ -1,0 +1,11 @@
+partner_id,name,description,type,category,status,contact_person,email,phone,address,tax_id,verified
+TCLQ-PART-001,TataCliq Electronics,Official TataCliq electronics distributor,DISTRIBUTOR,ELECTRONICS,ACTIVE,John Smith,john.smith@tatacliq.com,9876543210,"123 Main St, Mumbai, India",TATA123456,true
+CRMA-PART-001,Croma Retail,Croma official retail partner,RETAILER,ELECTRONICS,ACTIVE,Jane Doe,jane.doe@croma.com,8765432109,"456 Oak St, Bangalore, India",CROMA789012,true
+BBKT-PART-001,BigBasket Suppliers,BigBasket grocery supplier,SUPPLIER,GROCERY,ACTIVE,Mike Johnson,mike.j@bigbasket.com,7654321098,"789 Pine St, Delhi, India",BBKT345678,true
+TNSH-PART-001,Tanishq Jewelry,Tanishq jewelry manufacturer,MANUFACTURER,JEWELRY,ACTIVE,Sarah Brown,sarah.b@tanishq.com,6543210987,"101 Gold St, Jaipur, India",TNSH901234,true
+MG-PART-001,1MG Pharma,1MG pharmaceutical distributor,DISTRIBUTOR,HEALTHCARE,ACTIVE,Robert Davis,robert.d@1mg.com,5432109876,"202 Health Ave, Chennai, India",MG567890,true
+TCLQ-PART-002,TataCliq Fashion,Official TataCliq fashion distributor,DISTRIBUTOR,FASHION,ACTIVE,Emily Wilson,emily.w@tatacliq.com,4321098765,"303 Fashion Blvd, Kolkata, India",TATA234567,true
+AMZN-PART-001,Amazon Seller Services,Amazon marketplace integration,RETAILER,GENERAL,ACTIVE,David Miller,david.m@amazon.com,3210987654,"404 Market St, Pune, India",AMZN678901,true
+FLPK-PART-001,Flipkart Connect,Flipkart marketplace connection,RETAILER,GENERAL,ACTIVE,Michelle Lee,michelle.l@flipkart.com,2109876543,"505 Connect Rd, Hyderabad, India",FLPK345678,true
+STAR-PART-001,Star Suppliers,Multi-category supplier for Tata group,SUPPLIER,GENERAL,ACTIVE,James Wilson,james.w@starsuppliers.com,1098765432,"606 Star Ave, Ahmedabad, India",STAR789012,true
+TATA-PART-001,Tata Group Partners,Corporate Tata group partnership,MANUFACTURER,GENERAL,ACTIVE,Linda Garcia,linda.g@tatagroup.com,0987654321,"707 Corporate Park, Mumbai, India",TATA456789,true

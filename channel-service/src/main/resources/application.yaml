@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: channel-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: channel_service
+      auto-index-creation: true
+
+  
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

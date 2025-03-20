@@ -4,7 +4,10 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -15,14 +18,25 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Kafka configuration for channel service
+ * This configuration is only active when kafka is enabled
+ */
 @Configuration
+@ConditionalOnProperty(name = "spring.kafka.enabled", havingValue = "true", matchIfMissing = false)
 public class KafkaConfig {
     
-    @Value("${spring.kafka.bootstrap-servers}")
+    private static final Logger log = LoggerFactory.getLogger(KafkaConfig.class);
+    
+    @Value("${spring.kafka.bootstrap-servers:localhost:9092}")
     private String bootstrapServers;
     
-    @Value("${spring.kafka.consumer.group-id}")
+    @Value("${spring.kafka.consumer.group-id:channel-service-group}")
     private String groupId;
+    
+    public KafkaConfig() {
+        log.info("Initializing Kafka configuration with bootstrap servers: {}", bootstrapServers);
+    }
     
     @Bean
     public ProducerFactory<String, Object> producerFactory() {

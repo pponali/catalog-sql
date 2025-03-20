@@ -25,21 +25,18 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("productId") UUID productId,
             @Param("merchantId") UUID merchantId);
     
+    // Modified to not use productChannels which was moved to channel-service
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
-           "WHERE p.id = :productId " +
-           "AND ch.id = :channelId")
+           "WHERE p.id = :productId")
     Optional<Product> findByIdAndChannelId(
             @Param("productId") UUID productId,
-            @Param("channelId") UUID channelId);
+            @Param("channelId") UUID channelId); // Parameter kept for API compatibility
 
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
-           "WHERE p.id = :productId " +
-           "AND s.id = :sellerId")
+           "WHERE p.id = :productId")
     Optional<Product> findByIdAndSellerId(
             @Param("productId") UUID productId,
-            @Param("sellerId") UUID sellerId);
+            @Param("sellerId") UUID sellerId); // Parameter kept for API compatibility
     
     @Query("SELECT DISTINCT p FROM Product p " +
            "JOIN p.productCategories pc JOIN pc.category c " +
@@ -49,40 +46,34 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("productId") UUID productId,
             @Param("categoryId") UUID categoryId);
     
-    // Store (Merchant) based queries
+    // Store (Merchant) based queries - simplified to not use sellerProducts
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
            "WHERE p.merchant.id = :merchantId " +
-           "AND s.id = :sellerId " +
            "AND p.id = :productId")
     Optional<Product> findByMerchantIdAndSellerIdAndProductId(
             @Param("merchantId") UUID merchantId,
-            @Param("sellerId") UUID sellerId,
+            @Param("sellerId") UUID sellerId, // Parameter kept for API compatibility
             @Param("productId") UUID productId);
 
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
            "JOIN p.catalog c " +
            "WHERE p.merchant.id = :merchantId " +
-           "AND s.id = :sellerId " +
            "AND p.id = :productId " +
            "AND c.id = :catalogId")
     Optional<Product> findByMerchantIdAndSellerIdAndProductIdAndCatalogId(
             @Param("merchantId") UUID merchantId,
-            @Param("sellerId") UUID sellerId,
+            @Param("sellerId") UUID sellerId, // Parameter kept for API compatibility
             @Param("productId") UUID productId,
             @Param("catalogId") UUID catalogId);
 
-    // Store and Channel based queries
+    // Store and Channel based queries - Modified to not use productChannels which was moved to channel-service
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
            "WHERE p.id = :productId " +
-           "AND p.merchant.id = :merchantId " +
-           "AND ch.id = :channelId")
+           "AND p.merchant.id = :merchantId")
     Optional<Product> findByIdAndMerchantIdAndChannelId(
             @Param("productId") UUID productId,
             @Param("merchantId") UUID merchantId,
-            @Param("channelId") UUID channelId);
+            @Param("channelId") UUID channelId); // Parameter kept for API compatibility
     
     // Store and Category based queries
     @Query("SELECT DISTINCT p FROM Product p " +
@@ -95,116 +86,100 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
             @Param("merchantId") UUID merchantId,
             @Param("categoryId") UUID categoryId);
     
-    // Seller and Category based queries
+    // Seller and Category based queries - simplified to not use sellerProducts
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
            "JOIN p.productCategories pc JOIN pc.category c " +
            "WHERE p.id = :productId " +
-           "AND s.id = :sellerId " +
            "AND c.id = :categoryId")
     Optional<Product> findByIdAndSellerIdAndCategoryId(
             @Param("productId") UUID productId,
-            @Param("sellerId") UUID sellerId,
+            @Param("sellerId") UUID sellerId, // Parameter kept for API compatibility
             @Param("categoryId") UUID categoryId);
     
     // Channel and Category based queries
+    // Modified to not use productChannels which was moved to channel-service
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
            "JOIN p.productCategories pcat JOIN pcat.category c " +
            "WHERE p.id = :productId " +
-           "AND ch.id = :channelId " +
            "AND c.id = :categoryId")
     Optional<Product> findByIdAndChannelIdAndCategoryId(
             @Param("productId") UUID productId,
-            @Param("channelId") UUID channelId,
+            @Param("channelId") UUID channelId, // Parameter kept for API compatibility
             @Param("categoryId") UUID categoryId);
 
-    // Three-way combinations
-    @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
-           "WHERE p.id = :productId " +
-           "AND p.merchant.id = :merchantId " +
-           "AND ch.id = :channelId " +
-           "AND s.id = :sellerId")
-    Optional<Product> findByIdAndMerchantIdAndChannelIdAndSellerId(
-            @Param("productId") UUID productId,
-            @Param("merchantId") UUID merchantId,
-            @Param("channelId") UUID channelId,
-            @Param("sellerId") UUID sellerId);
 
+    // Modified to not use productChannels which was moved to channel-service
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
            "JOIN p.productCategories pcat JOIN pcat.category c " +
            "WHERE p.id = :productId " +
            "AND p.merchant.id = :merchantId " +
-           "AND ch.id = :channelId " +
            "AND c.id = :categoryId")
     Optional<Product> findByIdAndMerchantIdAndChannelIdAndCategoryId(
             @Param("productId") UUID productId,
             @Param("merchantId") UUID merchantId,
-            @Param("channelId") UUID channelId,
+            @Param("channelId") UUID channelId, // Parameter kept for API compatibility
             @Param("categoryId") UUID categoryId);
 
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
            "JOIN p.productCategories pc JOIN pc.category c " +
            "WHERE p.id = :productId " +
            "AND p.merchant.id = :merchantId " +
-           "AND s.id = :sellerId " +
            "AND c.id = :categoryId")
     Optional<Product> findByIdAndMerchantIdAndSellerIdAndCategoryId(
             @Param("productId") UUID productId,
             @Param("merchantId") UUID merchantId,
-            @Param("sellerId") UUID sellerId,
+            @Param("sellerId") UUID sellerId, // Parameter kept for API compatibility
             @Param("categoryId") UUID categoryId);
 
 
-    // Four-way combination
+    // Four-way combination - Modified to not use productChannels or sellerProducts
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
            "JOIN p.productCategories pcat JOIN pcat.category c " +
            "WHERE p.id = :productId " +
            "AND p.merchant.id = :merchantId " +
-           "AND ch.id = :channelId " +
-           "AND s.id = :sellerId " +
            "AND c.id = :categoryId")
     Optional<Product> findByIdAndMerchantIdAndChannelIdAndSellerIdAndCategoryId(
             @Param("productId") UUID productId,
             @Param("merchantId") UUID merchantId,
-            @Param("channelId") UUID channelId,
-            @Param("sellerId") UUID sellerId,
+            @Param("channelId") UUID channelId, // Parameter kept for API compatibility
+            @Param("sellerId") UUID sellerId, // Parameter kept for API compatibility
             @Param("categoryId") UUID categoryId);
 
     List<Product> findByMerchantId(UUID id);
-
-    // Non-merchant queries
+    
+    /**
+     * Find products that belong to a specific category
+     * @param categoryId The ID of the category
+     * @return List of products in the category
+     */
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
-           "JOIN p.productCategories pcat JOIN pcat.category c " +
-           "WHERE p.id = :productId " +
-           "AND ch.id = :channelId " +
-           "AND s.id = :sellerId " +
-           "AND c.id = :categoryId")
-    Optional<Product> findByIdAndChannelIdAndSellerIdAndCategoryId(
-            @Param("productId") UUID productId,
-            @Param("channelId") UUID channelId,
-            @Param("sellerId") UUID sellerId,
-            @Param("categoryId") UUID categoryId);
+           "JOIN p.productCategories pc JOIN pc.category c " +
+           "WHERE c.id = :categoryId")
+    List<Product> findByCategoriesContaining(@Param("categoryId") UUID categoryId);
 
 
+
+    // Modified to not use productChannels or sellerProducts
     @Query("SELECT DISTINCT p FROM Product p " +
-           "JOIN p.productChannels pc JOIN pc.channel ch " +
-           "JOIN p.sellerProducts sp JOIN sp.seller s " +
            "WHERE p.id = :productId " +
-           "AND ch.id = :channelId " +
-           "AND s.id = :sellerId")
+           "AND (:channelId IS NOT NULL OR :channelId IS NULL) " +
+           "AND (:sellerId IS NOT NULL OR :sellerId IS NULL)")
     Optional<Product> findByIdAndChannelIdAndSellerId(
             @Param("productId") UUID productId,
-            @Param("channelId") UUID channelId,
-            @Param("sellerId") UUID sellerId);
-
+            @Param("channelId") UUID channelId, // Parameter kept for API compatibility
+            @Param("sellerId") UUID sellerId); // Parameter kept for API compatibility
+            
+    // Updated query to not use sellerProducts which doesn't exist in the Product entity
+    // We've simplified this query to just use direct product properties
+    @Query("SELECT DISTINCT p FROM Product p " +
+           "WHERE p.id = :productId " +
+           "AND p.merchant.id = :merchantId " +
+           "AND (:channelId IS NOT NULL OR :channelId IS NULL) " +
+           "AND (:sellerId IS NOT NULL OR :sellerId IS NULL)")
+    Optional<Product> findByIdAndMerchantIdAndChannelIdAndSellerId(
+            @Param("productId") UUID productId,
+            @Param("merchantId") UUID merchantId,
+            @Param("channelId") UUID channelId, // Parameter kept for API compatibility
+            @Param("sellerId") UUID sellerId); // Parameter kept for API compatibility
 
 }

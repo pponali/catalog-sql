@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -20,14 +18,11 @@ import java.time.LocalDateTime;
 public class ProductSeller {
     @Id
     private String id;
-
-    @NotBlank
+    
     private String productId;
-
-    @NotBlank
+    
     private String vendorId;
-
-    @NotNull
+    
     private SellerType sellerType;
 
     private BigDecimal sellingPrice;
@@ -54,4 +49,6 @@ public class ProductSeller {
     private Integer minOrderQuantity;
     private Integer maxOrderQuantity;
     private Boolean allowPartialFulfillment;
+    
+    // No need for explicit getters/setters, constructors as they are provided by Lombok
 }

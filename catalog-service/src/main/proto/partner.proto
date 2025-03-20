@@ -1,0 +1,68 @@
+syntax = "proto3";
+package com.scaler.partner;
+
+option java_multiple_files = true;
+option java_package = "com.scaler.grpc.partner";
+
+service PartnerService {
+  rpc GetCategory (GetCategoryRequest) returns (CategoryResponse);
+  rpc GetCategoryByCode (GetCategoryByCodeRequest) returns (CategoryResponse);
+  rpc GetCategoriesByParent (GetCategoriesByParentRequest) returns (CategoryListResponse);
+  rpc CreateCategory (CreateCategoryRequest) returns (CategoryResponse);
+  rpc UpdateCategory (UpdateCategoryRequest) returns (CategoryResponse);
+  rpc DeleteCategory (DeleteCategoryRequest) returns (DeleteCategoryResponse);
+}
+
+message GetCategoryRequest {
+  string id = 1;
+}
+
+message GetCategoryByCodeRequest {
+  string code = 1;
+}
+
+message GetCategoriesByParentRequest {
+  string parent_id = 1;
+}
+
+message CreateCategoryRequest {
+  CategoryMessage category = 1;
+}
+
+message UpdateCategoryRequest {
+  CategoryMessage category = 1;
+}
+
+message DeleteCategoryRequest {
+  string id = 1;
+}
+
+message DeleteCategoryResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CategoryResponse {
+  CategoryMessage category = 1;
+}
+
+message CategoryListResponse {
+  repeated CategoryMessage categories = 1;
+  int32 total_count = 2;
+}
+
+message CategoryMessage {
+  string id = 1;
+  string name = 2;
+  string code = 3;
+  string description = 4;
+  string category_type = 5;
+  string parent_id = 6;
+  int32 level = 7;
+  string path = 8;
+  bool leaf = 9;
+  string merchant_id = 10;
+  string catalog_id = 11;
+  string created_at = 12;
+  string updated_at = 13;
+}

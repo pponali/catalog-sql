@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: validation-service
+  data:
+    mongodb:
+      host: ${SPRING_DATA_MONGODB_HOST:localhost}
+      port: ${SPRING_DATA_MONGODB_PORT:27017}
+      database: ${SPRING_DATA_MONGODB_DATABASE:validation_service}
+      auto-index-creation: true
+
+server:
+  port: ${SERVER_PORT:8085}
+  
+# gRPC server configuration
+grpc:
+  server:
+    port: 9090
+  
+# Eureka client configuration
+eureka:
+  client:
+    enabled: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    preferIpAddress: true
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  info:
+    env:
+      enabled: true
+    git:
+      mode: full
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationIdStrategy: METHOD
+    tagsSorter: alpha
+    display-request-duration: true
+  show-actuator: true
+  default-produces-media-type: application/json

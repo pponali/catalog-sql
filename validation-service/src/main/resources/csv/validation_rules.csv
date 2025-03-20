@@ -1,0 +1,21 @@
+rule_id,name,description,entity_type,attribute,condition,condition_value,message,severity,priority,active,category
+RULE-001,Product Name Required,Validates that product name is not empty,PRODUCT,name,NOT_NULL,,Product name is required,ERROR,10,true,GENERAL
+RULE-002,Product Price Positive,Validates that product price is positive,PRODUCT,price,MIN,0.01,Product price must be greater than zero,ERROR,9,true,GENERAL
+RULE-003,Product SKU Format,Validates that product SKU matches the pattern,PRODUCT,sku,REGEX,^[A-Z]{2,5}-[0-9]{3,6}$,Product SKU must follow the format XX-000,ERROR,8,true,GENERAL
+RULE-004,Product Description Length,Validates minimum description length,PRODUCT,description,MIN_LENGTH,10,Product description must be at least 10 characters,WARNING,7,true,GENERAL
+RULE-005,Product Category Required,Validates that product has a category,PRODUCT,categoryId,NOT_NULL,,Product must have a category,ERROR,10,true,GENERAL
+RULE-006,Electronic Product Weight,Validates weight for electronic products,PRODUCT,weight,MIN,0.1,Electronic products must have weight specified,WARNING,6,true,ELECTRONICS
+RULE-007,Fashion Size Required,Validates size attribute for fashion products,PRODUCT,size,NOT_NULL,,Fashion products must have size specified,ERROR,8,true,FASHION
+RULE-008,Partner Name Required,Validates that partner name is not empty,PARTNER,name,NOT_NULL,,Partner name is required,ERROR,10,true,GENERAL
+RULE-009,Partner Email Format,Validates partner email format,PARTNER,email,REGEX,^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$,Partner email must be valid,ERROR,9,true,GENERAL
+RULE-010,Partner Phone Format,Validates partner phone format,PARTNER,phone,REGEX,^\\d{10}$,Partner phone must be 10 digits,WARNING,8,true,GENERAL
+RULE-011,Contract Start Date,Validates contract start date is not in the past,PARTNER_CONTRACT,startDate,NOT_PAST,,Contract start date cannot be in the past,ERROR,10,true,GENERAL
+RULE-012,Contract End Date,Validates contract end date is after start date,PARTNER_CONTRACT,endDate,FUTURE,,Contract end date must be in the future,ERROR,9,true,GENERAL
+RULE-013,Category Name Required,Validates that category name is not empty,CATEGORY,name,NOT_NULL,,Category name is required,ERROR,10,true,GENERAL
+RULE-014,Category Code Format,Validates category code format,CATEGORY,code,REGEX,^[A-Z]{2,5}_[A-Z]{3,10}$,Category code must follow the format XX_YYY,ERROR,9,true,GENERAL
+RULE-015,Channel Name Required,Validates that channel name is not empty,CHANNEL,name,NOT_NULL,,Channel name is required,ERROR,10,true,GENERAL
+RULE-016,Channel Type Valid,Validates channel type is from allowed values,CHANNEL,type,ENUM,WEB|MOBILE_APP|MARKETPLACE|PHYSICAL_STORE,Channel type must be valid,ERROR,9,true,GENERAL
+RULE-017,Channel Integration URL,Validates channel integration URL format,CHANNEL,integrationEndpoint,REGEX,^https?://.*$,Channel integration URL must be valid,ERROR,8,true,GENERAL
+RULE-018,Product Feature Required,Validates that product feature is not empty,PRODUCT_FEATURE,name,NOT_NULL,,Product feature name is required,ERROR,10,true,GENERAL
+RULE-019,Product Feature Value,Validates that product feature value is not empty,PRODUCT_FEATURE_VALUE,value,NOT_NULL,,Product feature value is required,ERROR,10,true,GENERAL
+RULE-020,Inventory Quantity Positive,Validates that inventory quantity is positive,PRODUCT_INVENTORY,quantity,MIN,0,Inventory quantity must be non-negative,ERROR,10,true,GENERAL

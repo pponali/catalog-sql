@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "catalog-service")
+@FeignClient(
+    name = "catalog-service", 
+    fallback = com.nosql.poc.vendor.client.fallback.CatalogServiceFallback.class,
+    configuration = com.nosql.poc.vendor.config.FeignConfig.class
+)
 public interface CatalogServiceClient {
     
     @GetMapping("/api/vendors/{vendorId}/products")

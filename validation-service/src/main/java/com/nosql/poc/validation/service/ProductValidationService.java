@@ -1,5 +1,6 @@
 package com.nosql.poc.validation.service;
 
+import com.nosql.poc.validation.exception.ValidationException;
 import com.nosql.poc.validation.model.ValidationError;
 import com.nosql.poc.validation.model.ValidationResult;
 import com.nosql.poc.validation.model.ValidationSeverity;

@@ -1,12 +1,16 @@
 package com.nosql.poc.vendor.model;
 
 import lombok.Data;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import java.util.List;
 import java.util.Map;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SettlementTerms {
     private String settlementId;
     
@@ -23,25 +27,4 @@ public class SettlementTerms {
     private List<SettlementDeduction> deductions;
     
     private Map<String, Object> settlementRules;
-}
-
-@Data
-public class PaymentInformation {
-    private String paymentMode;
-    private String bankName;
-    private String accountNumber;
-    private String ifscCode;
-    private String accountHolderName;
-    private String accountType;
-    private String upiId;
-    private Map<String, String> additionalDetails;
-}
-
-@Data
-public class SettlementDeduction {
-    private String deductionType; // TDS, COMMISSION, PENALTY
-    private BigDecimal value;
-    private String calculationBasis;
-    private Boolean isAutoDeducted;
-    private Map<String, Object> deductionRules;
 }

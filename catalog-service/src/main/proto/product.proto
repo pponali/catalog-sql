@@ -1,0 +1,81 @@
+syntax = "proto3";
+package com.scaler.product;
+
+option java_multiple_files = true;
+option java_package = "com.scaler.grpc.product";
+
+service ProductService {
+  rpc GetProduct (GetProductRequest) returns (ProductResponse);
+  rpc GetProductsByCategory (GetProductsByCategoryRequest) returns (ProductListResponse);
+  rpc CreateProduct (CreateProductRequest) returns (ProductResponse);
+  rpc UpdateProduct (UpdateProductRequest) returns (ProductResponse);
+  rpc DeleteProduct (DeleteProductRequest) returns (DeleteProductResponse);
+  rpc SearchProducts (SearchProductsRequest) returns (ProductListResponse);
+}
+
+message GetProductRequest {
+  string id = 1;
+}
+
+message GetProductsByCategoryRequest {
+  string category_id = 1;
+}
+
+message CreateProductRequest {
+  ProductMessage product = 1;
+}
+
+message UpdateProductRequest {
+  ProductMessage product = 1;
+}
+
+message DeleteProductRequest {
+  string id = 1;
+}
+
+message DeleteProductResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message SearchProductsRequest {
+  string query = 1;
+  repeated string categories = 2;
+  repeated string filters = 3;
+  int32 page = 4;
+  int32 size = 5;
+}
+
+message ProductResponse {
+  ProductMessage product = 1;
+}
+
+message ProductListResponse {
+  repeated ProductMessage products = 1;
+  int32 total_count = 2;
+  int32 page = 3;
+  int32 size = 4;
+}
+
+message ProductMessage {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string sku = 4;
+  string brand = 5;
+  double price = 6;
+  int32 inventory = 7;
+  repeated string categories = 8;
+  repeated ProductFeatureMessage features = 9;
+  string merchant_id = 10;
+  string catalog_id = 11;
+  string created_at = 12;
+  string updated_at = 13;
+}
+
+message ProductFeatureMessage {
+  string feature_id = 1;
+  string feature_name = 2;
+  string value = 3;
+  string unit_of_measure = 4;
+}

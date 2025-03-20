@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "vendor-service")
+@FeignClient(
+    name = "vendor-service", 
+    fallback = VendorServiceFallback.class
+)
 public interface VendorServiceClient {
     
     @GetMapping("/api/vendors/{vendorId}")

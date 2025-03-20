@@ -1,0 +1,136 @@
+{
+  "info": {
+    "_postman_id": "82e5a9b4-8b2e-4768-8ee0-52f321d956f5",
+    "name": "Rules Service",
+    "description": "Collection for testing the Rules Service API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Import Data",
+      "item": [
+        {
+          "name": "Import Validation Rules",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8084/mongodb/import/validation-rules",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8084",
+              "path": [
+                "mongodb",
+                "import",
+                "validation-rules"
+              ]
+            },
+            "description": "Import validation rules from CSV file"
+          },
+          "response": []
+        },
+        {
+          "name": "Import Business Rules",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8084/mongodb/import/business-rules",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8084",
+              "path": [
+                "mongodb",
+                "import",
+                "business-rules"
+              ]
+            },
+            "description": "Import business rules from CSV file"
+          },
+          "response": []
+        },
+        {
+          "name": "Import All Rules",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8084/mongodb/import/all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8084",
+              "path": [
+                "mongodb",
+                "import",
+                "all"
+              ]
+            },
+            "description": "Import all rules from CSV files"
+          },
+          "response": []
+        }
+      ],
+      "description": "API endpoints for importing data into the Rules Service",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains success flag\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('success');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8084",
+      "type": "string"
+    }
+  ]
+}

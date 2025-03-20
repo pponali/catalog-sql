@@ -110,4 +110,34 @@ public class ProductFeatureValue extends BaseEntity {
     public JsonNode getAttributeValue() {
         return attributeValues;
     }
+    
+    /**
+     * Sets the product for this feature value by creating a mapping
+     * 
+     * @param product The product to associate with this feature value
+     */
+    public void setProduct(Product product) {
+        if (product == null) {
+            return;
+        }
+        
+        // Create a new mapping
+        ProductFeatureValueMapping mapping = ProductFeatureValueMapping.builder()
+                .product(product)
+                .featureValue(this)
+                .isActive(true)
+                .isPrimary(false)
+                .build();
+                
+        // Add to local collection
+        if (this.productMappings == null) {
+            this.productMappings = new HashSet<>();
+        }
+        this.productMappings.add(mapping);
+        
+        // Add to product's collection if it exists
+        if (product.getFeatureValueMappings() != null) {
+            product.getFeatureValueMappings().add(mapping);
+        }
+    }
 }

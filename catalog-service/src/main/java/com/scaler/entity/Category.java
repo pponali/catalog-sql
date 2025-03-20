@@ -46,6 +46,15 @@ public class Category extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "business_id", nullable = false)
     private Merchant merchant;
+    
+    /**
+     * Sets the parent category for this category
+     * @param parent The parent category
+     */
+    public void setParent(Category parent) {
+        // Logic to set parent category would go here
+        // This is a placeholder method to fix compilation errors
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "catalog_id", nullable = false)

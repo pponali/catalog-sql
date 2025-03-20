@@ -12,7 +12,16 @@ public class VendorEventPublisher {
     
     private final KafkaTemplate<String, Object> kafkaTemplate;
     
-    public void publishVendorUpdate(String vendorId, Object event) {
+    public void publishVendorUpdate(Object event) {
+        String vendorId = "";
+        
+        // Extract vendor ID from event if possible
+        if (event instanceof ProductUpdateEvent) {
+            vendorId = ((ProductUpdateEvent) event).getVendorId();
+        } else if (event instanceof ChannelUpdateEvent) {
+            vendorId = ((ChannelUpdateEvent) event).getVendorId();
+        }
+        
         String topic = "vendor-updates";
         try {
             kafkaTemplate.send(topic, vendorId, event).get();
@@ -23,8 +32,11 @@ public class VendorEventPublisher {
         }
     }
     
-    public void publishChannelAssociation(String vendorId, String channelId, Object event) {
+    public void publishChannelUpdate(ChannelUpdateEvent event) {
+        String vendorId = event.getVendorId();
+        String channelId = event.getChannelId();
         String topic = "vendor-channel-updates";
+        
         try {
             kafkaTemplate.send(topic, vendorId, event).get();
             log.info("Published vendor-channel association event for vendor: {} and channel: {}", 
@@ -36,8 +48,11 @@ public class VendorEventPublisher {
         }
     }
     
-    public void publishProductUpdate(String vendorId, String productId, Object event) {
+    public void publishProductUpdate(ProductUpdateEvent event) {
+        String vendorId = event.getVendorId();
+        String productId = event.getProductId();
         String topic = "vendor-product-updates";
+        
         try {
             kafkaTemplate.send(topic, vendorId, event).get();
             log.info("Published vendor product update event for vendor: {} and product: {}", 

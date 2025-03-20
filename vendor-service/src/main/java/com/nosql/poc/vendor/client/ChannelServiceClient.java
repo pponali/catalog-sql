@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "channel-service")
+@FeignClient(
+    name = "channel-service", 
+    fallback = com.nosql.poc.vendor.client.fallback.ChannelServiceFallback.class,
+    configuration = com.nosql.poc.vendor.config.FeignConfig.class
+)
 public interface ChannelServiceClient {
     
     @GetMapping("/api/channels/{channelId}")
@@ -24,8 +28,8 @@ public interface ChannelServiceClient {
     @PostMapping("/api/channels/{channelId}/vendors/{vendorId}")
     @CircuitBreaker(name = "channelService")
     VendorChannel addVendorToChannel(@PathVariable("channelId") String channelId,
-                                   @PathVariable("vendorId") String vendorId,
-                                   @RequestBody VendorChannel vendorChannel);
+                                     @PathVariable("vendorId") String vendorId,
+                                     @RequestBody VendorChannel vendorChannel);
     
     @PutMapping("/api/channels/{channelId}/vendors/{vendorId}")
     @CircuitBreaker(name = "channelService")

@@ -1,0 +1,11 @@
+contract_id,partner_id,contract_type,start_date,end_date,contract_value,currency,payment_terms,delivery_terms,status,termination_clause,renewal_terms,auto_renewal,created_by
+CONT-001,TCLQ-PART-001,DISTRIBUTION,2023-01-01,2024-12-31,5000000.00,INR,Net 30,FOB,ACTIVE,30 days notice,Auto renewal yearly,true,system
+CONT-002,CRMA-PART-001,RETAIL,2023-02-15,2025-02-14,3500000.00,INR,Net 45,CIF,ACTIVE,60 days notice,Renewal by mutual agreement,false,system
+CONT-003,BBKT-PART-001,SUPPLY,2023-03-10,2024-03-09,2000000.00,INR,Net 15,EXW,ACTIVE,15 days notice,Renegotiation required,false,system
+CONT-004,TNSH-PART-001,MANUFACTURING,2023-04-01,2026-03-31,10000000.00,INR,Net 60,DDP,ACTIVE,90 days notice,Auto renewal for 3 years,true,system
+CONT-005,MG-PART-001,DISTRIBUTION,2023-05-15,2025-05-14,3000000.00,INR,Net 30,FCA,ACTIVE,45 days notice,Annual review required,false,system
+CONT-006,TCLQ-PART-002,DISTRIBUTION,2023-06-01,2025-05-31,4500000.00,INR,Net 45,CIP,ACTIVE,60 days notice,Auto renewal yearly,true,system
+CONT-007,AMZN-PART-001,MARKETPLACE,2023-07-15,2024-07-14,1500000.00,INR,Net 15,DAP,ACTIVE,30 days notice,6-month review,false,system
+CONT-008,FLPK-PART-001,MARKETPLACE,2023-08-01,2025-07-31,1800000.00,INR,Net 30,DAT,ACTIVE,45 days notice,Annual review required,false,system
+CONT-009,STAR-PART-001,SUPPLY,2023-09-15,2026-09-14,8000000.00,INR,Net 60,CFR,ACTIVE,60 days notice,Auto renewal for 2 years,true,system
+CONT-010,TATA-PART-001,CORPORATE,2023-10-01,2026-09-30,20000000.00,INR,Net 90,CPT,ACTIVE,90 days notice,Board approval required,false,system

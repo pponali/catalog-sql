@@ -1,0 +1,21 @@
+ruleId,name,description,entityType,attribute,condition,conditionValue,message,severity,priority,active,category,createdAt,updatedAt
+VR001,Product Name Required,Validates that product name is not empty,PRODUCT,name,NOT_NULL,,Product name is required,ERROR,100,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR002,Product SKU Required,Validates that product SKU is not empty,PRODUCT,sku,NOT_NULL,,Product SKU is required,ERROR,100,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR003,Product Price Minimum,Validates that product price is at least 0,PRODUCT,price,MIN,0,Product price cannot be negative,ERROR,90,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR004,Product Description Length,Validates that product description is at least 10 characters,PRODUCT,description,MIN_LENGTH,10,Product description must be at least 10 characters,WARNING,80,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR005,Electronics Battery Info,Electronics must include battery information,PRODUCT,batteryInfo,NOT_NULL,,Battery information is required for electronics,ERROR,90,true,ELECTRONICS,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR006,Fashion Size Chart,Fashion items must include size chart,PRODUCT,sizeChart,NOT_NULL,,Size chart is required for fashion items,ERROR,90,true,FASHION,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR007,Food Ingredients List,Food items must include ingredients list,PRODUCT,ingredients,NOT_NULL,,Ingredients list is required for food items,ERROR,90,true,FOOD,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR008,Email Format,Email must be in valid format,CUSTOMER,email,REGEX,^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$,Invalid email format,ERROR,100,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR009,Phone Number Format,Phone number must be 10 digits,CUSTOMER,phone,REGEX,^\\d{10}$,Phone number must be 10 digits,ERROR,90,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR010,Discount Maximum,Discount percentage cannot exceed 70%,PRODUCT,discountPercentage,MAX,70,Discount cannot exceed 70%,ERROR,85,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR011,Category Name Required,Category name is required,CATEGORY,name,NOT_NULL,,Category name is required,ERROR,100,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR012,Partner Name Required,Partner name is required,PARTNER,name,NOT_NULL,,Partner name is required,ERROR,100,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR013,Partner Contract Valid Dates,Partner contract must have valid start and end dates,PARTNER_CONTRACT,startDate,BEFORE,endDate,Contract start date must be before end date,ERROR,95,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR014,Channel Name Required,Channel name is required,CHANNEL,name,NOT_NULL,,Channel name is required,ERROR,100,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR015,Product Image Required,Product must have at least one image,PRODUCT,images,MIN_COUNT,1,Product must have at least one image,ERROR,90,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR016,Product URL Format,Product URL must be valid,PRODUCT,url,REGEX,^https?://.*$,Product URL must be a valid URL,WARNING,80,true,ALL,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR017,Book ISBN Format,Book ISBN must be valid,PRODUCT,isbn,REGEX,^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$,Invalid ISBN format,ERROR,90,true,BOOKS,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR018,Clothing Color Required,Clothing items must specify color,PRODUCT,color,NOT_NULL,,Color is required for clothing items,ERROR,90,true,FASHION,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR019,Electronics Warranty Required,Electronics must specify warranty period,PRODUCT,warrantyPeriod,NOT_NULL,,Warranty information is required for electronics,WARNING,85,true,ELECTRONICS,2023-01-01T00:00:00,2023-01-01T00:00:00
+VR020,Food Expiry Date Required,Food items must have expiry date,PRODUCT,expiryDate,NOT_NULL,,Expiry date is required for food items,ERROR,95,true,FOOD,2023-01-01T00:00:00,2023-01-01T00:00:00
