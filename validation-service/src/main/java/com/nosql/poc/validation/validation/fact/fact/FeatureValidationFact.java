@@ -1,4 +1,4 @@
-package com.scaler.validation.fact;
+package com.scaler.validation.validation.fact;
 
 import com.scaler.enums.FeatureValueType;
 import lombok.*;
@@ -18,7 +18,7 @@ public class FeatureValidationFact {
     private boolean isList;
     private boolean valid;
     
-    @Builder.Default
+    @lombok.Builder.Default
     private List<String> validationErrors = new ArrayList<>();
     
     public void addValidationError(String error) {

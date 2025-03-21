@@ -116,13 +116,13 @@ public class ValidationService {
 
         // Set the rule expression based on the rule type
         switch (ruleType) {
-            case PATTERN:
+            case RuleType.PATTERN:
                 rule.setRuleExpression(validationRules.getPattern());
                 break;
-            case RANGE:
+            case RuleType.RANGE:
                 rule.setRuleExpression(validationRules.getMinValue() + "," + validationRules.getMaxValue());
                 break;
-            case ALLOWED_VALUES:
+            case RuleType.ALLOWED_VALUES:
                 rule.setRuleExpression(validationRules.getAllowedValues());
                 break;
             default:

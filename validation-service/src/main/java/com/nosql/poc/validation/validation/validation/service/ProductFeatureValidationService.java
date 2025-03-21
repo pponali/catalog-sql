@@ -1,4 +1,4 @@
-package com.scaler.validation.service;
+package com.scaler.validation.validation.service;
 
 import com.scaler.entity.Category;
 import com.scaler.entity.Product;

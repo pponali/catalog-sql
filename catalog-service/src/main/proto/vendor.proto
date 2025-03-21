@@ -5,12 +5,17 @@ option java_multiple_files = true;
 option java_package = "com.scaler.grpc.vendor";
 
 service VendorService {
+  // Seller operations
   rpc GetSeller (GetSellerRequest) returns (SellerResponse);
   rpc GetSellerProducts (GetSellerProductsRequest) returns (SellerProductListResponse);
-  rpc GetMerchant (GetMerchantRequest) returns (MerchantResponse);
+  rpc GetSellerProduct (GetSellerProductRequest) returns (SellerProductResponse);
   rpc CreateSeller (CreateSellerRequest) returns (SellerResponse);
   rpc UpdateSeller (UpdateSellerRequest) returns (SellerResponse);
   rpc DeleteSeller (DeleteSellerRequest) returns (DeleteSellerResponse);
+  
+  // Merchant operations
+  rpc GetMerchant (GetMerchantRequest) returns (MerchantResponse);
+  rpc ValidateMerchantExists (ValidateMerchantExistsRequest) returns (ValidateMerchantExistsResponse);
 }
 
 message GetSellerRequest {
@@ -79,8 +84,10 @@ message MerchantMessage {
   string description = 4;
   string business_unit = 5;
   string status = 6;
-  string created_at = 7;
-  string updated_at = 8;
+  string contact_email = 7;
+  string contact_phone = 8;
+  string created_at = 9;
+  string updated_at = 10;
 }
 
 message SellerProductMessage {
@@ -92,4 +99,23 @@ message SellerProductMessage {
   string status = 6;
   string created_at = 7;
   string updated_at = 8;
+}
+
+// Message definitions for RPC methods
+message GetSellerProductRequest {
+  string seller_id = 1;
+  string product_id = 2;
+}
+
+message SellerProductResponse {
+  SellerProductMessage product = 1;
+}
+
+message ValidateMerchantExistsRequest {
+  string merchant_id = 1;
+}
+
+message ValidateMerchantExistsResponse {
+  bool exists = 1;
+  MerchantMessage merchant = 2;
 }

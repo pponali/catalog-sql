@@ -1,4 +1,4 @@
-package com.scaler.validation;
+package com.scaler.validation.validation;
 
 import com.scaler.entity.CategoryFeatureTemplate;
 import com.fasterxml.jackson.databind.JsonNode;

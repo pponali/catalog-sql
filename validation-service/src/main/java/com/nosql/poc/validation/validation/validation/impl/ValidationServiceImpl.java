@@ -1,8 +1,8 @@
-package com.scaler.validation.impl;
+package com.scaler.validation.validation.impl;
 
 import com.scaler.entity.CategoryFeatureTemplate;
 import com.scaler.entity.ProductFeatureValue;
-import com.scaler.validation.ValidationService;
+import com.scaler.validation.validation.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +22,12 @@ public class ValidationServiceImpl implements ValidationService {
             return false;
         }
 
-        if (value.getAttributeValues() == null) {
-            log.debug("Value is null for template: {}", template.getCode());
+        if (value.getValue() == null) {
+            log.debug("Value is null for template: {}", template.getFeatureCode());
             return false;
         }
 
-        String stringValue = value.getAttributeValues().asText();
+        String stringValue = value.getValue();
         String validationPattern = template.getValidationPattern();
 
         try {

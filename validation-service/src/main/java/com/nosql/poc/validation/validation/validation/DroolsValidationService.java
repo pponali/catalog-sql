@@ -1,6 +1,6 @@
-package com.scaler.validation;
+package com.scaler.validation.validation;
 
-import com.scaler.validation.fact.ValidationFact;
+import com.scaler.validation.validation.fact.ValidationFact;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;

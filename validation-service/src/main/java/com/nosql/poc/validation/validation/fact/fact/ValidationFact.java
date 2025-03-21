@@ -1,4 +1,4 @@
-package com.scaler.validation.fact;
+package com.scaler.validation.validation.fact;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

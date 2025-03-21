@@ -1,4 +1,4 @@
-package com.scaler.validation.rule;
+package com.scaler.validation.validation.rule;
 
 import com.scaler.entity.CategoryFeatureTemplate;
 import jakarta.persistence.*;
@@ -25,13 +25,17 @@ public class ValidationRules {
     private String code;
     @Column(name = "name")
     private String name;
+    private boolean active;
     private String description;
+    private String categoryId;
     private String ruleType;
     private String pattern;
-    private String minValue;
-    private String maxValue;
+    private Double minValue;
+    private Double maxValue;
     private String allowedValues;
     private String errorMessage;
+    private Integer priority;
+
 
     public static ValidationRules createRequiredRule(CategoryFeatureTemplate template) {
         return ValidationRules.builder()

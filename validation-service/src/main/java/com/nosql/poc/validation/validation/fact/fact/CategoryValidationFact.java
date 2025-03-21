@@ -1,4 +1,4 @@
-package com.scaler.validation.fact;
+package com.scaler.validation.fact.fact;
 
 import lombok.*;
 
@@ -17,7 +17,7 @@ public class CategoryValidationFact {
     private String value;
     private Map<String, Object> metadata;
     
-    @Builder.Default
+    @lombok.Builder.Default
     private List<String> errors = new ArrayList<>();
     
     public void addError(String error) {
