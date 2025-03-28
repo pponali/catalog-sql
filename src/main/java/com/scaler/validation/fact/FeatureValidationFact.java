@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder(toBuilder = true)
@@ -17,8 +18,9 @@ public class FeatureValidationFact {
     private FeatureValueType valueType;
     private boolean isList;
     private boolean valid;
+    private UUID productId;
     
-    @Builder.Default
+    @lombok.Builder.Default
     private List<String> validationErrors = new ArrayList<>();
     
     public void addValidationError(String error) {

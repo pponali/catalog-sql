@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
+        <version>3.2.3</version>
         <relativePath/>
     </parent>
     
@@ -18,7 +18,7 @@
     <description>Catalog Management Project</description>
     
     <properties>
-        <java.version>23</java.version>
+        <java.version>21</java.version>
         <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <drools.version>8.44.0.Final</drools.version>
@@ -185,6 +185,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!-- Spring Cloud -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>4.1.0</version>
         </dependency>
 
         <!-- Testing -->

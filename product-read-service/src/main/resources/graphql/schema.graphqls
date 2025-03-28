@@ -1,0 +1,207 @@
+"""
+Product Read Service GraphQL Schema
+"""
+type Query {
+    """
+    Get a single product by ID
+    """
+    product(id: ID!): Product
+    
+    """
+    List products with flexible filtering options
+    """
+    products(filter: ProductFilter, page: Int = 0, size: Int = 20, sort: [ProductSort!]): ProductResult
+    
+    """
+    Search products by text query
+    """
+    productSearch(query: String!, page: Int = 0, size: Int = 20): ProductResult
+    
+    """
+    Get products by category
+    """
+    productsByCategory(categoryId: ID!, page: Int = 0, size: Int = 20): ProductResult
+    
+    """
+    Get products by brand
+    """
+    productsByBrand(brand: String!, page: Int = 0, size: Int = 20): ProductResult
+    
+    """
+    Get products available in a specific channel
+    """
+    productsByChannel(channelId: ID!, page: Int = 0, size: Int = 20): ProductResult
+    
+    """
+    Get products from a specific seller
+    """
+    productsBySeller(sellerId: ID!, page: Int = 0, size: Int = 20): ProductResult
+}
+
+"""
+Product entity with all its attributes and relationships
+"""
+type Product {
+    id: ID!
+    name: String!
+    description: String
+    sku: String
+    brand: String
+    categories: [String!]
+    categoryDetails: [CategoryInfo!]
+    features: [ProductFeature!]
+    sellers: [SellerInfo!]
+    channels: [ChannelInfo!]
+    attributes: JSON
+    images: [ImageInfo!]
+    active: Boolean!
+    minPrice: Float
+    maxPrice: Float
+    totalStock: Int
+    createdAt: String
+    updatedAt: String
+}
+
+"""
+Category information associated with a product
+"""
+type CategoryInfo {
+    id: ID!
+    name: String!
+    path: String
+    level: Int
+}
+
+"""
+Product feature with its name, code, and value
+"""
+type ProductFeature {
+    featureId: ID!
+    name: String!
+    code: String!
+    value: String
+    searchable: Boolean
+    filterable: Boolean
+}
+
+"""
+Seller information for a product
+"""
+type SellerInfo {
+    sellerId: ID!
+    name: String!
+    price: Float
+    salePrice: Float
+    inventory: Int
+    currency: String
+    available: Boolean!
+}
+
+"""
+Channel information for a product
+"""
+type ChannelInfo {
+    channelId: ID!
+    name: String!
+    type: String
+    available: Boolean!
+}
+
+"""
+Image information for a product
+"""
+type ImageInfo {
+    url: String!
+    type: String
+    sortOrder: Int
+}
+
+"""
+Paginated result for product queries
+"""
+type ProductResult {
+    content: [Product!]!
+    page: Int!
+    size: Int!
+    totalElements: Int!
+    totalPages: Int!
+    facets: [Facet!]
+}
+
+"""
+Facet information for filtered searches
+"""
+type Facet {
+    name: String!
+    values: [FacetValue!]!
+}
+
+"""
+Facet value with count
+"""
+type FacetValue {
+    value: String!
+    count: Int!
+}
+
+"""
+Filter criteria for product queries
+"""
+input ProductFilter {
+    categoryIds: [String]
+    brands: [String]
+    priceRange: PriceRange
+    sellerIds: [ID]
+    channelIds: [ID]
+    features: [FeatureFilter]
+    active: Boolean
+    inStock: Boolean
+    search: String
+}
+
+"""
+Price range filter
+"""
+input PriceRange {
+    min: Float
+    max: Float
+}
+
+"""
+Feature filter criteria
+"""
+input FeatureFilter {
+    code: String!
+    value: String!
+}
+
+"""
+Sorting options for product queries
+"""
+input ProductSort {
+    field: ProductSortField!
+    direction: SortDirection = ASC
+}
+
+"""
+Fields that can be used for sorting
+"""
+enum ProductSortField {
+    NAME
+    PRICE
+    CREATED_AT
+    UPDATED_AT
+}
+
+"""
+Sort direction
+"""
+enum SortDirection {
+    ASC
+    DESC
+}
+
+"""
+Custom scalar for JSON data
+"""
+scalar JSON

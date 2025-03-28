@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package com.scaler.catalog.proto;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto"; // For flexible value types
+
+option java_multiple_files = true;
+option java_package = "com.scaler.catalog.proto";
+option java_outer_classname = "ProductProto";
+
+// Represents essential product information for indexing
+message ProductUpdate {
+  string product_id = 1; // Corresponds to BaseEntity id (UUID as string)
+  string product_code = 2;
+  string name = 3;
+  string description = 4;
+  string status = 5;
+  string sku = 6;
+  double price = 7; // Consider using a more precise type if needed (e.g., string or custom decimal)
+  CategoryInfo primary_category = 8;
+  repeated FeatureWithValue features = 9;
+  string merchant_id = 10; // Corresponds to Merchant id (UUID as string)
+  google.protobuf.Timestamp last_modified_date = 11; // From BaseEntity
+  // Add other relevant fields as needed for indexing/filtering
+}
+
+// Basic category information
+message CategoryInfo {
+  string category_id = 1; // UUID as string
+  string category_code = 2;
+  string name = 3;
+}
+
+// Represents a feature definition and its assigned value(s) for a product
+message FeatureWithValue {
+  string feature_id = 1; // UUID as string
+  string feature_code = 2;
+  string name = 3;
+  string attribute_type = 4; // e.g., STRING, NUMBER, BOOLEAN
+  bool multi_valued = 5;
+  repeated google.protobuf.Value values = 6; // Use Value for flexibility, mirroring JsonNode
+  // Add other feature metadata if needed for indexing (e.g., searchable, comparable)
+  bool searchable = 7;
+  bool comparable = 8;
+}

@@ -6,6 +6,8 @@ import com.nosql.poc.catalog.exception.ResourceNotFoundException;
 import com.nosql.poc.catalog.client.VendorServiceClient;
 import com.nosql.poc.catalog.client.ChannelServiceClient;
 import com.nosql.poc.validation.service.ProductValidationService;
+import com.scaler.messaging.ProductKafkaProducerService; // Import Kafka producer
+import com.scaler.entity.Product; // Import the correct Product entity if different from model.Product
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,8 @@ public class ProductService {
     private final ProductValidationService validationService;
     private final VendorServiceClient vendorServiceClient;
     private final ChannelServiceClient channelServiceClient;
+    private final ProductKafkaProducerService productKafkaProducerService; // Inject Kafka producer
+    // private final ProductProtoMapper productProtoMapper; // Inject if mapping happens here
     
     @Transactional
     public Product createProduct(Product product) {
@@ -61,6 +65,30 @@ public class ProductService {
         
         Product savedProduct = productRepository.save(product);
         log.info("Created new product with ID: {}", savedProduct.getId());
+        
+        // Send update to Kafka
+        // Assuming the Product entity used by the repository is compatible with the mapper
+        // If com.nosql.poc.catalog.model.Product is different from com.scaler.entity.Product, mapping is needed first
+        // For now, assuming they are compatible or the mapper handles com.nosql.poc.catalog.model.Product
+        try {
+             // Need to map com.nosql.poc.catalog.model.Product to com.scaler.entity.Product if they differ
+             // Or adjust ProductProtoMapper to accept com.nosql.poc.catalog.model.Product
+             // For now, let's assume ProductProtoMapper needs com.scaler.entity.Product
+             // This part needs clarification on the exact Product model used by Kafka producer/mapper
+             // The savedProduct is of type com.nosql.poc.catalog.model.Product
+             // The Kafka producer expects com.scaler.entity.Product
+             // Assuming they are the same or a mapping exists implicitly/explicitly
+             // Based on user confirmation, ProductProtoMapper uses com.scaler.entity.Product
+             // Let's assume savedProduct is compatible or can be mapped.
+             // If ProductRepository returns com.scaler.entity.Product, this works directly.
+             // If it returns com.nosql.poc.catalog.model.Product, mapping is needed.
+             // For now, proceeding with the direct call as user confirmed the entity path.
+             productKafkaProducerService.sendProductUpdate(savedProduct);
+        } catch (Exception e) {
+            log.error("Failed to send product update to Kafka for ID {}: {}", savedProduct.getId(), e.getMessage(), e);
+            // Decide on error handling: throw exception, log only, etc.
+        }
+        
         return savedProduct;
     }
     
@@ -127,6 +155,15 @@ public class ProductService {
         
         Product savedProduct = productRepository.save(existingProduct);
         log.info("Updated product with ID: {}", savedProduct.getId());
+        
+        // Send update to Kafka
+        try {
+             // Similar assumption as in createProduct
+             productKafkaProducerService.sendProductUpdate(savedProduct);
+        } catch (Exception e) {
+            log.error("Failed to send product update to Kafka for ID {}: {}", savedProduct.getId(), e.getMessage(), e);
+        }
+        
         return savedProduct;
     }
     

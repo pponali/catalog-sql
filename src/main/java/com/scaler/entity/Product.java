@@ -105,6 +105,14 @@ public class Product extends BaseEntity {
     @lombok.Builder.Default
     private Set<ProductPlatform> productPlatforms = new HashSet<>();
 
+    public Set<ProductFeatureMapping> getFeatureMappings() {
+        return featureMappings;
+    }
+
+    public void setFeatureMappings(Set<ProductFeatureMapping> featureMappings) {
+        this.featureMappings = featureMappings;
+    }
+
     public void addProductCategory(ProductCategory productCategory) {
         productCategories.add(productCategory);
         productCategory.setProduct(this);
@@ -236,5 +244,9 @@ public class Product extends BaseEntity {
                 .findFirst()
                 .map(ProductCategory::getCategory)
                 .orElse(null);
+    }
+
+    public Category getCategory() {
+        return getPrimaryCategory();
     }
 }

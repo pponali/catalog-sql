@@ -25,9 +25,10 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductDTO create(ProductDTO productDTO) {
         Product product = productMappingService.toEntity(productDTO);
-        product.setId(UUID.randomUUID());
-        product = productRepository.save(product);
-        return productMappingService.toDTO(product);
+        // Assuming ID generation happens elsewhere or is handled by DB if not UUID
+        // product.setId(UUID.randomUUID()); 
+        Product savedProduct = productRepository.save(product);
+        return productMappingService.toDTO(savedProduct);
     }
 
     @Override
@@ -36,11 +37,15 @@ public class ProductServiceImpl implements ProductService {
         Product existingProduct = productRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
         
-        Product updatedProduct = productMappingService.toEntity(productDTO);
-        updatedProduct.setId(id);
-        updatedProduct = productRepository.save(updatedProduct);
+        // Map DTO to entity, preserving the existing ID
+        Product productToUpdate = productMappingService.toEntity(productDTO);
+        productToUpdate.setId(id); // Ensure the ID is set for update
         
-        return productMappingService.toDTO(updatedProduct);
+        // Merge changes if necessary, or simply save
+        // For simplicity, assuming save handles merge/update correctly
+        Product savedProduct = productRepository.save(productToUpdate); 
+        
+        return productMappingService.toDTO(savedProduct);
     }
 
     @Override
